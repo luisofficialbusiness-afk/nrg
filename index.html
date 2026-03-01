@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  /* Basic reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background-color: #0a0a0a; /* base dark color */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  /* NRG Logo */
+  h1.logo {
+    font-size: 8rem;
+    letter-spacing: 10px;
+    margin-bottom: 50px;
+    color: white;
+    text-align: center;
+  }
+
+  /* Horizontal card container */
+  .card-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 100px; /* leave space for sidebar */
+  }
+
+  /* Individual cards */
+  .card {
+    background-color: #1a1a1a;
+    width: 140px;
+    height: 180px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  }
+
+  .card:hover {
+    background-color: #007bff; /* electric blue */
+    box-shadow: 0 0 20px #007bff;
+    transform: translateY(-5px);
+  }
+
+  .card .emoji {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  .card .text {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+/* Bottom sidebar */
+.sidebar {
+  position: fixed;
+  bottom: 0;
+  left: 50%; /* center horizontally */
+  transform: translateX(-50%);
+  width: auto; /* shrink to fit icons */
+  padding: 10px 20px;
+  height: 70px;
+  background-color: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px; /* closer spacing between icons */
+  border-radius: 15px 15px 0 0; /* optional rounded top corners */
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+}
+
+.sidebar .icon {
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar .icon:hover {
+  color: #007bff;
+  transform: scale(1.2);
+}
+
+</style>
+</head>
+<body>
+
+  <!-- NRG Logo -->
+  <h1 class="logo">NRG</h1>
+
+  <!-- Horizontal Cards -->
+  <div class="card-container">
+    <div class="card">
+      <div class="emoji">🎮</div>
+      <div class="text">Games</div>
+    </div>
+    <div class="card">
+      <div class="emoji">🎬</div>
+      <div class="text">Movies</div>
+    </div>
+    <div class="card">
+      <div class="emoji">🤖</div>
+      <div class="text">AI</div>
+    </div>
+    <div class="card">
+      <div class="emoji">🌐</div>
+      <div class="text">Proxy</div>
+    </div>
+    <div class="card">
+      <div class="emoji">📻</div>
+      <div class="text">Radio</div>
+    </div>
+  </div>
+
+  <!-- Bottom Sidebar -->
+  <div class="sidebar">
+    <div class="icon">🏠</div>
+    <div class="icon">🎮</div>
+    <div class="icon">🤖</div>
+    <div class="icon">🌐</div>
+    <div class="icon">🎬</div>
+    <div class="icon">📻</div>
+  </div>
+
+</body>
+</html>
