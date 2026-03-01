@@ -6,7 +6,6 @@
 <title>NRG</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 <style>
-  /* Basic reset */
   * {
     margin: 0;
     padding: 0;
@@ -24,7 +23,6 @@
     color: white;
   }
 
-  /* NRG Logo */
   h1.logo {
     font-size: 8rem;
     letter-spacing: 10px;
@@ -33,7 +31,6 @@
     text-align: center;
   }
 
-  /* Horizontal card container */
   .card-container {
     display: flex;
     gap: 30px;
@@ -41,7 +38,6 @@
     margin-bottom: 100px; /* leave space for sidebar */
   }
 
-  /* Individual cards */
   .card {
     background-color: #1a1a1a;
     width: 140px;
@@ -57,7 +53,7 @@
   }
 
   .card:hover {
-    background-color: #007bff; /* electric blue */
+    background-color: #007bff;
     box-shadow: 0 0 20px #007bff;
     transform: translateY(-5px);
   }
@@ -72,62 +68,60 @@
     font-weight: bold;
   }
 
-/* Bottom sidebar */
-.sidebar {
-  position: fixed;
-  bottom: 0;
-  left: 50%; /* center horizontally */
-  transform: translateX(-50%);
-  width: auto; /* shrink to fit icons */
-  padding: 10px 20px;
-  height: 70px;
-  background-color: #121212;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px; /* closer spacing between icons */
-  border-radius: 15px 15px 0 0; /* optional rounded top corners */
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-}
+  /* Bottom sidebar */
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 10px 20px;
+    height: 70px;
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px; /* spacing between icons */
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+  }
 
-.sidebar .icon {
-  color: white;
-  font-size: 1.8rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  .sidebar .icon {
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-.sidebar .icon:hover {
-  color: #007bff;
-  transform: scale(1.2);
-}
-
+  .sidebar .icon:hover {
+    color: #007bff;
+    transform: scale(1.2);
+  }
 </style>
 </head>
 <body>
 
-  <!-- NRG Logo -->
   <h1 class="logo">NRG</h1>
 
   <!-- Horizontal Cards -->
   <div class="card-container">
-   <div class="card" data-page="games.html">
-  <div class="emoji">🎮</div>
-  <div class="text">Games</div>
-</div>
-    <div class="card">
+    <div class="card" data-page="games.html">
+      <div class="emoji">🎮</div>
+      <div class="text">Games</div>
+    </div>
+    <div class="card" data-page="movies.html">
       <div class="emoji">🎬</div>
       <div class="text">Movies</div>
     </div>
-    <div class="card">
+    <div class="card" data-page="ai.html">
       <div class="emoji">🤖</div>
       <div class="text">AI</div>
     </div>
-    <div class="card">
+    <div class="card" data-page="proxy.html">
       <div class="emoji">🌐</div>
       <div class="text">Proxy</div>
     </div>
-    <div class="card">
+    <div class="card" data-page="radio.html">
       <div class="emoji">📻</div>
       <div class="text">Radio</div>
     </div>
@@ -135,13 +129,37 @@
 
   <!-- Bottom Sidebar -->
   <div class="sidebar">
-    <div class="icon" href="index.html">🏠</div>
-    <div class="icon" href="games.html">🎮</div>
-    <div class="icon">🤖</div>
-    <div class="icon">🌐</div>
-    <div class="icon">🎬</div>
-    <div class="icon">📻</div>
+    <div class="icon" data-page="index.html">🏠</div>
+    <div class="icon" data-page="games.html">🎮</div>
+    <div class="icon" data-page="ai.html">🤖</div>
+    <div class="icon" data-page="proxy.html">🌐</div>
+    <div class="icon" data-page="movies.html">🎬</div>
+    <div class="icon" data-page="radio.html">📻</div>
   </div>
+
+<script>
+  // Make cards clickable
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const targetPage = card.dataset.page;
+      if(targetPage) {
+        window.location.href = targetPage;
+      }
+    });
+  });
+
+  // Make sidebar icons clickable
+  const icons = document.querySelectorAll('.sidebar .icon');
+  icons.forEach(icon => {
+    icon.addEventListener('click', () => {
+      const targetPage = icon.dataset.page;
+      if(targetPage) {
+        window.location.href = targetPage;
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
