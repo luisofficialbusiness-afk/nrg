@@ -89,6 +89,23 @@
 </div>
 
 </div>
+<script>
+document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
 
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (icon.dataset.page === currentPage) {
+        icon.classList.add("active");
+    }
+
+    icon.addEventListener('click', () => {
+        const page = icon.dataset.page;
+        if (page) {
+            window.location.href = "/" + page;
+        }
+    });
+
+});
+</script>
 </body>
 </html>
