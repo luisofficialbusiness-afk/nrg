@@ -126,7 +126,55 @@
 </head>
 <body>
 
-  <h1 class="logo">NRG</h1>
+<!-- Place this under your NRG logo -->
+<div class="logo-container" style="text-align:center;margin-bottom:20px;">
+    <div class="logo" style="font-size:2rem;font-weight:800;color:#00e5ff;letter-spacing:3px;text-shadow:0 0 15px #00e5ff;">NRG</div>
+    <div id="rotating-phrase" style="color:#00e5ff;font-weight:500;margin-top:5px;font-size:1rem;height:1.2em;"></div>
+</div>
+
+<script>
+const phrases = [
+    "Feel the NRG",
+    "This is a name of a Stadium and a Company",
+    "You should ask NRG AI something",
+    "Secretly Browse with Proxy 🌐",
+    "Tuff Settings",
+    "Their is a teacher behind you"
+];
+
+let phraseIndex = 0;
+let charIndex = 0;
+let typing = true; // true = typing, false = deleting
+const speed = 100; // typing speed in ms
+const delayAfter = 1500; // pause after typing full phrase
+const element = document.getElementById("rotating-phrase");
+
+function typeEffect() {
+    const currentPhrase = phrases[phraseIndex];
+    
+    if (typing) {
+        element.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentPhrase.length) {
+            typing = false;
+            setTimeout(typeEffect, delayAfter);
+            return;
+        }
+    } else {
+        element.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+            typing = true;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+    }
+
+    setTimeout(typeEffect, speed);
+}
+
+// Start the effect
+typeEffect();
+</script>
 
   <!-- Horizontal Cards -->
   <div class="card-container">
