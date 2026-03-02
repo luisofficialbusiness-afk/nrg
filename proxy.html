@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="js/nrg-global.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | Proxy</title>
+</head>
+
+<body style="margin:0; padding:0; background:#0a0f1c; overflow:hidden; font-family:Inter, sans-serif;">
+
+<!-- Proxy Wrapper -->
+<div style="
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:calc(100vh - 100px);
+">
+    <iframe 
+        src="https://nrg-proxybn.vercel.app/" 
+        style="
+            width:100%;
+            height:100%;
+            border:none;
+        ">
+    </iframe>
+</div>
+
+<!-- Bottom Sidebar -->
+<div style="
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:20px;
+    background:rgba(12,20,38,0.9);
+    backdrop-filter:blur(12px);
+    padding:14px 28px;
+    border-radius:50px;
+    border:1px solid rgba(0,229,255,0.3);
+    box-shadow:0 0 25px rgba(0,229,255,0.3);
+    z-index:9999;
+">
+
+    <div onclick="location.href='index.html'" style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        cursor:pointer;
+        font-size:22px;
+        color:#00e5ff;
+        transition:0.3s;
+    ">🏠</div>
+
+    <div onclick="location.href='games.html'" style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        cursor:pointer;
+        font-size:22px;
+        color:#00e5ff;
+    ">🎮</div>
+
+    <div onclick="location.href='ai.html'" style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        cursor:pointer;
+        font-size:22px;
+        color:#00e5ff;
+    ">🤖</div>
+
+    <div style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        font-size:22px;
+        background:linear-gradient(135deg,#00e5ff,#0066ff);
+        color:#000;
+        box-shadow:0 0 15px #00e5ff;
+    ">🌐</div>
+
+    <div onclick="location.href='movies.html'" style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        cursor:pointer;
+        font-size:22px;
+        color:#00e5ff;
+    ">🎬</div>
+
+    <div onclick="location.href='radio.html'" style="
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:14px;
+        cursor:pointer;
+        font-size:22px;
+        color:#00e5ff;
+    ">📻</div>
+
+</div>
+
+</body>
+</html>
