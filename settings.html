@@ -242,8 +242,9 @@ body {
 </div>
      
 <script>
-
-/* Cloak Apply */
+/* ==============================
+   CLOAK FUNCTIONS
+============================== */
 function saveCloak() {
     const title = document.getElementById("cloakTitle").value;
     const icon = document.getElementById("cloakIcon").value;
@@ -261,23 +262,13 @@ function saveCloak() {
     alert("Cloak Applied");
 }
 
-/* Reset */
 function resetCloak() {
     localStorage.removeItem("nrg_cloak_title");
     localStorage.removeItem("nrg_cloak_icon");
     location.reload();
 }
 
-/* Apply saved cloak on load */
-window.onload = function(){
-    const savedTitle = localStorage.getItem("nrg_cloak_title");
-    const savedIcon = localStorage.getItem("nrg_cloak_icon");
-
-    if(savedTitle) document.title = savedTitle;
-    if(savedIcon) setIcon(savedIcon);
-};
-
-function setIcon(url){
+function setIcon(url) {
     let link = document.querySelector("link[rel~='icon']");
     if (!link) {
         link = document.createElement('link');
@@ -287,54 +278,55 @@ function setIcon(url){
     link.href = url;
 }
 
-/* Presets */
-function presetGoogle(){
+window.addEventListener("load", () => {
+    const savedTitle = localStorage.getItem("nrg_cloak_title");
+    const savedIcon = localStorage.getItem("nrg_cloak_icon");
+
+    if(savedTitle) document.title = savedTitle;
+    if(savedIcon) setIcon(savedIcon);
+
+    // Initialize panic inputs
+    document.getElementById("panic-key").value = localStorage.getItem("nrg_panic_key") || "\\";
+    document.getElementById("panic-url").value = localStorage.getItem("nrg_panic_url") || "https://google.com";
+
+    // Highlight current bottom sidebar icon
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
+        if(icon.dataset.page === currentPage) icon.classList.add("active");
+    });
+});
+
+/* CLOAK PRESETS */
+function presetGoogle() {
     document.getElementById("cloakTitle").value = "Google";
     document.getElementById("cloakIcon").value = "https://www.google.com/favicon.ico";
 }
-
-function presetClassroom(){
+function presetClassroom() {
     document.getElementById("cloakTitle").value = "Google Classroom";
     document.getElementById("cloakIcon").value = "https://ssl.gstatic.com/classroom/favicon.png";
 }
-
-function presetCanvas(){
+function presetCanvas() {
     document.getElementById("cloakTitle").value = "Canvas";
     document.getElementById("cloakIcon").value = "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico";
 }
 
-/* About Blank */
-function openAboutBlank(){
+/* ABOUT BLANK */
+function openAboutBlank() {
     const win = window.open("about:blank", "_blank");
     win.document.write(`
         <iframe src="${location.href}" style="width:100%;height:100%;border:none;"></iframe>
     `);
 }
 
+/* BOTTOM SIDEBAR NAVIGATION */
 document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
-
-    const currentPage = window.location.pathname.split("/").pop();
-
-    if (icon.dataset.page === currentPage) {
-        icon.classList.add("active");
-    }
-
     icon.addEventListener('click', () => {
         const page = icon.dataset.page;
-        if (page) {
-            window.location.href = "/" + page;
-        }
+        if(page) window.location.href = "/" + page;
     });
-
 });
-</script>
-  <script>
-document.getElementById("panic-key").value =
-    localStorage.getItem("nrg_panic_key") || "\\";
 
-document.getElementById("panic-url").value =
-    localStorage.getItem("nrg_panic_url") || "https://google.com";
-
+/* PANIC SETTINGS */
 function savePanicSettings() {
     const key = document.getElementById("panic-key").value;
     const url = document.getElementById("panic-url").value;
@@ -344,20 +336,16 @@ function savePanicSettings() {
 
     alert("Panic settings saved.");
 }
-</script>
-  <script>
+
+/* IMPORT / EXPORT SETTINGS */
 function exportSettings() {
     const data = {};
-
-    for (let i = 0; i < localStorage.length; i++) {
+    for(let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         data[key] = localStorage.getItem(key);
     }
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: "application/json"
-    });
-
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "nrg-settings.json";
@@ -366,21 +354,19 @@ function exportSettings() {
 
 document.getElementById("import-file").addEventListener("change", function(e) {
     const file = e.target.files[0];
-    if (!file) return;
+    if(!file) return;
 
     const reader = new FileReader();
-
     reader.onload = function(event) {
-        const data = JSON.parse(event.target.result);
-
-        Object.keys(data).forEach(key => {
-            localStorage.setItem(key, data[key]);
-        });
-
-        alert("Settings imported. Reloading...");
-        location.reload();
+        try {
+            const data = JSON.parse(event.target.result);
+            Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
+            alert("Settings imported. Reloading...");
+            location.reload();
+        } catch(err) {
+            alert("Failed to import settings: Invalid JSON");
+        }
     };
-
     reader.readAsText(file);
 });
 </script>
