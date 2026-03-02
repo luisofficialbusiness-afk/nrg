@@ -81,3 +81,32 @@ function setupAboutBlank() {
         link.href = savedIcon;
     }
 })();
+
+
+// ===== PANIC KEY SYSTEM =====
+
+// Default panic config
+if (!localStorage.getItem("nrg_panic_key")) {
+    localStorage.setItem("nrg_panic_key", "\\"); // default key
+}
+
+if (!localStorage.getItem("nrg_panic_url")) {
+    localStorage.setItem("nrg_panic_url", "https://google.com");
+}
+
+document.addEventListener("keydown", function(e) {
+    const panicKey = localStorage.getItem("nrg_panic_key");
+
+    if (e.key === panicKey) {
+        const panicUrl = localStorage.getItem("nrg_panic_url");
+
+        // Option 1: Redirect current tab
+        window.location.href = panicUrl;
+
+        // Option 2 (stronger): Replace tab
+        // window.open(panicUrl, "_self");
+    }
+});
+
+
+
