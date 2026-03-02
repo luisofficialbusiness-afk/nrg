@@ -173,16 +173,22 @@
     });
   });
 
-  // Make sidebar icons clickable
-  const icons = document.querySelectorAll('.sidebar .icon');
-  icons.forEach(icon => {
+document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
+
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (icon.dataset.page === currentPage) {
+        icon.classList.add("active");
+    }
+
     icon.addEventListener('click', () => {
-      const targetPage = icon.dataset.page;
-      if(targetPage) {
-        window.location.href = targetPage;
-      }
+        const page = icon.dataset.page;
+        if (page) {
+            window.location.href = "/" + page;
+        }
     });
-  });
+
+});
 </script>
  <script src="js/index.js"></script>
 
