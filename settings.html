@@ -192,7 +192,45 @@ body {
             </button>
         </div>
     </div>
+  
+<div style="margin-top:30px;">
+    <h2 style="color:#00e5ff;">Panic Settings</h2>
 
+    <label>Panic Key:</label>
+    <input type="text" id="panic-key" maxlength="1"
+           style="padding:8px;border-radius:6px;margin-left:10px;">
+
+    <br><br>
+
+    <label>Panic Redirect URL:</label>
+    <input type="text" id="panic-url"
+           style="padding:8px;border-radius:6px;width:300px;margin-left:10px;">
+
+    <br><br>
+
+    <button onclick="savePanicSettings()"
+            style="padding:10px 20px;border:none;background:#00e5ff;color:black;border-radius:8px;cursor:pointer;">
+        Save Panic Settings
+    </button>
+</div>
+
+  <div style="margin-top:40px;">
+    <h2 style="color:#00e5ff;">Import / Export Settings</h2>
+
+    <button onclick="exportSettings()"
+        style="padding:10px 20px;margin-right:10px;background:#00e5ff;border:none;border-radius:8px;color:black;cursor:pointer;">
+        Export Settings
+    </button>
+
+    <input type="file" id="import-file" style="display:none;" accept=".json">
+
+    <button onclick="document.getElementById('import-file').click()"
+        style="padding:10px 20px;background:#00e5ff;border:none;border-radius:8px;color:black;cursor:pointer;">
+        Import Settings
+    </button>
+</div>
+
+  
 </div>
 
 <!-- Bottom Sidebar -->
@@ -289,6 +327,62 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
         }
     });
 
+});
+</script>
+  <script>
+document.getElementById("panic-key").value =
+    localStorage.getItem("nrg_panic_key") || "\\";
+
+document.getElementById("panic-url").value =
+    localStorage.getItem("nrg_panic_url") || "https://google.com";
+
+function savePanicSettings() {
+    const key = document.getElementById("panic-key").value;
+    const url = document.getElementById("panic-url").value;
+
+    localStorage.setItem("nrg_panic_key", key);
+    localStorage.setItem("nrg_panic_url", url);
+
+    alert("Panic settings saved.");
+}
+</script>
+  <script>
+function exportSettings() {
+    const data = {};
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        data[key] = localStorage.getItem(key);
+    }
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "nrg-settings.json";
+    link.click();
+}
+
+document.getElementById("import-file").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        const data = JSON.parse(event.target.result);
+
+        Object.keys(data).forEach(key => {
+            localStorage.setItem(key, data[key]);
+        });
+
+        alert("Settings imported. Reloading...");
+        location.reload();
+    };
+
+    reader.readAsText(file);
 });
 </script>
 
