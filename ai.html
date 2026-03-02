@@ -26,6 +26,7 @@
   .iframe-container {
     flex: 1;
     width: 100%;
+    height: calc(100vh - 70px); /* leave space for bottom sidebar */
     overflow: hidden;
   }
 
@@ -57,7 +58,6 @@
     text-shadow: 0 0 10px #007bff;
   }
 
-  /* Optional scrollbar for iframe content if needed */
   ::-webkit-scrollbar {
     width: 8px;
   }
