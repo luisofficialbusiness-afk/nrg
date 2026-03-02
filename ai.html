@@ -36,28 +36,58 @@ html, body {
     border: none;
   }
 
-  .sidebar {
-    height: 70px; /* fixed bottom bar height */
-    width: 100%;
-    background: #121212;
+
+
+.bottom-sidebar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    justify-content: space-around;
+    gap: 18px;
+    padding: 14px 26px;
+
+    background: rgba(10, 18, 35, 0.85);
+    backdrop-filter: blur(14px);
+
+    border-radius: 60px;
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
+
+    z-index: 9999;
+}
+
+.nav-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
     align-items: center;
-    border-top: 2px solid #007bff;
-    flex-shrink: 0;
-  }
+    justify-content: center;
 
-  .sidebar .icon {
-    font-size: 2rem;
+    border-radius: 14px;
     cursor: pointer;
-    transition: 0.3s ease;
-  }
 
-  .sidebar .icon:hover {
-    color: #007bff;
-    transform: scale(1.2);
-    text-shadow: 0 0 10px #007bff;
-  }
+    font-size: 22px;
+    color: #00e5ff;
+
+    transition: all 0.25s ease;
+}
+
+/* Hover */
+.nav-icon:hover {
+    background: linear-gradient(135deg, #00e5ff, #0066ff);
+    color: #000;
+    transform: translateY(-6px);
+    box-shadow: 0 0 20px #00e5ff;
+}
+
+/* Active Page */
+.nav-icon.active {
+    background: linear-gradient(135deg, #00e5ff, #0066ff);
+    color: #000;
+    box-shadow: 0 0 20px #00e5ff;
+}
 </style>
 </head>
 <body>
@@ -66,13 +96,12 @@ html, body {
   <iframe src="https://rousing-nrg-ai-go.base44.app" allowfullscreen></iframe>
 </div>
 
-<div class="sidebar">
-  <div class="icon" data-page="index.html">🏠</div>
-  <div class="icon" data-page="games.html">🎮</div>
-  <div class="icon" data-page="ai.html">🤖</div>
-  <div class="icon" data-page="proxy.html">🌐</div>
-  <div class="icon" data-page="movies.html">🎬</div>
-  <div class="icon" data-page="settings.html">⚙️</div>
+<div class="bottom-sidebar">
+    <div class="nav-icon" data-page="index.html">🏠</div>
+    <div class="nav-icon" data-page="games.html">🎮</div>
+    <div class="nav-icon" data-page="ai.html">🤖</div>
+    <div class="nav-icon" data-page="proxy.html">🌐</div>
+    <div class="nav-icon" data-page="settings.html">⚙</div>
 </div>
 
 <script>
