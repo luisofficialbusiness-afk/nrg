@@ -1,127 +1,65 @@
-/* ============================= */
-/* ========= INIT ============== */
-/* ============================= */
+// ==============================
+// NRG GLOBAL SETTINGS SYSTEM
+// ==============================
 
+// Apply cloak on page load
 document.addEventListener("DOMContentLoaded", () => {
-    setupSidebarNavigation();
-    setupCardNavigation();
-    setupCloakSettings();
-    setupAboutBlankButtons();
+    applySavedCloak();
+    setupAboutBlank();
 });
 
-/* ============================= */
-/* ===== SIDEBAR NAVIGATION ==== */
-/* ============================= */
+// ==============================
+// CLOAK SYSTEM
+// ==============================
 
-function setupSidebarNavigation() {
-    const icons = document.querySelectorAll('.sidebar .icon');
+function applyCloak(title, icon) {
+    if (title) {
+        localStorage.setItem("nrg_cloak_title", title);
+        document.title = title;
+    }
 
-    icons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            const targetPage = icon.dataset.page;
-            if (targetPage) {
-                window.location.href = targetPage;
-            }
-        });
-    });
+    if (icon) {
+        localStorage.setItem("nrg_cloak_icon", icon);
+        setFavicon(icon);
+    }
 }
 
-/* ============================= */
-/* ===== CARD NAVIGATION ======= */
-/* ============================= */
-
-function setupCardNavigation() {
-    const cards = document.querySelectorAll('.card');
-
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            const targetPage = card.dataset.page;
-            if (targetPage) {
-                window.location.href = targetPage;
-            }
-        });
-    });
-}
-
-/* ============================= */
-/* ===== WEBSITE CLOAK ========= */
-/* ============================= */
-
-function setupCloakSettings() {
+function applySavedCloak() {
     const savedTitle = localStorage.getItem("nrg_cloak_title");
     const savedIcon = localStorage.getItem("nrg_cloak_icon");
 
-    if (savedTitle) document.title = savedTitle;
+    if (savedTitle) {
+        document.title = savedTitle;
+    }
 
     if (savedIcon) {
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.head.appendChild(link);
-        }
-        link.href = savedIcon;
+        setFavicon(savedIcon);
     }
 }
 
-function applyCloak(title, iconUrl) {
-    if (title) {
-        document.title = title;
-        localStorage.setItem("nrg_cloak_title", title);
+function setFavicon(iconUrl) {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+        link = document.createElement("link");
+        link.rel = "icon";
+        document.head.appendChild(link);
     }
-
-    if (iconUrl) {
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.head.appendChild(link);
-        }
-        link.href = iconUrl;
-        localStorage.setItem("nrg_cloak_icon", iconUrl);
-    }
+    link.href = iconUrl;
 }
 
-/* ============================= */
-/* ===== OPEN IN ABOUT:BLANK === */
-/* ============================= */
+// ==============================
+// ABOUT:BLANK SYSTEM
+// ==============================
 
-function setupAboutBlankButtons() {
-    const aboutBlankButtons = document.querySelectorAll('.open-about');
+function setupAboutBlank() {
+    const btn = document.querySelector(".open-about");
+    if (!btn) return;
 
-    aboutBlankButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            openInAboutBlank(window.location.href);
-        });
+    btn.addEventListener("click", () => {
+        const win = window.open("about:blank", "_blank");
+        win.document.write(`
+            <iframe src="${location.href}" 
+                    style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
+        `);
     });
-}
-
-function openInAboutBlank(url) {
-    const win = window.open("about:blank", "_blank");
-    if (!win) return;
-
-    win.document.write(`
-        <html>
-            <head>
-                <title>Loading...</title>
-                <style>
-                    html,body{
-                        margin:0;
-                        height:100%;
-                        background:#000;
-                    }
-                    iframe{
-                        border:none;
-                        width:100%;
-                        height:100%;
-                    }
-                </style>
-            </head>
-            <body>
-                <iframe src="${url}"></iframe>
-            </body>
-        </html>
-    `);
-
-    win.document.close();
 }
