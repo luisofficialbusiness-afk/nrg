@@ -302,13 +302,21 @@ blankBtn.addEventListener('click', ()=>{
   if(currentGame) window.open(currentGame, '_blank');
 });
 
-// Bottom sidebar navigation
-const icons = document.querySelectorAll('.sidebar .icon');
-icons.forEach(icon=>{
-  icon.addEventListener('click', ()=>{
-    const targetPage = icon.dataset.page;
-    if(targetPage) window.location.href = targetPage;
-  });
+document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
+
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (icon.dataset.page === currentPage) {
+        icon.classList.add("active");
+    }
+
+    icon.addEventListener('click', () => {
+        const page = icon.dataset.page;
+        if (page) {
+            window.location.href = "/" + page;
+        }
+    });
+
 });
 </script>
  <script src="js/index.js"></script>
