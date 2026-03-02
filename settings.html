@@ -8,6 +8,18 @@
 <link rel="stylesheet" href="css/style.css"> <!-- your main css -->
 
 <style>
+     body {
+  background: linear-gradient(-45deg, #0a0a0a, #0a1f3f, #001f4f, #0a0a0a);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+    
 .settings-container {
     max-width: 800px;
     margin: 0 auto;
