@@ -5,13 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NRG | Settings</title>
 
-<link rel="stylesheet" href="css/style.css"> <!-- your main css -->
+<link rel="stylesheet" href="css/style.css">
 
 <style>
-     body {
+/* Animated Background */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
   background: linear-gradient(-45deg, #0a0a0a, #0a1f3f, #001f4f, #0a0a0a);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
+  color: white;
+  padding-bottom: 90px; /* space for bottom sidebar */
 }
 
 @keyframes gradientBG {
@@ -19,23 +24,24 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-    
+
 .settings-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 50px auto;
 }
 
 .settings-card {
-    background: var(--bg-card);
+    background: rgba(20,20,30,0.85);
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 14px;
     margin-bottom: 2rem;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(0,217,255,0.2);
+    backdrop-filter: blur(10px);
 }
 
 .settings-card h2 {
     margin-bottom: 1.5rem;
-    color: var(--text-secondary);
+    color: #00d9ff;
 }
 
 .setting-group {
@@ -45,21 +51,21 @@
 .setting-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--text-muted);
+    color: #8b7ea8;
 }
 
 .setting-group input {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
+    background: #1e1e2e;
+    border: 1px solid rgba(0,217,255,0.2);
     border-radius: 8px;
-    color: var(--text-primary);
+    color: white;
 }
 
 .setting-group input:focus {
     outline: none;
-    border-color: var(--accent);
+    border-color: #00d9ff;
 }
 
 .button-row {
@@ -70,8 +76,8 @@
 
 .nrg-btn {
     padding: 0.75rem 1.5rem;
-    background: var(--accent);
-    color: var(--bg-primary);
+    background: #00d9ff;
+    color: black;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -80,104 +86,175 @@
 }
 
 .nrg-btn:hover {
-    background: var(--accent-hover);
+    background: #00b8e6;
     transform: translateY(-2px);
 }
 
 .nrg-btn.secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
+    background: #1e1e2e;
+    color: white;
 }
+
+/* Bottom Sidebar */
+.bottom-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    background: #151320;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    border-top: 1px solid rgba(0,217,255,0.2);
+    z-index: 1000;
+}
+
+.bottom-sidebar .nav-item {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #8b7ea8;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom-sidebar .nav-item:hover,
+.bottom-sidebar .nav-item.active {
+    color: #00d9ff;
+    transform: translateY(-4px) scale(1.1);
+}
+     
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="settings-container">
 
-    <!-- MAIN -->
-    <div class="main-content">
-        <div class="header">
-            <div class="page-title">
-                ⚙ Settings
-            </div>
+    <div class="settings-card">
+        <h2>Website Cloak</h2>
+
+        <div class="setting-group">
+            <label>Tab Title</label>
+            <input type="text" id="cloakTitle" placeholder="Google Classroom">
         </div>
 
-        <div class="settings-container">
+        <div class="setting-group">
+            <label>Tab Icon URL</label>
+            <input type="text" id="cloakIcon" placeholder="https://example.com/icon.ico">
+        </div>
 
-            <!-- WEBSITE CLOAK -->
-            <div class="settings-card">
-                <h2>Website Cloak</h2>
+        <div class="button-row">
+            <button class="nrg-btn" onclick="saveCloak()">Apply Cloak</button>
+            <button class="nrg-btn secondary" onclick="resetCloak()">Reset</button>
+        </div>
+    </div>
 
-                <div class="setting-group">
-                    <label>Tab Title</label>
-                    <input type="text" id="cloakTitle" placeholder="Google Classroom">
-                </div>
+    <div class="settings-card">
+        <h2>Quick Cloak Presets</h2>
 
-                <div class="setting-group">
-                    <label>Tab Icon URL</label>
-                    <input type="text" id="cloakIcon" placeholder="https://example.com/icon.ico">
-                </div>
+        <div class="button-row">
+            <button class="nrg-btn secondary" onclick="presetGoogle()">Google</button>
+            <button class="nrg-btn secondary" onclick="presetClassroom()">Classroom</button>
+            <button class="nrg-btn secondary" onclick="presetCanvas()">Canvas</button>
+        </div>
+    </div>
 
-                <div class="button-row">
-                    <button class="nrg-btn" onclick="saveCloak()">Apply Cloak</button>
-                    <button class="nrg-btn secondary" onclick="resetCloak()">Reset</button>
-                </div>
-            </div>
+    <div class="settings-card">
+        <h2>Privacy</h2>
 
-            <!-- PRESETS -->
-            <div class="settings-card">
-                <h2>Quick Cloak Presets</h2>
-
-                <div class="button-row">
-                    <button class="nrg-btn secondary" onclick="presetGoogle()">Google</button>
-                    <button class="nrg-btn secondary" onclick="presetClassroom()">Classroom</button>
-                    <button class="nrg-btn secondary" onclick="presetCanvas()">Canvas</button>
-                </div>
-            </div>
-
-            <!-- ABOUT BLANK -->
-            <div class="settings-card">
-                <h2>Privacy</h2>
-
-                <div class="button-row">
-                    <button class="nrg-btn open-about">
-                        Open NRG in about:blank
-                    </button>
-                </div>
-            </div>
-
+        <div class="button-row">
+            <button class="nrg-btn" onclick="openAboutBlank()">
+                Open NRG in about:blank
+            </button>
         </div>
     </div>
 
 </div>
 
-<script src="js/nrg-global.js"></script>
-
+<!-- Bottom Sidebar -->
+<div class="bottom-sidebar">
+    <div class="nav-item" onclick="go('index.html')">🏠</div>
+    <div class="nav-item" onclick="go('games.html')">🎮</div>
+    <div class="nav-item" onclick="go('movies.html')">🎬</div>
+    <div class="nav-item active">⚙️</div>
+</div>
+     
 <script>
+/* Navigation */
+function go(page){
+    window.location.href = page;
+}
+
+/* Cloak Apply */
 function saveCloak() {
     const title = document.getElementById("cloakTitle").value;
     const icon = document.getElementById("cloakIcon").value;
-    applyCloak(title, icon);
+
+    if(title) {
+        localStorage.setItem("nrg_cloak_title", title);
+        document.title = title;
+    }
+
+    if(icon) {
+        localStorage.setItem("nrg_cloak_icon", icon);
+        setIcon(icon);
+    }
+
+    alert("Cloak Applied");
 }
 
+/* Reset */
 function resetCloak() {
     localStorage.removeItem("nrg_cloak_title");
     localStorage.removeItem("nrg_cloak_icon");
     location.reload();
 }
 
-/* PRESETS */
-function presetGoogle() {
-    applyCloak("Google", "https://www.google.com/favicon.ico");
+/* Apply saved cloak on load */
+window.onload = function(){
+    const savedTitle = localStorage.getItem("nrg_cloak_title");
+    const savedIcon = localStorage.getItem("nrg_cloak_icon");
+
+    if(savedTitle) document.title = savedTitle;
+    if(savedIcon) setIcon(savedIcon);
+};
+
+function setIcon(url){
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+    }
+    link.href = url;
 }
 
-function presetClassroom() {
-    applyCloak("Google Classroom", "https://ssl.gstatic.com/classroom/favicon.png");
+/* Presets */
+function presetGoogle(){
+    document.getElementById("cloakTitle").value = "Google";
+    document.getElementById("cloakIcon").value = "https://www.google.com/favicon.ico";
 }
 
-function presetCanvas() {
-    applyCloak("Canvas", "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico");
+function presetClassroom(){
+    document.getElementById("cloakTitle").value = "Google Classroom";
+    document.getElementById("cloakIcon").value = "https://ssl.gstatic.com/classroom/favicon.png";
+}
+
+function presetCanvas(){
+    document.getElementById("cloakTitle").value = "Canvas";
+    document.getElementById("cloakIcon").value = "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico";
+}
+
+/* About Blank */
+function openAboutBlank(){
+    const win = window.open("about:blank", "_blank");
+    win.document.write(`
+        <iframe src="${location.href}" style="width:100%;height:100%;border:none;"></iframe>
+    `);
 }
 </script>
 
