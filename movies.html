@@ -326,6 +326,51 @@ select:hover {
     font-weight: 600;
     color: var(--accent);
 }
+
+        /* ===== Bottom Sidebar ===== */
+
+.bottom-sidebar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 18px;
+    background: rgba(12, 20, 38, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 14px 24px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+    z-index: 9999;
+}
+
+.bottom-sidebar .icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+}
+
+.bottom-sidebar .icon:hover {
+    background: linear-gradient(135deg, #00e5ff, #0066ff);
+    color: #000;
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px var(--accent);
+}
+
+.bottom-sidebar .icon.active {
+    background: linear-gradient(135deg, #00e5ff, #0066ff);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent);
+}
+        
     </style>
 </head>
 <body>
@@ -669,7 +714,26 @@ select:hover {
             });
         }
 
-        init();
+        init();    
     </script>
+<!-- Bottom Sidebar -->
+<div class="bottom-sidebar">
+    <div class="icon" data-page="index.html">🏠</div>
+    <div class="icon" data-page="games.html">🎮</div>
+    <div class="icon" data-page="ai.html">🤖</div>
+    <div class="icon" data-page="proxy.html">🌐</div>
+    <div class="icon active" data-page="movies.html">🎬</div>
+    <div class="icon" data-page="radio.html">📻</div>
+</div>
+
+<script>
+    document.querySelectorAll('.bottom-sidebar .icon').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const page = icon.getAttribute('data-page');
+            if (page) window.location.href = page;
+        });
+    });
+</script>
+    
 </body>
 </html>
