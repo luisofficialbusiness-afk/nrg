@@ -2,9 +2,15 @@
 // NRG GLOBAL SETTINGS SYSTEM
 // ==============================
 
-// Apply cloak on page load
+// Immediately apply cloak (no wait)
+const savedTitle = localStorage.getItem("nrg_cloak_title");
+const savedIcon = localStorage.getItem("nrg_cloak_icon");
+
+if (savedTitle) document.title = savedTitle;
+if (savedIcon) setFavicon(savedIcon);
+
+// Wait for DOMContentLoaded only for buttons
 document.addEventListener("DOMContentLoaded", () => {
-    applySavedCloak();
     setupAboutBlank();
 });
 
@@ -24,17 +30,10 @@ function applyCloak(title, icon) {
     }
 }
 
-function applySavedCloak() {
-    const savedTitle = localStorage.getItem("nrg_cloak_title");
-    const savedIcon = localStorage.getItem("nrg_cloak_icon");
-
-    if (savedTitle) {
-        document.title = savedTitle;
-    }
-
-    if (savedIcon) {
-        setFavicon(savedIcon);
-    }
+function resetCloak() {
+    localStorage.removeItem("nrg_cloak_title");
+    localStorage.removeItem("nrg_cloak_icon");
+    location.reload();
 }
 
 function setFavicon(iconUrl) {
