@@ -26,7 +26,7 @@
   .iframe-container {
     flex: 1;
     width: 100%;
-    height: calc(100vh - 70px); /* leave space for bottom sidebar */
+    height: calc(100vh - 60px); /* slightly smaller bottom sidebar */
     overflow: hidden;
   }
 
@@ -38,7 +38,7 @@
 
   .sidebar {
     width: 100%;
-    height: 70px;
+    height: 60px; /* smaller height so iframe can be bigger */
     background: #121212;
     display: flex;
     justify-content: space-around;
@@ -47,7 +47,7 @@
   }
 
   .sidebar .icon {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -92,7 +92,6 @@
 </div>
 
 <script>
-  // Make sidebar icons clickable
   const icons = document.querySelectorAll('.sidebar .icon');
   icons.forEach(icon => {
     icon.addEventListener('click', () => {
