@@ -193,43 +193,42 @@ body {
         </div>
     </div>
   
-<div style="margin-top:30px;">
-    <h2 style="color:#00e5ff;">Panic Settings</h2>
+<!-- PANIC SETTINGS -->
+<div class="settings-card">
+    <h2>Panic Settings</h2>
 
-    <label>Panic Key:</label>
-    <input type="text" id="panic-key" maxlength="1"
-           style="padding:8px;border-radius:6px;margin-left:10px;">
+    <div class="setting-group">
+        <label>Panic Key</label>
+        <input type="text" id="panic-key" maxlength="1" placeholder="\"">
+    </div>
 
-    <br><br>
+    <div class="setting-group">
+        <label>Panic Redirect URL</label>
+        <input type="text" id="panic-url" placeholder="https://google.com">
+    </div>
 
-    <label>Panic Redirect URL:</label>
-    <input type="text" id="panic-url"
-           style="padding:8px;border-radius:6px;width:300px;margin-left:10px;">
-
-    <br><br>
-
-    <button onclick="savePanicSettings()"
-            style="padding:10px 20px;border:none;background:#00e5ff;color:black;border-radius:8px;cursor:pointer;">
-        Save Panic Settings
-    </button>
+    <div class="button-row">
+        <button class="nrg-btn" onclick="savePanicSettings()">Save Panic Settings</button>
+    </div>
 </div>
 
-  <div style="margin-top:40px;">
-    <h2 style="color:#00e5ff;">Import / Export Settings</h2>
+<!-- IMPORT / EXPORT -->
+<div class="settings-card">
+    <h2>Import / Export Settings</h2>
 
-    <button onclick="exportSettings()"
-        style="padding:10px 20px;margin-right:10px;background:#00e5ff;border:none;border-radius:8px;color:black;cursor:pointer;">
-        Export Settings
-    </button>
+    <div class="button-row">
+        <button class="nrg-btn" onclick="exportSettings()">
+            Export Settings
+        </button>
+
+        <button class="nrg-btn secondary"
+            onclick="document.getElementById('import-file').click()">
+            Import Settings
+        </button>
+    </div>
 
     <input type="file" id="import-file" style="display:none;" accept=".json">
-
-    <button onclick="document.getElementById('import-file').click()"
-        style="padding:10px 20px;background:#00e5ff;border:none;border-radius:8px;color:black;cursor:pointer;">
-        Import Settings
-    </button>
 </div>
-
   
 </div>
 
