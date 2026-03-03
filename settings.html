@@ -200,10 +200,15 @@ body {
         <h2>Quick Cloak Presets</h2>
 
         <div class="button-row">
-            <button class="nrg-btn secondary" onclick="presetGoogle()">Google</button>
-            <button class="nrg-btn secondary" onclick="presetClassroom()">Classroom</button>
-            <button class="nrg-btn secondary" onclick="presetCanvas()">Canvas</button>
-        </div>
+    <button class="nrg-btn secondary" onclick="presetGoogle()">Google</button>
+    <button class="nrg-btn secondary" onclick="presetClassroom()">Classroom</button>
+    <button class="nrg-btn secondary" onclick="presetCanvas()">Canvas</button>
+    <button class="nrg-btn secondary" onclick="presetIready()">I-Ready</button>
+    <button class="nrg-btn secondary" onclick="presetIXL()">IXL</button>
+    <button class="nrg-btn secondary" onclick="presetClasslink()">Classlink</button>
+    <button class="nrg-btn secondary" onclick="presetKhanAcademy()">Khan Academy</button>
+    <button class="nrg-btn secondary" onclick="presetEdmodo()">Edmodo</button>
+</div>
     </div>
 
     <div class="settings-card">
@@ -346,13 +351,42 @@ function presetGoogle() {
     document.getElementById("cloakTitle").value = "Google";
     document.getElementById("cloakIcon").value = "https://www.google.com/favicon.ico";
 }
+
 function presetClassroom() {
     document.getElementById("cloakTitle").value = "Google Classroom";
     document.getElementById("cloakIcon").value = "https://ssl.gstatic.com/classroom/favicon.png";
 }
+
 function presetCanvas() {
     document.getElementById("cloakTitle").value = "Canvas";
     document.getElementById("cloakIcon").value = "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico";
+}
+
+// Educational apps
+function presetIready() {
+    document.getElementById("cloakTitle").value = "I-Ready";
+    document.getElementById("cloakIcon").value = "https://cdn.i-ready.com/favicon.ico";
+}
+
+function presetIXL() {
+    document.getElementById("cloakTitle").value = "IXL";
+    document.getElementById("cloakIcon").value = "https://www.ixl.com/favicon.ico";
+}
+
+function presetClasslink() {
+    document.getElementById("cloakTitle").value = "Classlink";
+    document.getElementById("cloakIcon").value = "https://launchpad.classlink.com/favicon.ico";
+}
+
+// You can add more educational apps similarly
+function presetKhanAcademy() {
+    document.getElementById("cloakTitle").value = "Khan Academy";
+    document.getElementById("cloakIcon").value = "https://www.khanacademy.org/favicon.ico";
+}
+
+function presetEdmodo() {
+    document.getElementById("cloakTitle").value = "Edmodo";
+    document.getElementById("cloakIcon").value = "https://www.edmodo.com/favicon.ico";
 }
 
 /* ABOUT BLANK */
