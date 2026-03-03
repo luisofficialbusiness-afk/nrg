@@ -141,6 +141,51 @@ const themes = {
         '--btn-primary-hover': '#ffa500',
         '--btn-secondary-bg': '#1a1a1a'
     },
+    forest: {
+  '--bg-gradient-1': '#0b3d0b',
+  '--bg-gradient-2': '#1e5e1e',
+  '--bg-gradient-3': '#2e7d2e',
+  '--bg-gradient-4': '#0b3d0b',
+  '--btn-primary-bg': '#4CAF50',
+  '--btn-primary-hover': '#45a049',
+  '--btn-secondary-bg': '#1a2e1a'
+},
+    cyberpunk: {
+  '--bg-gradient-1': '#0a0a0a',
+  '--bg-gradient-2': '#ff00ff',
+  '--bg-gradient-3': '#00ffff',
+  '--bg-gradient-4': '#0a0a0a',
+  '--btn-primary-bg': '#ff00ff',
+  '--btn-primary-hover': '#ff66ff',
+  '--btn-secondary-bg': '#1e1e1e'
+},
+    sunrise: {
+  '--bg-gradient-1': '#ffb347',
+  '--bg-gradient-2': '#ffcc70',
+  '--bg-gradient-3': '#ffd699',
+  '--bg-gradient-4': '#ffb347',
+  '--btn-primary-bg': '#ff9966',
+  '--btn-primary-hover': '#ff7f50',
+  '--btn-secondary-bg': '#ffe6cc'
+},
+    aurora: {
+  '--bg-gradient-1': '#0d0d50',
+  '--bg-gradient-2': '#004d99',
+  '--bg-gradient-3': '#6600cc',
+  '--bg-gradient-4': '#0d0d50',
+  '--btn-primary-bg': '#66ccff',
+  '--btn-primary-hover': '#3399ff',
+  '--btn-secondary-bg': '#1a1a3d'
+},
+    candy: {
+  '--bg-gradient-1': '#ffb6c1',
+  '--bg-gradient-2': '#ffd1dc',
+  '--bg-gradient-3': '#ffe4e1',
+  '--bg-gradient-4': '#ffb6c1',
+  '--btn-primary-bg': '#ff69b4',
+  '--btn-primary-hover': '#ff1493',
+  '--btn-secondary-bg': '#ffe4e1'
+},
     neon: {
         '--bg-gradient-1': '#0f0f0f',
         '--bg-gradient-2': '#ff00ff',
