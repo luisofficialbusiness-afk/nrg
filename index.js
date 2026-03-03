@@ -108,5 +108,103 @@ document.addEventListener("keydown", function(e) {
     }
 });
 
+/* ==============================
+   UNIVERSAL THEME SCRIPT
+============================== */
+
+// Define theme colors
+const themes = {
+    default: {
+        '--bg-gradient-1': '#0a0a0a',
+        '--bg-gradient-2': '#0a1f3f',
+        '--bg-gradient-3': '#001f4f',
+        '--bg-gradient-4': '#0a0a0a',
+        '--btn-primary-bg': '#00d9ff',
+        '--btn-primary-hover': '#00b8e6',
+        '--btn-secondary-bg': '#1e1e2e'
+    },
+    ocean: {
+        '--bg-gradient-1': '#001f3f',
+        '--bg-gradient-2': '#003366',
+        '--bg-gradient-3': '#0055a5',
+        '--bg-gradient-4': '#001f3f',
+        '--btn-primary-bg': '#00ffaa',
+        '--btn-primary-hover': '#00dd88',
+        '--btn-secondary-bg': '#0a1f3f'
+    },
+    sunset: {
+        '--bg-gradient-1': '#ff6b6b',
+        '--bg-gradient-2': '#ff8e53',
+        '--bg-gradient-3': '#ffb347',
+        '--bg-gradient-4': '#ff6b6b',
+        '--btn-primary-bg': '#ffb347',
+        '--btn-primary-hover': '#ffa500',
+        '--btn-secondary-bg': '#1a1a1a'
+    },
+    neon: {
+        '--bg-gradient-1': '#0f0f0f',
+        '--bg-gradient-2': '#ff00ff',
+        '--bg-gradient-3': '#00ffff',
+        '--bg-gradient-4': '#0f0f0f',
+        '--btn-primary-bg': '#ff00ff',
+        '--btn-primary-hover': '#ff66ff',
+        '--btn-secondary-bg': '#1e1e1e'
+    }
+};
+
+// Apply a theme
+function applyTheme(themeName) {
+    const theme = themes[themeName];
+    if (!theme) return;
+
+    Object.keys(theme).forEach(key => {
+        document.documentElement.style.setProperty(key, theme[key]);
+        localStorage.setItem('nrg_theme_' + key, theme[key]);
+    });
+
+    localStorage.setItem('nrg_theme_selected', themeName);
+}
+
+// Reset to default
+function applyThemeDefault() {
+    Object.keys(themes.default).forEach(key => {
+        document.documentElement.style.setProperty(key, themes.default[key]);
+        localStorage.setItem('nrg_theme_' + key, themes.default[key]);
+    });
+    localStorage.setItem('nrg_theme_selected', 'default');
+}
+
+// Apply saved theme on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('nrg_theme_selected') || 'default';
+
+    if (themes[savedTheme]) {
+        Object.keys(themes[savedTheme]).forEach(key => {
+            const value = localStorage.getItem('nrg_theme_' + key) || themes[savedTheme][key];
+            document.documentElement.style.setProperty(key, value);
+        });
+    }
+
+    // If a theme dropdown exists, set its value
+    const themeChooser = document.getElementById('theme-chooser');
+    if (themeChooser) themeChooser.value = savedTheme;
+
+    // Add change listener for dropdown
+    if (themeChooser) {
+        themeChooser.addEventListener('change', () => {
+            applyTheme(themeChooser.value);
+            alert(`Theme "${themeChooser.value}" applied.`);
+        });
+    }
+});
+
+// Optional: expose reset function to button click
+window.resetTheme = () => {
+    applyThemeDefault();
+    const themeChooser = document.getElementById('theme-chooser');
+    if (themeChooser) themeChooser.value = 'default';
+    alert('Theme reset to default.');
+};
+
 
 
