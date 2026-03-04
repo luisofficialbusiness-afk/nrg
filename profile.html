@@ -15,17 +15,27 @@
     <input type="text" id="username-input" placeholder="Enter username">
     <button onclick="saveProfileInfo()">Save</button>
 
-    <h3>Level <span id="level">1</span></h3>
+<div class="level-section">
 
-    <h3 id="rank">Rookie</h3>
+  <div class="level-text">
+    <span class="level-label">LEVEL</span>
+    <span class="level-number" id="level">1</span>
+  </div>
 
+  <div class="rank-badge" id="rank">Rookie</div>
+
+  <div class="xp-container">
     <div class="xp-bar">
       <div class="xp-fill" id="xp-fill"></div>
     </div>
+    <div class="xp-text">
+      <span id="xp">0</span> XP
+    </div>
+  </div>
 
-    <p><span id="xp">0</span> XP</p>
+</div>
 
-    <h3>Achievements</h3>
+<h3 class="section-title">Achievements</h3>
     <div id="achievements-grid"></div>
 
   </div>
