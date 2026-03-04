@@ -143,3 +143,19 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+.level-section {
+  margin-top: 20px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.xp-container {
+  margin-top: 15px;
+}
+
+.xp-text {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.8;
+}
