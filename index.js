@@ -1,22 +1,16 @@
-// ==============================
-// NRG GLOBAL SETTINGS SYSTEM
-// ==============================
 
-// Immediately apply cloak (no wait)
 const savedTitle = localStorage.getItem("nrg_cloak_title");
 const savedIcon = localStorage.getItem("nrg_cloak_icon");
 
 if (savedTitle) document.title = savedTitle;
 if (savedIcon) setFavicon(savedIcon);
 
-// Wait for DOMContentLoaded only for buttons
+
 document.addEventListener("DOMContentLoaded", () => {
     setupAboutBlank();
 });
 
-// ==============================
-// CLOAK SYSTEM
-// ==============================
+
 
 function applyCloak(title, icon) {
     if (title) {
@@ -46,9 +40,6 @@ function setFavicon(iconUrl) {
     link.href = iconUrl;
 }
 
-// ==============================
-// ABOUT:BLANK SYSTEM
-// ==============================
 
 function setupAboutBlank() {
     const btn = document.querySelector(".open-about");
@@ -83,11 +74,9 @@ function setupAboutBlank() {
 })();
 
 
-// ===== PANIC KEY SYSTEM =====
 
-// Default panic config
 if (!localStorage.getItem("nrg_panic_key")) {
-    localStorage.setItem("nrg_panic_key", "\\"); // default key
+    localStorage.setItem("nrg_panic_key", "\\"); 
 }
 
 if (!localStorage.getItem("nrg_panic_url")) {
@@ -100,19 +89,15 @@ document.addEventListener("keydown", function(e) {
     if (e.key === panicKey) {
         const panicUrl = localStorage.getItem("nrg_panic_url");
 
-        // Option 1: Redirect current tab
+        
         window.location.href = panicUrl;
 
-        // Option 2 (stronger): Replace tab
-        // window.open(panicUrl, "_self");
+    
     }
 });
 
-/* ==============================
-   UNIVERSAL THEME SCRIPT
-============================== */
 
-// Define theme colors
+
 const themes = {
     default: {
         '--bg-gradient-1': '#0a0a0a',
@@ -197,7 +182,7 @@ const themes = {
     }
 };
 
-// Apply a theme
+
 function applyTheme(themeName) {
     const theme = themes[themeName];
     if (!theme) return;
@@ -210,7 +195,6 @@ function applyTheme(themeName) {
     localStorage.setItem('nrg_theme_selected', themeName);
 }
 
-// Reset to default
 function applyThemeDefault() {
     Object.keys(themes.default).forEach(key => {
         document.documentElement.style.setProperty(key, themes.default[key]);
@@ -219,7 +203,7 @@ function applyThemeDefault() {
     localStorage.setItem('nrg_theme_selected', 'default');
 }
 
-// Apply saved theme on page load
+
 window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('nrg_theme_selected') || 'default';
 
@@ -230,11 +214,11 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // If a theme dropdown exists, set its value
+
     const themeChooser = document.getElementById('theme-chooser');
     if (themeChooser) themeChooser.value = savedTheme;
 
-    // Add change listener for dropdown
+    
     if (themeChooser) {
         themeChooser.addEventListener('change', () => {
             applyTheme(themeChooser.value);
@@ -243,7 +227,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Optional: expose reset function to button click
+
 window.resetTheme = () => {
     applyThemeDefault();
     const themeChooser = document.getElementById('theme-chooser');
