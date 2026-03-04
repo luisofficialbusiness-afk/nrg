@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Theme / root colors */
+  
   --bg-primary: #0a0a0a;
   --bg-secondary: #0a1f3f;
   --bg-gradient-1: #0a0a0a;
@@ -105,7 +105,7 @@ h1.logo {
 }
 
 .card:hover .text {
-  opacity: 0; /* hide text on hover */
+  opacity: 0; 
 }
 
 .play-btn {
@@ -229,7 +229,7 @@ h1.logo {
 
 <h1 class="logo">NRG</h1>
 
-<!-- Game Cards -->
+
 <div class="card-container">
   <div class="card" data-game="games/1v1.LoL.html">
     <img src="images/1v1-lol.png" alt="1v1 LoL" class="card-img">
@@ -357,7 +357,7 @@ h1.logo {
     <button class="play-btn">▶ Play</button>
   </div>
 
-<!-- Iframe Overlay -->
+
 <div class="iframe-overlay">
   <div class="iframe-buttons">
     <button id="back-btn">← Back</button>
@@ -367,7 +367,7 @@ h1.logo {
   <iframe class="game-iframe" src=""></iframe>
 </div>
 
-<!-- Bottom Sidebar -->
+
 <div class="bottom-sidebar">
     <div class="nav-icon" data-page="index.html">🏠</div>
     <div class="nav-icon" data-page="games.html">🎮</div>
@@ -385,7 +385,7 @@ const backBtn = document.getElementById('back-btn');
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 const blankBtn = document.getElementById('blank-btn');
 
-// Open iframe when Play is clicked
+
 cards.forEach(card => {
   const playBtn = card.querySelector('.play-btn');
   playBtn.addEventListener('click', (e)=>{
@@ -395,20 +395,20 @@ cards.forEach(card => {
   });
 });
 
-// Back button
+
 backBtn.addEventListener('click', ()=>{
   overlay.style.display='none';
   iframe.src='';
 });
 
-// Fullscreen
+
 fullscreenBtn.addEventListener('click', ()=>{
   if(iframe.requestFullscreen) iframe.requestFullscreen();
   else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
   else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
 });
 
-// Open game in new tab
+
 blankBtn.addEventListener('click', ()=>{
   const currentGame = iframe.src;
   if(currentGame) window.open(currentGame, '_blank');
