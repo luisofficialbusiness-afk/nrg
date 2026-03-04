@@ -17,6 +17,8 @@
 
     <h3>Level <span id="level">1</span></h3>
 
+    <h3 id="rank">Rookie</h3>
+
     <div class="xp-bar">
       <div class="xp-fill" id="xp-fill"></div>
     </div>
@@ -39,6 +41,9 @@ function loadProfile() {
   document.getElementById("username-input").value = profile.username;
   document.getElementById("level").innerText = level;
   document.getElementById("xp").innerText = profile.xp;
+
+  // ✅ Set rank properly
+  document.getElementById("rank").innerText = getRank(level);
 
   let percent = profile.xp % 100;
   document.getElementById("xp-fill").style.width = percent + "%";
@@ -78,9 +83,19 @@ function renderAchievements() {
 
   const achievementList = {
     first_game: "🎮 First Game",
+    gamer_10: "🎮 Played 10 Games",
+    gamer_50: "🎮 Played 50 Games",
     ai_user: "🤖 AI Beginner",
-    xp_100: "⚡ 100 XP",
-    level_5: "🔥 Level 5"
+    ai_20: "🤖 AI Expert (20 Uses)",
+    xp_100: "⭐ 100 XP",
+    xp_500: "⭐ 500 XP",
+    xp_1000: "⭐ 1000 XP",
+    level_5: "🔥 Level 5",
+    level_10: "🔥 Level 10",
+    level_25: "🔥 Level 25",
+    coins_100: "💰 100 N-Coins",
+    coins_500: "💰 500 N-Coins",
+    visitor_10: "📅 10 Visits"
   };
 
   grid.innerHTML = "";
