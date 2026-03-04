@@ -272,6 +272,13 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
 });
 </script>
  <script src="index.js"></script>
+ <script src="nrg-system.js"></script>
+<script>
+let profile = getProfile();
+profile.progress.visits++;
+saveProfile(profile);
+checkAchievements();
+</script>
 
 </body>
 </html>
