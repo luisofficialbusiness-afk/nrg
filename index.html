@@ -7,24 +7,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 <style>
  :root {
-  /* Background Gradient */
+
   --bg-gradient-1: #0a0a0a;
   --bg-gradient-2: #0a1f3f;
   --bg-gradient-3: #001f4f;
   --bg-gradient-4: #0a0a0a;
 
-  /* Card Colors */
+
   --card-bg: #1a1a1a;
   --card-hover-bg: #007bff;
   --card-text: #ffffff;
 
-  /* Bottom Sidebar */
+
   --sidebar-bg: rgba(10, 18, 35, 0.85);
   --sidebar-border: rgba(0, 229, 255, 0.25);
   --sidebar-shadow: rgba(0, 229, 255, 0.25);
   --icon-color: #00e5ff;
 
-  /* Hover / Active */
+
   --hover-gradient-start: #00e5ff;
   --hover-gradient-end: #0066ff;
 }
@@ -60,7 +60,7 @@ h1.logo {
   display: flex;
   gap: 30px;
   justify-content: center;
-  margin-bottom: 100px; /* space for bottom sidebar */
+  margin-bottom: 100px; 
 }
 
 .card {
@@ -94,7 +94,7 @@ h1.logo {
   color: var(--card-text);
 }
 
-/* Bottom sidebar */
+
 .bottom-sidebar {
   position: fixed;
   bottom: 20px;
@@ -131,7 +131,7 @@ h1.logo {
   transition: all 0.25s ease;
 }
 
-/* Hover */
+
 .nav-icon:hover {
   background: linear-gradient(135deg, var(--hover-gradient-start), var(--hover-gradient-end));
   color: #000;
@@ -139,14 +139,14 @@ h1.logo {
   box-shadow: 0 0 20px var(--hover-gradient-start);
 }
 
-/* Active Page */
+
 .nav-icon.active {
   background: linear-gradient(135deg, var(--hover-gradient-start), var(--hover-gradient-end));
   color: #000;
   box-shadow: 0 0 20px var(--hover-gradient-start);
 }
 
-/* Optional: Hide card text when hovering */
+
 .card:hover .text {
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -155,7 +155,7 @@ h1.logo {
 </head>
 <body>
 
-<!-- Place this under your NRG logo -->
+
 <div class="logo-container" style="text-align:center;margin-bottom:20px;">
     <div class="logo" style="font-size:6rem;font-weight:800;color:white;letter-spacing:3px;text-shadow:0 0 15px #00e5ff;">NRG</div>
     <div id="rotating-phrase" style="color:#00e5ff;font-weight:500;margin-top:5px;font-size:1rem;height:1.2em;"></div>
@@ -176,9 +176,9 @@ const phrases = [
 
 let phraseIndex = 0;
 let charIndex = 0;
-let typing = true; // true = typing, false = deleting
-const speed = 100; // typing speed in ms
-const delayAfter = 1500; // pause after typing full phrase
+let typing = true; 
+const speed = 100; 
+const delayAfter = 1500; 
 const element = document.getElementById("rotating-phrase");
 
 function typeEffect() {
@@ -204,11 +204,11 @@ function typeEffect() {
     setTimeout(typeEffect, speed);
 }
 
-// Start the effect
+
 typeEffect();
 </script>
 
-  <!-- Horizontal Cards -->
+
   <div class="card-container">
     <div class="card" data-page="games.html">
       <div class="emoji">🎮</div>
@@ -232,7 +232,7 @@ typeEffect();
     </div>
   </div>
 
-  <!-- Bottom Sidebar -->
+  
   <div class="bottom-sidebar">
     <div class="nav-icon" data-page="index.html">🏠</div>
     <div class="nav-icon" data-page="games.html">🎮</div>
@@ -243,7 +243,7 @@ typeEffect();
 </div>
  
 <script>
-  // Make cards clickable
+
   const cards = document.querySelectorAll('.card');
   cards.forEach(card => {
     card.addEventListener('click', () => {
