@@ -101,3 +101,45 @@
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+
+:root {
+
+  --bg-gradient-1: #0a0a0a;
+  --bg-gradient-2: #0a1f3f;
+  --bg-gradient-3: #001f4f;
+  --bg-gradient-4: #0a0a0a;
+
+
+  --card-bg: #1a1a1a;
+  --card-hover-bg: #007bff;
+  --card-text: #ffffff;
+
+
+  --sidebar-bg: rgba(10, 18, 35, 0.85);
+  --sidebar-border: rgba(0, 229, 255, 0.25);
+  --sidebar-shadow: rgba(0, 229, 255, 0.25);
+  --icon-color: #00e5ff;
+
+
+  --hover-gradient-start: #00e5ff;
+  --hover-gradient-end: #0066ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
