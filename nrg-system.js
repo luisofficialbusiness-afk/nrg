@@ -84,3 +84,17 @@ function showAchievementPopup() {
     popup.remove();
   }, 2500);
 }
+
+
+function getRank(level) {
+  if (level >= 100) return "NRG Legend";
+  if (level >= 75) return "Ascended";
+  if (level >= 50) return "NRG Master";
+  if (level >= 40) return "Veteran";
+  if (level >= 30) return "Elite";
+  if (level >= 20) return "Specialist";
+  if (level >= 15) return "Operator";
+  if (level >= 10) return "Explorer";
+  if (level >= 5) return "Rising";
+  return "Rookie";
+}
