@@ -9,32 +9,27 @@
 
 <style>
 :root {
-  /* Background Gradient */
   --bg-gradient-1: #0a0a0a;
   --bg-gradient-2: #0a1f3f;
   --bg-gradient-3: #001f4f;
   --bg-gradient-4: #0a0a0a;
 
-  /* Text & Input */
   --text-color: white;
   --label-color: #8b7ea8;
   --input-bg: #1e1e2e;
   --input-border: rgba(0,217,255,0.2);
   --input-focus: #00d9ff;
 
-  /* Buttons */
   --btn-primary-bg: #00d9ff;
   --btn-primary-hover: #00b8e6;
   --btn-primary-color: black;
   --btn-secondary-bg: #1e1e2e;
   --btn-secondary-color: white;
 
-  /* Cards / Settings */
   --card-bg: rgba(20,20,30,0.85);
   --card-border: rgba(0,217,255,0.2);
   --card-radius: 14px;
 
-  /* Sidebar */
   --sidebar-bg: rgba(10, 18, 35, 0.85);
   --sidebar-border: rgba(0, 229, 255, 0.25);
   --sidebar-shadow: rgba(0, 229, 255, 0.25);
@@ -48,7 +43,7 @@ body {
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
   color: var(--text-color);
-  padding-bottom: 90px; /* space for bottom sidebar */
+  padding-bottom: 90px; 
 }
 
 @keyframes gradientBG {
@@ -127,7 +122,7 @@ body {
   color: var(--btn-secondary-color);
 }
 
-/* Bottom Sidebar */
+
 .bottom-sidebar {
   position: fixed;
   bottom: 20px;
@@ -221,7 +216,7 @@ body {
         </div>
     </div>
   
-<!-- PANIC SETTINGS -->
+
 <div class="settings-card">
     <h2>Panic Settings</h2>
 
@@ -240,7 +235,7 @@ body {
     </div>
 </div>
 
-<!-- IMPORT / EXPORT -->
+
 <div class="settings-card">
     <h2>Import / Export Settings</h2>
 
@@ -282,7 +277,7 @@ body {
     </div>
 </div>
 
-<!-- Bottom Sidebar -->
+
 <div class="bottom-sidebar">
     <div class="nav-icon" data-page="index.html">🏠</div>
     <div class="nav-icon" data-page="games.html">🎮</div>
@@ -293,9 +288,6 @@ body {
 </div>
      
 <script>
-/* ==============================
-   CLOAK FUNCTIONS
-============================== */
 function saveCloak() {
     const title = document.getElementById("cloakTitle").value;
     const icon = document.getElementById("cloakIcon").value;
@@ -336,18 +328,18 @@ window.addEventListener("load", () => {
     if(savedTitle) document.title = savedTitle;
     if(savedIcon) setIcon(savedIcon);
 
-    // Initialize panic inputs
+
     document.getElementById("panic-key").value = localStorage.getItem("nrg_panic_key") || "\\";
     document.getElementById("panic-url").value = localStorage.getItem("nrg_panic_url") || "https://google.com";
 
-    // Highlight current bottom sidebar icon
+
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
         if(icon.dataset.page === currentPage) icon.classList.add("active");
     });
 });
 
-/* CLOAK PRESETS */
+
 function presetGoogle() {
     document.getElementById("cloakTitle").value = "Google";
     document.getElementById("cloakIcon").value = "https://www.google.com/favicon.ico";
@@ -363,7 +355,7 @@ function presetCanvas() {
     document.getElementById("cloakIcon").value = "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico";
 }
 
-// Educational apps
+
 function presetIready() {
     document.getElementById("cloakTitle").value = "I-Ready";
     document.getElementById("cloakIcon").value = "https://cdn.i-ready.com/favicon.ico";
@@ -379,7 +371,6 @@ function presetClasslink() {
     document.getElementById("cloakIcon").value = "https://launchpad.classlink.com/favicon.ico";
 }
 
-// You can add more educational apps similarly
 function presetKhanAcademy() {
     document.getElementById("cloakTitle").value = "Khan Academy";
     document.getElementById("cloakIcon").value = "https://www.khanacademy.org/favicon.ico";
@@ -390,15 +381,15 @@ function presetEdmodo() {
     document.getElementById("cloakIcon").value = "https://www.edmodo.com/favicon.ico";
 }
 
-/* ABOUT BLANK */
-function openAboutBlank() {
+
+  function openAboutBlank() {
     const win = window.open("about:blank", "_blank");
     win.document.write(`
         <iframe src="${location.href}" style="width:100%;height:100%;border:none;"></iframe>
     `);
 }
 
-/* BOTTOM SIDEBAR NAVIGATION */
+
 document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
     icon.addEventListener('click', () => {
         const page = icon.dataset.page;
@@ -406,7 +397,7 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
     });
 });
 
-/* PANIC SETTINGS */
+
 function savePanicSettings() {
     const key = document.getElementById("panic-key").value;
     const url = document.getElementById("panic-url").value;
@@ -417,7 +408,7 @@ function savePanicSettings() {
     alert("Panic settings saved.");
 }
 
-/* IMPORT / EXPORT SETTINGS */
+
 function exportSettings() {
     const data = {};
     for(let i = 0; i < localStorage.length; i++) {
@@ -450,7 +441,7 @@ document.getElementById("import-file").addEventListener("change", function(e) {
     reader.readAsText(file);
 });
 
-  // Define theme colors
+
 const themes = {
     default: {
         '--bg-gradient-1': '#0a0a0a',
@@ -535,8 +526,8 @@ const themes = {
     }
 };
 
-// Apply selected theme
-function applyTheme() {
+
+  function applyTheme() {
     const themeName = document.getElementById('theme-chooser').value;
     const theme = themes[themeName];
 
@@ -551,14 +542,14 @@ function applyTheme() {
     alert(`Theme "${themeName}" applied.`);
 }
 
-// Reset theme to default
+
 function resetTheme() {
     applyThemeDefault();
     document.getElementById('theme-chooser').value = 'default';
     alert('Theme reset to default.');
 }
 
-// Apply saved theme on load
+
 window.addEventListener('load', () => {
     const savedTheme = localStorage.getItem('nrg_theme_selected') || 'default';
     document.getElementById('theme-chooser').value = savedTheme;
@@ -571,7 +562,7 @@ window.addEventListener('load', () => {
     }
 });
 
-// Reset to default colors
+
 function applyThemeDefault() {
     Object.keys(themes.default).forEach(key => {
         document.documentElement.style.setProperty(key, themes.default[key]);
