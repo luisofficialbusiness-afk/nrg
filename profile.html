@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NRG | Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="profile-container">
+  <div class="profile-card">
+
+    <div class="pfp" id="pfp"></div>
+    <input type="file" id="pfp-upload" accept="image/*">
+
+    <input type="text" id="username-input" placeholder="Enter username">
+    <button onclick="saveProfileInfo()">Save</button>
+
+    <h3>Level <span id="level">1</span></h3>
+
+    <div class="xp-bar">
+      <div class="xp-fill" id="xp-fill"></div>
+    </div>
+
+    <p><span id="xp">0</span> XP</p>
+
+    <h3>Achievements</h3>
+    <div id="achievements-grid"></div>
+
+  </div>
+</div>
+
+<script src="nrg-system.js"></script>
+
+<script>
+function loadProfile() {
+  let profile = getProfile();
+  let level = getLevel(profile.xp);
+
+  document.getElementById("username-input").value = profile.username;
+  document.getElementById("level").innerText = level;
+  document.getElementById("xp").innerText = profile.xp;
+
+  let percent = profile.xp % 100;
+  document.getElementById("xp-fill").style.width = percent + "%";
+
+  if (profile.pfp) {
+    const pfp = document.getElementById("pfp");
+    pfp.style.backgroundImage = `url(${profile.pfp})`;
+    pfp.style.backgroundSize = "cover";
+    pfp.style.backgroundPosition = "center";
+  }
+
+  renderAchievements();
+}
+
+function saveProfileInfo() {
+  let profile = getProfile();
+  profile.username =
+    document.getElementById("username-input").value || "Guest";
+  saveProfile(profile);
+  loadProfile();
+}
+
+document.getElementById("pfp-upload").addEventListener("change", function () {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    let profile = getProfile();
+    profile.pfp = e.target.result;
+    saveProfile(profile);
+    loadProfile();
+  };
+  reader.readAsDataURL(this.files[0]);
+});
+
+function renderAchievements() {
+  let profile = getProfile();
+  let grid = document.getElementById("achievements-grid");
+
+  const achievementList = {
+    first_game: "🎮 First Game",
+    ai_user: "🤖 AI Beginner",
+    xp_100: "⚡ 100 XP",
+    level_5: "🔥 Level 5"
+  };
+
+  grid.innerHTML = "";
+
+  for (let id in achievementList) {
+    let unlocked = profile.achievements.includes(id);
+    let div = document.createElement("div");
+    div.className = unlocked ? "ach unlocked" : "ach locked";
+    div.innerText = achievementList[id];
+    grid.appendChild(div);
+  }
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>
