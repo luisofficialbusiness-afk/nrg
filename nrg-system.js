@@ -46,6 +46,7 @@ function getRank(level) {
     return "Rookie";
 }
 
+// Show achievement popup
 function showAchievementPopup(name) {
     const popup = document.createElement("div");
     popup.className = "achievement-popup";
@@ -132,6 +133,7 @@ function unlockAchievement(id) {
         profile.achievements.push(id);
         saveProfile(profile);
         showAchievementPopup(achievementList[id]);
+        renderAchievements(); // ensure grid updates immediately
     }
 }
 
@@ -172,12 +174,18 @@ function checkAchievements() {
 
 function updateProfileUI() {
     const profile = getProfile();
-    document.getElementById('xp').innerText = profile.xp || 0;
-    document.getElementById('level').innerText = getLevel(profile.xp);
-    document.getElementById('rank').innerText = getRank(getLevel(profile.xp));
 
-    const percent = profile.xp % 100;
-    document.getElementById('xp-fill').style.width = percent + '%';
+    const xpElem = document.getElementById('xp');
+    if (xpElem) xpElem.innerText = profile.xp || 0;
+
+    const levelElem = document.getElementById('level');
+    if (levelElem) levelElem.innerText = getLevel(profile.xp);
+
+    const rankElem = document.getElementById('rank');
+    if (rankElem) rankElem.innerText = getRank(getLevel(profile.xp));
+
+    const xpFillElem = document.getElementById('xp-fill');
+    if (xpFillElem) xpFillElem.style.width = (profile.xp % 100) + '%';
 
     renderAchievements();
     updateCoinsUI();
@@ -268,5 +276,10 @@ window.getProfile = getProfile;
 window.saveProfile = saveProfile;
 window.updateProfileUI = updateProfileUI;
 
-// Update UI on load
-window.addEventListener('load', updateProfileUI);
+// ============================
+// Auto-update UI and achievements on page load
+// ============================
+window.addEventListener('load', () => {
+    updateProfileUI();
+    checkAchievements(); // <- THIS fixes achievements for testers
+});
