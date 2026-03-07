@@ -197,6 +197,87 @@ function updateProfileUI() {
     renderAchievements();
 }
 
-// Example usage:
-// trackGamePlayed(); // Call after finishing a game
-// trackAiUsage();    // Call whenever AI is used
+
+
+// ================================
+// N-Coins System
+// ================================
+
+// Add N-Coins
+function addCoins(amount) {
+    let profile = getProfile();
+    profile.nCoins = (profile.nCoins || 0) + amount;
+    saveProfile(profile);
+    updateCoinsUI();
+}
+
+// Remove / spend N-Coins
+function spendCoins(amount) {
+    let profile = getProfile();
+    if ((profile.nCoins || 0) >= amount) {
+        profile.nCoins -= amount;
+        saveProfile(profile);
+        updateCoinsUI();
+        return true; // purchase successful
+    } else {
+        alert("Not enough N-Coins!");
+        return false; // not enough coins
+    }
+}
+
+// Update N-Coins display in UI
+function updateCoinsUI() {
+    const profile = getProfile();
+    const coinsElements = document.querySelectorAll(".ncoins-display");
+    coinsElements.forEach(el => el.innerText = profile.nCoins || 0);
+}
+
+// ================================
+// Examples of gaining N-Coins
+// ================================
+
+// From games
+function trackGamePlayed() {
+    let profile = getProfile();
+    profile.gamesPlayed = (profile.gamesPlayed || 0) + 1;
+
+    addXp(5);
+    addCoins(2); // Give 2 N-Coins per game
+
+    unlockAchievement(profile, 'first_game', profile.gamesPlayed >= 1);
+    unlockAchievement(profile, 'gamer_10', profile.gamesPlayed >= 10);
+    unlockAchievement(profile, 'gamer_50', profile.gamesPlayed >= 50);
+
+    saveProfile(profile);
+}
+
+// From AI usage
+function trackAiUsage() {
+    let profile = getProfile();
+    profile.aiUses = (profile.aiUses || 0) + 1;
+
+    addXp(3);
+    addCoins(1); // Give 1 N-Coin per AI use
+
+    unlockAchievement(profile, 'ai_user', profile.aiUses >= 1);
+    unlockAchievement(profile, 'ai_20', profile.aiUses >= 20);
+
+    saveProfile(profile);
+}
+
+// ================================
+// Optional: give daily bonus N-Coins
+// ================================
+function dailyBonus() {
+    const lastBonus = localStorage.getItem('nrg_last_daily_bonus') || 0;
+    const now = Date.now();
+    const oneDay = 24*60*60*1000;
+
+    if(now - lastBonus >= oneDay) {
+        addCoins(50); // Give 50 N-Coins once per day
+        localStorage.setItem('nrg_last_daily_bonus', now);
+        alert("Daily bonus: +50 N-Coins!");
+    } else {
+        console.log("Daily bonus already claimed.");
+    }
+}
