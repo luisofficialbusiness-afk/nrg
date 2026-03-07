@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,19 +11,19 @@
 <div class="profile-page">
 
   <!-- Banner -->
-  <div class="profile-banner"></div>
+  <div class="profile-banner" id="banner"></div>
+  <input type="file" id="banner-upload" accept="image/*" hidden>
 
   <!-- Profile Header -->
   <div class="profile-header">
 
     <div class="pfp" id="pfp"></div>
+    <input type="file" id="pfp-upload" accept="image/*" hidden>
 
     <div class="profile-info">
 
       <input type="text" id="username-input" placeholder="Enter username">
       <button onclick="saveProfileInfo()">Save</button>
-
-      <input type="file" id="pfp-upload" accept="image/*">
 
       <div class="level-section">
 
@@ -78,14 +79,20 @@ function loadProfile() {
   let percent = profile.xp % 100;
   document.getElementById("xp-fill").style.width = percent + "%";
 
+  // Load PFP
   if (profile.pfp) {
-
     const pfp = document.getElementById("pfp");
-
     pfp.style.backgroundImage = `url(${profile.pfp})`;
     pfp.style.backgroundSize = "cover";
     pfp.style.backgroundPosition = "center";
+  }
 
+  // Load Banner
+  if (profile.banner) {
+    const banner = document.getElementById("banner");
+    banner.style.backgroundImage = `url(${profile.banner})`;
+    banner.style.backgroundSize = "cover";
+    banner.style.backgroundPosition = "center";
   }
 
   renderAchievements();
@@ -107,6 +114,18 @@ function saveProfileInfo() {
 }
 
 
+// CLICK PFP TO UPLOAD
+document.getElementById("pfp").addEventListener("click", () => {
+  document.getElementById("pfp-upload").click();
+});
+
+// CLICK BANNER TO UPLOAD
+document.getElementById("banner").addEventListener("click", () => {
+  document.getElementById("banner-upload").click();
+});
+
+
+// PFP Upload
 document.getElementById("pfp-upload").addEventListener("change", function () {
 
   const reader = new FileReader();
@@ -116,6 +135,28 @@ document.getElementById("pfp-upload").addEventListener("change", function () {
     let profile = getProfile();
 
     profile.pfp = e.target.result;
+
+    saveProfile(profile);
+
+    loadProfile();
+
+  };
+
+  reader.readAsDataURL(this.files[0]);
+
+});
+
+
+// Banner Upload
+document.getElementById("banner-upload").addEventListener("change", function () {
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+
+    let profile = getProfile();
+
+    profile.banner = e.target.result;
 
     saveProfile(profile);
 
@@ -176,7 +217,6 @@ function renderAchievements() {
 
 }
 
-
 loadProfile();
 
 </script>
@@ -185,3 +225,5 @@ loadProfile();
 
 </body>
 </html>
+
+
