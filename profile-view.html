@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shared Profile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Shared NRG Profile</h1>
+
+<div id="profile"></div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const data = params.get("profile");
+
+if (data) {
+
+  const profile = JSON.parse(atob(data));
+
+  document.getElementById("profile").innerHTML = `
+    <h2>${profile.username}</h2>
+    <p>Level: ${profile.level}</p>
+    <p>XP: ${profile.xp}</p>
+    <p>N-Coins: ${profile.coins}</p>
+    <p>Achievements: ${profile.achievements}</p>
+  `;
+
+}
+
+</script>
+
+</body>
+</html>
