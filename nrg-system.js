@@ -120,3 +120,83 @@ window.addEventListener('load', () => {
         gainHomepageXp();
     }
 });
+
+
+
+// ================================
+// NRG Universal Tracking System
+// ================================
+
+// Call this whenever a game is completed
+function trackGamePlayed() {
+    let profile = getProfile();
+
+    profile.gamesPlayed = (profile.gamesPlayed || 0) + 1;
+
+    // Give XP for playing a game
+    addXp(5);
+
+    // Give N-Coins for playing a game (optional)
+    profile.nCoins = (profile.nCoins || 0) + 2;
+
+    // Unlock achievements
+    unlockAchievement(profile, 'first_game', profile.gamesPlayed >= 1);
+    unlockAchievement(profile, 'gamer_10', profile.gamesPlayed >= 10);
+    unlockAchievement(profile, 'gamer_50', profile.gamesPlayed >= 50);
+
+    saveProfile(profile);
+}
+
+// Call this whenever AI feature is used
+function trackAiUsage() {
+    let profile = getProfile();
+
+    profile.aiUses = (profile.aiUses || 0) + 1;
+
+    // Give XP for using AI
+    addXp(3);
+
+    // Optional: give N-Coins
+    profile.nCoins = (profile.nCoins || 0) + 1;
+
+    // Unlock achievements
+    unlockAchievement(profile, 'ai_user', profile.aiUses >= 1);
+    unlockAchievement(profile, 'ai_20', profile.aiUses >= 20);
+
+    saveProfile(profile);
+}
+
+// Helper to unlock achievements
+function unlockAchievement(profile, id, condition) {
+    if(condition && !profile.achievements.includes(id)) {
+        profile.achievements.push(id);
+        console.log(`Achievement unlocked: ${id}`);
+    }
+}
+
+// Simple XP addition function
+function addXp(amount) {
+    let profile = getProfile();
+    profile.xp = (profile.xp || 0) + amount;
+    saveProfile(profile);
+    updateProfileUI();
+}
+
+// Optional: Update the profile UI after changes
+function updateProfileUI() {
+    const profile = getProfile();
+    document.getElementById('xp').innerText = profile.xp || 0;
+
+    const level = getLevel(profile.xp);
+    document.getElementById('level').innerText = level;
+    document.getElementById('rank').innerText = getRank(level);
+
+    const percent = (profile.xp % 100);
+    document.getElementById('xp-fill').style.width = percent + '%';
+
+    renderAchievements();
+}
+
+// Example usage:
+// trackGamePlayed(); // Call after finishing a game
+// trackAiUsage();    // Call whenever AI is used
