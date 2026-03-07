@@ -3,10 +3,6 @@
 <head>
   <title>Shared Profile</title>
   <style>
-    /* ============================
-       Shared Profile Card CSS
-    ============================ */
-
     body {
       margin: 0;
       padding: 0;
@@ -24,7 +20,7 @@
       background-color: #111;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -51,24 +47,30 @@
       background-position: center;
     }
 
-    /* Username */
+    /* Profile Info */
+    .shared-profile-card .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+
     .shared-profile-card .username {
       font-size: 1.6rem;
       font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
+      margin: 10px 0 5px 0;
     }
 
-    /* Level & Rank */
-    .shared-profile-card .level-rank {
+    .level-rank {
       display: flex;
       justify-content: space-around;
       width: 80%;
-      margin-top: 10px;
+      margin-bottom: 10px;
     }
 
-    .shared-profile-card .level-rank .level,
-    .shared-profile-card .level-rank .rank {
+    .level-rank .level,
+    .level-rank .rank {
       text-align: center;
       font-size: 0.9rem;
       padding: 5px 10px;
@@ -78,36 +80,34 @@
       font-weight: bold;
     }
 
-    /* XP Bar */
-    .shared-profile-card .xp-bar-container {
+    .xp-container {
       width: 80%;
+      margin-bottom: 15px;
+    }
+
+    .xp-bar-container {
+      width: 100%;
       height: 12px;
       background: #222;
       border-radius: 10px;
-      margin: 15px 0;
       overflow: hidden;
     }
 
-    .shared-profile-card .xp-bar {
-      height: 100%;
+    .xp-bar {
       width: 0%;
-      background: linear-gradient(135deg, #00e5ff, #0066ff);
+      height: 100%;
+      background: linear-gradient(135deg,#00e5ff,#0066ff);
       border-radius: 10px;
       transition: width 0.5s ease;
     }
 
-    /* N-Coins */
-    .shared-profile-card .ncoins {
+    .ncoins {
       font-size: 1rem;
       font-weight: bold;
       margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
-    /* Achievements Grid */
-    .shared-profile-card .achievements {
+    .achievements {
       width: 90%;
       display: flex;
       flex-wrap: wrap;
@@ -116,26 +116,24 @@
       padding-bottom: 15px;
     }
 
-    .shared-profile-card .achievements .ach {
+    .achievements .ach {
       flex: 0 0 40%;
       padding: 8px 5px;
       text-align: center;
       border-radius: 8px;
       font-size: 0.85rem;
       font-weight: bold;
-      transition: all 0.3s ease;
     }
 
-    .shared-profile-card .achievements .unlocked {
+    .achievements .unlocked {
       background: linear-gradient(135deg, #00e5ff, #0066ff);
       color: #000;
     }
 
-    .shared-profile-card .achievements .locked {
+    .achievements .locked {
       background: #333;
       color: #888;
     }
-
   </style>
 </head>
 <body>
@@ -143,30 +141,36 @@
 <div class="shared-profile-card" id="profile-card">
   <div class="banner" id="banner"></div>
   <div class="pfp" id="pfp"></div>
-  <div class="username" id="username">Username</div>
+  
+  <div class="profile-info">
+    <div class="username" id="username">Username</div>
 
-  <div class="level-rank">
-    <div class="level" id="level">Level 1</div>
-    <div class="rank" id="rank">Rookie</div>
+    <div class="level-rank">
+      <div class="level" id="level">Level 1</div>
+      <div class="rank" id="rank">Rookie</div>
+    </div>
+
+    <div class="xp-container">
+      <div class="xp-bar-container">
+        <div class="xp-bar" id="xp-bar"></div>
+      </div>
+      <div class="xp-text" id="xp-text">0 XP</div>
+    </div>
+
+    <div class="ncoins">💰 <span id="ncoins">0</span> N-Coins</div>
+
+    <div class="achievements" id="achievements-grid"></div>
   </div>
-
-  <div class="xp-bar-container">
-    <div class="xp-bar" id="xp-bar"></div>
-  </div>
-
-  <div class="ncoins">💰 <span id="ncoins">0</span> N-Coins</div>
-
-  <div class="achievements" id="achievements-grid"></div>
 </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 const data = params.get("profile");
 
-if (data) {
+if(data){
   const profile = JSON.parse(atob(data));
 
-  // Set banner and PFP
+  // Banner & PFP
   if(profile.banner) document.getElementById("banner").style.backgroundImage = `url(${profile.banner})`;
   if(profile.pfp) document.getElementById("pfp").style.backgroundImage = `url(${profile.pfp})`;
 
@@ -178,8 +182,9 @@ if (data) {
   document.getElementById("rank").innerText = profile.rank || "Rookie";
 
   // XP Bar
-  const xpPercent = Math.min((profile.xp % 100), 100);
+  const xpPercent = Math.min(profile.xp % 100, 100);
   document.getElementById("xp-bar").style.width = xpPercent + "%";
+  document.getElementById("xp-text").innerText = `${profile.xp || 0} XP`;
 
   // N-Coins
   document.getElementById("ncoins").innerText = profile.coins || 0;
@@ -187,9 +192,11 @@ if (data) {
   // Achievements
   const achievementList = profile.achievements || [];
   const grid = document.getElementById("achievements-grid");
-  achievementList.forEach(a => {
+  const allAchievements = ["First Game","Played 10 Games","Played 50 Games","AI Beginner","AI Expert","100 XP","500 XP","1000 XP","Level 5","Level 10","Level 25","100 N-Coins","500 N-Coins","10 Visits"];
+
+  allAchievements.forEach(a => {
     const div = document.createElement("div");
-    div.className = "ach unlocked";
+    div.className = achievementList.includes(a) ? "ach unlocked" : "ach locked";
     div.innerText = a;
     grid.appendChild(div);
   });
