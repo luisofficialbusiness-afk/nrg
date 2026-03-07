@@ -52,6 +52,9 @@
             <span>N-Coins: </span><span id="ncoins">0</span>
           </div>
 
+          <!-- ⭐ Share Profile Button -->
+          <button onclick="shareProfile()">Share Profile</button>
+
         </div>
 
       </div>
@@ -70,6 +73,7 @@
 <script src="nrg-system.js"></script>
 
 <script>
+
 function loadProfile() {
   let profile = getProfile();
   let level = getLevel(profile.xp);
@@ -99,7 +103,7 @@ function loadProfile() {
     banner.style.backgroundPosition = "center";
   }
 
-  // Update N-Coins ✅ proper casing
+  // Update N-Coins
   document.getElementById("ncoins").innerText = profile.nCoins || 0;
 
   renderAchievements();
@@ -112,10 +116,34 @@ function saveProfileInfo() {
   loadProfile();
 }
 
-// PFP and Banner click triggers
+// ⭐ Share Profile Function
+function shareProfile() {
+
+  let profile = getProfile();
+  let level = getLevel(profile.xp);
+
+  const data = {
+    username: profile.username,
+    level: level,
+    xp: profile.xp,
+    coins: profile.nCoins,
+    achievements: profile.achievements.length
+  };
+
+  const encoded = btoa(JSON.stringify(data));
+  const link = `${window.location.origin}/profile-view.html?profile=${encoded}`;
+
+  navigator.clipboard.writeText(link);
+
+  alert("Profile link copied! Send it to your friends.");
+}
+
+// PFP click trigger
 document.getElementById("pfp").addEventListener("click", () => {
   document.getElementById("pfp-upload").click();
 });
+
+// Banner click trigger
 document.getElementById("banner").addEventListener("click", () => {
   document.getElementById("banner-upload").click();
 });
@@ -146,6 +174,7 @@ document.getElementById("banner-upload").addEventListener("change", function() {
 function renderAchievements() {
   let profile = getProfile();
   let grid = document.getElementById("achievements-grid");
+
   const achievementList = {
     first_game: "🎮 First Game",
     gamer_10: "🎮 Played 10 Games",
@@ -164,16 +193,20 @@ function renderAchievements() {
   };
 
   grid.innerHTML = "";
+
   for (let id in achievementList) {
     let unlocked = profile.achievements.includes(id);
+
     let div = document.createElement("div");
     div.className = unlocked ? "ach unlocked" : "ach locked";
     div.innerText = achievementList[id];
+
     grid.appendChild(div);
   }
 }
 
 loadProfile();
+
 </script>
 
 <script src="index.js"></script>
