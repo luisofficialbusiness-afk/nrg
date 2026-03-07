@@ -48,7 +48,7 @@
           </div>
 
           <!-- N-Coins Counter -->
-           <div class="ncoins-container">
+          <div class="ncoins-container">
             <span>N-Coins: </span><span id="ncoins">0</span>
           </div>
 
@@ -99,8 +99,8 @@ function loadProfile() {
     banner.style.backgroundPosition = "center";
   }
 
-  // Update N-Coins
-  document.getElementById("ncoins").innerText = profile.ncoins || 0;
+  // Update N-Coins ✅ proper casing
+  document.getElementById("ncoins").innerText = profile.nCoins || 0;
 
   renderAchievements();
 }
