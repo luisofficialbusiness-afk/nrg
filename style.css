@@ -161,3 +161,54 @@ body {
   opacity: 0.8;
   color: white;
 }
+
+.profile-page{
+  max-width:900px;
+  margin:auto;
+  padding-bottom:80px;
+}
+
+.profile-banner{
+  height:160px;
+  background:linear-gradient(135deg,#00e5ff,#0066ff);
+  border-radius:12px 12px 0 0;
+}
+
+.profile-header{
+  display:flex;
+  gap:20px;
+  padding:20px;
+  margin-top:-60px;
+  align-items:center;
+}
+
+.pfp{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:4px solid #111;
+  background:#222;
+}
+
+.profile-info h2{
+  margin:0;
+  font-size:24px;
+}
+
+.rank-line{
+  opacity:0.8;
+  margin:4px 0 10px 0;
+}
+
+.profile-content{
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.profile-section{
+  background:rgba(20,20,30,0.8);
+  padding:15px;
+  border-radius:10px;
+}
