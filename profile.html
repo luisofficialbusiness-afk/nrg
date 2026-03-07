@@ -47,6 +47,11 @@
             </div>
           </div>
 
+          <!-- N-Coins Counter -->
+          <div class="ncoins-container">
+            <span>N-Coins: </span><span id="ncoins">0</span>
+          </div>
+
         </div>
 
       </div>
@@ -74,6 +79,7 @@ function loadProfile() {
   document.getElementById("xp").innerText = profile.xp;
   document.getElementById("rank").innerText = getRank(level);
 
+  // Update XP bar
   let percent = profile.xp % 100;
   document.getElementById("xp-fill").style.width = percent + "%";
 
@@ -92,6 +98,9 @@ function loadProfile() {
     banner.style.backgroundSize = "cover";
     banner.style.backgroundPosition = "center";
   }
+
+  // Update N-Coins
+  document.getElementById("ncoins").innerText = profile.ncoins || 0;
 
   renderAchievements();
 }
