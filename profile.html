@@ -159,7 +159,7 @@ function shareProfile() {
 }
 
 const encoded = base64EncodeUnicode(JSON.stringify(data));
-const url = `shared-profile.html?profile=${encoded}`;
+const url = `profile-view.html?profile=${encoded}`;
 window.open(url, "_blank");
 }
 
