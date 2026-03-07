@@ -4,47 +4,68 @@
   <title>NRG | Profile</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="profile-container">
-  <div class="profile-card">
+<div class="profile-page">
+
+  <!-- Banner -->
+  <div class="profile-banner"></div>
+
+  <!-- Profile Header -->
+  <div class="profile-header">
 
     <div class="pfp" id="pfp"></div>
-    <input type="file" id="pfp-upload" accept="image/*">
 
-    <input type="text" id="username-input" placeholder="Enter username">
-    <button onclick="saveProfileInfo()">Save</button>
+    <div class="profile-info">
 
-<div class="level-section">
+      <input type="text" id="username-input" placeholder="Enter username">
+      <button onclick="saveProfileInfo()">Save</button>
 
-  <div class="level-text">
-    <span class="level-label">LEVEL</span>
-    <span class="level-number" id="level">1</span>
+      <input type="file" id="pfp-upload" accept="image/*">
+
+      <div class="level-section">
+
+        <div class="level-text">
+          <span class="level-label">LEVEL</span>
+          <span class="level-number" id="level">1</span>
+        </div>
+
+        <div class="rank-badge" id="rank">Rookie</div>
+
+        <div class="xp-container">
+          <div class="xp-bar">
+            <div class="xp-fill" id="xp-fill"></div>
+          </div>
+
+          <div class="xp-text">
+            <span id="xp">0</span> XP
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="rank-badge" id="rank">Rookie</div>
+  <!-- Profile Content -->
+  <div class="profile-content">
 
-  <div class="xp-container">
-    <div class="xp-bar">
-      <div class="xp-fill" id="xp-fill"></div>
-    </div>
-    <div class="xp-text">
-      <span id="xp">0</span> XP
-    </div>
-  </div>
-
-</div>
-
-<h3 class="section-title">Achievements</h3>
+    <h3 class="section-title">Achievements</h3>
     <div id="achievements-grid"></div>
 
   </div>
+
 </div>
+
 
 <script src="nrg-system.js"></script>
 
 <script>
+
 function loadProfile() {
+
   let profile = getProfile();
   let level = getLevel(profile.xp);
 
@@ -52,76 +73,115 @@ function loadProfile() {
   document.getElementById("level").innerText = level;
   document.getElementById("xp").innerText = profile.xp;
 
-  // ✅ Set rank properly
   document.getElementById("rank").innerText = getRank(level);
 
   let percent = profile.xp % 100;
   document.getElementById("xp-fill").style.width = percent + "%";
 
   if (profile.pfp) {
+
     const pfp = document.getElementById("pfp");
+
     pfp.style.backgroundImage = `url(${profile.pfp})`;
     pfp.style.backgroundSize = "cover";
     pfp.style.backgroundPosition = "center";
+
   }
 
   renderAchievements();
+
 }
+
 
 function saveProfileInfo() {
+
   let profile = getProfile();
+
   profile.username =
-    document.getElementById("username-input").value || "Guest";
+  document.getElementById("username-input").value || "Guest";
+
   saveProfile(profile);
+
   loadProfile();
+
 }
 
+
 document.getElementById("pfp-upload").addEventListener("change", function () {
+
   const reader = new FileReader();
+
   reader.onload = function (e) {
+
     let profile = getProfile();
+
     profile.pfp = e.target.result;
+
     saveProfile(profile);
+
     loadProfile();
+
   };
+
   reader.readAsDataURL(this.files[0]);
+
 });
 
+
 function renderAchievements() {
+
   let profile = getProfile();
+
   let grid = document.getElementById("achievements-grid");
 
   const achievementList = {
+
     first_game: "🎮 First Game",
     gamer_10: "🎮 Played 10 Games",
     gamer_50: "🎮 Played 50 Games",
+
     ai_user: "🤖 AI Beginner",
     ai_20: "🤖 AI Expert (20 Uses)",
+
     xp_100: "⭐ 100 XP",
     xp_500: "⭐ 500 XP",
     xp_1000: "⭐ 1000 XP",
+
     level_5: "🔥 Level 5",
     level_10: "🔥 Level 10",
     level_25: "🔥 Level 25",
+
     coins_100: "💰 100 N-Coins",
     coins_500: "💰 500 N-Coins",
+
     visitor_10: "📅 10 Visits"
+
   };
 
   grid.innerHTML = "";
 
   for (let id in achievementList) {
+
     let unlocked = profile.achievements.includes(id);
+
     let div = document.createElement("div");
+
     div.className = unlocked ? "ach unlocked" : "ach locked";
+
     div.innerText = achievementList[id];
+
     grid.appendChild(div);
+
   }
+
 }
 
+
 loadProfile();
+
 </script>
-  <script src="index.js"></script>
+
+<script src="index.js"></script>
 
 </body>
 </html>
