@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shared Profile</title>
+  <title>Shared NRG Profile</title>
   <style>
     body {
       margin: 0;
@@ -24,6 +24,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding-bottom: 15px;
     }
 
     .banner {
@@ -127,47 +128,54 @@
   </style>
 </head>
 <body>
+  <div id="profile-container"></div>
 
-<div id="profile-container"></div>
+  <script>
+    // Get profile data from URL
+    const params = new URLSearchParams(window.location.search);
+    const data = params.get("profile");
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const data = params.get("profile");
+    if (data) {
+      try {
+        // Decode Base64 Unicode safely
+        const decodedData = decodeURIComponent(atob(data).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
 
-  if (data) {
-      const profile = JSON.parse(atob(data));
+        const profile = JSON.parse(decodedData);
 
-      // Build achievements grid
-      const achievementsHTML = profile.achievementsList.map(a => {
+        // Build achievements HTML
+        const achievementsHTML = profile.achievementsList.map(a => {
           const unlocked = profile.achievements.includes(a.id);
           return `<div class="ach ${unlocked ? 'unlocked' : 'locked'}">${a.name}</div>`;
-      }).join("");
+        }).join("");
 
-      // Render full profile card
-      document.getElementById("profile-container").innerHTML = `
-        <div class="shared-profile-card">
-          <div class="banner" style="background-image: url('${profile.banner || ""}')"></div>
-          <div class="pfp" style="background-image: url('${profile.pfp || ""}')"></div>
-          <div class="username">${profile.username}</div>
-
-          <div class="level-rank">
-            <div class="level">Level ${profile.level}</div>
-            <div class="rank">${profile.rank}</div>
+        // Render profile card
+        document.getElementById("profile-container").innerHTML = `
+          <div class="shared-profile-card">
+            <div class="banner" style="background-image: url('${profile.banner || ''}')"></div>
+            <div class="pfp" style="background-image: url('${profile.pfp || ''}')"></div>
+            <div class="username">${profile.username}</div>
+            <div class="level-rank">
+              <div class="level">Level ${profile.level}</div>
+              <div class="rank">${profile.rank}</div>
+            </div>
+            <div class="xp-bar-container">
+              <div class="xp-bar" style="width: ${profile.xp % 100}%"></div>
+            </div>
+            <div class="ncoins">💰 ${profile.nCoins} N-Coins</div>
+            <div class="achievements">
+              ${achievementsHTML}
+            </div>
           </div>
-
-          <div class="xp-bar-container">
-            <div class="xp-bar" style="width: ${profile.xp % 100}%"></div>
-          </div>
-
-          <div class="ncoins">💰 ${profile.nCoins} N-Coins</div>
-
-          <div class="achievements">
-            ${achievementsHTML}
-          </div>
-        </div>
-      `;
-  }
-</script>
-
+        `;
+      } catch (e) {
+        document.getElementById("profile-container").innerHTML = "<p style='color:red;'>Failed to load profile.</p>";
+        console.error("Error parsing profile data:", e);
+      }
+    } else {
+      document.getElementById("profile-container").innerHTML = "<p style='color:red;'>No profile data provided.</p>";
+    }
+  </script>
 </body>
 </html>
