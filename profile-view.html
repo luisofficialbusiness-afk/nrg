@@ -26,7 +26,7 @@
       align-items: center;
     }
 
-    .shared-profile-card .banner {
+    .banner {
       width: 100%;
       height: 120px;
       background-color: #222;
@@ -34,7 +34,7 @@
       background-position: center;
     }
 
-    .shared-profile-card .pfp {
+    .pfp {
       width: 100px;
       height: 100px;
       border-radius: 50%;
@@ -45,22 +45,22 @@
       background-position: center;
     }
 
-    .shared-profile-card .username {
+    .username {
       font-size: 1.6rem;
       font-weight: bold;
       margin-top: 10px;
       text-align: center;
     }
 
-    .shared-profile-card .level-rank {
+    .level-rank {
       display: flex;
       justify-content: space-around;
       width: 80%;
       margin-top: 10px;
     }
 
-    .shared-profile-card .level-rank .level,
-    .shared-profile-card .level-rank .rank {
+    .level-rank .level,
+    .level-rank .rank {
       text-align: center;
       font-size: 0.9rem;
       padding: 5px 10px;
@@ -70,7 +70,7 @@
       font-weight: bold;
     }
 
-    .shared-profile-card .xp-bar-container {
+    .xp-bar-container {
       width: 80%;
       height: 12px;
       background: #222;
@@ -79,7 +79,7 @@
       overflow: hidden;
     }
 
-    .shared-profile-card .xp-bar {
+    .xp-bar {
       height: 100%;
       width: 0%;
       background: linear-gradient(135deg, #00e5ff, #0066ff);
@@ -87,7 +87,7 @@
       transition: width 0.5s ease;
     }
 
-    .shared-profile-card .ncoins {
+    .ncoins {
       font-size: 1rem;
       font-weight: bold;
       margin-bottom: 15px;
@@ -96,7 +96,7 @@
       gap: 5px;
     }
 
-    .shared-profile-card .achievements {
+    .achievements {
       width: 90%;
       display: flex;
       flex-wrap: wrap;
@@ -105,7 +105,7 @@
       padding-bottom: 15px;
     }
 
-    .shared-profile-card .achievements .ach {
+    .achievements .ach {
       flex: 0 0 40%;
       padding: 8px 5px;
       text-align: center;
@@ -115,16 +115,15 @@
       transition: all 0.3s ease;
     }
 
-    .shared-profile-card .achievements .unlocked {
+    .achievements .unlocked {
       background: linear-gradient(135deg, #00e5ff, #0066ff);
       color: #000;
     }
 
-    .shared-profile-card .achievements .locked {
+    .achievements .locked {
       background: #333;
       color: #888;
     }
-
   </style>
 </head>
 <body>
@@ -132,40 +131,42 @@
 <div id="profile-container"></div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const data = params.get("profile");
+  const params = new URLSearchParams(window.location.search);
+  const data = params.get("profile");
 
-if (data) {
-    const profile = JSON.parse(atob(data));
+  if (data) {
+      const profile = JSON.parse(atob(data));
 
-    const achievementsHTML = profile.achievementsList.map(a => {
-        const unlocked = profile.achievements.includes(a.id);
-        return `<div class="ach ${unlocked ? 'unlocked' : 'locked'}">${a.name}</div>`;
-    }).join("");
+      // Build achievements grid
+      const achievementsHTML = profile.achievementsList.map(a => {
+          const unlocked = profile.achievements.includes(a.id);
+          return `<div class="ach ${unlocked ? 'unlocked' : 'locked'}">${a.name}</div>`;
+      }).join("");
 
-    document.getElementById("profile-container").innerHTML = `
-      <div class="shared-profile-card">
-        <div class="banner" style="background-image: url('${profile.banner || ""}')"></div>
-        <div class="pfp" style="background-image: url('${profile.pfp || ""}')"></div>
-        <div class="username">${profile.username}</div>
+      // Render full profile card
+      document.getElementById("profile-container").innerHTML = `
+        <div class="shared-profile-card">
+          <div class="banner" style="background-image: url('${profile.banner || ""}')"></div>
+          <div class="pfp" style="background-image: url('${profile.pfp || ""}')"></div>
+          <div class="username">${profile.username}</div>
 
-        <div class="level-rank">
-          <div class="level">Level ${profile.level}</div>
-          <div class="rank">${profile.rank}</div>
+          <div class="level-rank">
+            <div class="level">Level ${profile.level}</div>
+            <div class="rank">${profile.rank}</div>
+          </div>
+
+          <div class="xp-bar-container">
+            <div class="xp-bar" style="width: ${profile.xp % 100}%"></div>
+          </div>
+
+          <div class="ncoins">💰 ${profile.nCoins} N-Coins</div>
+
+          <div class="achievements">
+            ${achievementsHTML}
+          </div>
         </div>
-
-        <div class="xp-bar-container">
-          <div class="xp-bar" style="width: ${profile.xp % 100}%"></div>
-        </div>
-
-        <div class="ncoins">💰 ${profile.nCoins} N-Coins</div>
-
-        <div class="achievements">
-          ${achievementsHTML}
-        </div>
-      </div>
-    `;
-}
+      `;
+  }
 </script>
 
 </body>
