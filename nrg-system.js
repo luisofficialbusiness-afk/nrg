@@ -240,3 +240,28 @@ function dailyBonus() {
         console.log("Daily bonus already claimed.");
     }
 }
+
+
+
+window.addXP = function(amount) {
+  let profile = getProfile();
+  profile.xp = (profile.xp || 0) + amount;
+  saveProfile(profile);
+  updateProfileUI();
+};
+
+window.addProgress = function(type) {
+  let profile = getProfile();
+  if (profile.progress[type] !== undefined) {
+    profile.progress[type]++;
+    saveProfile(profile);
+    checkAchievements();
+  }
+};
+
+window.addCoins = function(amount) {
+  let profile = getProfile();
+  profile.nCoins = (profile.nCoins || 0) + amount;
+  saveProfile(profile);
+  updateCoinsUI();
+};
