@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shared Profile</title>
+  <title>Shared NRG Profile</title>
   <style>
     body {
       margin: 0;
@@ -27,36 +27,35 @@
     }
 
     /* Banner */
-    .shared-profile-card .banner {
+    .banner {
       width: 100%;
-      height: 120px;
+      height: 150px;
       background-color: #222;
       background-size: cover;
       background-position: center;
     }
 
     /* PFP */
-    .shared-profile-card .pfp {
+    .pfp {
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      margin-top: -50px;
+      margin-top: -50px; /* overlaps banner */
       border: 4px solid #00e5ff;
       background-color: #333;
       background-size: cover;
       background-position: center;
     }
 
-    /* Profile Info */
-    .shared-profile-card .profile-info {
+    .profile-info {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      margin-top: 10px;
+      padding-bottom: 15px;
     }
 
-    .shared-profile-card .username {
+    .username {
       font-size: 1.6rem;
       font-weight: bold;
       margin: 10px 0 5px 0;
@@ -65,24 +64,23 @@
     .level-rank {
       display: flex;
       justify-content: space-around;
-      width: 80%;
+      width: 70%;
       margin-bottom: 10px;
     }
 
-    .level-rank .level,
-    .level-rank .rank {
+    .level, .rank {
       text-align: center;
       font-size: 0.9rem;
       padding: 5px 10px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #00e5ff, #0066ff);
+      background: linear-gradient(135deg,#00e5ff,#0066ff);
       color: #000;
       font-weight: bold;
     }
 
     .xp-container {
       width: 80%;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .xp-bar-container {
@@ -94,11 +92,17 @@
     }
 
     .xp-bar {
-      width: 0%;
       height: 100%;
+      width: 0%;
       background: linear-gradient(135deg,#00e5ff,#0066ff);
       border-radius: 10px;
       transition: width 0.5s ease;
+    }
+
+    .xp-text {
+      font-size: 0.85rem;
+      margin-top: 3px;
+      text-align: center;
     }
 
     .ncoins {
@@ -113,7 +117,6 @@
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
-      padding-bottom: 15px;
     }
 
     .achievements .ach {
@@ -126,7 +129,7 @@
     }
 
     .achievements .unlocked {
-      background: linear-gradient(135deg, #00e5ff, #0066ff);
+      background: linear-gradient(135deg,#00e5ff,#0066ff);
       color: #000;
     }
 
@@ -138,15 +141,15 @@
 </head>
 <body>
 
-<div class="shared-profile-card" id="profile-card">
+<div class="shared-profile-card">
   <div class="banner" id="banner"></div>
   <div class="pfp" id="pfp"></div>
-  
+
   <div class="profile-info">
     <div class="username" id="username">Username</div>
 
     <div class="level-rank">
-      <div class="level" id="level">Level 1</div>
+      <div class="level" id="level">1</div>
       <div class="rank" id="rank">Rookie</div>
     </div>
 
@@ -170,30 +173,23 @@ const data = params.get("profile");
 if(data){
   const profile = JSON.parse(atob(data));
 
-  // Banner & PFP
   if(profile.banner) document.getElementById("banner").style.backgroundImage = `url(${profile.banner})`;
   if(profile.pfp) document.getElementById("pfp").style.backgroundImage = `url(${profile.pfp})`;
 
-  // Username
   document.getElementById("username").innerText = profile.username || "Guest";
-
-  // Level & Rank
   document.getElementById("level").innerText = profile.level || 1;
   document.getElementById("rank").innerText = profile.rank || "Rookie";
 
-  // XP Bar
   const xpPercent = Math.min(profile.xp % 100, 100);
   document.getElementById("xp-bar").style.width = xpPercent + "%";
   document.getElementById("xp-text").innerText = `${profile.xp || 0} XP`;
 
-  // N-Coins
   document.getElementById("ncoins").innerText = profile.coins || 0;
 
-  // Achievements
   const achievementList = profile.achievements || [];
-  const grid = document.getElementById("achievements-grid");
   const allAchievements = ["First Game","Played 10 Games","Played 50 Games","AI Beginner","AI Expert","100 XP","500 XP","1000 XP","Level 5","Level 10","Level 25","100 N-Coins","500 N-Coins","10 Visits"];
 
+  const grid = document.getElementById("achievements-grid");
   allAchievements.forEach(a => {
     const div = document.createElement("div");
     div.className = achievementList.includes(a) ? "ach unlocked" : "ach locked";
