@@ -116,10 +116,11 @@ function saveProfileInfo() {
   loadProfile();
 }
 
-// ⭐ Share Profile Function (Unicode safe)
+// ⭐ Share Profile Function (Copy URL instead of opening)
 function shareProfile() {
   const profile = getProfile();
 
+  // Prepare achievements list
   const achievementsList = [
     { id: "first_game", name: "🎮 First Game" },
     { id: "gamer_10", name: "🎮 Played 10 Games" },
@@ -137,6 +138,7 @@ function shareProfile() {
     { id: "visitor_10", name: "📅 10 Visits" }
   ];
 
+  // Data to share
   const data = {
     username: profile.username,
     level: getLevel(profile.xp),
@@ -149,20 +151,25 @@ function shareProfile() {
     achievementsList: achievementsList
   };
 
-  // Unicode-safe base64
-  function base64EncodeUnicode(str) {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-        function(match, p1) {
-            return String.fromCharCode('0x' + p1);
-        }
-    ));
-}
+  // Encode to Base64 safely using Unicode-safe btoa
+  function toBase64Unicode(str) {
+    return btoa(
+      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, 
+        function(match, p1) { return String.fromCharCode('0x' + p1); }
+      )
+    );
+  }
 
-const encoded = base64EncodeUnicode(JSON.stringify(data));
-const url = `profile-view.html?profile=${encoded}`;
-window.open(url, "_blank");
-}
+  const encoded = toBase64Unicode(JSON.stringify(data));
+  const shareURL = `${window.location.origin}/profile-view.html?profile=${encoded}`;
 
+  // Copy URL to clipboard
+  navigator.clipboard.writeText(shareURL).then(() => {
+    alert("Profile URL copied to clipboard!");
+  }).catch(() => {
+    prompt("Copy this URL manually:", shareURL);
+  });
+}
   
 // PFP click trigger
 document.getElementById("pfp").addEventListener("click", () => {
