@@ -52,8 +52,6 @@
             <span>N-Coins: </span><span id="ncoins">0</span>
           </div>
 
-          <!-- ⭐ Share Profile Button -->
-          <button onclick="shareProfile()">Share Profile</button>
 
         </div>
 
@@ -116,60 +114,6 @@ function saveProfileInfo() {
   loadProfile();
 }
 
-// ⭐ Share Profile Function (Copy URL instead of opening)
-function shareProfile() {
-  const profile = getProfile();
-
-  // Prepare achievements list
-  const achievementsList = [
-    { id: "first_game", name: "🎮 First Game" },
-    { id: "gamer_10", name: "🎮 Played 10 Games" },
-    { id: "gamer_50", name: "🎮 Played 50 Games" },
-    { id: "ai_user", name: "🤖 AI Beginner" },
-    { id: "ai_20", name: "🤖 AI Expert (20 Uses)" },
-    { id: "xp_100", name: "⭐ 100 XP" },
-    { id: "xp_500", name: "⭐ 500 XP" },
-    { id: "xp_1000", name: "⭐ 1000 XP" },
-    { id: "level_5", name: "🔥 Level 5" },
-    { id: "level_10", name: "🔥 Level 10" },
-    { id: "level_25", name: "🔥 Level 25" },
-    { id: "coins_100", name: "💰 100 N-Coins" },
-    { id: "coins_500", name: "💰 500 N-Coins" },
-    { id: "visitor_10", name: "📅 10 Visits" }
-  ];
-
-  // Data to share
-  const data = {
-    username: profile.username,
-    level: getLevel(profile.xp),
-    xp: profile.xp,
-    rank: getRank(getLevel(profile.xp)),
-    nCoins: profile.nCoins || 0,
-    pfp: profile.pfp || "",
-    banner: profile.banner || "",
-    achievements: profile.achievements,
-    achievementsList: achievementsList
-  };
-
-  // Encode to Base64 safely using Unicode-safe btoa
-  function toBase64Unicode(str) {
-    return btoa(
-      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, 
-        function(match, p1) { return String.fromCharCode('0x' + p1); }
-      )
-    );
-  }
-
-  const encoded = toBase64Unicode(JSON.stringify(data));
-  const shareURL = `${window.location.origin}/profile-view.html?profile=${encoded}`;
-
-  // Copy URL to clipboard
-  navigator.clipboard.writeText(shareURL).then(() => {
-    alert("Profile URL copied to clipboard!");
-  }).catch(() => {
-    prompt("Copy this URL manually:", shareURL);
-  });
-}
   
 // PFP click trigger
 document.getElementById("pfp").addEventListener("click", () => {
