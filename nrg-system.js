@@ -98,3 +98,25 @@ function getRank(level) {
   if (level >= 5) return "Rising";
   return "Rookie";
 }
+
+
+function gainHomepageXp() {
+    const lastXp = localStorage.getItem('nrg_last_home_xp') || 0;
+    const now = Date.now();
+    const cooldown = 5 * 60 * 1000; 
+
+    if(now - lastXp >= cooldown) {
+        addXp(10); 
+        localStorage.setItem('nrg_last_home_xp', now);
+        console.log("You earned 10 XP from the homepage!");
+    } else {
+        const remaining = Math.ceil((cooldown - (now - lastXp)) / 1000);
+        console.log(`Wait ${remaining} more seconds before earning XP again.`);
+    }
+}
+
+window.addEventListener('load', () => {
+    if(window.location.pathname.endsWith("index.html")) {
+        gainHomepageXp();
+    }
+});
