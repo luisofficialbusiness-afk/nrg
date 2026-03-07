@@ -156,43 +156,7 @@ function shareProfile() {
   window.open(url, "_blank");
 }
 
-  
 
-  // Prepare achievements list for display
-  const achievementsList = [
-    { id: "first_game", name: "🎮 First Game" },
-    { id: "gamer_10", name: "🎮 Played 10 Games" },
-    { id: "gamer_50", name: "🎮 Played 50 Games" },
-    { id: "ai_user", name: "🤖 AI Beginner" },
-    { id: "ai_20", name: "🤖 AI Expert (20 Uses)" },
-    { id: "xp_100", name: "⭐ 100 XP" },
-    { id: "xp_500", name: "⭐ 500 XP" },
-    { id: "xp_1000", name: "⭐ 1000 XP" },
-    { id: "level_5", name: "🔥 Level 5" },
-    { id: "level_10", name: "🔥 Level 10" },
-    { id: "level_25", name: "🔥 Level 25" },
-    { id: "coins_100", name: "💰 100 N-Coins" },
-    { id: "coins_500", name: "💰 500 N-Coins" },
-    { id: "visitor_10", name: "📅 10 Visits" }
-  ];
-
-  // Include all data needed for the shared profile
-  const data = {
-    username: profile.username,
-    level: getLevel(profile.xp),
-    xp: profile.xp,
-    rank: getRank(getLevel(profile.xp)),
-    nCoins: profile.nCoins || 0,
-    pfp: profile.pfp || "",
-    banner: profile.banner || "",
-    achievements: profile.achievements,
-    achievementsList: achievementsList
-  };
-
-  const encoded = btoa(JSON.stringify(data));
-  const url = `${window.location.origin}/shared-profile.html?profile=${encoded}`;
-  window.open(url, "_blank");
-}
   
 // PFP click trigger
 document.getElementById("pfp").addEventListener("click", () => {
