@@ -120,7 +120,7 @@ function saveProfileInfo() {
 function shareProfile() {
   const profile = getProfile();
 
-  // Prepare achievements list for display
+  // Prepare achievements list for the shared profile
   const achievementsList = [
     { id: "first_game", name: "🎮 First Game" },
     { id: "gamer_10", name: "🎮 Played 10 Games" },
@@ -138,7 +138,7 @@ function shareProfile() {
     { id: "visitor_10", name: "📅 10 Visits" }
   ];
 
-  // Include all data needed for the shared profile
+  // Build the full profile data object
   const data = {
     username: profile.username,
     level: getLevel(profile.xp),
@@ -151,11 +151,13 @@ function shareProfile() {
     achievementsList: achievementsList
   };
 
+  // Encode the profile object as a base64 string
   const encoded = btoa(JSON.stringify(data));
+
+  // Open the shared profile page in a new tab with the encoded data
   const url = `${window.location.origin}/shared-profile.html?profile=${encoded}`;
   window.open(url, "_blank");
 }
-
 
   
 // PFP click trigger
