@@ -168,13 +168,22 @@
 <body>
 
 <h1 class="logo">NRG MUSIC</h1>
-
+<!-- this code is deadass so bad lmao. It takes like forever to add songs. 
+    Anyways thats not the point. 
+    The first set of single quotes is the song name, the second set of single quotes is the song artist, the third set of single quotes is the image, and the fourth set of single quotes is the song file -->
+    <!-- For example: In this line of code: -->
+   <!-- <div class="music-card" onclick="playTrack(this, 'Expresso', 'Sabrina Carpenter', 'images/espresso.webp', 'music/Espresso.mp3')"> -->
+   <!-- Espresso would be the song name -->
+    <!-- Sabrina Carpenter would be the song artist -->
+    <!-- images/espresso.webp would be the image -->
+    <!-- music/Espresso.mp3 would be the song mp3 file -->
 <div class="music-container">
     <div class="music-card" onclick="playTrack(this, 'Expresso', 'Sabrina Carpenter', 'images/espresso.webp', 'music/Espresso.mp3')">
-        <img src="images/espresso.webp" alt="Song">
+        <!-- all of this stuff is for the individual song card  -->
+        <img src="images/espresso.webp" alt="Song"> 
         <div class="text-content">
-            <h3>Expresso</h3>
-            <p>Sabrina Carpenter</p>
+            <h3>Expresso</h3> <!-- song name -->
+            <p>Sabrina Carpenter</p> <!-- song artist -->
         </div>
     </div>
 
@@ -259,6 +268,16 @@
     </div>
 </div>
 
+
+            <div class="music-card" onclick="playTrack(this, 'SEM NADA ', 'Ogryzek', 'images/ab67616d00001e02ce10cd7ae7dd95df726ca527.jpg', 'music/SEM NADA.mp3')">
+        <img src="images/ab67616d00001e02ce10cd7ae7dd95df726ca527.jpg" alt="Song">
+        <div class="text-content">
+            <h3>SEM NADA</h3>
+            <p>Ogryzek</p>
+        </div>
+    </div>
+</div>
+
 <div class="player-bar">
     <div class="player-top">
         <div class="now-playing-info">
@@ -306,10 +325,10 @@
     const timeCurrent = document.getElementById('time-current');
     const timeTotal = document.getElementById('time-total');
     
-    let currentCard = null; // Keeps track of which HTML element is "active"
+    let currentCard = null; 
 
     function playTrack(element, name, artist, art, url) {
-        currentCard = element; // Save the clicked card
+        currentCard = element; 
         
         document.getElementById('current-track-name').innerText = name;
         document.getElementById('current-artist-name').innerText = artist;
@@ -330,31 +349,26 @@
             playBtn.className = "fas fa-play";
         }
     }
-
-    // SKIP FORWARD
+//Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy. Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy. Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy.
     function nextTrack() {
         if (!currentCard) return;
         let next = currentCard.nextElementSibling;
-        // If it's the last card, go back to the first one
         if (!next || !next.classList.contains('music-card')) {
             next = document.querySelector('.music-card');
         }
-        next.click(); // Trigger the onclick of the next card
+        next.click();
     }
 
-    // SKIP BACKWARD
     function prevTrack() {
         if (!currentCard) return;
         let prev = currentCard.previousElementSibling;
-        // If it's the first card, go to the last one
         if (!prev || !prev.classList.contains('music-card')) {
             const allCards = document.querySelectorAll('.music-card');
             prev = allCards[allCards.length - 1];
         }
-        prev.click(); // Trigger the onclick of the previous card
+        prev.click(); 
     }
-
-    // SCRUBBER (Skip to point in song)
+//skip to a point in a song
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
             const percent = (audio.currentTime / audio.duration) * 100;
@@ -378,10 +392,9 @@
 
     function setVolume(v) { audio.volume = v / 100; }
 
-    // Auto-play next song when finished
+    // auto-play next song if finished
     audio.addEventListener('ended', nextTrack);
-
-    // Sidebar Navigation
+//sidebar stuff
     document.querySelectorAll('.nav-icon').forEach(icon => {
         icon.addEventListener('click', () => {
             const page = icon.dataset.page;
