@@ -323,6 +323,7 @@
     const timeTotal = document.getElementById('time-total');
     
     let currentCard = null; 
+    let isLooping = false; 
 
     function playTrack(element, name, artist, art, url) {
         currentCard = element; 
@@ -346,7 +347,7 @@
             playBtn.className = "fas fa-play";
         }
     }
-//Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy. Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy. Crazy? i was crazy once. They locked me in a room. A rubber room. A rubber room with rats. The rats made me crazy.
+
     function nextTrack() {
         if (!currentCard) return;
         let next = currentCard.nextElementSibling;
@@ -365,7 +366,15 @@
         }
         prev.click(); 
     }
-//skip to a point in a song
+
+    function seekAudio() {
+        if (!audio.duration) return;
+        const seekTo = audio.duration * (progressBar.value / 100);
+        audio.currentTime = seekTo;
+    }
+
+    function setVolume(v) { audio.volume = v / 100; }
+
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
             const percent = (audio.currentTime / audio.duration) * 100;
@@ -375,23 +384,29 @@
         }
     });
 
-    function seekAudio() {
-        if (!audio.duration) return;
-        const seekTo = audio.duration * (progressBar.value / 100);
-        audio.currentTime = seekTo;
-    }
-
     function formatTime(seconds) {
         const min = Math.floor(seconds / 60);
         const sec = Math.floor(seconds % 60);
         return `${min}:${sec < 10 ? '0' : ''}${sec}`;
     }
 
-    function setVolume(v) { audio.volume = v / 100; }
+    audio.addEventListener('ended', () => {
+        if (isLooping) {
+            audio.play(); 
+        } else {
+            nextTrack();
+        }
+    });
 
-    // auto-play next song if finished
-    audio.addEventListener('ended', nextTrack);
-//sidebar stuff
+    function toggleLoop() {
+        isLooping = !isLooping;
+        if (isLooping) {
+            audio.loop = true;
+        } else {
+            audio.loop = false;
+        }
+    }
+
     document.querySelectorAll('.nav-icon').forEach(icon => {
         icon.addEventListener('click', () => {
             const page = icon.dataset.page;
