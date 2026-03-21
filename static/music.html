@@ -200,8 +200,11 @@
 
 
     <!--To help other programmers, please update the amount of time you've wasted on this project accordingly. -->
-    <!--  TOTAL WASTED TIME: 4 hour(s) -->
+    <!--  TOTAL WASTED TIME: 5 hour(s) -->
     <!-- RVEPRTY CURRENT WASTED TIME: 3 hour(s) -->
+    <!-- OTHER PROGRAMMERS WASTED TIME: 2 hour(s) -->
+
+
 
     <div class="music-card" onclick="playTrack(this, 'Washing Machine Heart', 'Mitski', 'images/wmh.jpg', 'music/Washing Machine Heart.mp3')">
         <img src="images/wmh.jpg" alt="Song">
@@ -211,14 +214,10 @@
         </div>
     </div>
 
-    <div class="music-card" onclick="playTrack(this, 'Golden Hour', 'JVKE', 'images/JVKE_-_Golden_Hour.png', 'music/golden hour.mp3')">
-        <img src="images/JVKE_-_Golden_Hour.png" alt="Song">
-        <div class="text-content">
-            <h3>Golden Hour</h3>
-            <p>JVKE</p>
-        </div>
-    </div>
 
+<!-- if multiple songs are made by one person, put them in a catagory, like this one ||| 
+                                                                                     VVV -->
+    <!-- bad bunny music --> 
         <div class="music-card" onclick="playTrack(this, 'Baile Inovidalbe', 'Bad Bunny', 'images/dtmf.jpg', 'music/Baile Inovidalbe.mp3')">
         <img src="images/dtmf.jpg" alt="Song">
         <div class="text-content">
@@ -234,9 +233,9 @@
             <p>Bad Bunny</p>
         </div>
     </div>
+<!-- end of bad bunny music -->
 
-
-
+<!-- J4KE music -->
      <div class="music-card" onclick="playTrack(this, 'this is what falling in love feels like', 'J4KE', 'images/this is what falling in love feels like.jpg', 'music/this is how falling in love feels like.mp3')">
         <img src="images/this is what falling in love feels like.jpg" alt="Song">
         <div class="text-content">
@@ -245,11 +244,20 @@
         </div>
     </div>
 
+        <div class="music-card" onclick="playTrack(this, 'Golden Hour', 'JVKE', 'images/JVKE_-_Golden_Hour.png', 'music/golden hour.mp3')">
+        <img src="images/JVKE_-_Golden_Hour.png" alt="Song">
+        <div class="text-content">
+            <h3>Golden Hour</h3>
+            <p>JVKE</p>
+        </div>
+    </div>
+<!-- end of J4KE music -->
+
      <div class="music-card" onclick="playTrack(this, 'Die With A Smile', 'Lady GaGa', 'images/Die With A Smile.jpg', 'music/Die With A Smile.mp3')">
         <img src="images/Die With A Smile.jpg" alt="Song">
         <div class="text-content">
             <h3>Die With A Smile</h3>
-            <p>Lady GaGa</p>
+            <p>Bruno Mars</p>
         </div>
     </div>
 
@@ -277,8 +285,22 @@
         </div>
     </div>
 
+    <div class="music-card" onclick="playTrack(this, 'I Had Some Help', 'Morgan wallen', 'images/a0300537838_16.jpg', 'music/I Had Some Help.mp3')">
+        <img src="images/telepatia.jpg" alt="Song">
+        <div class="text-content">
+            <h3>I Had Some Help</h3>
+            <p>Morgan Wallen</p>
+        </div>
+    </div>
 
-    
+        <div class="music-card" onclick="playTrack(this, 'All girls are the same', 'JUICE WRLD', 'images/images.jpg', 'music/All Girls Are The Same.mp3')">
+        <img src="images/telepatia.jpg" alt="Song">
+        <div class="text-content">
+            <h3>All girls are the same</h3>
+            <p>JUICE WRLD</p>
+        </div>
+    </div>
+
 <!-- Very epik funk music -->
         <div class="music-card" onclick="playTrack(this, 'MATADORA', 'DJ Asul', 'images/ab67616d0000b2738630ce04dcdf0c89f218b7d8.jpg', 'music/MATADORA.mp3')">
         <img src="images/ab67616d0000b2738630ce04dcdf0c89f218b7d8.jpg" alt="Song">
@@ -304,7 +326,7 @@
         </div>
     </div>
 </div> <!-- make sure to have this third div tag -->
-
+<!-- end of very epik funk music -->
     
 <div class="player-bar">
     <div class="player-top">
@@ -352,7 +374,7 @@
     const progressBar = document.getElementById('progress-bar');
     const timeCurrent = document.getElementById('time-current');
     const timeTotal = document.getElementById('time-total');
-    
+    console.error("We desperately need developers. Sign up to be one at https://discord.gg/2TQ9B8rWMK!")
     let currentCard = null; 
     let isLooping = false; 
 
