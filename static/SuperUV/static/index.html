@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NRG // EDUCATION</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;900&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nrg-blue: #0044ff;      
+      --nrg-cyan: #00f2ff;      
+      --nrg-electric: #4488ff;  
+      --deep-void: #000105;     
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--deep-void);
+      color: var(--nrg-electric);
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background-image: radial-gradient(circle at center, #001133 0%, var(--deep-void) 70%);
+    }
+
+    #nrg-dashboard {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.4s ease;
+      position: relative;
+    }
+
+    .nrg-logo-container {
+      position: relative;
+      margin-bottom: 50px;
+      user-select: none;
+    }
+
+    .nrg-logo-container h1 {
+      font-family: 'Syncopate', sans-serif;
+      font-size: clamp(5rem, 15vw, 11rem);
+      line-height: 0.8;
+      letter-spacing: -8px;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--nrg-electric);
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .nrg-logo-container::after {
+      content: 'NRG';
+      position: absolute;
+      left: 15px;
+      top: 10px;
+      font-family: 'Syncopate', sans-serif;
+      font-size: clamp(5rem, 15vw, 11rem);
+      line-height: 0.8;
+      letter-spacing: -8px;
+      color: var(--nrg-cyan);
+      z-index: -1;
+      filter: blur(20px);
+      opacity: 0.4;
+    }
+
+    .nrg-input-wrap {
+      width: 90%;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .nrg-input-wrap input {
+      width: 100%;
+      background: rgba(0, 10, 30, 0.7);
+      border: 1px solid var(--nrg-blue);
+      padding: 22px;
+      color: var(--nrg-cyan);
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      outline: none;
+      transition: all 0.4s;
+      border-radius: 2px;
+    }
+
+    .nrg-input-wrap input:focus {
+      border-color: var(--nrg-cyan);
+      box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+      background: #000;
+    }
+    
+    .nrg-rail {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 65px;
+      background: #000;
+      border-right: 1px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      gap: 15px;
+      z-index: 1000;
+    }
+
+    .node-wrapper {
+      position: relative;
+      width: 38px;
+      height: 38px;
+    }
+
+    .nrg-node {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      border: 1px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: 'Syncopate', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #333;
+      transition: all 0.2s;
+    }
+
+    .nrg-node.active {
+      background: var(--nrg-blue);
+      border-color: var(--nrg-cyan);
+      color: var(--nrg-cyan);
+      box-shadow: 0 0 15px var(--nrg-blue);
+    }
+
+    .close-node {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 16px;
+      height: 16px;
+      background: #ff0044;
+      color: white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      cursor: pointer;
+      opacity: 0;
+      transition: 0.2s;
+      z-index: 1001;
+      font-weight: bold;
+    }
+
+    .node-wrapper:hover .close-node { opacity: 1; }
+
+    #nrg-viewport {
+      position: fixed;
+      left: 65px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: #000;
+      display: none;
+    }
+
+    #nrg-viewport.active { display: block; }
+    iframe { width: 100%; height: 100%; border: none; }
+
+    .nrg-status-line {
+        position: absolute;
+        top: 25px;
+        right: 40px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--nrg-blue);
+        letter-spacing: 2px;
+        pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nrg-status-line">education: <span style="color:var(--nrg-cyan)">stable</span></div>
+
+  <nav class="nrg-rail">
+    <div id="node-stack" style="display:flex; flex-direction:column; gap:10px;"></div>
+    <div class="nrg-node" id="init-node" title="INITIALIZE NODE" style="margin-top: 10px;">+</div>
+  </nav>
+
+  <div id="nrg-viewport"></div>
+
+  <main id="nrg-dashboard">
+    <div class="nrg-logo-container">
+      <h1>NRG</h1>
+    </div>
+
+    <form class="nrg-input-wrap" id="nrg-core-form">
+      <input type="text" id="nrg-query" placeholder="Education active" autocomplete="off">
+    </form>
+  </main>
+
+  <script>
+    function uvEncode(str) {
+      if (!str) return str;
+      return encodeURIComponent(str.split('').map((char, ind) => ind % 2 ? String.fromCharCode(char.charCodeAt() ^ 2) : char).join(''));
+    }
+
+    let nrg_nodes = [];
+    let active_node_id = null;
+
+    function createNode(url = null, raw = "") {
+      const id = 'node_' + Date.now();
+      const nodeObj = { id, url, raw };
+      nrg_nodes.push(nodeObj);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'node-wrapper';
+      wrapper.id = `wrap-${id}`;
+
+      const btn = document.createElement('div');
+      btn.className = 'nrg-node';
+      btn.id = `btn-${id}`;
+      btn.innerText = 'N';
+      btn.onclick = () => switchNode(id);
+      
+      const close = document.createElement('div');
+      close.className = 'close-node';
+      close.innerText = '×';
+      close.onclick = (e) => {
+        e.stopPropagation(); // Prevents switching to the node while closing it
+        deleteNode(id);
+      };
+
+      wrapper.appendChild(btn);
+      wrapper.appendChild(close);
+      document.getElementById('node-stack').appendChild(wrapper);
+
+      const frame = document.createElement('iframe');
+      frame.id = `frame-${id}`;
+      frame.style.display = 'none';
+      if (url) frame.src = url;
+      document.getElementById('nrg-viewport').appendChild(frame);
+
+      switchNode(id);
+    }
+
+    function deleteNode(id) {
+      const index = nrg_nodes.findIndex(n => n.id === id);
+      if (index === -1) return;
+
+      // Remove from Array
+      nrg_nodes.splice(index, 1);
+
+      // Remove elements from DOM
+      document.getElementById(`wrap-${id}`).remove();
+      document.getElementById(`frame-${id}`).remove();
+
+      // If we deleted the active node, switch to the last available node
+      if (active_node_id === id) {
+        if (nrg_nodes.length > 0) {
+          switchNode(nrg_nodes[nrg_nodes.length - 1].id);
+        } else {
+          // No nodes left? Create a fresh home node
+          createNode();
+        }
+      }
+    }
+
+    function switchNode(id) {
+      active_node_id = id;
+      const node = nrg_nodes.find(n => n.id === id);
+
+      document.querySelectorAll('.nrg-node').forEach(e => e.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-${id}`);
+      if(activeBtn) activeBtn.classList.add('active');
+
+      document.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
+      const activeFrame = document.getElementById(`frame-${id}`);
+      if(activeFrame) activeFrame.style.display = 'block';
+
+      if (node && node.url) {
+        document.getElementById('nrg-viewport').classList.add('active');
+        document.getElementById('nrg-dashboard').style.opacity = '0';
+        document.getElementById('nrg-dashboard').style.pointerEvents = 'none';
+      } else {
+        document.getElementById('nrg-viewport').classList.remove('active');
+        document.getElementById('nrg-dashboard').style.opacity = '1';
+        document.getElementById('nrg-dashboard').style.pointerEvents = 'all';
+      }
+    }
+
+    document.getElementById('nrg-core-form').onsubmit = (e) => {
+      e.preventDefault();
+      const raw = document.getElementById('nrg-query').value.trim();
+      let final = raw;
+
+      if (!final.includes('.') || final.includes(' ')) {
+        final = "https://search.brave.com/search?q=" + encodeURIComponent(final);
+      } else if (!/^https?:\/\//i.test(final)) {
+        final = "https://" + final;
+      }
+
+      const encoded = "/service/" + uvEncode(final);
+      const node = nrg_nodes.find(n => n.id === active_node_id);
+      node.url = encoded;
+      node.raw = final;
+      
+      document.getElementById(`frame-${active_node_id}`).src = encoded;
+      switchNode(active_node_id);
+      document.getElementById('nrg-query').value = "";
+    };
+
+    document.getElementById('init-node').onclick = () => createNode();
+
+    createNode();
+  </script>
+</body>
+</html>
