@@ -69,7 +69,7 @@ updateTemperature();
 document.addEventListener("DOMContentLoaded", function () {
 
  
-  document.querySelectorAll('.sidebar .nav-icon .nrg-sidebar').forEach(icon => {
+  document.querySelectorAll('.sidebar .nav-icon').forEach(icon => {
     const currentPage = window.location.pathname.split("/").pop();
 
     if (icon.dataset.page === currentPage) {
