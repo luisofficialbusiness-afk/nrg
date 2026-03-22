@@ -66,19 +66,16 @@ updateBattery();
 updatePing();
 updateTemperature();
 
-
 document.querySelectorAll('.nav-icon').forEach(button => {
   button.addEventListener('click', () => {
     const page = button.getAttribute('data-page');
     if (page) {
-      window.location.href = "/static/" + page;
+      window.location.href = page;
     }
   });
 });
 
-// Highlight active page
 const currentPage = window.location.pathname.split("/").pop();
-
 document.querySelectorAll('.nav-icon').forEach(button => {
   if (button.getAttribute('data-page') === currentPage) {
     button.classList.add('active');
