@@ -1,84 +1,7 @@
-function updateTime() {
-  const now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-  let seconds = now.getSeconds();
+document.addEventListener("DOMContentLoaded", function () {
 
 
-  let ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-
-  if (minutes < 10) minutes = "0" + minutes;
-  if (seconds < 10) seconds = "0" + seconds;
-
-  const timeEl = document.getElementById("time");
-  if (timeEl) {
-    timeEl.textContent = `Time: ${hours}:${minutes}:${seconds} ${ampm}`;
-  }
-}
-
-
-async function updateBattery() {
-  try {
-    if (navigator.getBattery) {
-      const battery = await navigator.getBattery();
-      const level = Math.round(battery.level * 100);
-      document.getElementById("battery").textContent = `Battery: ${level}%`;
-    } else {
-      document.getElementById("battery").textContent = "Battery: N/A";
-    }
-  } catch {
-    document.getElementById("battery").textContent = "Battery: N/A";
-  }
-}
-
-
-async function updatePing() {
-  const start = performance.now();
-  try {
-    await fetch(window.location.href, { cache: "no-store" });
-    const ping = Math.round(performance.now() - start);
-    document.getElementById("ping").textContent = `Ping: ${ping}ms`;
-  } catch {
-    document.getElementById("ping").textContent = "Ping: N/A";
-  }
-}
-
-
-async function updateTemperature() {
-  try {
-    const ipRes = await fetch("https://ipapi.co/json/");
-    const ipData = await ipRes.json();
-
-    const lat = ipData.latitude;
-    const lon = ipData.longitude;
-
-    const weatherRes = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
-    );
-    const weatherData = await weatherRes.json();
-
-    const temp = weatherData.current_weather.temperature;
-    document.getElementById("temperature").textContent = `Temp: ${temp}°C`;
-  } catch {
-    document.getElementById("temperature").textContent = "Temp: N/A";
-  }
-}
-
-
-setInterval(updateTime, 1000);
-setInterval(updatePing, 5000);
-setInterval(updateBattery, 60000);
-setInterval(updateTemperature, 600000);
-
-
-updateTime();
-updatePing();
-updateBattery();
-updateTemperature();
- 
-  document.querySelectorAll('.sidebar .nav-icon').forEach(icon => {
+  document.querySelectorAll('.nrg-sidebar .nav-icon, .sidebar .nav-icon').forEach(icon => {
     const currentPage = window.location.pathname.split("/").pop();
 
     if (icon.dataset.page === currentPage) {
@@ -92,5 +15,119 @@ updateTemperature();
       }
     });
   });
+
+
+  
+  function updateTime() {
+    const now = new Date();
+    let use24Hour = localStorage.getItem("timeFormat") === "24";
+
+    const timeString = now.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: !use24Hour
+    });
+
+    const timeEl = document.getElementById("time-status");
+    if (timeEl) {
+      timeEl.textContent = "Time: " + timeString;
+    }
+  }
+
+
+  
+  function updateBattery() {
+    if (navigator.getBattery) {
+      navigator.getBattery().then(battery => {
+        const batteryEl = document.getElementById('battery-status');
+        if (batteryEl) {
+          batteryEl.textContent = 'Battery: ' + Math.floor(battery.level * 100) + '%';
+        }
+      });
+    } else {
+      const batteryEl = document.getElementById('battery-status');
+      if (batteryEl) {
+        batteryEl.textContent = 'Battery: N/A';
+      }
+    }
+  }
+
+
+  
+  function updatePing() {
+    const start = Date.now();
+    fetch(window.location.href, { cache: "no-store" })
+      .then(() => {
+        const ping = Date.now() - start;
+        const pingEl = document.getElementById('ping-status');
+        if (pingEl) {
+          pingEl.textContent = 'Ping: ' + ping + ' ms';
+        }
+      })
+      .catch(() => {
+        const pingEl = document.getElementById('ping-status');
+        if (pingEl) {
+          pingEl.textContent = 'Ping: N/A';
+        }
+      });
+  }
+
+
+  async function updateTemperature() {
+    const tempEl = document.getElementById('temperature-status');
+    if (!tempEl) return;
+
+    try {
+      navigator.geolocation.getCurrentPosition(async position => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        const weatherRes = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=964167d80cb0792b385da69d18946bd1`
+        );
+
+        const weatherData = await weatherRes.json();
+        const temp = Math.round(weatherData.main.temp);
+
+        tempEl.textContent = 'Temp: ' + temp + '°C';
+      }, async () => {
+
+        try {
+          const ipRes = await fetch('https://ipapi.co/json/');
+          const ipData = await ipRes.json();
+
+          const weatherRes = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${ipData.latitude}&lon=${ipData.longitude}&units=metric&appid=964167d80cb0792b385da69d18946bd1`
+          );
+
+          const weatherData = await weatherRes.json();
+          const temp = Math.round(weatherData.main.temp);
+
+          tempEl.textContent = 'Temp: ' + temp + '°C';
+        } catch {
+          tempEl.textContent = 'Temp: N/A';
+        }
+      });
+
+    } catch {
+      tempEl.textContent = 'Temp: N/A';
+    }
+  }
+
+
+  setInterval(updateTime, 1000);
+  setInterval(() => {
+    updateBattery();
+    updatePing();
+  }, 5000);
+
+  setInterval(updateTemperature, 300000);
+
+
+  updateTime();
+  updateBattery();
+  updatePing();
+  updateTemperature();
 
 });
