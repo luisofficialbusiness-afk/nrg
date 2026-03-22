@@ -66,18 +66,22 @@ updateBattery();
 updatePing();
 updateTemperature();
 
-document.querySelectorAll('.nav-icon').forEach(button => {
-  button.addEventListener('click', () => {
-    const page = button.getAttribute('data-page');
-    if (page) {
-      window.location.href = page;
-    }
-  });
-});
+document.addEventListener("DOMContentLoaded", function () {
 
-const currentPage = window.location.pathname.split("/").pop();
-document.querySelectorAll('.nav-icon').forEach(button => {
-  if (button.getAttribute('data-page') === currentPage) {
-    button.classList.add('active');
-  }
+ 
+  document.querySelectorAll('.sidebar .nav-icon').forEach(icon => {
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (icon.dataset.page === currentPage) {
+      icon.classList.add("active");
+    }
+
+    icon.addEventListener('click', () => {
+      const page = icon.dataset.page;
+      if (page) {
+        window.location.href = page;
+      }
+    });
+  });
+
 });
