@@ -67,21 +67,20 @@ updatePing();
 updateTemperature();
 
 
-document.querySelectorAll('.sidebar .nav-icon .nrg-sidebar').forEach(icon => {
-  icon.addEventListener('click', () => {
-    const page = icon.getAttribute('data-page');
+document.querySelectorAll('.nav-icon').forEach(button => {
+  button.addEventListener('click', () => {
+    const page = button.getAttribute('data-page');
     if (page) {
-      window.location.href = page;
+      window.location.href = "/static/" + page;
     }
   });
 });
 
+// Highlight active page
+const currentPage = window.location.pathname.split("/").pop();
 
-const path = window.location.pathname;
-const pageName = path.substring(path.lastIndexOf('/') + 1);
-
-document.querySelectorAll('.sidebar .nav-icon .nrg-sidebar').forEach(icon => {
-  if (icon.getAttribute('data-page') === pageName) {
-    icon.classList.add('active');
+document.querySelectorAll('.nav-icon').forEach(button => {
+  if (button.getAttribute('data-page') === currentPage) {
+    button.classList.add('active');
   }
 });
