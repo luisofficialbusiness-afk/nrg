@@ -12,4 +12,6 @@
 
 Working on:
 
-STUFF
+- NRG Music
+
+- Fixing Movies
