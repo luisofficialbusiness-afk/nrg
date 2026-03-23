@@ -4,7 +4,7 @@
 
 - A somewhat working movie page
 
-- AI (Made Using Base 44 because I CANNOT code an AI)
+- AI (Def Not Stolen from GN-Math)
 
 - Proxy (Only works on Non-Bunny Links)
 
