@@ -1,10 +1,10 @@
 const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".card");
+const gameCards = document.querySelectorAll(".card");
 
 searchInput.addEventListener("input", () => {
   const search = searchInput.value.toLowerCase();
 
-  cards.forEach(card => {
+  gameCards.forEach(card => {
     const title = card.querySelector(".text").textContent.toLowerCase();
 
     if (title.includes(search)) {
@@ -15,13 +15,10 @@ searchInput.addEventListener("input", () => {
   });
 });
 
-
-// if youre reading this, gay son or thot daughter
-cards.forEach(card => {
+// gay son or thot daughter
+gameCards.forEach(card => {
   card.addEventListener("click", () => {
     const playBtn = card.querySelector(".play-btn");
-    if (playBtn) {
-      playBtn.click(); 
-    }
+    if (playBtn) playBtn.click();
   });
 });
