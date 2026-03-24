@@ -245,37 +245,79 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 font-size: 0.9rem;
 }
 
-  .search-container {
-  width: 80%;
-  margin: 20px auto;
+
+.search-container {
+  width: 100%;
   display: flex;
   justify-content: center;
+  margin: 25px 0 15px 0;
 }
 
-#gameSearch {
+.search-box {
+  position: relative;
+  width: 320px;
+}
+
+.search-box input {
   width: 100%;
-  max-width: 500px;
-  padding: 12px 15px;
-  background: #111;
+  padding: 12px 40px 12px 40px;
+  border-radius: 12px;
   border: 1px solid #222;
-  border-radius: 10px;
-  color: white;
+  background: #111;
+  color: #eee;
   font-size: 14px;
   outline: none;
+  transition: 0.2s ease;
 }
 
-#gameSearch:focus {
-  border-color: #555;
+.search-box input::placeholder {
+  color: #777;
 }
 
+.search-box input:focus {
+  border-color: #444;
+  background: #151515;
+}
+
+
+.search-box::before {
+  content: "🔍";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+
+.clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+}
+
+.clear-search:hover {
+  color: white;
+}
 </style>
 </head>
 <body>
 
 <h1 class="logo">NRG</h1>
 
-  <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search games...">
+<div class="search-container">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search games...">
+    <button class="clear-search" id="clearSearch">✕</button>
+  </div>
 </div>
 
 <div class="card-container">
