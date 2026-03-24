@@ -1,39 +1,27 @@
-document.addEventListener("DOMContentLoaded", function () {
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
 
-    const searchInput = document.getElementById("searchInput");
-    const gameCards = document.querySelectorAll(".card");
-    const noResults = document.getElementById("noResults");
+searchInput.addEventListener("input", () => {
+  const search = searchInput.value.toLowerCase();
 
-    if (!searchInput) return;
+  cards.forEach(card => {
+    const title = card.querySelector(".text").textContent.toLowerCase();
 
-    searchInput.addEventListener("input", function () {
-        const searchValue = searchInput.value.toLowerCase();
-        let visible = 0;
+    if (title.includes(search)) {
+      card.style.display = "flex";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
 
-        gameCards.forEach(card => {
-            const title = card.querySelector(".text").textContent.toLowerCase();
 
-            if (title.includes(searchValue)) {
-                card.style.display = "flex";
-                visible++;
-            } else {
-                card.style.display = "none";
-            }
-        });
-
-        if (noResults) {
-            noResults.style.display = visible === 0 ? "block" : "none";
-        }
-    });
-    
-    document.querySelectorAll(".play-btn").forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const card = button.closest(".card");
-            const game = card.getAttribute("data-game");
-            if (game) {
-                window.location.href = game;
-            }
-        });
-    });
-;
+// if youre reading this, gay son or thot daughter
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    const playBtn = card.querySelector(".play-btn");
+    if (playBtn) {
+      playBtn.click(); 
+    }
+  });
+});
