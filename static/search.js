@@ -36,14 +36,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
-    gameCards.forEach(card => {
-        card.addEventListener("click", () => {
-            const game = card.getAttribute("data-game");
-            if (game) {
-                window.location.href = game;
-            }
-        });
-    });
-
-});
+;
