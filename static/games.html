@@ -245,11 +245,38 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 font-size: 0.9rem;
 }
 
+  .search-container {
+  width: 80%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+}
+
+#gameSearch {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 15px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+#gameSearch:focus {
+  border-color: #555;
+}
+
 </style>
 </head>
 <body>
 
 <h1 class="logo">NRG</h1>
+
+  <div class="search-container">
+  <input type="text" id="gameSearch" placeholder="Search games...">
+</div>
 
 <div class="card-container">
   
