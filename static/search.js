@@ -1,33 +1,38 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const searchInput = document.getElementById("gameSearch");
-  const games = document.querySelectorAll(".game-card");
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
 
-  if (!searchInput) return;
-
-  searchInput.addEventListener("input", function () {
+searchInput.addEventListener("input", function () {
     const searchValue = searchInput.value.toLowerCase();
 
-    games.forEach(game => {
-      const titleElement = game.querySelector(".text");
-      const gameName = titleElement.textContent.toLowerCase();
+    cards.forEach(card => {
+        const title = card.querySelector(".text").textContent.toLowerCase();
 
-      if (gameName.includes(searchValue)) {
-        game.style.display = "block";
-      } else {
-        game.style.display = "none";
-      }
-    });
-  });
-
-  // Press Enter = open first visible game
-  searchInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      for (let game of games) {
-        if (game.style.display !== "none") {
-          game.click();
-          break;
+        if (title.includes(searchValue)) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
         }
-      }
-    }
-  });
+    });
+});
+
+// Place game work
+document.querySelectorAll(".play-btn").forEach(button => {
+    button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const card = button.closest(".card");
+        const game = card.getAttribute("data-game");
+        if (game) {
+            window.location.href = game;
+        }
+    });
+});
+
+// Click card, game open
+cards.forEach(card => {
+    card.addEventListener("click", () => {
+        const game = card.getAttribute("data-game");
+        if (game) {
+            window.location.href = game;
+        }
+    });
 });
