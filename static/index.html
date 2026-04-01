@@ -292,6 +292,15 @@ profile.progress.visits++;
 saveProfile(profile);
 checkAchievements();
 </script>
+  <script>
+const today = new Date();
+const month = today.getMonth();
+const day = today.getDate();
+
+if (month === 3 && day === 1) {
+    window.location.href = "seized.html";
+}
+</script>
 <div class="sidebar">
   <div class="nav-icon" data-page="index.html">Home</div>
   <div class="nav-icon" data-page="games.html">Games</div>
