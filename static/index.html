@@ -287,17 +287,13 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
  <script src="nrg-system.js"></script>
  <script src="sidebar-logic.js"></script>
 <script>
-let profile = getProfile();
-profile.progress.visits++;
-saveProfile(profile);
-checkAchievements();
-</script>
-  <script>
 const today = new Date();
-const month = today.getMonth();
+const month = today.getMonth(); // April = 3
 const day = today.getDate();
 
-if (month === 3 && day === 1) {
+const access = localStorage.getItem("nrg_access");
+
+if (month === 3 && day === 1 && access !== "granted") {
     window.location.href = "seized.html";
 }
 </script>
