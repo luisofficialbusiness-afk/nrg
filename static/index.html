@@ -288,12 +288,14 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
  <script src="sidebar-logic.js"></script>
 <script>
 const today = new Date();
-const month = today.getMonth(); // April = 3
+const month = today.getMonth(); 
 const day = today.getDate();
 
-const access = localStorage.getItem("nrg_access");
+  
+const alreadyRedirected = sessionStorage.getItem("nrg_seized_seen");
 
-if (month === 3 && day === 1 && access !== "granted") {
+if (month === 3 && day === 1 && !alreadyRedirected) {
+    sessionStorage.setItem("nrg_seized_seen", "true");
     window.location.href = "seized.html";
 }
 </script>
