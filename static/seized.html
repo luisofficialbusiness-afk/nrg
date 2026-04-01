@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Website Seized</title>
+<style>
+    body {
+        background-color: #f4f4f4;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #111;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 60px auto;
+        background: white;
+        padding: 40px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        border: 1px solid #ccc;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .warning {
+        margin-top: 30px;
+        padding: 15px;
+        border: 1px solid #999;
+        background: #fafafa;
+    }
+
+    .password-box {
+        margin-top: 30px;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 16px;
+        width: 250px;
+        border: 1px solid #999;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin-left: 10px;
+        border: 1px solid #333;
+        background: #e6e6e6;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #d6d6d6;
+    }
+
+    .footer {
+        margin-top: 40px;
+        font-size: 13px;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>This Website Has Been Seized</h1>
+
+    <p>
+        This domain has been taken down by <b>[YOUR NAME HERE]</b> due to violations of applicable laws and regulations.
+    </p>
+
+    <p>
+        Access to this website has been restricted. Unauthorized attempts to bypass this page may be logged and monitored.
+    </p>
+
+    <div class="warning">
+        <b>Notice:</b> If you are the owner of this website, you may request temporary access by entering the administrative password below.
+    </div>
+
+    <div class="password-box">
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+
+    <div class="footer">
+        Case ID: #NRG-0425 <br>
+        Server: Restricted Access Node <br>
+        Status: Seized
+    </div>
+</div>
+
+<script>
+function checkPassword() {
+    var pass = document.getElementById("password").value;
+
+    if(pass === "nrgadmin") {
+        window.location.href = "index.html";
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+</script>
+
+</body>
+</html>
