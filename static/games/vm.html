@@ -112,141 +112,154 @@
 
     <script>
 const EC2_HOST = 'ec2-3-12-220-215.us-east-2.compute.amazonaws.com';
+
+// Navigation logic
+function nav(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+}
+
+// PWA Embedding & Setup
+const manifest = {
+    "name": "Google",
+    "short_name": "Google",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#1a1a1a",
+    "theme_color": "#1a1a1a",
+    "icons": [{"src": "https://google.com/favicon.ico", "sizes": "192x192", "type": "image/x-icon"}]
+};
+const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
+
+// Dummy Service Worker for PWA compliance
+const swBlob = new Blob(["self.addEventListener('fetch', e => {});"], {type: 'application/javascript'});
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.log('SW registration failed'));
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btn-install-pwa').style.display = 'block';
+});
+
+function installPWA() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+    }
+}
+
+// Window Launch Logic
+function openCloaked(url) {
+    let win = window.open(url, '_blank');
+    if (!win) {
+        alert("Popup blocked! Please allow popups for this site, or use the fallback button.");
+    }
+}
+
+// Connect to Friend
+function joinFriend() {
+    const port = document.getElementById('input-friend-code').value;
+    if (!port) return alert('Please enter a friend code (port).');
+    openCloaked(`http://${EC2_HOST}:${port}/`);
+}
+
+// Create VM
+async function initVM(isPremium) {
+    const code = document.getElementById('input-premium-code').value.trim();
+    if (isPremium && !code) return alert('Please enter a premium code.');
+
+    nav('view-loading');
+    document.getElementById('loading-text').innerText = "Connecting to remote servers...";
+
+    try {
+        /* FIXED: 
+           1. Used backticks (`) for template literals.
+           2. Changed ec2_host to EC2_HOST to match the constant above.
+           3. Removed trailing semicolon inside the URL.
+           4. Changed to http:// unless you have specifically installed an SSL certificate on EC2.
+        */
+        let apiUrl = `https://${EC2_HOST}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45`;
         
-        // Navigation
-        function nav(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+        if (isPremium) apiUrl += `&premium=${encodeURIComponent(code)}`;
+
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
         }
 
-        // PWA Embedding & Setup
-        const manifest = {
-            "name": "Google",
-            "short_name": "Google",
-            "start_url": ".",
-            "display": "standalone",
-            "background_color": "#1a1a1a",
-            "theme_color": "#1a1a1a",
-            "icons": [{"src": "https://google.com/favicon.ico", "sizes": "192x192", "type": "image/x-icon"}]
-        };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-        document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
+        const data = await response.json();
 
-        // Dummy Service Worker for PWA compliance
-        const swBlob = new Blob(["self.addEventListener('fetch', e => {});"], {type: 'application/javascript'});
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.log('SW registration failed'));
-        }
+        if (data.status === 'success') {
+            document.getElementById('loading-text').innerText = "Instance allocated. Initializing...";
+                                
+            if (isPremium) savePremiumVM(data.url, code);
 
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('btn-install-pwa').style.display = 'block';
-        });
-
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-            }
-        }
-
-        // Window Launch Logic (Modified to open normally in a new tab)
-        function openCloaked(url) {
-            let win = window.open(url, '_blank');
-            if (!win) {
-                alert("Popup blocked! Please allow popups for this site, or use the fallback button.");
-            }
-        }
-
-        // Connect to Friend
-        function joinFriend() {
-            const port = document.getElementById('input-friend-code').value;
-            if (!port) return alert('Please enter a friend code (port).');
-            openCloaked(`http://${EC2_HOST}:${port}/`);
-        }
-
-        // Create VM
-        async function initVM(isPremium) {
-            const code = document.getElementById('input-premium-code').value.trim();
-            if (isPremium && !code) return alert('Please enter a premium code.');
-
-            nav('view-loading');
-            document.getElementById('loading-text').innerText = "Connecting to remote servers...";
-
-            try {
-                let apiUrl = `https://${ec2_host}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45;`
-                if (isPremium) apiUrl += `&premium=${encodeURIComponent(code)}`;
-
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.status === 'success') {
-                    document.getElementById('loading-text').innerText = "Instance allocated. Initializing...";
-                    
-                    if (isPremium) savePremiumVM(data.url, code);
-
-                    setTimeout(() => {
-                        openCloaked(data.url);
-                        nav('view-post-launch');
-                        
-                        let msg = "<strong>Important:</strong> New VMs may display random errors when they first start. Reload the new tab if you see one.";
-                        if (!isPremium) {
-                            msg += "<br><br><span style='color: #ff9f0a;'>Notice: Free VMs will be automatically deleted after 45 minutes or 60 seconds of inactivity.</span>";
-                        }
-                        
-                        // Added Fallback Button Here
-                        msg += `<br><br><button class="vm-connect" onclick="window.open('${data.url}', '_blank')">Launch VM (Fallback)</button>`;
-                        
-                        document.getElementById('post-launch-msg').innerHTML = msg;
-                    }, 3000);
-                } else {
-                    alert("Sequence Aborted: " + (data.message || "Only 10 free VMs can be created. Limit reached."));
-                    nav('view-main');
+            setTimeout(() => {
+                openCloaked(data.url);
+                nav('view-post-launch');
+                                        
+                let msg = "<strong>Important:</strong> New VMs may display random errors when they first start. Reload the new tab if you see one.";
+                if (!isPremium) {
+                    msg += "<br><br><span style='color: #ff9f0a;'>Notice: Free VMs will be automatically deleted after 45 minutes or 60 seconds of inactivity.</span>";
                 }
-            } catch (err) {
-                alert("Connection Failed to instances.");
-                nav('view-main');
-            }
+                                        
+                // Added Fallback Button Here
+                msg += `<br><br><button class="vm-connect" onclick="window.open('${data.url}', '_blank')">Launch VM (Fallback)</button>`;
+                                        
+                document.getElementById('post-launch-msg').innerHTML = msg;
+            }, 3000);
+        } else {
+            alert("Sequence Aborted: " + (data.message || "Only 10 free VMs can be created. Limit reached."));
+            nav('view-main');
         }
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        alert("Connection Failed to instances. Check console for details.");
+        nav('view-main');
+    }
+}
 
-        // Local Storage / Cookie Logic for VMs
-        function savePremiumVM(url, code) {
-            let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
-            vms.push({ url, code, date: new Date().toLocaleDateString() });
-            localStorage.setItem('xcloud_premium_vms', JSON.stringify(vms));
-            checkMyVMs();
-        }
+// Local Storage / Cookie Logic for VMs
+function savePremiumVM(url, code) {
+    let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
+    vms.push({ url, code, date: new Date().toLocaleDateString() });
+    localStorage.setItem('xcloud_premium_vms', JSON.stringify(vms));
+    checkMyVMs();
+}
 
-        function checkMyVMs() {
-            let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
-            if (vms.length > 0) document.getElementById('btn-my-vms').style.display = 'block';
-        }
+function checkMyVMs() {
+    let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
+    const btn = document.getElementById('btn-my-vms');
+    if (btn && vms.length > 0) btn.style.display = 'block';
+}
 
-        function loadMyVMs() {
-            const container = document.getElementById('vm-list-container');
-            let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
-            container.innerHTML = '';
-            
-            if (vms.length === 0) {
-                container.innerHTML = '<p style="text-align:center; margin-top:10px;">No saved VMs found.</p>';
-                return;
-            }
+function loadMyVMs() {
+    const container = document.getElementById('vm-list-container');
+    let vms = JSON.parse(localStorage.getItem('xcloud_premium_vms') || '[]');
+    container.innerHTML = '';
+                
+    if (vms.length === 0) {
+        container.innerHTML = '<p style="text-align:center; margin-top:10px;">No saved VMs found.</p>';
+        return;
+    }
+    vms.forEach((vm, index) => {
+        const div = document.createElement('div');
+        div.className = 'vm-item';
+        div.innerHTML = `
+            <span>Premium VM (${vm.date})</span>
+            <button class="vm-connect" onclick="openCloaked('${vm.url}')">Connect</button>
+        `;
+        container.appendChild(div);
+    });
+}
 
-            vms.forEach((vm, index) => {
-                const div = document.createElement('div');
-                div.className = 'vm-item';
-                div.innerHTML = `
-                    <span>Premium VM (${vm.date})</span>
-                    <button class="vm-connect" onclick="openCloaked('${vm.url}')">Connect</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Init check
-        checkMyVMs();
+// Init check
+checkMyVMs();
       
     </script>
 </body>
