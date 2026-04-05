@@ -176,7 +176,7 @@ const EC2_HOST = 'ec2-3-12-220-215.us-east-2.compute.amazonaws.com';
             document.getElementById('loading-text').innerText = "Connecting to remote servers...";
 
             try {
-                let apiUrl = 'https://${ec2_host}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45;'
+                let apiUrl = `https://${ec2_host}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45;`
                 if (isPremium) apiUrl += `&premium=${encodeURIComponent(code)}`;
 
                 const response = await fetch(apiUrl);
