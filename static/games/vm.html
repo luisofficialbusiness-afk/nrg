@@ -182,7 +182,7 @@ async function initVM(isPremium) {
            3. Removed trailing semicolon inside the URL.
            4. Changed to http:// unless you have specifically installed an SSL certificate on EC2.
         */
-        let apiUrl = `https://${EC2_HOST}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45`;
+        let apiUrl = `https://${ec2_host}/api/create?developer_id=nrgisfatass&site_limit=12&delete_after=45&premium=NODADDYSTOP`;
         
         if (isPremium) apiUrl += `&premium=${encodeURIComponent(code)}`;
 
