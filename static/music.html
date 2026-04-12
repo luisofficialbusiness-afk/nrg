@@ -51,7 +51,42 @@
             100% { background-position: 0% 50%; }
         }
 
-        h1.logo { font-size: 3rem; margin: 20px 0; text-align: center; text-shadow: 0 0 15px var(--nav-icon-color); }
+        .logo {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 4px;
+  display: inline-block;
+  position: relative;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 40px rgba(167,139,250,0.35),
+    0 0 80px rgba(167,139,250,0.12);
+    text-align: center;
+
+}
+
+.logo::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  color: rgba(167,139,250,0.08);
+  letter-spacing: 16px;
+  animation: glitch 5s infinite step-start;
+}
+
+@keyframes glitch {
+  0%, 92%, 100% { clip-path: inset(100% 0 0 0); transform: none; }
+  93% { clip-path: inset(20% 0 60% 0); transform: translateX(-3px); }
+  95% { clip-path: inset(55% 0 20% 0); transform: translateX(3px); }
+  97% { clip-path: inset(80% 0 5% 0); transform: translateX(-2px); }
+}
+
+.logo-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent);
+  margin-top: 6px;
+}
 
         .music-container {
             flex: 1;
