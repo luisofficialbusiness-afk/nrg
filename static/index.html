@@ -494,6 +494,22 @@ document.getElementById("nav-go-btn").addEventListener("click", () => {
 document.getElementById("nav-input").addEventListener("keydown", (e) => {
   if (e.key === "Enter") navigateTo(e.target.value);
 });
+
+  const bgMusic = new Audio('music/random music.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.1;
+
+function startFaintMusic() {
+    bgMusic.play()
+    .then(() => {
+        window.removeEventListener('click', startFaintMusic);
+    })
+    .catch(error => {
+        console.error("Playback failed:", error);
+    });
+}
+
+window.addEventListener('click', startFaintMusic);
 </script>
 
 <script src="index.js"></script>
