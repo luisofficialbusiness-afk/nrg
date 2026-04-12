@@ -960,6 +960,22 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
     });
 
 });
+
+const bgMusic = new Audio('music/random music.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.5;
+
+function startFaintMusic() {
+    bgMusic.play()
+    .then(() => {
+        window.removeEventListener('click', startFaintMusic);
+    })
+    .catch(error => {
+        console.error("Playback failed:", error);
+    });
+}
+
+window.addEventListener('click', startFaintMusic);
 </script>
   
 <script src="nrg-system.js"></script>
