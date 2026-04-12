@@ -6,7 +6,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-79K42EBSYZ');
 </script>
 <meta charset="UTF-8">
@@ -19,15 +18,7 @@
   --bg-gradient-2: #0a1f3f;
   --bg-gradient-3: #001f4f;
   --bg-gradient-4: #0a0a0a;
-
-  --card-bg: #121212;
-  --card-hover-bg: #1c1c1c;
-  --card-text: #e5e5e5;
-
-  --sidebar-bg: rgba(15, 15, 15, 0.85);
-  --sidebar-border: rgba(255, 255, 255, 0.05);
-
-  --icon-color: #ccc;
+  --accent: #00e5ff;
 }
 
 * {
@@ -41,6 +32,12 @@ body {
   background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
 }
 
 @keyframes gradientBG {
@@ -49,267 +46,320 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-
-.logo {
-  font-size: 6rem;
-  font-weight: 800;
-  color: white;
-  letter-spacing: 3px;
+.logo-container {
+  text-align: center;
+  margin-bottom: 48px;
 }
 
+.logo {
+  font-size: 8rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 16px;
+  display: inline-block;
+  position: relative;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 40px rgba(0,229,255,0.4),
+    0 0 80px rgba(0,229,255,0.15);
+}
+
+.logo::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  color: rgba(0,229,255,0.08);
+  letter-spacing: 16px;
+  animation: glitch 5s infinite step-start;
+}
+
+@keyframes glitch {
+  0%, 92%, 100% { clip-path: inset(100% 0 0 0); transform: none; }
+  93% { clip-path: inset(20% 0 60% 0); transform: translateX(-3px); }
+  95% { clip-path: inset(55% 0 20% 0); transform: translateX(3px); }
+  97% { clip-path: inset(80% 0 5% 0); transform: translateX(-2px); }
+}
+
+.logo-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), transparent);
+  margin-top: 6px;
+}
+
+#rotating-phrase {
+  color: rgba(0,229,255,0.7);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  height: 1.2em;
+}
+
+.version-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 2px;
+  padding: 5px 16px;
+  font-size: 0.5rem;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+.version-chip .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
 
 .card-container {
   display: flex;
-  gap: 30px;
+  gap: 14px;
   justify-content: center;
-  margin-bottom: 100px; 
+  flex-wrap: wrap;
+  max-width: 900px;
 }
 
 .card {
-  background-color: var(--card-bg);
-  width: 140px;
-  height: 180px;
-  border-radius: 12px;
-
+  width: 134px;
+  height: 162px;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  transition: transform 0.2s ease;
   cursor: pointer;
-
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+  background: rgba(10,10,10,0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: border-color 0.25s, transform 0.25s;
 }
+
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: rgba(0,229,255,0.4);
+  border-style: solid;
+  transition: width 0.25s, height 0.25s, border-color 0.25s;
+}
+.card::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
+.card::after  { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
 
 .card:hover {
-  transform: translateY(-3px);
-  background-color: var(--card-hover-bg);
+  transform: translateY(-5px);
+  border-color: rgba(0,229,255,0.18);
+}
+.card:hover::before,
+.card:hover::after {
+  width: 20px; height: 20px;
+  border-color: rgba(0,229,255,0.7);
 }
 
-.card .emoji {
-  font-size: 2.5rem;
-  margin-bottom: 12px;
-  opacity: 0.9;
+.card .sweep {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(105deg, transparent 40%, rgba(0,229,255,0.04) 50%, transparent 60%);
+  transition: left 0.4s ease;
+}
+.card:hover .sweep { left: 160%; }
+
+.card .icon {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 .card .text {
-  font-size: 1rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: var(--card-text);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  transition: color 0.2s;
 }
-
+.card:hover .text { color: rgba(255,255,255,0.95); }
 
 .sidebar {
-width: 80px;
-background: rgba(15, 15, 15, 0.95);
-border-right: 1px solid rgba(255, 255, 255, 0.05);
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px 0;
-position: fixed;
-top: 0;
-bottom: 0;
-left: 0;
-transform: translateX(-70px);
-transition: transform 0.3s ease;
-z-index: 999;
+  width: 110px;
+  background: rgba(15, 15, 15, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 0;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  transform: translateX(-96px);
+  transition: transform 0.3s ease;
+  z-index: 999;
 }
-
-.sidebar:hover {
-transform: translateX(0);
-}
-
-
+.sidebar:hover { transform: translateX(0); }
 .sidebar .nav-icon {
-width: 50px;
-height: 50px;
-margin: 10px 0;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 12px;
-cursor: pointer;
-font-size: 14px;
-color: #ccc;
-transition: background 0.2s ease;
+  width: 86px; height: 56px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ccc;
+  transition: background 0.2s ease;
 }
-
 .sidebar .nav-icon:hover,
 .sidebar .nav-icon.active {
-background: rgba(255, 255, 255, 0.08);
-color: white
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
 }
 
 .bottom-sidebar {
-position: fixed;
-bottom: 0;
-left: 50%;
-transform: translate(-50%, 70%);
-display: flex;
-gap: 20px;
-padding: 10px 18px;
-background: rgba(15, 15, 15, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 40px;
-border: 1px solid rgba(255, 255, 255, 0.05);
-transition: transform 0.3s ease;
-z-index: 999;
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translate(-50%, 70%);
+  display: flex;
+  gap: 20px;
+  padding: 10px 18px;
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+  z-index: 999;
 }
-
-.bottom-sidebar:hover {
-  transform: translate(-50%, 0);
-}
-
+.bottom-sidebar:hover { transform: translate(-50%, 0); }
 .status-card {
-color: white;
-background-color: #1a1a1a;
-padding: 8px 12px;
-border-radius: 10px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-font-size: 0.9rem;
+  color: white;
+  background-color: #1a1a1a;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  font-size: 0.9rem;
 }
-
-
 </style>
 </head>
 <body>
 
+<div class="logo-container">
+  <div class="logo" data-text="NRG">NRG</div>
+  <div class="logo-line"></div>
+  <div id="rotating-phrase"></div>
+</div>
 
-<div class="logo-container" style="text-align:center;margin-bottom:20px;">
-    <div class="logo" style="font-size:6rem;font-weight:800;color:white;letter-spacing:3px;text-shadow:0 0 15px #00e5ff;">NRG</div>
-    <div id="rotating-phrase" style="color:#00e5ff;font-weight:500;margin-top:5px;font-size:1rem;height:1.2em;"></div>
+
+
+<div class="card-container">
+  <div class="card" data-page="games.html">
+    <div class="sweep"></div>
+    <div class="icon">🎮</div>
+    <div class="text">Games</div>
+  </div>
+  <div class="card" data-page="movies.html">
+    <div class="sweep"></div>
+    <div class="icon">🎬</div>
+    <div class="text">Movies</div>
+  </div>
+  <div class="card" data-page="ai.html">
+    <div class="sweep"></div>
+    <div class="icon">🤖</div>
+    <div class="text">AI</div>
+  </div>
+  <div class="card" data-page="music.html">
+    <div class="sweep"></div>
+    <div class="icon">🎵</div>
+    <div class="text">Music</div>
+  </div>
+  <div class="card" data-page="proxy.html">
+    <div class="sweep"></div>
+    <div class="icon">🌐</div>
+    <div class="text">Proxy</div>
+  </div>
+  <div class="card" data-page="settings.html">
+    <div class="sweep"></div>
+    <div class="icon">⚙️</div>
+    <div class="text">Settings</div>
+  </div>
 </div>
 
 <script>
 const phrases = [
-    "Feel the NRG",
-    "This is a name of a Stadium and a Company",
-    "You should ask NRG AI something",
-    "NRG v1.67 coming in 1 week and 6 days",
-    "Secretly Browse with Proxy 🌐",
-    "I secretly snuck this quote in lmao",
-    "NRG Music When?",
-    "Tuff Settings",
-    "Their is a teacher behind you",
-    "WELCOME TO THE NRG STADIUM", 
-    "Math is Boring",
-    "Send a Screenshot of this message and dm it to rveprty.",
-    "NRG > VeilUB",
-    "what te hell",
-    "guess what. Chicken butt",
-    "end of the road pal"
+  "Feel the NRG",
+  "This is a name of a Stadium and a Company",
+  "You should ask NRG AI something",
+  "NRG v1.67 coming in 1 week and 6 days",
+  "Secretly Browse with Proxy 🌐",
+  "I secretly snuck this quote in lmao",
+  "NRG Music When?",
+  "Tuff Settings",
+  "Their is a teacher behind you",
+  "WELCOME TO THE NRG STADIUM",
+  "Math is Boring",
+  "Send a Screenshot of this message and dm it to rveprty.",
+  "NRG > VeilUB",
+  "what te hell",
+  "guess what. Chicken butt",
+  "end of the road pal"
 ];
 
-let phraseIndex = 0;
-let charIndex = 0;
-let typing = true; 
-const speed = 100; 
-const delayAfter = 1500; 
-const element = document.getElementById("rotating-phrase");
+let phraseIndex = 0, charIndex = 0, typing = true;
+const el = document.getElementById("rotating-phrase");
 
 function typeEffect() {
-    const currentPhrase = phrases[phraseIndex];
-    
-    if (typing) {
-        element.textContent = currentPhrase.substring(0, charIndex + 1);
-        charIndex++;
-        if (charIndex === currentPhrase.length) {
-            typing = false;
-            setTimeout(typeEffect, delayAfter);
-            return;
-        }
-    } else {
-        element.textContent = currentPhrase.substring(0, charIndex - 1);
-        charIndex--;
-        if (charIndex === 0) {
-            typing = true;
-            phraseIndex = (phraseIndex + 1) % phrases.length;
-        }
-    }
-
-    setTimeout(typeEffect, speed);
+  const cur = phrases[phraseIndex];
+  if (typing) {
+    el.textContent = cur.substring(0, charIndex + 1);
+    charIndex++;
+    if (charIndex === cur.length) { typing = false; setTimeout(typeEffect, 1500); return; }
+  } else {
+    el.textContent = cur.substring(0, charIndex - 1);
+    charIndex--;
+    if (charIndex === 0) { typing = true; phraseIndex = (phraseIndex + 1) % phrases.length; }
+  }
+  setTimeout(typeEffect, 100);
 }
-
-
 typeEffect();
-</script>
 
-
-  <div class="card-container">
-    <div class="card" data-page="games.html">
-      <div class="emoji">🎮</div>
-      <div class="text">Games</div>
-    </div>
-    <div class="card" data-page="movies.html">
-      <div class="emoji">🎬</div>
-      <div class="text">Movies</div>
-    </div>
-    <div class="card" data-page="ai.html">
-      <div class="emoji">🤖</div>
-      <div class="text">AI</div>
-    </div>
-    <div class="card" data-page="proxy.html">
-      <div class="emoji">🌐</div>
-      <div class="text">Proxy</div>
-    </div>
-    <div class="card" data-page="settings.html">
-      <div class="emoji">⚙️</div>
-      <div class="text">Settings</div>
-    </div>
-  </div>
-
-  
-
-  
-</div>
- 
-<script>
-
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      const targetPage = card.dataset.page;
-      if(targetPage) {
-        window.location.href = targetPage;
-      }
-    });
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    const page = card.dataset.page;
+    if (page) window.location.href = page;
   });
+});
 
 document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
-
-    const currentPage = window.location.pathname.split("/").pop();
-
-    if (icon.dataset.page === currentPage) {
-        icon.classList.add("active");
-    }
-
-    icon.addEventListener('click', () => {
-        const page = icon.dataset.page;
-        if (page) {
-            window.location.href = "/" + page;
-        }
-    });
-
+  const currentPage = window.location.pathname.split("/").pop();
+  if (icon.dataset.page === currentPage) icon.classList.add("active");
+  icon.addEventListener('click', () => {
+    const page = icon.dataset.page;
+    if (page) window.location.href = "/" + page;
+  });
 });
-</script>
- <script src="index.js"></script>
- <script src="nrg-system.js"></script>
- <script src="sidebar-logic.js"></script>
-<script>
+
 const today = new Date();
-const month = today.getMonth(); 
-const day = today.getDate();
-
-  
-const alreadyRedirected = sessionStorage.getItem("nrg_seized_seen");
-
-if (month === 3 && day === 1 && !alreadyRedirected) {
-    sessionStorage.setItem("nrg_seized_seen", "true");
-    window.location.href = "seized.html";
+if (today.getMonth() === 3 && today.getDate() === 1 && !sessionStorage.getItem("nrg_seized_seen")) {
+  sessionStorage.setItem("nrg_seized_seen", "true");
+  window.location.href = "seized.html";
 }
 </script>
+
+<script src="index.js"></script>
+<script src="nrg-system.js"></script>
+<script src="sidebar-logic.js"></script>
+
 <div class="sidebar">
   <div class="nav-icon" data-page="index.html">Home</div>
   <div class="nav-icon" data-page="games.html">Games</div>
@@ -321,10 +371,11 @@ if (month === 3 && day === 1 && !alreadyRedirected) {
 </div>
 
 <div class="bottom-sidebar">
-<div class="status-card" id="time-status">Time: --:--</div>
-<div class="status-card" id="battery-status">Battery: --%</div>
-<div class="status-card" id="temperature-status">Temp: -- °C</div>
-<div class="status-card" id="ping-status">Ping: -- ms</div>
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
 </div>
+
 </body>
 </html>
