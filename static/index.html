@@ -388,7 +388,7 @@
     <input id="nav-input" type="text" placeholder="enter url or search  —  e.g; google.com" autocomplete="off" spellcheck="false" />
     <button id="nav-go-btn">Go</button>
   </div>
-  <div class="nav-hint"></div>
+  <div class="nav-hint">URLs and searches routed through scramjet</div>
 </div>
 
 <script>
@@ -483,7 +483,8 @@ function navigateTo(raw) {
   } else {
     url = "https://search.brave.com/search?q=" + encodeURIComponent(input);
   }
-  window.location.href = "/sail/go/" + encodeURIComponent(url);
+  sessionStorage.setItem("nrg_nav_target", url);
+  window.location.href = "/proxy.html";
 }
 
 document.getElementById("nav-go-btn").addEventListener("click", () => {
