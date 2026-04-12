@@ -338,45 +338,36 @@ select:hover {
 
 
 .nrg-sidebar {
-width: 80px;
-background: rgba(15, 15, 15, 0.95);
-border-right: 1px solid rgba(255, 255, 255, 0.05);
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px 0;
-position: fixed;
-top: 0;
-bottom: 0;
-left: 0;
-transform: translateX(-70px);
-transition: transform 0.3s ease;
-z-index: 999;
+  width: 110px;
+  background: rgba(15, 15, 15, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 0;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  transform: translateX(-96px);
+  transition: transform 0.3s ease;
+  z-index: 999;
 }
-
-.nrg-sidebar:hover {
-transform: translateX(0);
-}
-
-
+.nrg-sidebar:hover { transform: translateX(0); }
 .nrg-sidebar .nav-icon {
-width: 50px;
-height: 50px;
-margin: 10px 0;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 12px;
-cursor: pointer;
-font-size: 14px;
-color: #ccc;
-transition: background 0.2s ease;
+  width: 86px; height: 56px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ccc;
+  transition: background 0.2s ease;
 }
-
 .nrg-sidebar .nav-icon:hover,
 .nrg-sidebar .nav-icon.active {
-background: rgba(255, 255, 255, 0.08);
-color: white
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
 }
 
 .bottom-sidebar {
@@ -753,15 +744,6 @@ font-size: 0.9rem;
 
         init();    
     </script>
-<!-- Bottom Sidebar -->
-<div class="bottom-sidebar">
-    <div class="nav-icon" data-page="index.html">🏠</div>
-    <div class="nav-icon" data-page="games.html">🎮</div>
-    <div class="nav-icon" data-page="movies.html">🎬</div>
-    <div class="nav-icon" data-page="ai.html">🤖</div>
-    <div class="nav-icon" data-page="proxy.html">🌐</div>
-    <div class="nav-icon" data-page="settings.html">⚙</div>
-</div>
 
 <script>
 document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
@@ -784,14 +766,15 @@ document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
     <script src="index.js"></script>
     <script src="sidebar-logic.js"></script>
 
-    <div class="nrg-sidebar">
-<div class="nav-icon" data-page="index.html">Home</div>
-<div class="nav-icon" data-page="games.html">Games</div>
-<div class="nav-icon" data-page="index.html">Movies</div>
-<div class="nav-icon" data-page="ai.html">AI</div>
-<div class="nav-icon" data-page="proxy.html">Proxy</div>
-<div class="nav-icon" data-page="settings.html">Settings</div>
-<div class="nav-icon" data-page="support.html">Support Us</div>
+<div class="nrg-sidebar">
+  <div class="nav-icon" data-page="index.html">Home</div>
+  <div class="nav-icon" data-page="games.html">Games</div>
+  <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="ai.html">AI</div>
+  <div class="nav-icon" data-page="proxy.html">Proxy</div>
+  <div class="nav-icon" data-page="settings.html">Settings</div>
+  <div class="nav-icon" data-page="support.html">Support Us</div>
+</div>
     
 <div class="bottom-sidebar">
 <div class="status-card" id="time-status">Time: --:--</div>
