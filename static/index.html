@@ -196,6 +196,112 @@ body {
 }
 .card:hover .text { color: rgba(255,255,255,0.95); }
 
+.nav-search-wrapper {
+  margin-top: 36px;
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-search-label {
+  font-size: 0.5rem;
+  letter-spacing: 3px;
+  color: rgba(167,139,250,0.5);
+  text-transform: uppercase;
+}
+
+.nav-search-bar {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(167,139,250,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(10,10,10,0.75);
+  transition: border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+
+.nav-search-bar::before,
+.nav-search-bar::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  border-color: rgba(167,139,250,0.4);
+  border-style: solid;
+  transition: width 0.25s, height 0.25s, border-color 0.25s;
+  pointer-events: none;
+}
+.nav-search-bar::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
+.nav-search-bar::after  { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+.nav-search-bar:focus-within {
+  border-color: rgba(167,139,250,0.55);
+  box-shadow: 0 0 18px rgba(167,139,250,0.1);
+}
+.nav-search-bar:focus-within::before,
+.nav-search-bar:focus-within::after {
+  width: 16px; height: 16px;
+  border-color: rgba(167,139,250,0.7);
+}
+
+.nav-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  color: rgba(167,139,250,0.5);
+  flex-shrink: 0;
+}
+
+#nav-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  padding: 14px 6px;
+  caret-color: var(--accent);
+}
+
+#nav-input::placeholder {
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 1.5px;
+}
+
+#nav-go-btn {
+  background: rgba(167,139,250,0.1);
+  border: none;
+  border-left: 1px solid rgba(167,139,250,0.15);
+  color: rgba(167,139,250,0.75);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 0 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+#nav-go-btn:hover {
+  background: rgba(167,139,250,0.22);
+  color: #fff;
+}
+
+.nav-hint {
+  font-size: 0.45rem;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.12);
+  text-align: center;
+}
+
+
 .sidebar {
   width: 110px;
   background: rgba(15, 15, 15, 0.95);
@@ -262,8 +368,6 @@ body {
   <div id="rotating-phrase"></div>
 </div>
 
-
-
 <div class="card-container">
   <div class="card" data-page="games.html">
     <div class="sweep"></div>
@@ -295,6 +399,23 @@ body {
     <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
     <div class="text">Settings</div>
   </div>
+</div>
+
+<div class="nav-search-wrapper">
+  <div class="nav-search-label">Quick Nav</div>
+  <div class="nav-search-bar">
+    <div class="nav-search-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="6" width="20" height="5" rx="2"/>
+        <rect x="2" y="13" width="20" height="5" rx="2"/>
+        <circle cx="6" cy="8.5" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="6" cy="15.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <input id="nav-input" type="text" placeholder="enter url or search  —  e.g; google.com" autocomplete="off" spellcheck="false" />
+    <button id="nav-go-btn">Go</button>
+  </div>
+  <div class="nav-hint"></div>
 </div>
 
 <script>
@@ -374,6 +495,31 @@ if (today.getMonth() === 3 && today.getDate() === 1 && !sessionStorage.getItem("
   sessionStorage.setItem("nrg_seized_seen", "true");
   window.location.href = "seized.html";
 }
+
+function isURL(input) {
+  return /^https?:\/\//i.test(input) ||
+    /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(input);
+}
+
+function navigateTo(raw) {
+  let input = raw.trim();
+  if (!input) return;
+  let url;
+  if (isURL(input)) {
+    url = /^https?:\/\//i.test(input) ? input : "https://" + input;
+  } else {
+    url = "https://search.brave.com/search?q=" + encodeURIComponent(input);
+  }
+  window.location.href = "/sail/go/" + encodeURIComponent(url);
+}
+
+document.getElementById("nav-go-btn").addEventListener("click", () => {
+  navigateTo(document.getElementById("nav-input").value);
+});
+
+document.getElementById("nav-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") navigateTo(e.target.value);
+});
 </script>
 
 <script src="index.js"></script>
