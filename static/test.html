@@ -1,2674 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NRG Music</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-79K42EBSYZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-79K42EBSYZ');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NRG Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111;
-    --surface2: #1a1a1a;
-    --surface3: #222;
-    --border: #2a2a2a;
-    --accent: #c50cf9;
-    --accent-dim: rgba(200,255,0,0.10);
-    --text: #e8e8e8;
-    --text-dim: #666;
-    --text-muted: #3a3a3a;
-    --mono: 'Space Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-  }
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111;
+      --surface2: #1a1a1a;
+      --surface3: #222;
+      --border: #2a2a2a;
+      --accent: #c50cf9;
+      --accent-dim: rgba(197,12,249,0.10);
+      --accent-glow: rgba(197,12,249,0.25);
+      --text: #e8e8e8;
+      --text-dim: #666;
+      --text-muted: #3a3a3a;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
 
-  html, body { height: 100%; overflow: hidden; }
+    html, body { height: 100%; overflow: hidden; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    display: grid;
-    grid-template-columns: 300px 1fr 260px;
-    grid-template-rows: 100vh;
-  }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      display: flex;
+      flex-direction: column;
+    }
 
-  ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* ══ SIDEBAR ══ */
-  .sidebar {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-  .sidebar-top {
-    padding: 22px 20px 14px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .app-label {
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: 0.3em; color: var(--accent); margin-bottom: 14px;
-  }
-  .search-box { position: relative; }
-  .search-box svg {
-    position: absolute; left: 10px; top: 50%;
-    transform: translateY(-50%); width: 13px; height: 13px;
-    color: var(--text-dim); pointer-events: none;
-  }
-  .search-box input {
-    width: 100%; background: var(--surface2);
-    border: 1px solid var(--border); color: var(--text);
-    font-family: var(--sans); font-size: 12px;
-    padding: 8px 10px 8px 30px; border-radius: 4px;
-    outline: none; transition: border-color 0.2s;
-  }
-  .search-box input::placeholder { color: var(--text-muted); }
-  .search-box input:focus { border-color: var(--accent); }
+    /* ══ TOP BAR ══ */
+    .topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px 14px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
 
-  .section-label {
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: 0.2em; color: var(--text-muted);
-    text-transform: uppercase; padding: 14px 20px 6px; flex-shrink: 0;
-  }
-  .playlist-scroll { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .brand-nrg {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+    }
+    .brand-page {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
 
-  /* Track row */
-  .track-row {
-    display: flex; align-items: center; gap: 11px;
-    padding: 8px 20px; cursor: pointer;
-    transition: background 0.12s; position: relative; user-select: none;
-  }
-  .track-row:hover { background: var(--surface2); }
-  .track-row.active { background: var(--accent-dim); }
-  .track-row.active .t-name { color: var(--accent); }
-  .track-row.active::before {
-    content: ''; position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--accent); border-radius: 0 2px 2px 0;
-  }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-  .t-cover {
-    width: 38px; height: 38px; border-radius: 4px;
-    flex-shrink: 0; overflow: hidden; background: var(--surface3);
-    display: flex; align-items: center; justify-content: center; position: relative;
-  }
-  .t-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .cover-fallback { font-size: 16px; color: var(--text-muted); }
-  .play-overlay {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.55);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity 0.15s;
-  }
-  .track-row:hover .play-overlay { opacity: 1; }
-  .play-overlay svg { color: #fff; width: 14px; height: 14px; }
+    .game-count {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+    }
 
-  .t-meta { flex: 1; min-width: 0; }
-  .t-name {
-    font-size: 12px; font-weight: 500; color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.4;
-  }
-  .t-artist {
-    font-size: 11px; color: var(--text-dim);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;
-  }
-  .t-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .t-dur { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
-  .q-add-btn {
-    background: none; border: 1px solid var(--border);
-    color: var(--text-dim); font-family: var(--mono);
-    font-size: 8px; letter-spacing: 0.08em;
-    padding: 3px 7px; border-radius: 3px; cursor: pointer;
-    opacity: 0; transition: opacity 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap;
-  }
-  .track-row:hover .q-add-btn { opacity: 1; }
-  .q-add-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .no-results {
-    padding: 28px 20px; font-family: var(--mono); font-size: 10px;
-    color: var(--text-muted); letter-spacing: 0.1em; text-align: center;
-  }
 
-  /* ══ MAIN PLAYER ══ */
-  .player-main {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 48px 40px; position: relative; overflow: hidden;
-  }
-  .player-main::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 55% 45% at 50% 58%, rgba(200,255,0,0.035) 0%, transparent 70%);
-    pointer-events: none;
-  }
+    .search-wrap {
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 10px; top: 50%;
+      transform: translateY(-50%);
+      width: 13px; height: 13px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+    .search-wrap input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 12px;
+      padding: 8px 10px 8px 30px;
+      border-radius: 4px;
+      outline: none;
+      width: 220px;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-clear {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-muted);
+      cursor: pointer; font-size: 14px;
+      display: none; line-height: 1;
+    }
+    .search-clear:hover { color: var(--text); }
 
-  .art-wrap { position: relative; margin-bottom: 40px; }
-  .art-frame {
-    width: 230px; height: 230px; border-radius: 8px;
-    background: var(--surface2); overflow: hidden; position: relative;
-    box-shadow: 0 0 0 1px var(--border), 0 40px 80px rgba(0,0,0,0.85);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .art-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .art-empty {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 12px; width: 100%; height: 100%;
-    position: absolute; inset: 0;
-  }
-  .art-empty svg { color: var(--text-muted); width: 44px; height: 44px; }
-  .art-empty span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); }
 
-  .disc {
-    position: absolute; bottom: -14px; right: -14px;
-    width: 58px; height: 58px; border-radius: 50%;
-    background: var(--surface); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .disc::before {
-    content: ''; position: absolute;
-    width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
-  }
-  .disc::after {
-    content: ''; width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 10px var(--accent);
-  }
-  .disc.spin { animation: spin 3s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 28px 100px 28px;
+    }
 
-  .player-info { text-align: center; margin-bottom: 34px; min-height: 44px; }
-  .player-title {
-    font-family: var(--mono); font-size: 16px; font-weight: 700;
-    letter-spacing: -0.02em; color: var(--text); margin-bottom: 6px; line-height: 1.2;
-  }
-  .player-artist { font-size: 12px; color: var(--text-dim); letter-spacing: 0.04em; }
-  .player-idle { font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.2em; }
 
-  .progress-section { width: 100%; max-width: 360px; margin-bottom: 30px; }
-  .times { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .times span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
-  .prog-track {
-    width: 100%; height: 3px; background: var(--surface3);
-    border-radius: 2px; cursor: pointer; position: relative;
-  }
-  .prog-fill {
-    height: 100%; background: var(--accent); border-radius: 2px;
-    width: 0%; position: relative; transition: width 0.25s linear;
-  }
-  .prog-fill::after {
-    content: ''; position: absolute; right: -5px; top: 50%;
-    transform: translateY(-50%); width: 9px; height: 9px;
-    border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent);
-    opacity: 0; transition: opacity 0.2s;
-  }
-  .prog-track:hover .prog-fill::after { opacity: 1; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
 
-  .controls { display: flex; align-items: center; gap: 20px; margin-bottom: 26px; }
-  .ctrl {
-    background: none; border: none; cursor: pointer; color: var(--text-dim);
-    display: flex; align-items: center; justify-content: center;
-    padding: 7px; border-radius: 50%; transition: color 0.15s, transform 0.1s;
-  }
-  .ctrl:hover { color: var(--text); }
-  .ctrl:active { transform: scale(0.9); }
-  .ctrl.lit { color: var(--accent); }
-  .play-pause {
-    width: 54px; height: 54px; background: var(--accent);
-    border: none; border-radius: 50%; cursor: pointer; color: #000;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 22px rgba(200,255,0,0.28); transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .play-pause:hover { transform: scale(1.07); box-shadow: 0 0 32px rgba(200,255,0,0.42); }
-  .play-pause:active { transform: scale(0.94); }
+  
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
 
-  .vol-row { display: flex; align-items: center; gap: 9px; width: 100%; max-width: 190px; }
-  .vol-row svg { color: var(--text-muted); width: 13px; height: 13px; flex-shrink: 0; }
-  input[type=range] {
-    -webkit-appearance: none; flex: 1; height: 3px;
-    background: var(--surface3); border-radius: 2px; outline: none; cursor: pointer;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 10px; height: 10px;
-    border-radius: 50%; background: var(--text-dim); transition: background 0.15s;
-  }
-  input[type=range]:hover::-webkit-slider-thumb { background: var(--accent); }
+    .game-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .game-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
 
-  /* ══ QUEUE / LYRICS PANEL ══ */
-  .queue-panel {
-    background: var(--surface); border-left: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow: hidden;
-  }
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: var(--surface2);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .game-card:hover .card-thumb img {
+      transform: scale(1.06);
+    }
 
-  /* Tabs */
-  .panel-tabs {
-    display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
-  }
-  .panel-tab {
-    flex: 1; padding: 15px 0; text-align: center;
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
-    color: var(--text-muted); cursor: pointer; text-transform: uppercase;
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .panel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .panel-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-  .panel-pane { display: none; flex: 1; overflow: hidden; flex-direction: column; }
-  .panel-pane.active { display: flex; }
+    
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .game-card:hover .card-overlay { opacity: 1; }
+    .overlay-play {
+      width: 42px; height: 42px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .overlay-play svg { color: #fff; width: 16px; height: 16px; margin-left: 2px; }
 
-  /* Queue pane */
-  .queue-scroll { flex: 1; overflow-y: auto; }
-  .queue-next-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); padding: 12px 18px 4px; }
+    .card-info {
+      padding: 10px 12px 12px;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+    }
+    .game-card:hover .card-title { color: var(--accent); }
 
-  /* Lyrics pane */
-  .lyrics-pane { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
-  .lyrics-state {
-    padding: 60px 20px; text-align: center;
-    font-family: var(--mono); font-size: 10px;
-    color: var(--text-muted); letter-spacing: 0.15em; line-height: 2.4;
-  }
-  .lyric-line {
-    display: block; padding: 7px 20px;
-    font-family: var(--sans); font-size: 13px; line-height: 1.6;
-    color: var(--text-muted); cursor: pointer;
-    transition: color 0.3s, font-size 0.25s, padding-left 0.25s;
-  }
-  .lyric-line:hover { color: var(--text-dim); }
-  .lyric-line.active { color: var(--text); font-size: 15px; font-weight: 500; padding-left: 24px; }
-  .lyric-line.passed { color: var(--text-dim); }
+ 
+    .game-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+      transform: scaleY(0);
+      transition: transform 0.2s;
+    }
+    .game-card:hover::before { transform: scaleY(1); }
 
-  /* Offset bar */
-  .offset-bar {
-    flex-shrink: 0; padding: 10px 16px;
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .offset-label {
-    font-family: var(--mono); font-size: 9px;
-    color: var(--text-muted); letter-spacing: 0.1em; flex-shrink: 0;
-  }
-  .offset-val {
-    font-family: var(--mono); font-size: 9px;
-    color: var(--accent); width: 44px; text-align: center; flex-shrink: 0;
-  }
-  .offset-btn {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text-dim); font-family: var(--mono); font-size: 13px;
-    width: 26px; height: 26px; border-radius: 4px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s, border-color 0.15s; flex-shrink: 0;
-    line-height: 1;
-  }
-  .offset-btn:hover { color: var(--accent); border-color: var(--accent); }
-  .offset-reset {
-    background: none; border: none; font-family: var(--mono);
-    font-size: 8px; letter-spacing: 0.1em; color: var(--text-muted);
-    cursor: pointer; padding: 2px 4px; transition: color 0.15s; flex-shrink: 0;
-  }
-  .offset-reset:hover { color: var(--accent); }
+   
+    .no-results {
+      grid-column: 1 / -1;
+      padding: 60px 20px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      line-height: 2;
+    }
 
-  .queue-row {
-    display: flex; align-items: center; gap: 9px;
-    padding: 8px 16px; cursor: pointer; transition: background 0.12s; position: relative;
-  }
-  .queue-row:hover { background: var(--surface2); }
-  .q-num { font-family: var(--mono); font-size: 9px; color: var(--text-muted); width: 12px; text-align: right; flex-shrink: 0; }
-  .q-thumb {
-    width: 32px; height: 32px; border-radius: 3px; background: var(--surface3);
-    flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center;
-    font-size: 14px; color: var(--text-muted);
-  }
-  .q-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .q-info { flex: 1; min-width: 0; }
-  .q-name { font-size: 11px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .q-artist { font-size: 10px; color: var(--text-dim); }
-  .q-remove {
-    background: none; border: none; cursor: pointer; color: var(--text-muted);
-    display: flex; opacity: 0; transition: opacity 0.12s, color 0.12s; padding: 2px;
-  }
-  .queue-row:hover .q-remove { opacity: 1; }
-  .q-remove:hover { color: #ff4a4a; }
-  .queue-empty-msg {
-    padding: 48px 20px; text-align: center; font-family: var(--mono);
-    font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em; line-height: 2;
-  }
+   
+    .game-overlay {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: none;
+      flex-direction: column;
+      z-index: 500;
+    }
+    .game-overlay.open { display: flex; }
 
-  .toast {
-    position: fixed; bottom: 28px; left: 50%;
-    transform: translateX(-50%) translateY(8px);
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text); font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.1em; padding: 9px 18px; border-radius: 4px;
-    opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 999;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  audio { display: none; }
+    .overlay-bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .overlay-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      flex: 1;
+    }
+    .overlay-title span { color: var(--accent); }
 
-  .nrg-sidebar {
-  width: 110px;
-  background: rgba(15, 15, 15, 0.95);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 0;
-  position: fixed;
-  top: 0; bottom: 0; left: 0;
-  transform: translateX(-96px);
-  transition: transform 0.3s ease;
-  z-index: 999;
-}
-.nrg-sidebar:hover { transform: translateX(0); }
-.nrg-sidebar .nav-icon {
-  width: 86px; height: 56px;
-  margin: 6px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  color: #ccc;
-  transition: background 0.2s ease;
-}
-.nrg-sidebar .nav-icon:hover,
-.nrg-sidebar .nav-icon.active {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-}
+    .ov-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .ov-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .ov-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+    .ov-btn.primary:hover { box-shadow: 0 0 16px var(--accent-glow); color: #000; }
 
-.bottom-sidebar {
-position: fixed;
-bottom: 0;
-left: 50%;
-transform: translate(-50%, 70%);
-display: flex;
-gap: 20px;
-padding: 10px 18px;
-background: rgba(15, 15, 15, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 40px;
-border: 1px solid rgba(255, 255, 255, 0.05);
-transition: transform 0.3s ease;
-z-index: 999;
-}
+    .game-frame {
+      flex: 1;
+      border: none;
+      background: #000;
+    }
 
-.bottom-sidebar:hover {
-  transform: translate(-50%, 0);
-}
-</style>
+   
+    .nrg-sidebar {
+      width: 110px;
+      background: rgba(15, 15, 15, 0.95);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 0;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      transform: translateX(-96px);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .nrg-sidebar:hover { transform: translateX(0); }
+    .nrg-sidebar .nav-icon {
+      width: 86px; height: 56px;
+      margin: 6px 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px; color: #ccc;
+      transition: background 0.2s ease;
+      font-family: var(--sans);
+    }
+    .nrg-sidebar .nav-icon:hover,
+    .nrg-sidebar .nav-icon.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+    }
+
+    .bottom-sidebar {
+      position: fixed;
+      bottom: 0; left: 50%;
+      transform: translate(-50%, 70%);
+      display: flex; gap: 20px;
+      padding: 10px 18px;
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .bottom-sidebar:hover { transform: translate(-50%, 0); }
+    .status-card {
+      color: white;
+      background-color: var(--surface2);
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      font-size: 0.75rem;
+      font-family: var(--mono);
+      letter-spacing: 0.05em;
+    }
+  </style>
 </head>
 <body>
 
-
-<aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="app-label">▶ NRG Music</div>
-    <div class="search-box">
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">▶ NRG</span>
+    <span class="brand-page">Games</span>
+  </div>
+  <div class="topbar-right">
+    <span class="game-count" id="game-count"></span>
+    <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="Search tracks…">
+      <input type="text" id="search" placeholder="Search games…">
+      <button class="search-clear" id="search-clear">×</button>
     </div>
   </div>
-
-  <div class="section-label">All Tracks</div>
-
-  <div class="playlist-scroll" id="playlist-scroll">
+</div>
 
 
-    <div class="track-row"
-         data-src="music/Washing Machine Heart.mp3"
-         data-cover="images/wmh.jpg"
-         data-title="Washing Machine Heart"
-         data-artist="Mitski"
-         data-duration="2:07">
-      <div class="t-cover">
-        <img src="images/wmh.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Washing Machine Heart</div>
-        <div class="t-artist">Mitski</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:07</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-  
-    <div class="track-row"
-         data-src="music/Espresso.mp3"
-         data-cover="images/espresso.webp"
-         data-title="Expresso"
-         data-artist="Sabrina Carpenter"
-         data-duration="2:55">
-      <div class="t-cover">
-        <img src="images/espresso.webp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Expresso</div>
-        <div class="t-artist">Sabrina Carpenter</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:55</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-   
-    <div class="track-row"
-         data-src="music/Baile Inovidalbe.mp3"
-         data-cover="images/dtmf.jpg"
-         data-title="Baile Inovidalbe"
-         data-artist="Bad Bunny"
-         data-duration="6:07">
-      <div class="t-cover">
-        <img src="images/dtmf.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Baile Inovidalbe</div>
-        <div class="t-artist">Bad Bunny</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">6:07</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
+<div class="content">
+  <div class="section-label" id="section-label">All Games</div>
+  <div class="game-grid" id="game-grid">
 
     
-    <div class="track-row"
-         data-src="music/LO QUE LE PASÓ A HAWAii.mp3"
-         data-cover="images/LO QUE LE PASÓ A HAWAii.jpg"
-         data-title="LO QUE LE PASÓ A HAWAii"
-         data-artist="Bad Bunny"
-         data-duration="3:49">
-      <div class="t-cover">
-        <img src="images/LO QUE LE PASÓ A HAWAii.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">LO QUE LE PASÓ A HAWAii</div>
-        <div class="t-artist">Bad Bunny</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:49</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-
-    <div class="track-row"
-         data-src="music/this is how falling in love feels like.mp3"
-         data-cover="images/this is what falling in love feels like.jpg"
-         data-title="this is what falling in love feels like"
-         data-artist="J4KE"
-         data-duration="2:01">
-      <div class="t-cover">
-        <img src="images/this is what falling in love feels like.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">this is what falling in love feels like</div>
-        <div class="t-artist">J4KE</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:01</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-    <div class="track-row"
-         data-src="music/golden hour.mp3"
-         data-cover="images/JVKE_-_Golden_Hour.png"
-         data-title="golden hour"
-         data-artist="J4KE"
-         data-duration="3:29">
-      <div class="t-cover">
-        <img src="images/JVKE_-_Golden_Hour.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">golden hour</div>
-        <div class="t-artist">J4KE</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:29</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-
-    <div class="track-row"
-         data-src="music/Die With A Smile.mp3"
-         data-cover="images/Die With A Smile.jpg"
-         data-title="Die With A Smile"
-         data-artist="Lady GaGa"
-         data-duration="4:11">
-      <div class="t-cover">
-        <img src="images/Die With A Smile.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Die With A Smile</div>
-        <div class="t-artist">Lady GaGa</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:11</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Join Us for a Bite.mp3"
-         data-cover="images/Join Us for a Bite.jpg"
-         data-title="Join Us for a Bite"
-         data-artist="JT Music"
-         data-duration="3:56">
-      <div class="t-cover">
-        <img src="images/Join Us for a Bite.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Join Us for a Bite</div>
-        <div class="t-artist">JT Music</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:56</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Army Dreamers.mp3"
-         data-cover="images/Army Dreamers.jpg"
-         data-title="Army Dreamers"
-         data-artist="Kate Bush"
-         data-duration="2:59">
-      <div class="t-cover">
-        <img src="images/Army Dreamers.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Army Dreamers</div>
-        <div class="t-artist">Kate Bush</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:59</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/telepatía.mp3"
-         data-cover="images/telepatia.jpg"
-         data-title="telepatia"
-         data-artist="Kali Uchis"
-         data-duration="2:39">
-      <div class="t-cover">
-        <img src="images/telepatia.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">telepatia</div>
-        <div class="t-artist">Kali Uchis</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:39</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-               <div class="track-row"
-         data-src="music/I Had Some Help.mp3"
-         data-cover="images/a0300537838_16.jpg"
-         data-title="I Had Some Help"
-         data-artist="Morgan Wallen"
-         data-duration="3:03">
-      <div class="t-cover">
-        <img src="images/a0300537838_16.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">I Had Some Help</div>
-        <div class="t-artist">Morgan Wallen</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:03</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                   <div class="track-row"
-         data-src="music/All Girls Are The Same.mp3"
-         data-cover="images/images.jpg"
-         data-title="All girls are the same"
-         data-artist="JUICE WRLD"
-         data-duration="2:56">
-      <div class="t-cover">
-        <img src="images/images.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">All girls are the same</div>
-        <div class="t-artist">JUICE WRLD</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:56</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                       <div class="track-row"
-         data-src="music/MATADORA.mp3"
-         data-cover="images/ab67616d0000b2738630ce04dcdf0c89f218b7d8.jpg"
-         data-title="MATADORA"
-         data-artist="JUICE WRLD"
-         data-duration="1:28">
-      <div class="t-cover">
-        <img src="images/ab67616d0000b2738630ce04dcdf0c89f218b7d8.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">MATADORA</div>
-        <div class="t-artist">DJ Asul</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">1:28</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                           <div class="track-row"
-         data-src="music/TIKI TIKI.mp3"
-         data-cover="images/Screenshot 2026-03-21 130924.png"
-         data-title="TIKI TIKI"
-         data-artist="QMIIR"
-         data-duration="2:01">
-      <div class="t-cover">
-        <img src="images/Screenshot 2026-03-21 130924.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">TIKI TIKI</div>
-        <div class="t-artist">QMIIR</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:01</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                               <div class="track-row"
-         data-src="music/SEM NADA.mp3"
-         data-cover="images/ab67616d00001e02ce10cd7ae7dd95df726ca527.jpg"
-         data-title="SEM NADA"
-         data-artist="Ogryzek"
-         data-duration="1:14">
-      <div class="t-cover">
-        <img src="images/ab67616d00001e02ce10cd7ae7dd95df726ca527.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">SEM NADA</div>
-        <div class="t-artist">Ogryzek</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">1:14</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                                   <div class="track-row"
-         data-src="music/As the World Caves In.mp3"
-         data-cover="images/As the World Caves In.jpg"
-         data-title="As the World Caves In"
-         data-artist="Matt Maltese"
-         data-duration="1:14">
-      <div class="t-cover">
-        <img src="images/As the World Caves In.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">As the World Caves In</div>
-        <div class="t-artist">Matt Maltese</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:38</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/euphoria.mp3"
-         data-cover="images/euphoria.jpg"
-         data-title="euphoria"
-         data-artist="Kendrick Lamar"
-         data-duration="6:23">
-      <div class="t-cover">
-        <img src="images/euphoria.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">euphoria</div>
-        <div class="t-artist">Kendrick Lamar</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">6:23</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Romantic Homicide.mp3"
-         data-cover="images/Romantic Homicide.jpg"
-         data-title="Romantic Homicide"
-         data-artist="d4vd"
-         data-duration="2:12">
-      <div class="t-cover">
-        <img src="images/Romantic Homicide.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Romantic Homicide</div>
-        <div class="t-artist">d4vd</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:12</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/Shut up My Moms Calling.mp3"
-         data-cover="images/Shut up My Moms Calling.jpg"
-         data-title="Shut up My Moms Calling"
-         data-artist="Hotel Ugly"
-         data-duration="2:44">
-      <div class="t-cover">
-        <img src="images/Shut up My Moms Calling.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Shut up My Moms Calling</div>
-        <div class="t-artist">Hotel Ugly</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:44</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                    <div class="track-row"
-         data-src="music/La Chona.mp3"
-         data-cover="images/La Chona.jpg"
-         data-title="La Chona"
-         data-artist="Los Tucanes de Tijuana"
-         data-duration="3:19">
-      <div class="t-cover">
-        <img src="images/La Chona.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">La Chona</div>
-        <div class="t-artist">Los Tucanes de Tijuana</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:19</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/Resting on My Mind.mp3"
-         data-cover="images/Resting on My Mind.jpg"
-         data-title="Resting on My Mind"
-         data-artist="Jontavious Willis"
-         data-duration="3:24">
-      <div class="t-cover">
-        <img src="images/Resting on My Mind.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Resting on My Mind</div>
-        <div class="t-artist">Jontavious Willis</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:24</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/Cheerleader.mp3"
-         data-cover="images/Cheerleader.jpg"
-         data-title="Cheerleader"
-         data-artist="OMI"
-         data-duration="3:00">
-      <div class="t-cover">
-        <img src="images/Cheerleader.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Cheerleader</div>
-        <div class="t-artist">OMI</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:00</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                        <div class="track-row"
-         data-src="music/Babydoll.mp3"
-         data-cover="images/Babydoll.jpg"
-         data-title="Babydoll"
-         data-artist="Dominic Fike"
-         data-duration="1:37">
-      <div class="t-cover">
-        <img src="images/Babydoll.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Babydoll</div>
-        <div class="t-artist">Dominic Fike</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">1:37</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                            <div class="track-row"
-         data-src="music/NUEVAYoL.mp3"
-         data-cover="images/NUEVAYoL.jpg"
-         data-title="NUEVAYoL"
-         data-artist="Bad Bunny"
-         data-duration="3:03">
-      <div class="t-cover">
-        <img src="images/NUEVAYoL.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">NUEVAYoL</div>
-        <div class="t-artist">Bad Bunny</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:03</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-
-                    <div class="track-row"
-         data-src="music/VOY A LLeVARTE PA PR.mp3"
-         data-cover="images/VOY A LLeVARTE PA PR.jpg"
-         data-title="VOY A LLeVARTE PA PR"
-         data-artist="Bad Bunny"
-         data-duration="2:36">
-      <div class="t-cover">
-        <img src="images/VOY A LLeVARTE PA PR.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">VOY A LLeVARTE PA PR</div>
-        <div class="t-artist">Bad Bunny</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:36</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                    <div class="track-row"
-         data-src="music/CAFé CON RON.mp3"
-         data-cover="images/CAFé CON RON.jpg"
-         data-title="CAFé CON RON"
-         data-artist="Bad Bunny"
-         data-duration="3:48">
-      <div class="t-cover">
-        <img src="images/CAFé CON RON.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">CAFé CON RON</div>
-        <div class="t-artist">Bad Bunny</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:48</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Dark Red.mp3"
-         data-cover="images/Dark Red.jpg"
-         data-title="Dark Red"
-         data-artist="Steve Lacy"
-         data-duration="2:53">
-      <div class="t-cover">
-        <img src="images/Dark Red.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Dark Red</div>
-        <div class="t-artist">Steve Lacy</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:53</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Everybody Wants To Rule The World.mp3"
-         data-cover="images/Everybody Wants To Rule The World.jpg"
-         data-title="Everybody Wants To Rule The World"
-         data-artist="Tears for Fears"
-         data-duration="4:11">
-      <div class="t-cover">
-        <img src="images/Everybody Wants To Rule The World.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Everybody Wants To Rule The World</div>
-        <div class="t-artist">Tears for Fears</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:11</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Bohemian Rhapsody.mp3"
-         data-cover="images/Bohemian Rhapsody.jpg"
-         data-title="Bohemian Rhapsody"
-         data-artist="Queen"
-         data-duration="5:55">
-      <div class="t-cover">
-        <img src="images/Bohemian Rhapsody.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Bohemian Rhapsody</div>
-        <div class="t-artist">Queen</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">5:55</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Fly-day Chinatown.mp3"
-         data-cover="images/Fly-day Chinatown.jpg"
-         data-title="Fly-day Chinatown"
-         data-artist="Yasuha"
-         data-duration="3:30">
-      <div class="t-cover">
-        <img src="images/Fly-day Chinatown.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Fly-day Chinatown</div>
-        <div class="t-artist">Yasuha</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:30</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/blue.mp3"
-         data-cover="images/blue.jpg"
-         data-title="Blue"
-         data-artist="Yung Kai"
-         data-duration="3:34">
-      <div class="t-cover">
-        <img src="images/blue.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Blue</div>
-        <div class="t-artist">Yung Kai</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:34</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/Moonlight.mp3"
-         data-cover="images/Moonlight.jpg"
-         data-title="Moonlight"
-         data-artist="Kali Uchis"
-         data-duration="3:07">
-      <div class="t-cover">
-        <img src="images/Moonlight.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Moonlight</div>
-        <div class="t-artist">Kali Uchis</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:07</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                    <div class="track-row"
-         data-src="music/From The Start.mp3"
-         data-cover="images/From The Start.jpg"
-         data-title="From The Start"
-         data-artist="Laufey"
-         data-duration="2:49">
-      <div class="t-cover">
-        <img src="images/From The Start.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">From The Start</div>
-        <div class="t-artist">Laufey</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:49</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/I Thought I Saw Your Face Today.mp3"
-         data-cover="images/I Thought I Saw Your Face Today.jpg"
-         data-title="I Thought I Saw Your Face Today"
-         data-artist="She & Him"
-         data-duration="2:50">
-      <div class="t-cover">
-        <img src="images/I Thought I Saw Your Face Today.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">I Thought I Saw Your Face Today</div>
-        <div class="t-artist">She & Him</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:50</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/Lover Girl.mp3"
-         data-cover="images/Lover Girl.jpg"
-         data-title="Lover Girl"
-         data-artist="Laufey"
-         data-duration="2:44">
-      <div class="t-cover">
-        <img src="images/Lover Girl.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Lover Girl</div>
-        <div class="t-artist">Laufey</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:44</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/505.mp3"
-         data-cover="images/505.jpg"
-         data-title="505"
-         data-artist="Artic Monkeys"
-         data-duration="4:13">
-      <div class="t-cover">
-        <img src="images/505.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">505</div>
-        <div class="t-artist">Artic Monkeys</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:13</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/PRIDE.mp3"
-         data-cover="images/PRIDE.jpg"
-         data-title="PRIDE"
-         data-artist="Kendrick Lamar"
-         data-duration="4:35">
-      <div class="t-cover">
-        <img src="images/PRIDE.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">PRIDE</div>
-        <div class="t-artist">Kendrick Lamar</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:35</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/Ransom.mp3"
-         data-cover="images/Ransom.jpg"
-         data-title="Ransom"
-         data-artist="Lil Tecca"
-         data-duration="2:51">
-      <div class="t-cover">
-        <img src="images/Ransom.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Ransom</div>
-        <div class="t-artist">Lil Tecca</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:51</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Bad Habit.mp3"
-         data-cover="images/Bad Habit.jpg"
-         data-title="Bad Habit"
-         data-artist="Steve Lacy"
-         data-duration="3:52">
-      <div class="t-cover">
-        <img src="images/Bad Habit.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Bad Habit</div>
-        <div class="t-artist">Steve Lacy</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:52</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-         <div class="track-row"
-         data-src="music/Lalala.mp3"
-         data-cover="images/Lalala.jpg"
-         data-title="Lalala"
-         data-artist="bbno$ & Y2K"
-         data-duration="2:40">
-      <div class="t-cover">
-        <img src="images/Lalala.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Lalala</div>
-        <div class="t-artist">bbno$ & Y2K</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:40</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/St. Chroma.mp3"
-         data-cover="images/St. Chroma.jpg"
-         data-title="St. Chroma"
-         data-artist="Tyler the Creator"
-         data-duration="3:17">
-      <div class="t-cover">
-        <img src="images/St. Chroma.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">St. Chroma</div>
-        <div class="t-artist">Tyler the Creator</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:17</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-        <div class="track-row"
-         data-src="music/peekaboo.mp3"
-         data-cover="images/peekaboo.jpg"
-         data-title="peekaboo"
-         data-artist="Kendrick Lamar & Denzel Curry"
-         data-duration="2:35">
-      <div class="t-cover">
-        <img src="images/peekaboo.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">peekaboo</div>
-        <div class="t-artist">Kendrick Lamar & Denzel Curry</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:35</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Just Right.mp3"
-         data-cover="images/Just Right.jpg"
-         data-title="Just Right"
-         data-artist="Andrew DVEM"
-         data-duration="2:51">
-      <div class="t-cover">
-        <img src="images/Just Right.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Just Right</div>
-        <div class="t-artist">Andrew DVEM</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:51</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Santa Baby.mp3"
-         data-cover="images/Santa Baby.jpg"
-         data-title="Santa Baby"
-         data-artist="Laufey"
-         data-duration="3:02">
-      <div class="t-cover">
-        <img src="images/Santa Baby.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Santa Baby</div>
-        <div class="t-artist">Laufey</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:02</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/The Fine Print.mp3"
-         data-cover="images/The Fine Print.jpg"
-         data-title="The Fine Print"
-         data-artist="The Stupendium"
-         data-duration="4:34">
-      <div class="t-cover">
-        <img src="images/The Fine Print.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">The Fine Print</div>
-        <div class="t-artist">The Stupendium</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:34</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/I Wonder.mp3"
-         data-cover="images/I Wonder.jpg"
-         data-title="I Wonder"
-         data-artist="Kanye West"
-         data-duration="4:03">
-      <div class="t-cover">
-        <img src="images/I Wonder.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">I Wonder</div>
-        <div class="t-artist">Kanye West</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:03</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Another One Bites The Dust.mp3"
-         data-cover="images/Another One Bites The Dust.jpg"
-         data-title="Another One Bites The Dust"
-         data-artist="Queen"
-         data-duration="3:34">
-      <div class="t-cover">
-        <img src="images/Another One Bites The Dust.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Another One Bites The Dust</div>
-        <div class="t-artist">Queen</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:34</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Bella ciao.mp3"
-         data-cover="images/Bella ciao.jpg"
-         data-title="Bella Ciao"
-         data-artist="Fonola Band"
-         data-duration="2:06">
-      <div class="t-cover">
-        <img src="images/Bella ciao.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Bella Ciao</div>
-        <div class="t-artist">Fonola Band</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:06</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-         <div class="track-row"
-         data-src="music/this is what heartbreak feels like.mp3"
-         data-cover="images/this is what heartbreak feels like.jpg"
-         data-title="this is what heartbreak feels like"
-         data-artist="J4KE"
-         data-duration="2:37">
-      <div class="t-cover">
-        <img src="images/this is what heartbreak feels like.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">this is what heartbreak feels like</div>
-        <div class="t-artist">J4KE</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:37</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/Freaks.mp3"
-         data-cover="images/Freaks.jpg"
-         data-title="Freaks"
-         data-artist="Surf Curse"
-         data-duration="2:27">
-      <div class="t-cover">
-        <img src="images/Freaks.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Freaks</div>
-        <div class="t-artist">Surf Curse</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:27</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/My Ordinary Life.mp3"
-         data-cover="images/My Ordinary Life.jpg"
-         data-title="My Ordinary Life"
-         data-artist="The Living Tombstone"
-         data-duration="2:50">
-      <div class="t-cover">
-        <img src="images/My Ordinary Life.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">My Ordinary Life</div>
-        <div class="t-artist">The Living Tombstone</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:50</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/My Way.mp3"
-         data-cover="images/My Way.jpg"
-         data-title="My Way"
-         data-artist="Frank Sinatra"
-         data-duration="4:36">
-      <div class="t-cover">
-        <img src="images/My Way.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">My Way</div>
-        <div class="t-artist">Frank Sinatra</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:36</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src= "music/Nothings New.mp3"
-         data-cover="images/Nothings New.jpg"
-         data-title="Nothing`s New"
-         data-artist="Rio Romero"
-         data-duration="3:31">
-      <div class="t-cover">
-        <img src="images/Nothings New.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Nothing`s New</div>
-        <div class="t-artist">Rio Romero</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:31</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/squabble up.mp3"
-         data-cover="images/squabble up.jpg"
-         data-title="squabble up"
-         data-artist="Kendrick Lamar"
-         data-duration="2:38">
-      <div class="t-cover">
-        <img src="images/squabble up.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">squabble up</div>
-        <div class="t-artist">Kendrick Lamar</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:38</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/Take A Slice.mp3"
-         data-cover="images/Take A Slice.jpg"
-         data-title="Take A Slice"
-         data-artist="Glass Animals"
-         data-duration="3:49">
-      <div class="t-cover">
-        <img src="images/Take A Slice.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Take A Slice</div>
-        <div class="t-artist">Glass Animals</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:49</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/United In Grief.mp3"
-         data-cover="images/United In Grief.jpg"
-         data-title="United In Grief"
-         data-artist="Kendrick Lamar"
-         data-duration="4:15">
-      <div class="t-cover">
-        <img src="images/United In Grief.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">United In Grief</div>
-        <div class="t-artist">Kendrick Lamar</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:15</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-             <div class="track-row"
-         data-src="music/California Gurls.mp3"
-         data-cover="images/California Gurls.jpg"
-         data-title="California Gurls"
-         data-artist="Katy Parry & Snoop Dogg"
-         data-duration="4:00">
-      <div class="t-cover">
-        <img src="images/California Gurls.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">California Gurls</div>
-        <div class="t-artist">Katy Parry & Snoop Dogg</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:00</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Dream Sweet in Sea Major.mp3"
-         data-cover="images/Dream Sweet in Sea Major.jpg"
-         data-title="Dream Sweet in Sea Major"
-         data-artist="Miracle Musical"
-         data-duration="7:00">
-      <div class="t-cover">
-        <img src="images/Dream Sweet in Sea Major.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Dream Sweet in Sea Major</div>
-        <div class="t-artist">Miracle Musical</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">7:00</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Call Me Maybe.mp3"
-         data-cover="images/Call Me Maybe.jpg"
-         data-title="Call Me Maybe"
-         data-artist="Carly Rae Jepsen"
-         data-duration="3:13">
-      <div class="t-cover">
-        <img src="images/Call Me Maybe.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Call Me Maybe</div>
-        <div class="t-artist">Carly Rae Jepsen</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:13</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/We ll Meet Again.mp3"
-         data-cover="images/We ll Meet Again.jpg"
-         data-title="We'll Meet Again"
-         data-artist="Vera Lynn"
-         data-duration="3:01">
-      <div class="t-cover">
-        <img src="images/We ll Meet Again.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">We'll Meet Again</div>
-        <div class="t-artist">Vera Lynn</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:01</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Discord.mp3"
-         data-cover="images/Discord.jpg"
-         data-title="Discord"
-         data-artist="The Living Tombstone"
-         data-duration="3:13">
-      <div class="t-cover">
-        <img src="images/Discord.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Discord</div>
-        <div class="t-artist">The Living Tombstone</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:13</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Strategy.mp3"
-         data-cover="images/Strategy.jpg"
-         data-title="Strategy"
-         data-artist="TWICE & Megan thee Stallion"
-         data-duration="3:21">
-      <div class="t-cover">
-        <img src="images/Strategy.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Strategy</div>
-        <div class="t-artist">TWICE & Megan thee Stallion</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:21</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Blueberry Faygo.mp3"
-         data-cover="images/Blueberry Faygo.jpg"
-         data-title="Blueberry Faygo"
-         data-artist="Lil Mosey"
-         data-duration="2:42">
-      <div class="t-cover">
-        <img src="images/Blueberry Faygo.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Blueberry Faygo</div>
-        <div class="t-artist">Lil Mosey</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:42</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <div class="track-row"
-         data-src="music/Thats What I Like.mp3"
-         data-cover="images/Thats What I Like.jpg"
-         data-title="Thats What I Like"
-         data-artist="Bruno Mars"
-         data-duration="3:26">
-      <div class="t-cover">
-        <img src="images/Thats What I Like.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Thats What I Like</div>
-        <div class="t-artist">Bruno Mars</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:26</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Around the World.mp3"
-         data-cover="images/Around the World.jpg"
-         data-title="Around the World"
-         data-artist="Daft Punk"
-         data-duration="7:09">
-      <div class="t-cover">
-        <img src="images/Around the World.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Around the World</div>
-        <div class="t-artist">Daft Punk</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">7:09</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/CITY OF ANGELS.mp3"
-         data-cover="images/CITY OF ANGELS.jpg"
-         data-title="CITY OF ANGELS"
-         data-artist="24kGoldn"
-         data-duration="1:52">
-      <div class="t-cover">
-        <img src="images/CITY OF ANGELS.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">CITY OF ANGELS</div>
-        <div class="t-artist">24kGoldn</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">1:52</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/White Ball.mp3"
-         data-cover="images/Miracle.jpg"
-         data-title="White Ball"
-         data-artist="Miracle Musical"
-         data-duration="3:35">
-      <div class="t-cover">
-        <img src="images/Miracle.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">White Ball</div>
-        <div class="t-artist">Miracle Musical</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:35</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Isle Unto Thyself.mp3"
-         data-cover="images/Miracle.jpg"
-         data-title="Isle Unto Thyself"
-         data-artist="Miracle Musical"
-         data-duration="3:47">
-      <div class="t-cover">
-        <img src="images/Miracle.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Isle Unto Thyself</div>
-        <div class="t-artist">Miracle Musical</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:47</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-        <div class="track-row"
-         data-src="music/Time Machine.mp3"
-         data-cover="images/Miracle.jpg"
-         data-title="Time Machine"
-         data-artist="Miracle Musical"
-         data-duration="4:12">
-      <div class="t-cover">
-        <img src="images/Miracle.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Time Machine</div>
-        <div class="t-artist">Miracle Musical</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:12</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-
-    
-        <div class="track-row"
-         data-src="music/Murders.mp3"
-         data-cover="images/Miracle.jpg"
-         data-title="Murders"
-         data-artist="Miracle Musical"
-         data-duration="3:43">
-      <div class="t-cover">
-        <img src="images/Miracle.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Murders</div>
-        <div class="t-artist">Miracle Musical</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:43</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-        <div class="track-row"
-         data-src="music/Starkiller.mp3"
-         data-cover="images/Bear Ghost.jpg"
-         data-title="Starkiller"
-         data-artist="Bear Ghost"
-         data-duration="3:50">
-      <div class="t-cover">
-        <img src="images/Bear Ghost.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Starkiller</div>
-        <div class="t-artist">Bear Ghost</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:50</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-        <div class="track-row"
-         data-src="music/Necromancin Dancin.mp3"
-         data-cover="images/Bear Ghost.jpg"
-         data-title="Necromancin Dancin"
-         data-artist="Bear Ghost"
-         data-duration="3:47">
-      <div class="t-cover">
-        <img src="images/Bear Ghost.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Necromancin Dancin</div>
-        <div class="t-artist">Bear Ghost</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:47</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-        <div class="track-row"
-         data-src="music/Just Apathy.mp3"
-         data-cover="images/Tally Hall 1.jpg"
-         data-title="Just Apathy"
-         data-artist="Tally Hall"
-         data-duration="7:00">
-      <div class="t-cover">
-        <img src="images/Tally Hall 1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Just Apathy</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:11</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Banana Man.mp3"
-         data-cover="images/Tally Hall 1.jpg"
-         data-title="Banana Man"
-         data-artist="Tally Hall"
-         data-duration="4:09">
-      <div class="t-cover">
-        <img src="images/Tally Hall 1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Banana Man</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:09</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-            <div class="track-row"
-         data-src="music/Spring and a Storm.mp3"
-         data-cover="images/Tally Hall 1.jpg"
-         data-title="Spring and a Storm"
-         data-artist="Tally Hall"
-         data-duration="4:47">
-      <div class="t-cover">
-        <img src="images/Tally Hall 1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Spring and a Storm</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:47</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-                <div class="track-row"
-         data-src="music/Spring and a Storm.mp3"
-         data-cover="images/Tally Hall 2.jpg"
-         data-title="Spring and a Storm"
-         data-artist="Tally Hall"
-         data-duration="4:47">
-      <div class="t-cover">
-        <img src="images/Tally Hall 2.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Spring and a Storm</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:47</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                <div class="track-row"
-         data-src="music/Never Meant to Know.mp3"
-         data-cover="images/Tally Hall 2.jpg"
-         data-title="Never Meant to Know"
-         data-artist="Tally Hall"
-         data-duration="3:40">
-      <div class="t-cover">
-        <img src="images/Tally Hall 2.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Never Meant to Know</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:40</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                <div class="track-row"
-         data-src="music/Cannibal.mp3"
-         data-cover="images/Tally Hall 2.jpg"
-         data-title="Cannibal"
-         data-artist="Tally Hall"
-         data-duration="3:28">
-      <div class="t-cover">
-        <img src="images/Tally Hall 2.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Cannibal</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:28</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/You & Me.mp3"
-         data-cover="images/Tally Hall 2.jpg"
-         data-title="You & Me"
-         data-artist="Tally Hall"
-         data-duration="2:52">
-      <div class="t-cover">
-        <img src="images/Tally Hall 2.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">You & Me</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:52</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-                <div class="track-row"
-         data-src="music/Young Girl A.mp3"
-         data-cover="images/Young Girl A.jpg"
-         data-title="Young Girl A"
-         data-artist="Siinamota"
-         data-duration="3:41">
-      <div class="t-cover">
-        <img src="images/Young Girl A.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Young Girl A</div>
-        <div class="t-artist">Siinamota</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:41</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-                <div class="track-row"
-         data-src="music/Fly Me To the Moon.mp3"
-         data-cover="images/My Way.jpg"
-         data-title="Fly Me To the Moon"
-         data-artist="Frank Sinatra"
-         data-duration="2:27">
-      <div class="t-cover">
-        <img src="images/My Way.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Fly Me To the Moon</div>
-        <div class="t-artist">Frank Sinatra</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">2:27</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    
-                <div class="track-row"
-         data-src="music/The Main Character.mp3"
-         data-cover="images/The Main Character.jpg"
-         data-title="The Main Character"
-         data-artist="Will Wood"
-         data-duration="4:25">
-      <div class="t-cover">
-        <img src="images/The Main Character.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">The Main Character</div>
-        <div class="t-artist">Will Wood</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:25</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                <div class="track-row"
-         data-src="music/Digital Silence.mp3"
-         data-cover="images/Digital Silence.jpg"
-         data-title="Digital Silence"
-         data-artist="Peter McPoland"
-         data-duration="3:18">
-      <div class="t-cover">
-        <img src="images/Digital Silence.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Digital Silence</div>
-        <div class="t-artist">Peter McPoland</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:18</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                        <div class="track-row"
-         data-src="music/Gangstas Paradise.mp3"
-         data-cover="images/Gangstas Paradise.jpg"
-         data-title="Gangstas Paradise"
-         data-artist="Coolio"
-         data-duration="4:00">
-      <div class="t-cover">
-        <img src="images/Gangstas Paradise.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Gangstas Paradise</div>
-        <div class="t-artist">Coolio</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">4:00</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/13.mp3"
-         data-cover="images/Tally Hall 1.jpg"
-         data-title="13"
-         data-artist="Tally Hall"
-         data-duration="0:13">
-      <div class="t-cover">
-        <img src="images/Tally Hall 1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">13</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">0:13</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/Ruler of Everything.mp3"
-         data-cover="images/Tally Hall 1.jpg"
-         data-title="Ruler of Everything"
-         data-artist="Tally Hall"
-         data-duration="3:42">
-      <div class="t-cover">
-        <img src="images/Tally Hall 1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">Ruler of Everything</div>
-        <div class="t-artist">Tally Hall</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:42</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-    
-                <div class="track-row"
-         data-src="music/this is what space feels like.mp3"
-         data-cover="images/this is what space feels like.jpg"
-         data-title="this is what space feels like"
-         data-artist="JVKE"
-         data-duration="3:03">
-      <div class="t-cover">
-        <img src="images/this is what space feels like.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">this is what space feels like</div>
-        <div class="t-artist">JVKE</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:03</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-                <div class="track-row"
-         data-src="music/A Thousand Years.mp3"
-         data-cover="images/A Thousand Years.jpg"
-         data-title="A Thousand Years"
-         data-artist="John Micheal Howell, JVKE, and ZVC"
-         data-duration="3:00">
-      <div class="t-cover">
-        <img src="images/A Thousand Years.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="cover-fallback" style="display:none">♪</div>
-        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-      </div>
-      <div class="t-meta">
-        <div class="t-name">A Thousand Years</div>
-        <div class="t-artist">John Micheal Howell, JVKE, and ZVC</div>
-      </div>
-      <div class="t-right">
-        <span class="t-dur">3:00</span>
-        <button class="q-add-btn">+ Q</button>
-      </div>
-    </div>
-
-    <!--- All Tracks Must Not Cross This Line --->
-    <!--- As Per Order of Head Dev & Owner RVEPRTY-->
-
-    <div class="no-results" id="no-results" style="display:none">NO RESULTS FOUND.</div>
+
+    <div class="game-card" data-game="games/vm.html" data-name="VMs">
+      <div class="card-thumb"><img src="images/ubuntu.jpg" alt="VMs" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">VMs</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/1v1.LoL.html" data-name="1v1 LoL">
+      <div class="card-thumb"><img src="images/1v1-lol.png" alt="1v1 LoL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">1v1 LoL</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/2048.html" data-name="2048">
+      <div class="card-thumb"><img src="images/2048.png" alt="2048" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">2048</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/64 in 1 NES.html" data-name="64 in 1 NES">
+      <div class="card-thumb"><img src="images/64 in 1 NES.png" alt="64 in 1 NES" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">64 in 1 NES</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/A Dance of Fire and Ice.html" data-name="A Dance of Fire and Ice">
+      <div class="card-thumb"><img src="images/A Dance of Fire and Ice.png" alt="A Dance of Fire and Ice" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">A Dance of Fire and Ice</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Andy's Apple Farm.html" data-name="Andy's Apple Farm">
+      <div class="card-thumb"><img src="images/Andy's Apple Farm.png" alt="Andy's Apple Farm" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Andy's Apple Farm</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Antonblast.html" data-name="Antonblast">
+      <div class="card-thumb"><img src="images/Antonblast.png" alt="Antonblast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Antonblast</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bad Ice Cream.html" data-name="Bad Ice Cream">
+      <div class="card-thumb"><img src="images/Bad Ice Cream.png" alt="Bad Ice Cream" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bad Ice Cream</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bad Ice Cream 2.html" data-name="Bad Ice Cream 2">
+      <div class="card-thumb"><img src="images/Bad Ice Cream 2.png" alt="Bad Ice Cream 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bad Ice Cream 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bad Ice Cream 3.html" data-name="Bad Ice Cream 3">
+      <div class="card-thumb"><img src="images/Bad Ice Cream 3.png" alt="Bad Ice Cream 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bad Ice Cream 3</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bad Parenting 1.html" data-name="Bad Parenting 1">
+      <div class="card-thumb"><img src="images/Bad Parenting 1.png" alt="Bad Parenting 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bad Parenting 1</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Ball Blast.html" data-name="Ball Blast">
+      <div class="card-thumb"><img src="images/Ball Blast.png" alt="Ball Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Ball Blast</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bank Robbery.html" data-name="Bank Robbery">
+      <div class="card-thumb"><img src="images/Bank Robbery.png" alt="Bank Robbery" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bank Robbery</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bank Robbery 2.html" data-name="Bank Robbery 2">
+      <div class="card-thumb"><img src="images/Bank Robbery 2.png" alt="Bank Robbery 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bank Robbery 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bank Robbery 3.html" data-name="Bank Robbery 3">
+      <div class="card-thumb"><img src="images/Bank Robbery 3.png" alt="Bank Robbery 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bank Robbery 3</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Basketball Stars.html" data-name="Basketball Stars">
+      <div class="card-thumb"><img src="images/Basketball Stars.png" alt="Basketball Stars" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Basketball Stars</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Bendy and the Ink Machine.html" data-name="Bendy and the Ink Machine">
+      <div class="card-thumb"><img src="images/Bendy and the Ink Machine.png" alt="Bendy and the Ink Machine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Bendy and the Ink Machine</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/BlackJack.html" data-name="BlackJack">
+      <div class="card-thumb"><img src="images/BlackJack.png" alt="BlackJack" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">BlackJack</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Block Blast.html" data-name="Block Blast">
+      <div class="card-thumb"><img src="images/Block Blast.png" alt="Block Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Block Blast</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Brawl Simulator 3D.html" data-name="Brawl Simulator 3D">
+      <div class="card-thumb"><img src="images/Brawl Simulator 3D.png" alt="Brawl Simulator 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Brawl Simulator 3D</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Buckshot Roulette.html" data-name="Buckshot Roulette">
+      <div class="card-thumb"><img src="images/Buckshot Roulette.png" alt="Buckshot Roulette" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Buckshot Roulette</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Celeste.html" data-name="Celeste">
+      <div class="card-thumb"><img src="images/Celeste.png" alt="Celeste" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Celeste</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Chess Classic.html" data-name="Chess Classic">
+      <div class="card-thumb"><img src="images/Chess Classic.png" alt="Chess Classic" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Chess Classic</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/CircloO.html" data-name="CircloO">
+      <div class="card-thumb"><img src="images/CircloO.png" alt="CircloO" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">CircloO</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Clash Of Vikings.html" data-name="Clash Of Vikings">
+      <div class="card-thumb"><img src="images/Clash Of Vikings.png" alt="Clash Of Vikings" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Clash Of Vikings</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Clover Pit.html" data-name="Clover Pit">
+      <div class="card-thumb"><img src="images/Clover Pit.png" alt="Clover Pit" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Clover Pit</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Cooking Mama.html" data-name="Cooking Mama">
+      <div class="card-thumb"><img src="images/Cooking Mama.png" alt="Cooking Mama" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Cooking Mama</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Count Masters_ Stickman Games.html" data-name="Count Masters">
+      <div class="card-thumb"><img src="images/Count Masters_ Stickman Games.png" alt="Count Masters" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Count Masters</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Crazy Cattle 3D.html" data-name="Crazy Cattle 3D">
+      <div class="card-thumb"><img src="images/Crazy Cattle 3D.png" alt="Crazy Cattle 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Crazy Cattle 3D</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Crossy Road.html" data-name="Crossy Road">
+      <div class="card-thumb"><img src="images/Crossy Road.png" alt="Crossy Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Crossy Road</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Cuphead.html" data-name="Cuphead">
+      <div class="card-thumb"><img src="images/Cuphead.png" alt="Cuphead" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Cuphead</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Cut the Rope.html" data-name="Cut the Rope">
+      <div class="card-thumb"><img src="images/Cut the Rope.png" alt="Cut the Rope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Cut the Rope</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Dadish.html" data-name="Dadish">
+      <div class="card-thumb"><img src="images/Dadish.png" alt="Dadish" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Dadish</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Death Run 3D.html" data-name="Death Run 3D">
+      <div class="card-thumb"><img src="images/Death Run 3D.png" alt="Death Run 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Death Run 3D</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Destroy The Car 3D.html" data-name="Destroy The Car 3D">
+      <div class="card-thumb"><img src="images/Destroy The Car 3D.png" alt="Destroy The Car 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Destroy The Car 3D</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Dice a Million.html" data-name="Dice a Million">
+      <div class="card-thumb"><img src="images/Dice a Million.png" alt="Dice a Million" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Dice a Million</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/DOOM.html" data-name="DOOM">
+      <div class="card-thumb"><img src="images/DOOM.png" alt="DOOM" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">DOOM</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Doodle Jump.html" data-name="Doodle Jump">
+      <div class="card-thumb"><img src="images/Doodle Jump.png" alt="Doodle Jump" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Doodle Jump</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Draw Joust.html" data-name="Draw Joust">
+      <div class="card-thumb"><img src="images/Draw Joust.png" alt="Draw Joust" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Draw Joust</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Drift Boss.html" data-name="Drift Boss">
+      <div class="card-thumb"><img src="images/Drift Boss.png" alt="Drift Boss" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Drift Boss</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Duck Life.html" data-name="Duck Life">
+      <div class="card-thumb"><img src="images/Duck Life.png" alt="Duck Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Duck Life</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Escape Road.html" data-name="Escape Road">
+      <div class="card-thumb"><img src="images/Escape Road.png" alt="Escape Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Escape Road</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Escape Road 2.html" data-name="Escape Road 2">
+      <div class="card-thumb"><img src="images/Escape Road 2.png" alt="Escape Road 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Escape Road 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Escape Road City 2.html" data-name="Escape Road City 2">
+      <div class="card-thumb"><img src="images/Escape Road City 2.png" alt="Escape Road City 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Escape Road City 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Fancy Pants Adventure 2.html" data-name="Fancy Pants Adventure 2">
+      <div class="card-thumb"><img src="images/Fancy Pants Adventure 2.png" alt="Fancy Pants Adventure 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Fancy Pants Adventure 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Find the Alien.html" data-name="Find the Alien">
+      <div class="card-thumb"><img src="images/Find the Alien.png" alt="Find the Alien" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Find the Alien</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Fitness Empire.html" data-name="Fitness Empire">
+      <div class="card-thumb"><img src="images/FItness Empire.png" alt="Fitness Empire" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Fitness Empire</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Candy's.html" data-name="Five Nights at Candy's">
+      <div class="card-thumb"><img src="images/Five Nights at Candy's.png" alt="Five Nights at Candy's" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Five Nights at Candy's</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Epsteins.html" data-name="Five Nights at Epsteins">
+      <div class="card-thumb"><img src="images/Five Nights at Epsteins.png" alt="FNAE" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">FNAE</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys.html" data-name="Five Nights at Freddys">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys.png" alt="Five Nights at Freddys" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Five Nights at Freddys</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys 2.html" data-name="Five Nights at Freddys 2">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 2.png" alt="Five Nights at Freddys 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Five Nights at Freddys 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys 3.html" data-name="Five Nights at Freddys 3">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 3.png" alt="Five Nights at Freddys 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Five Nights at Freddys 3</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys 4.html" data-name="Five Nights at Freddys 4">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 4.png" alt="Five Nights at Freddys 4" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Five Nights at Freddys 4</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys 4  Halloween.html" data-name="FNAF 4 Halloween">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 4  Halloween.png" alt="FNAF 4 Halloween" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">FNAF 4 Halloween</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys Pizza Simulator.html" data-name="FNAF Pizza Simulator">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Pizza Simulator.png" alt="FNAF Pizza Simulator" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">FNAF Pizza Simulator</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddys Sister Location.html" data-name="FNAF Sister Location">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Sister Location.png" alt="FNAF Sister Location" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">FNAF Sister Location</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Five Nights at Freddy's_ Ultimate Custom Night.html" data-name="FNAF Ultimate Custom Night">
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Ultimate Custom Night.png" alt="FNAF Ultimate Custom Night" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">FNAF Ultimate Custom Night</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Fork n Sausage.html" data-name="Fork n Sausage">
+      <div class="card-thumb"><img src="images/Fork n Sausage.png" alt="Fork n Sausage" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Fork n Sausage</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Fruit Ninja.html" data-name="Fruit Ninja">
+      <div class="card-thumb"><img src="images/Fruit Ninja.png" alt="Fruit Ninja" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Fruit Ninja</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Geometry Dash World.html" data-name="GD World">
+      <div class="card-thumb"><img src="images/Geometry Dash World.webp" alt="GD World" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">GD World</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Granny.html.html" data-name="Granny">
+      <div class="card-thumb"><img src="images/Granny.png" alt="Granny" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Granny</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Half Life.html" data-name="Half Life">
+      <div class="card-thumb"><img src="images/Half Life.png" alt="Half Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Half Life</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Hobo 1.html" data-name="Hobo 1">
+      <div class="card-thumb"><img src="images/Hobo 1.png" alt="Hobo 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Hobo 1</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Hobo 2.html" data-name="Hobo 2">
+      <div class="card-thumb"><img src="images/Hobo 2.png" alt="Hobo 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Hobo 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Idle Breakout.html" data-name="Idle Breakout">
+      <div class="card-thumb"><img src="images/Idle Breakout.png" alt="Idle Breakout" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Idle Breakout</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Infinimoes.html" data-name="Infinimoes">
+      <div class="card-thumb"><img src="images/Infinimoes.png" alt="Infinimoes" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Infinimoes</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Jelly Restaurant.html" data-name="Jelly Restaurant">
+      <div class="card-thumb"><img src="images/Jelly Restaurant.png" alt="Jelly Restaurant" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Jelly Restaurant</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Johnny Upgrade.html" data-name="Johnny Upgrade">
+      <div class="card-thumb"><img src="images/Johnny Upgrade.png" alt="Johnny Upgrade" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Johnny Upgrade</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Mr Mine.html" data-name="Mr Mine">
+      <div class="card-thumb"><img src="images/Mr Mine.png" alt="Mr Mine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Mr Mine</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Papa's Donuteria.html" data-name="Papa's Donuteria">
+      <div class="card-thumb"><img src="images/Papa's Donuteria.png" alt="Papa's Donuteria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Papa's Donuteria</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Papa's Freezeria.html" data-name="Papa's Freezeria">
+      <div class="card-thumb"><img src="images/Papa's Freezeria.png" alt="Papa's Freezeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Papa's Freezeria</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Papa's Wingeria.html" data-name="Papa's Wingeria">
+      <div class="card-thumb"><img src="images/Papa's Wingeria.png" alt="Papa's Wingeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Papa's Wingeria</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Papers, Please.html" data-name="Papers Please">
+      <div class="card-thumb"><img src="images/Papers, Please.png" alt="Papers, Please" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Papers, Please</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Peggle.html" data-name="Peggle">
+      <div class="card-thumb"><img src="images/Peggle.png" alt="Peggle" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Peggle</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/People Playground.html" data-name="People Playground">
+      <div class="card-thumb"><img src="images/People Playground.png" alt="People Playground" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">People Playground</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Riddle School.html" data-name="Riddle School">
+      <div class="card-thumb"><img src="images/Riddle School.png" alt="Riddle School" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Riddle School</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Riddle School 3.html" data-name="Riddle School 3">
+      <div class="card-thumb"><img src="images/Riddle School 3.png" alt="Riddle School 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Riddle School 3</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Riddle School 5.html" data-name="Riddle School 5">
+      <div class="card-thumb"><img src="images/Riddle School 5.png" alt="Riddle School 5" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Riddle School 5</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Riddle Transfer.html" data-name="Riddle Transfer">
+      <div class="card-thumb"><img src="images/Riddle Transfer.png" alt="Riddle Transfer" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Riddle Transfer</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Roulette Hero.html" data-name="Roulette Hero">
+      <div class="card-thumb"><img src="images/Roulette Hero.png" alt="Roulette Hero" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Roulette Hero</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Run 1.html" data-name="Run 1">
+      <div class="card-thumb"><img src="images/Run 1.png" alt="Run 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Run 1</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Run 2.html" data-name="Run 2">
+      <div class="card-thumb"><img src="images/Run 2.png" alt="Run 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Run 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Run 3.html" data-name="Run 3">
+      <div class="card-thumb"><img src="images/Run 3.png" alt="Run 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Run 3</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Slope.html" data-name="Slope">
+      <div class="card-thumb"><img src="images/Slope.png" alt="Slope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Slope</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Steal A Brainrot.html" data-name="Steal A Brainrot">
+      <div class="card-thumb"><img src="images/Steal A Brainrot.png" alt="Steal A Brainrot" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Steal A Brainrot</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Survivor.io.html" data-name="Survivor io">
+      <div class="card-thumb"><img src="images/Survivor.io.png" alt="Survivor.io" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Survivor.io</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Tetris.html" data-name="Tetris">
+      <div class="card-thumb"><img src="images/Tetris.png" alt="Tetris" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Tetris</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/That's Not My Neighbor.html" data-name="That's Not My Neighbor">
+      <div class="card-thumb"><img src="images/That's Not My Neighbor.png" alt="That's Not My Neighbor" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">That's Not My Neighbor</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Time Shooter 2.html" data-name="Time Shooter 2">
+      <div class="card-thumb"><img src="images/Time Shooter 2.png" alt="Time Shooter 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Time Shooter 2</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Time Shooter 3_ SWAT.html" data-name="Time Shooter 3 SWAT">
+      <div class="card-thumb"><img src="images/Time Shooter 3_ SWAT.png" alt="Time Shooter 3: SWAT" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Time Shooter 3: SWAT</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/ULTRAKILL.html" data-name="ULTRAKILL">
+      <div class="card-thumb"><img src="images/ULTRAKILL.png" alt="ULTRAKILL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">ULTRAKILL</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Untitled Goose Game.html" data-name="Untitled Goose Game">
+      <div class="card-thumb"><img src="images/Untitled Goose Game.png" alt="Untitled Goose Game" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Untitled Goose Game</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/Volley Random.html" data-name="Volley Random">
+      <div class="card-thumb"><img src="images/Volley Random.png" alt="Volley Random" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Volley Random</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/We Become What We Behold.html" data-name="We Become What We Behold">
+      <div class="card-thumb"><img src="images/We Become What We Behold.png" alt="We Become What We Behold" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">We Become What We Behold</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/WebFishing.html" data-name="WebFishing">
+      <div class="card-thumb"><img src="images/WebFishing.png" alt="WebFishing" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">WebFishing</div></div>
+    </div>
+
+    <div class="game-card" data-game="games/windowkill/index.html" data-name="Windowkill">
+      <div class="card-thumb"><img src="images/windowkill.png" alt="Windowkill" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-info"><div class="card-title">Windowkill</div></div>
+    </div>
+
+    <div class="no-results" id="no-results" style="display:none">NO GAMES FOUND.<br>TRY A DIFFERENT SEARCH.</div>
   </div>
-</aside>
+</div>
 
 
-<main class="player-main">
-  <div class="art-wrap">
-    <div class="art-frame" id="art-frame">
-      <img id="art-img" src="" style="display:none">
-      <div class="art-empty" id="art-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="9" x2="12" y2="2"/></svg>
-        <span>SELECT A TRACK</span>
-      </div>
-    </div>
-    <div class="disc" id="disc"></div>
+<div class="game-overlay" id="game-overlay">
+  <div class="overlay-bar">
+    <button class="ov-btn" id="back-btn">← Back</button>
+    <div class="overlay-title">NOW PLAYING — <span id="overlay-title-text"></span></div>
+    <button class="ov-btn" id="fullscreen-btn">⛶ Fullscreen</button>
+    <button class="ov-btn primary" id="blank-btn">↗ New Tab</button>
   </div>
+  <iframe class="game-frame" id="game-frame" src="" allowfullscreen></iframe>
+</div>
 
-  <div class="player-info">
-    <div class="player-idle" id="player-idle">NOTHING PLAYING</div>
-    <div class="player-title" id="player-title" style="display:none"></div>
-    <div class="player-artist" id="player-artist" style="display:none"></div>
-  </div>
-
-  <div class="progress-section">
-    <div class="times">
-      <span id="t-cur">0:00</span>
-      <span id="t-dur">0:00</span>
-    </div>
-    <div class="prog-track" id="prog-track">
-      <div class="prog-fill" id="prog-fill"></div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button class="ctrl" id="btn-shuffle" title="Shuffle" onclick="toggleShuffle()">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-    </button>
-    <button class="ctrl" onclick="prevTrack()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
-    </button>
-    <button class="play-pause" onclick="togglePlay()">
-      <svg id="play-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </button>
-    <button class="ctrl" onclick="nextTrack()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-    </button>
-    <button class="ctrl" id="btn-repeat" title="Repeat" onclick="toggleRepeat()">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-    </button>
-  </div>
-
-  <div class="vol-row">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-    <input type="range" id="vol" min="0" max="1" step="0.02" value="0.85">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-  </div>
-
-  <audio id="audio"></audio>
-</main>
-
-
-<aside class="queue-panel">
-  <div class="panel-tabs">
-    <div class="panel-tab active" id="tab-queue" onclick="switchTab('queue')">Queue <span id="q-badge"></span></div>
-    <div class="panel-tab" id="tab-lyrics" onclick="switchTab('lyrics')">Lyrics</div>
-  </div>
-  <div class="panel-body">
-   
-    <div class="panel-pane active" id="pane-queue">
-      <div class="queue-scroll" id="queue-scroll">
-        <div class="queue-empty-msg">EMPTY.<br>HOVER A TRACK<br>AND PRESS + Q</div>
-      </div>
-    </div>
-   
-    <div class="panel-pane" id="pane-lyrics">
-      <div class="lyrics-pane" id="lyrics-pane">
-        <div class="lyrics-state" id="lyrics-state">SELECT A TRACK<br>TO SEE LYRICS</div>
-      </div>
-
-      <div class="offset-bar" id="offset-bar">
-        <span class="offset-label">OFFSET</span>
-        <button class="offset-btn" onclick="adjustOffset(-0.5)">−</button>
-        <span class="offset-val" id="offset-val">0.0s</span>
-        <button class="offset-btn" onclick="adjustOffset(+0.5)">+</button>
-        <button class="offset-reset" onclick="resetOffset()">RESET</button>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const audio = document.getElementById('audio');
-let currentEl  = null;
-let playing    = false;
-let shuffle    = false;
-let repeat     = false;
-let queue      = [];
-
-let syncedLines  = [];   
-let lyricsCache  = {};
-let lastLineIdx  = -1;
-let offsetStore  = {};  
-let currentOffset = 0;
-
-const $ = id => document.getElementById(id);
-const fmt = s => isNaN(s) || !s ? '0:00' : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
-
-
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-
-function switchTab(tab) {
-  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel-pane').forEach(p => p.classList.remove('active'));
-  $('tab-' + tab).classList.add('active');
-  $('pane-' + tab).classList.add('active');
-}
-
-// ── Offset controls ───────────────────────────────────────
-function adjustOffset(delta) {
-  if (!currentEl) return;
-  currentOffset = Math.round((currentOffset + delta) * 10) / 10;
-  offsetStore[currentEl.dataset.src] = currentOffset;
-  $('offset-val').textContent = (currentOffset >= 0 ? '+' : '') + currentOffset.toFixed(1) + 's';
-  // re-highlight immediately with new offset
-  syncHighlight(audio.currentTime);
-}
-
-function resetOffset() {
-  if (!currentEl) return;
-  currentOffset = 0;
-  offsetStore[currentEl.dataset.src] = 0;
-  $('offset-val').textContent = '0.0s';
-  syncHighlight(audio.currentTime);
-}
-
-
-async function fetchLyrics(title, artist) {
-  const key = `${title}||${artist}`;
-  if (lyricsCache[key] !== undefined) return lyricsCache[key];
-  try {
-    const q   = encodeURIComponent(`${title} ${artist}`);
-    const res = await fetch(`https://lrclib.net/api/search?q=${q}`);
-    const results = await res.json();
-    if (!results.length) { lyricsCache[key] = null; return null; }
-    const exact = results.find(r =>
-      r.trackName?.toLowerCase() === title.toLowerCase() &&
-      r.artistName?.toLowerCase() === artist.toLowerCase()
-    );
-    const hit = exact || results[0];
-    const out = { synced: hit.syncedLyrics || null, plain: hit.plainLyrics || null };
-    lyricsCache[key] = out;
-    return out;
-  } catch { lyricsCache[key] = null; return null; }
-}
-
-
-function parseLrc(lrc) {
-  return lrc.split('\n')
-    .map(line => {
-      const m = line.match(/^\[(\d+):(\d+\.\d+)\](.*)/);
-      if (!m) return null;
-      return { time: parseInt(m[1]) * 60 + parseFloat(m[2]), text: m[3].trim() };
-    })
-    .filter(l => l && l.text);
-}
-
-
-function renderLyrics(data) {
-  const pane = $('lyrics-pane');
-  syncedLines = [];
-  lastLineIdx = -1;
-
-  if (!data) {
-    pane.innerHTML = `<div class="lyrics-state">NO LYRICS FOUND<br>FOR THIS TRACK</div>`;
-    return;
-  }
-
-  if (data.synced) {
-    const parsed = parseLrc(data.synced);
-    if (parsed.length) {
-      pane.innerHTML = '';
-    
-      pane.appendChild(Object.assign(document.createElement('div'), { style: 'height:120px' }));
-      parsed.forEach(l => {
-        const span = document.createElement('span');
-        span.className = 'lyric-line';
-        span.textContent = l.text;
-        span.addEventListener('click', () => {
-       
-          audio.currentTime = Math.max(0, l.time - currentOffset);
-        });
-        pane.appendChild(span);
-        syncedLines.push({ time: l.time, el: span });
-      });
-      pane.appendChild(Object.assign(document.createElement('div'), { style: 'height:200px' }));
-      return;
-    }
-  }
-
-
-  if (data.plain) {
-    pane.innerHTML = `<div style="padding:20px 20px 60px;font-family:var(--sans);font-size:13px;line-height:2;color:var(--text-dim);white-space:pre-wrap">${data.plain}</div>`;
-  } else {
-    pane.innerHTML = `<div class="lyrics-state">NO LYRICS FOUND<br>FOR THIS TRACK</div>`;
-  }
-}
-
-
-function syncHighlight(currentTime) {
-  if (!syncedLines.length) return;
-  const adjusted = currentTime + currentOffset;
-
-  let idx = -1;
-  for (let i = 0; i < syncedLines.length; i++) {
-    if (syncedLines[i].time <= adjusted) idx = i;
-    else break;
-  }
-
-  if (idx === lastLineIdx) return;
-  lastLineIdx = idx;
-
-  syncedLines.forEach((l, i) => {
-    l.el.classList.toggle('active', i === idx);
-    l.el.classList.toggle('passed', i < idx);
-  });
-
- 
-  if (idx >= 0) {
-    const pane = $('lyrics-pane');
-    const el   = syncedLines[idx].el;
-    pane.scrollTop = el.offsetTop - pane.clientHeight / 2 + el.clientHeight / 2;
-  }
-}
-
-
-function loadRow(row, autoplay = true) {
-  if (currentEl) currentEl.classList.remove('active');
-  currentEl = row;
-  row.classList.add('active');
-
-  audio.src = row.dataset.src;
-
-  const img   = $('art-img');
-  const empty = $('art-empty');
-  img.src = row.dataset.cover;
-  img.onload  = () => { img.style.display = ''; empty.style.display = 'none'; };
-  img.onerror = () => { img.style.display = 'none'; empty.style.display = ''; };
-
-  $('player-idle').style.display   = 'none';
-  $('player-title').style.display  = '';
-  $('player-artist').style.display = '';
-  $('player-title').textContent    = row.dataset.title;
-  $('player-artist').textContent   = row.dataset.artist;
-
-  // Restore saved offset for this track
-  currentOffset = offsetStore[row.dataset.src] || 0;
-  $('offset-val').textContent = (currentOffset >= 0 ? '+' : '') + currentOffset.toFixed(1) + 's';
-
-  // Reset & fetch lyrics
-  syncedLines = []; lastLineIdx = -1;
-  $('lyrics-pane').innerHTML = `<div class="lyrics-state">SEARCHING…</div>`;
-  fetchLyrics(row.dataset.title, row.dataset.artist).then(renderLyrics);
-
-  if (autoplay) { audio.play(); setPlaying(true); }
-}
-
-
-function setPlaying(state) {
-  playing = state;
-  $('play-icon').innerHTML = state
-    ? '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>'
-    : '<polygon points="5 3 19 12 5 21 5 3"/>';
-  state ? $('disc').classList.add('spin') : $('disc').classList.remove('spin');
-}
-
-function togglePlay() {
-  if (!currentEl) { const f = document.querySelector('.track-row'); if (f) loadRow(f); return; }
-  playing ? (audio.pause(), setPlaying(false)) : (audio.play(), setPlaying(true));
-}
-
-function prevTrack() {
-  if (audio.currentTime > 3) { audio.currentTime = 0; return; }
-  const rows = [...document.querySelectorAll('.track-row')];
-  const idx  = rows.indexOf(currentEl);
-  loadRow(idx > 0 ? rows[idx - 1] : rows[rows.length - 1]);
-}
-
-function nextTrack() {
-  if (queue.length) { const n = queue.shift(); renderQueue(); loadRow(n); return; }
-  const rows = [...document.querySelectorAll('.track-row')];
-  if (!rows.length) return;
-  if (shuffle) {
-    let r; do { r = Math.floor(Math.random() * rows.length); } while (rows[r] === currentEl && rows.length > 1);
-    loadRow(rows[r]);
-  } else {
-    loadRow(rows[(rows.indexOf(currentEl) + 1) % rows.length]);
-  }
-}
-
-function toggleShuffle() { shuffle = !shuffle; $('btn-shuffle').classList.toggle('lit', shuffle); toast(shuffle ? 'SHUFFLE ON' : 'SHUFFLE OFF'); }
-function toggleRepeat()  { repeat  = !repeat;  $('btn-repeat').classList.toggle('lit', repeat);   toast(repeat  ? 'REPEAT ON'  : 'REPEAT OFF');  }
-
-$('prog-track').addEventListener('click', e => {
-  if (!audio.duration) return;
-  const r = e.currentTarget.getBoundingClientRect();
-  audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
-});
-
-audio.addEventListener('timeupdate', () => {
-  const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-  $('prog-fill').style.width = pct + '%';
-  $('t-cur').textContent = fmt(audio.currentTime);
-  $('t-dur').textContent = fmt(audio.duration);
-  syncHighlight(audio.currentTime);
-});
-
-audio.addEventListener('ended', () => { if (repeat) { audio.play(); return; } nextTrack(); });
-audio.addEventListener('play',  () => setPlaying(true));
-audio.addEventListener('pause', () => setPlaying(false));
-
-$('vol').addEventListener('input', e => { audio.volume = e.target.value; });
-audio.volume = 0.85;
-
-document.querySelectorAll('.track-row').forEach(row => {
-  row.addEventListener('click', e => { if (e.target.closest('.q-add-btn')) return; loadRow(row); });
-  row.querySelector('.q-add-btn').addEventListener('click', e => { e.stopPropagation(); addToQueue(row); });
-});
-
-$('search').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  let visible = 0;
-  document.querySelectorAll('.track-row').forEach(row => {
-    const match = !q || row.dataset.title.toLowerCase().includes(q) || row.dataset.artist.toLowerCase().includes(q);
-    row.style.display = match ? '' : 'none';
-    if (match) visible++;
-  });
-  $('no-results').style.display = visible === 0 ? '' : 'none';
-});
-
-
-function addToQueue(row) {
-  queue.push(row);
-  renderQueue();
-  toast(`QUEUED: ${row.dataset.title}`);
-}
-
-function renderQueue() {
-  const scroll = $('queue-scroll');
-  const badge  = $('q-badge');
-  if (badge) badge.textContent = queue.length ? `(${queue.length})` : '';
-  if (!queue.length) {
-    scroll.innerHTML = '<div class="queue-empty-msg">EMPTY.<br>HOVER A TRACK<br>AND PRESS + Q</div>';
-    return;
-  }
-  scroll.innerHTML = '<div class="queue-next-label">NEXT UP</div>';
-  queue.forEach((row, i) => {
-    const d = document.createElement('div');
-    d.className = 'queue-row';
-    d.innerHTML = `
-      <span class="q-num">${i + 1}</span>
-      <div class="q-thumb"><img src="${row.dataset.cover}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="q-info">
-        <div class="q-name">${row.dataset.title}</div>
-        <div class="q-artist">${row.dataset.artist}</div>
-      </div>
-      <button class="q-remove" title="Remove">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>`;
-    d.addEventListener('click', e => {
-      if (e.target.closest('.q-remove')) { queue.splice(i, 1); renderQueue(); return; }
-      queue.splice(i, 1); renderQueue(); loadRow(row);
-    });
-    scroll.appendChild(d);
-  });
-}
-</script>
-<script src="index.js"></script>
-<script src="sidebar-logic.js"></script>
 
 <div class="nrg-sidebar">
   <div class="nav-icon" data-page="index.html">Home</div>
@@ -2679,12 +885,101 @@ function renderQueue() {
   <div class="nav-icon" data-page="settings.html">Settings</div>
   <div class="nav-icon" data-page="support.html">Support Us</div>
 </div>
-    
+
+
 <div class="bottom-sidebar">
-<div class="status-card" id="time-status">Time: --:--</div>
-<div class="status-card" id="battery-status">Battery: --%</div>
-<div class="status-card" id="temperature-status">Temp: -- °C</div>
-<div class="status-card" id="ping-status">Ping: -- ms</div>
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
 </div>
+
+<script>
+
+  const allCards = document.querySelectorAll('.game-card');
+  document.getElementById('game-count').textContent = allCards.length + ' GAMES';
+
+  
+  const overlay   = document.getElementById('game-overlay');
+  const frame     = document.getElementById('game-frame');
+  const titleText = document.getElementById('overlay-title-text');
+
+  allCards.forEach(card => {
+    card.addEventListener('click', () => {
+      frame.src = card.dataset.game;
+      titleText.textContent = card.dataset.name;
+      overlay.classList.add('open');
+    });
+  });
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    overlay.classList.remove('open');
+    frame.src = '';
+  });
+
+  document.getElementById('fullscreen-btn').addEventListener('click', () => {
+    if (frame.requestFullscreen) frame.requestFullscreen();
+    else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+  });
+
+  document.getElementById('blank-btn').addEventListener('click', () => {
+    if (frame.src) window.open(frame.src, '_blank');
+  });
+
+
+  const searchInput = document.getElementById('search');
+  const searchClear = document.getElementById('search-clear');
+  const noResults   = document.getElementById('no-results');
+  const sectionLabel = document.getElementById('section-label');
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase().trim();
+    searchClear.style.display = q ? 'block' : 'none';
+    let visible = 0;
+    allCards.forEach(card => {
+      const match = !q || card.dataset.name.toLowerCase().includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    noResults.style.display = visible === 0 ? '' : 'none';
+    sectionLabel.textContent = q ? `${visible} RESULT${visible !== 1 ? 'S' : ''} FOR "${q.toUpperCase()}"` : 'All Games';
+  });
+
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchClear.style.display = 'none';
+    allCards.forEach(c => c.style.display = '');
+    noResults.style.display = 'none';
+    sectionLabel.textContent = 'All Games';
+  });
+
+  
+  document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(icon => {
+    const currentPage = window.location.pathname.split('/').pop();
+    if (icon.dataset.page === currentPage) icon.classList.add('active');
+    icon.addEventListener('click', () => {
+      if (icon.dataset.page) window.location.href = '/' + icon.dataset.page;
+    });
+  });
+
+ 
+  const bgMusic = new Audio('music/random music.mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = 0.5;
+  function startFaintMusic() {
+    bgMusic.play().then(() => window.removeEventListener('click', startFaintMusic)).catch(() => {});
+  }
+  window.addEventListener('click', startFaintMusic);
+</script>
+
+<script src="nrg-system.js"></script>
+<script>
+  addXP(25);
+  addCoins(5);
+  addProgress("gamesPlayed");
+</script>
+<script src="index.js"></script>
+<script src="sidebar-logic.js"></script>
+
 </body>
 </html>
