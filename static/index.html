@@ -47,7 +47,7 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* ── REACTIVE BACKGROUND ── */
+    
     #bg-canvas {
       position: fixed;
       inset: 0;
@@ -102,14 +102,14 @@
       border-radius: 3px;
     }
 
-    /* ── MAIN AREA ── */
+   
     .main {
       display: grid;
       grid-template-columns: 1fr;
       overflow: hidden;
     }
 
-    /* ── LEFT: HERO + CARDS ── */
+   
     .hero-side {
       display: flex;
       flex-direction: column;
@@ -121,7 +121,7 @@
       position: relative;
     }
 
-    /* ── LOGO ── */
+  
     .logo-wrap { text-align: center; position: relative; z-index: 1; }
     .logo {
       font-family: var(--mono);
@@ -148,7 +148,7 @@
       min-height: 14px;
     }
 
-    /* ── NAV CARDS ── */
+
     .nav-cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -189,7 +189,7 @@
     }
     .nav-card:hover::before { transform: scaleY(1); }
 
-    /* sweep removed */
+   
     .nav-card .sweep { display: none; }
 
     .card-icon {
@@ -240,7 +240,7 @@
       flex-shrink: 0;
     }
 
-    /* recent activity */
+    
     .activity-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
     .activity-item {
       display: flex;
@@ -279,7 +279,7 @@
     }
     .activity-item:hover .activity-arrow { opacity: 1; }
 
-    /* status grid */
+
     .status-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -307,7 +307,7 @@
     }
     .stat-val.accent { color: var(--accent); }
 
-    /* ── V2 POPUP ── */
+ 
     .popup-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.6);
@@ -404,7 +404,7 @@
       background: rgba(255,255,255,0.08); color: white;
     }
 
-    /* ── BOTTOM SIDEBAR ── */
+   
     .bottom-sidebar {
       position: fixed; bottom: 0; left: 50%;
       transform: translate(-50%, 70%);
@@ -620,7 +620,7 @@
     });
   }
 
-  // Ping
+  
   (function pingCheck() {
     const start = performance.now();
     fetch('/favicon.ico?_=' + Date.now(), { cache: 'no-store' })
@@ -638,14 +638,14 @@
     icon.addEventListener('click', () => { if (icon.dataset.page) window.location.href = '/' + icon.dataset.page; });
   });
 
-  // April fools redirect
+
   const today = new Date();
   if (today.getMonth() === 3 && today.getDate() === 1 && !sessionStorage.getItem('nrg_seized_seen')) {
     sessionStorage.setItem('nrg_seized_seen', 'true');
     window.location.href = 'seized.html';
   }
 
-  // Background music
+ 
   const bgMusic = new Audio('music/random music.mp3');
   bgMusic.loop = true; bgMusic.volume = 0.1;
   function startMusic() { bgMusic.play().then(() => window.removeEventListener('click', startMusic)).catch(()=>{}); }
@@ -674,7 +674,7 @@
 </div>
 
 <script>
-  // Show once per session
+
   if (sessionStorage.getItem('nrg_v2_seen')) {
     document.getElementById('v2-popup').style.display = 'none';
   }
@@ -688,21 +688,21 @@
 </script>
 
 <script>
-// ── Reactive grid background ──────────────────────────────
+
 (function() {
   const canvas = document.getElementById('bg-canvas');
   const ctx    = canvas.getContext('2d');
 
-  const COLS   = 28;   // grid columns
-  const ROWS   = 20;   // grid rows
-  const RADIUS = 180;  // mouse influence radius px
-  const MAX_H  = 28;   // max bar raise height px
-  const SPEED  = 0.12; // lerp speed
+  const COLS   = 28;   
+  const ROWS   = 20;   
+  const RADIUS = 180;  
+  const MAX_H  = 28;   
+  const SPEED  = 0.12; 
 
   let W, H, cellW, cellH;
   let mouse = { x: -999, y: -999 };
 
-  // Each cell stores current and target height
+
   let cells = [];
 
   function resize() {
@@ -710,7 +710,7 @@
     H = canvas.height = window.innerHeight;
     cellW = W / COLS;
     cellH = H / ROWS;
-    // init cells if empty
+    
     if (!cells.length) {
       for (let r = 0; r < ROWS; r++) {
         cells[r] = [];
@@ -734,7 +734,7 @@
     mouse.y = -999;
   });
 
-  // get accent color from CSS var
+
   function getAccent() {
     return getComputedStyle(document.documentElement)
       .getPropertyValue('--accent').trim() || '#c50cf9';
@@ -758,38 +758,38 @@
         const cx = (col + 0.5) * cellW;
         const cy = (row + 0.5) * cellH;
 
-        // distance from mouse
+       
         const dx   = cx - mouse.x;
         const dy   = cy - mouse.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
 
-        // target height: falls off with distance
+        
         const cell = cells[row][col];
         cell.target = dist < RADIUS
           ? MAX_H * Math.pow(1 - dist / RADIUS, 1.8)
           : 0;
 
-        // lerp toward target
+        
         cell.h += (cell.target - cell.h) * SPEED;
 
         const h    = cell.h;
-        const t    = h / MAX_H; // 0–1 intensity
+        const t    = h / MAX_H; 
         const pad  = 2;
 
         if (h < 0.5) {
-          // just draw a dot
+          
           ctx.fillStyle = `rgba(${r},${g},${b},${0.06 + t * 0.04})`;
           ctx.fillRect(cx - 1, cy - 1, 2, 2);
           continue;
         }
 
-        // bar that rises upward from center
+        
         const barW  = Math.max(1, cellW * 0.18);
         const barH  = h;
         const x     = cx - barW / 2;
         const y     = cy - barH / 2;
 
-        // gradient from bottom (dim) to top (bright)
+        
         const grad = ctx.createLinearGradient(x, y + barH, x, y);
         grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
         grad.addColorStop(1, `rgba(${r},${g},${b},${0.18 + t * 0.35})`);
@@ -799,7 +799,7 @@
         ctx.roundRect(x, y, barW, barH, 1);
         ctx.fill();
 
-        // tiny dot at grid intersection
+      
         ctx.fillStyle = `rgba(${r},${g},${b},${0.08 + t * 0.15})`;
         ctx.fillRect(cx - 1, cy - 1, 2, 2);
       }
