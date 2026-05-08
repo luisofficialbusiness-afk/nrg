@@ -452,3 +452,11 @@ function resetThemeToDefault() {
     buildThemeGrid();
     if (typeof toast === "function") toast("theme reset");
 }
+
+// gay son or thot daugher procedure
+
+const MAINTENANCE_MODE = true; 
+
+if (MAINTENANCE_MODE) {
+  window.location.replace("maintance.html");
+}
