@@ -3,224 +3,387 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NRG // EDUCATION</title>
-  
+  <title>NRG | Proxy</title>
+
   <script src="/sail/baremux/index.js"></script>
   <script src="/sail/scram/scramjet.all.js"></script>
   <script>
-    // Register the Scramjet Service Worker
     navigator.serviceWorker.register("/sail/sw.js");
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;900&family=Space+Mono&display=swap" rel="stylesheet">
-  
+  <script src="index.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --nrg-blue: #0044ff;      
-      --nrg-cyan: #00f2ff;      
-      --nrg-electric: #4488ff;  
-      --deep-void: #000105;     
+      --bg: #0a0a0a;
+      --surface: #111;
+      --surface2: #1a1a1a;
+      --surface3: #222;
+      --border: #2a2a2a;
+      --accent: #c50cf9;
+      --accent-dim: rgba(197,12,249,0.10);
+      --accent-glow: rgba(197,12,249,0.25);
+      --text: #e8e8e8;
+      --text-dim: #666;
+      --text-muted: #3a3a3a;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--deep-void);
-      color: var(--nrg-electric);
-      font-family: 'Inter', sans-serif;
+    html, body {
       height: 100vh;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background-image: radial-gradient(circle at center, #001133 0%, var(--deep-void) 70%);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
     }
 
-    #nrg-dashboard {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.4s ease;
-      position: relative;
-    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    .nrg-logo-container {
-      position: relative;
-      margin-bottom: 50px;
-      user-select: none;
+    /* ── STATUS LINE ── */
+    .nrg-status-line {
+      position: fixed;
+      top: 17px;
+      right: 24px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      pointer-events: none;
+      z-index: 2000;
     }
+    .nrg-status-line span { color: var(--accent); }
 
-    .nrg-logo-container h1 {
-      font-family: 'Syncopate', sans-serif;
-      font-size: clamp(5rem, 15vw, 11rem);
-      line-height: 0.8;
-      letter-spacing: -8px;
-      color: transparent;
-      -webkit-text-stroke: 2px var(--nrg-electric);
-      text-transform: uppercase;
-      opacity: 0.6;
-    }
-
-    .nrg-logo-container::after {
-      content: 'NRG';
-      position: absolute;
-      left: 15px;
-      top: 10px;
-      font-family: 'Syncopate', sans-serif;
-      font-size: clamp(5rem, 15vw, 11rem);
-      line-height: 0.8;
-      letter-spacing: -8px;
-      color: var(--nrg-cyan);
-      z-index: -1;
-      filter: blur(20px);
-      opacity: 0.4;
-    }
-
-    .nrg-input-wrap {
-      width: 90%;
-      max-width: 480px;
-      position: relative;
-    }
-
-    .nrg-input-wrap input {
-      width: 100%;
-      background: rgba(0, 10, 30, 0.7);
-      border: 1px solid var(--nrg-blue);
-      padding: 22px;
-      color: var(--nrg-cyan);
-      font-family: 'Space Mono', monospace;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      outline: none;
-      transition: all 0.4s;
-      border-radius: 2px;
-    }
-
-    .nrg-input-wrap input:focus {
-      border-color: var(--nrg-cyan);
-      box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
-      background: #000;
-    }
-    
+    /* ── RAIL (left tab strip) ── */
     .nrg-rail {
       position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 65px;
-      background: #000;
-      border-right: 1px solid #111;
+      left: 0; top: 0; bottom: 0;
+      width: 52px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 20px;
-      gap: 15px;
+      padding: 14px 0 14px;
+      gap: 0;
       z-index: 1000;
+    }
+
+    #node-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 0;
+      width: 100%;
     }
 
     .node-wrapper {
       position: relative;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
     }
 
     .nrg-node {
       width: 100%;
       height: 100%;
-      background: #000;
-      border: 1px solid #222;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-family: 'Syncopate', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 900;
-      color: #333;
-      transition: all 0.2s;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: background 0.13s, border-color 0.13s, color 0.13s;
     }
-
+    .nrg-node:hover { border-color: var(--text-dim); color: var(--text-dim); }
     .nrg-node.active {
-      background: var(--nrg-blue);
-      border-color: var(--nrg-cyan);
-      color: var(--nrg-cyan);
-      box-shadow: 0 0 15px var(--nrg-blue);
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .close-node {
       position: absolute;
-      top: -5px;
-      right: -5px;
-      width: 16px;
-      height: 16px;
-      background: #ff0044;
-      color: white;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: -4px; right: -4px;
+      width: 14px; height: 14px;
+      background: #ff3a3a;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
       border-radius: 2px;
       cursor: pointer;
       opacity: 0;
-      transition: 0.2s;
+      transition: opacity 0.13s;
       z-index: 1001;
-      font-weight: bold;
     }
-
     .node-wrapper:hover .close-node { opacity: 1; }
 
+    /* + new tab button */
+    #init-node {
+      width: 36px; height: 36px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      transition: border-color 0.13s, color 0.13s;
+      flex-shrink: 0;
+    }
+    #init-node:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── VIEWPORT (iframe area) ── */
     #nrg-viewport {
       position: fixed;
-      left: 65px;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background: #000;
+      left: 52px; right: 0; top: 0; bottom: 0;
+      background: #fff;
       display: none;
     }
-
     #nrg-viewport.active { display: block; }
     iframe { width: 100%; height: 100%; border: none; background: #fff; }
 
-    .nrg-status-line {
-        position: absolute;
-        top: 25px;
-        right: 40px;
-        font-family: 'Space Mono', monospace;
-        font-size: 0.7rem;
-        color: var(--nrg-blue);
-        letter-spacing: 2px;
-        pointer-events: none;
+    /* ── DASHBOARD (home screen) ── */
+    #nrg-dashboard {
+      position: fixed;
+      left: 52px; right: 0; top: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      transition: opacity 0.25s;
+      background: var(--bg);
+    }
+
+    /* background glow */
+    #nrg-dashboard::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 40% at 50% 50%, var(--accent-dim) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* logo */
+    .nrg-logo-container {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      user-select: none;
+    }
+    .nrg-logo-container h1 {
+      font-family: var(--mono);
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-dim);
+      position: relative;
+      display: inline-block;
+    }
+    /* glitch layer */
+    .nrg-logo-container h1::before {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0;
+      color: var(--accent);
+      opacity: 0.06;
+      letter-spacing: 0.15em;
+      animation: glitch 6s infinite step-start;
+    }
+    @keyframes glitch {
+      0%,91%,100% { clip-path: inset(100% 0 0 0); transform: none; }
+      92% { clip-path: inset(18% 0 64% 0); transform: translateX(-3px); }
+      94% { clip-path: inset(52% 0 22% 0); transform: translateX(3px); }
+      96% { clip-path: inset(78% 0 8% 0);  transform: translateX(-2px); }
+    }
+    .logo-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin-top: 8px;
+      opacity: 0.4;
+    }
+    .logo-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--text-muted);
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    /* input */
+    .nrg-input-wrap {
+      width: 90%;
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nrg-input-wrap form {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.18s;
+    }
+    .nrg-input-wrap form:focus-within { border-color: var(--accent); }
+
+    .input-icon {
+      display: flex; align-items: center;
+      padding: 0 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    #nrg-query {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      padding: 13px 6px;
+      caret-color: var(--accent);
+    }
+    #nrg-query::placeholder { color: var(--text-muted); }
+
+    .go-btn {
+      background: var(--accent);
+      border: none;
+      color: #000;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 0 18px;
+      cursor: pointer;
+      transition: opacity 0.13s;
+      flex-shrink: 0;
+    }
+    .go-btn:hover { opacity: 0.85; }
+
+    .input-hint {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ── NRG SIDEBAR ── */
+    .nrg-sidebar {
+      width: 110px;
+      background: rgba(15,15,15,0.95);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 0;
+      position: fixed; top: 0; bottom: 0; left: 52px;
+      transform: translateX(-96px);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .nrg-sidebar:hover { transform: translateX(0); }
+    .nrg-sidebar .nav-icon {
+      width: 86px; height: 56px; margin: 6px 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; cursor: pointer;
+      font-size: 16px; color: #ccc;
+      font-family: var(--sans);
+      transition: background 0.2s ease;
+    }
+    .nrg-sidebar .nav-icon:hover,
+    .nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
+
+    /* ── BOTTOM SIDEBAR ── */
+    .bottom-sidebar {
+      position: fixed; bottom: 0; left: 50%;
+      transform: translate(-50%, 70%);
+      display: flex; gap: 20px; padding: 10px 18px;
+      background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
+      border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.3s ease; z-index: 999;
+    }
+    .bottom-sidebar:hover { transform: translate(-50%, 0); }
+    .status-card {
+      color: white; background: var(--surface2); padding: 8px 12px;
+      border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;
     }
   </style>
 </head>
 <body>
 
-  <div class="nrg-status-line">education: <span style="color:var(--nrg-cyan)">stable</span></div>
+  <div class="nrg-status-line">proxy — <span>active</span></div>
 
+  <!-- RAIL -->
   <nav class="nrg-rail">
-    <div id="node-stack" style="display:flex; flex-direction:column; gap:10px;"></div>
-    <div class="nrg-node" id="init-node" title="INITIALIZE NODE" style="margin-top: 10px;">+</div>
+    <div id="node-stack"></div>
+    <div class="nrg-node" id="init-node" title="New tab">+</div>
   </nav>
 
+  <!-- IFRAME VIEWPORT -->
   <div id="nrg-viewport"></div>
 
+  <!-- DASHBOARD -->
   <main id="nrg-dashboard">
     <div class="nrg-logo-container">
-      <h1>NRG</h1>
+      <h1 data-text="NRG">NRG</h1>
+      <div class="logo-rule"></div>
+      <div class="logo-sub">proxy — browse freely</div>
     </div>
 
-    <form class="nrg-input-wrap" id="nrg-core-form">
-      <input type="text" id="nrg-query" placeholder="Education active" autocomplete="off">
-    </form>
+    <div class="nrg-input-wrap">
+      <form id="nrg-core-form">
+        <div class="input-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input type="text" id="nrg-query" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
+        <button class="go-btn" type="submit">GO</button>
+      </form>
+      <div class="input-hint">urls and searches routed through scramjet</div>
+    </div>
   </main>
 
+  <!-- NRG SIDEBAR -->
+  <div class="nrg-sidebar">
+    <div class="nav-icon" data-page="index.html">Home</div>
+    <div class="nav-icon" data-page="games.html">Games</div>
+    <div class="nav-icon" data-page="movies.html">Movies</div>
+    <div class="nav-icon" data-page="ai.html">AI</div>
+    <div class="nav-icon" data-page="proxy.html">Proxy</div>
+    <div class="nav-icon" data-page="settings.html">Settings</div>
+    <div class="nav-icon" data-page="support.html">Support Us</div>
+  </div>
+
+  <div class="bottom-sidebar">
+    <div class="status-card" id="time-status">Time: --:--</div>
+    <div class="status-card" id="battery-status">Battery: --%</div>
+    <div class="status-card" id="temperature-status">Temp: -- °C</div>
+    <div class="status-card" id="ping-status">Ping: -- ms</div>
+  </div>
+
+  <!-- ALL JS BELOW IS UNTOUCHED -->
   <script>
-    // --- Scramjet & BareMux Implementation ---
-    // Sets Wisp to: wss://[current_hostname]/wisp/
     const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
     
     const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
@@ -237,7 +400,6 @@
     });
     scramjet.init();
 
-    // --- Tab/Node Management ---
     let nrg_nodes = [];
     let active_node_id = null;
 
@@ -316,7 +478,6 @@
       }
     }
 
-    // --- Input Handling ---
     document.getElementById('nrg-core-form').onsubmit = (e) => {
       e.preventDefault();
       let raw = document.getElementById('nrg-query').value.trim();
@@ -339,8 +500,18 @@
 
     document.getElementById('init-node').onclick = () => createNode();
 
-    // Initial State
     createNode();
   </script>
+
+  <script>
+    document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(icon => {
+      const cur = window.location.pathname.split('/').pop();
+      if (icon.dataset.page === cur) icon.classList.add('active');
+      icon.addEventListener('click', () => { if (icon.dataset.page) window.location.href = '/' + icon.dataset.page; });
+    });
+  </script>
+
+  <script src="sidebar-logic.js"></script>
+
 </body>
 </html>

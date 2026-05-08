@@ -2,642 +2,545 @@
 <html lang="en">
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-79K42EBSYZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-79K42EBSYZ');
+  </script>
 
-  gtag('config', 'G-79K42EBSYZ');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NRG | Settings</title>
+  <script src="index.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NRG | Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<link rel="stylesheet" href="css/style.css">
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111;
+      --surface2: #1a1a1a;
+      --surface3: #222;
+      --border: #2a2a2a;
+      --accent: #c50cf9;
+      --accent-dim: rgba(197,12,249,0.08);
+      --accent-glow: rgba(197,12,249,0.2);
+      --text: #e8e8e8;
+      --text-dim: #888;
+      --text-muted: #3a3a3a;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
 
-<style>
-:root {
-  --bg-gradient-1: #0a0a0a;
-  --bg-gradient-2: #0a1f3f;
-  --bg-gradient-3: #001f4f;
-  --bg-gradient-4: #0a0a0a;
-/* hello. if you're reading this, it means all of my online information is being/has been deleted. */
-  /* it was great coding for you, and chatting on discord. but i honestly dont care */
-  /* i care about my life more than coding. i hope you can understand*/
-  /* don't worry about it if you don't know whos writing this. */
-  /* have a great life. */ 
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+
+    .topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 13px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-nrg { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; }
+    .brand-divider { width: 1px; height: 13px; background: var(--border); }
+    .brand-page { font-family: var(--sans); font-size: 13px; color: var(--text-dim); }
+
+ 
+    .layout {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 48px);
+    }
+
+    
+    .settings-nav {
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      overflow-y: auto;
+      background: var(--surface);
+    }
+    .nav-section-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0 18px 8px;
+    }
+    .snav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      font-size: 13px;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color 0.13s, background 0.13s, border-color 0.13s;
+    }
+    .snav-item:hover { color: var(--text); background: var(--surface2); }
+    .snav-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+    .snav-item .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0; transition: background 0.13s;
+    }
+    .snav-item.active .dot { background: var(--accent); }
+    .nav-gap { height: 18px; }
+
+   
+    .settings-content {
+      padding: 32px 40px 120px;
+      overflow-y: auto;
+      max-width: 660px;
+    }
+
+   
+    .section { margin-bottom: 48px; scroll-margin-top: 20px; }
+    .section-head {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 11px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+    .section-sub { font-size: 11px; color: var(--text-muted); }
+
+    
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
+    .field input {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--sans); font-size: 13px;
+      padding: 9px 12px; border-radius: 4px; outline: none; transition: border-color 0.15s;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--text-muted); }
+    .field-hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+   
+       .field-row { display: flex; gap: 14px; align-items: flex-start; }
+    .field-row .field { margin-bottom: 0; }
+    .field input.key-input { width: 52px; text-align: center; font-family: var(--mono); font-size: 16px; }
+
+   
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      padding: 8px 16px; border-radius: 4px; border: 1px solid var(--border);
+      cursor: pointer; background: var(--surface2); color: var(--text-dim);
+      white-space: nowrap; transition: border-color 0.13s, color 0.13s;
+    }
+    .btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
+    .btn-primary:hover { opacity: 0.88; color: #000; box-shadow: 0 0 12px var(--accent-glow); }
+    .btn-ghost { background: none; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
   
-  
-  --text-color: white;
-  --label-color: #8b7ea8;
-  --input-bg: #1e1e2e;
-  --input-border: rgba(0,217,255,0.2);
-  --input-focus: #00d9ff;
+    .presets { display: flex; flex-wrap: wrap; gap: 7px; }
+    .preset-pill {
+      font-family: var(--sans); font-size: 11px; padding: 5px 13px;
+      border-radius: 20px; border: 1px solid var(--border); background: none;
+      color: var(--text-dim); cursor: pointer; transition: all 0.13s;
+    }
+    .preset-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
-  --btn-primary-bg: #00d9ff;
-  --btn-primary-hover: #00b8e6;
-  --btn-primary-color: black;
-  --btn-secondary-bg: #1e1e2e;
-  --btn-secondary-color: white;
+    
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+    .theme-card {
+      border: 1px solid var(--border); border-radius: 5px;
+      overflow: hidden; cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+      position: relative;
+    }
+    .theme-card:hover { border-color: var(--text-dim); transform: translateY(-1px); }
+    .theme-card.selected { border-color: var(--accent); }
+    .theme-card.selected::after {
+      content: '✓'; position: absolute; top: 5px; right: 7px;
+      font-size: 9px; color: var(--accent); font-family: var(--mono);
+    }
+    .theme-swatch { height: 38px; width: 100%; display: block; }
+    .theme-name { padding: 5px 7px; font-size: 10px; color: var(--text-dim); background: var(--surface2); font-family: var(--sans); }
+    .theme-card.selected .theme-name { color: var(--accent); }
 
-  --card-bg: rgba(20,20,30,0.85);
-  --card-border: rgba(0,217,255,0.2);
-  --card-radius: 14px;
-
-  --sidebar-bg: rgba(10, 18, 35, 0.85);
-  --sidebar-border: rgba(0, 229, 255, 0.25);
-  --sidebar-shadow: rgba(0, 229, 255, 0.25);
-  --sidebar-icon: #00e5ff;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  color: var(--text-color);
-  padding-bottom: 90px; 
-}
-
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.settings-container {
-  max-width: 800px;
-  margin: 50px auto;
-}
-
-.settings-card {
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: var(--card-radius);
-  margin-bottom: 2rem;
-  border: 1px solid var(--card-border);
-  backdrop-filter: blur(10px);
-}
-
-.settings-card h2 {
-  margin-bottom: 1.5rem;
-  color: var(--btn-primary-bg);
-}
-
-.setting-group {
-  margin-bottom: 1.5rem;
-}
-
-.setting-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--label-color);
-}
-
-.setting-group input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  color: var(--text-color);
-}
-
-.setting-group input:focus {
-  outline: none;
-  border-color: var(--input-focus);
-}
-
-.button-row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.nrg-btn {
-  padding: 0.75rem 1.5rem;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-color);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.nrg-btn:hover {
-  background: var(--btn-primary-hover);
-  transform: translateY(-2px);
-}
-
-.nrg-btn.secondary {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-color);
-}
+   
+    .prose { font-size: 12px; color: var(--text-dim); line-height: 1.7; margin-bottom: 14px; }
 
 
-.sidebar {
-  width: 110px;
-  background: rgba(15, 15, 15, 0.95);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 0;
-  position: fixed;
-  top: 0; bottom: 0; left: 0;
-  transform: translateX(-96px);
-  transition: transform 0.3s ease;
-  z-index: 999;
-}
-.sidebar:hover { transform: translateX(0); }
-.sidebar .nav-icon {
-  width: 86px; height: 56px;
-  margin: 6px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  color: #ccc;
-  transition: background 0.2s ease;
-}
-.sidebar .nav-icon:hover,
-.sidebar .nav-icon.active {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-}
+    .toast {
+      position: fixed; bottom: 26px; left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.08em; padding: 9px 18px; border-radius: 4px;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.22s; z-index: 9999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-.bottom-sidebar {
-position: fixed;
-bottom: 0;
-left: 50%;
-transform: translate(-50%, 70%);
-display: flex;
-gap: 20px;
-padding: 10px 18px;
-background: rgba(15, 15, 15, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 40px;
-border: 1px solid rgba(255, 255, 255, 0.05);
-transition: transform 0.3s ease;
-z-index: 999;
-}
+    
+    .nrg-sidebar {
+      width: 110px; background: rgba(15,15,15,0.95);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 0; position: fixed; top: 0; bottom: 0; left: 0;
+      transform: translateX(-96px); transition: transform 0.3s ease; z-index: 999;
+    }
+    .nrg-sidebar:hover { transform: translateX(0); }
+    .nrg-sidebar .nav-icon {
+      width: 86px; height: 56px; margin: 6px 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; cursor: pointer; font-size: 16px; color: #ccc;
+      font-family: var(--sans); transition: background 0.2s ease;
+    }
+    .nrg-sidebar .nav-icon:hover,
+    .nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
 
-.bottom-sidebar:hover {
-  transform: translate(-50%, 0);
-}
-
-.status-card {
-color: white;
-background-color: #1a1a1a;
-padding: 8px 12px;
-border-radius: 10px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-font-size: 0.9rem;
-}
-     
-</style>
+    
+    .bottom-sidebar {
+      position: fixed; bottom: 0; left: 50%;
+      transform: translate(-50%, 70%);
+      display: flex; gap: 20px; padding: 10px 18px;
+      background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
+      border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.3s ease; z-index: 999;
+    }
+    .bottom-sidebar:hover { transform: translate(-50%, 0); }
+    .status-card {
+      color: white; background: var(--surface2); padding: 8px 12px;
+      border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="settings-container">
-
-    <div class="settings-card">
-        <h2>Website Cloak</h2>
-
-        <div class="setting-group">
-            <label>Tab Title</label>
-            <input type="text" id="cloakTitle" placeholder="Google Classroom">
-        </div>
-
-        <div class="setting-group">
-            <label>Tab Icon URL</label>
-            <input type="text" id="cloakIcon" placeholder="https://example.com/icon.ico">
-        </div>
-
-        <div class="button-row">
-            <button class="nrg-btn" onclick="saveCloak()">Apply Cloak</button>
-            <button class="nrg-btn secondary" onclick="resetCloak()">Reset</button>
-        </div>
-    </div>
-
-    <div class="settings-card">
-        <h2>Quick Cloak Presets</h2>
-
-        <div class="button-row">
-    <button class="nrg-btn secondary" onclick="presetGoogle()">Google</button>
-    <button class="nrg-btn secondary" onclick="presetClassroom()">Classroom</button>
-    <button class="nrg-btn secondary" onclick="presetCanvas()">Canvas</button>
-    <button class="nrg-btn secondary" onclick="presetIready()">I-Ready</button>
-    <button class="nrg-btn secondary" onclick="presetIXL()">IXL</button>
-    <button class="nrg-btn secondary" onclick="presetClasslink()">Classlink</button>
-    <button class="nrg-btn secondary" onclick="presetKhanAcademy()">Khan Academy</button>
-    <button class="nrg-btn secondary" onclick="presetEdmodo()">Edmodo</button>
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">NRG</span>
+    <div class="brand-divider"></div>
+    <span class="brand-page">Settings</span>
+  </div>
 </div>
-    </div>
 
-    <div class="settings-card">
-        <h2>Privacy</h2>
+<div class="layout">
 
-        <div class="button-row">
-            <button class="nrg-btn" onclick="openAboutBlank()">
-                Open NRG in about:blank
-            </button>
-        </div>
-    </div>
   
+  <nav class="settings-nav" id="settings-nav">
+    <div class="nav-section-label">Preferences</div>
+    <div class="snav-item active" data-target="cloak"><div class="dot"></div> Cloak</div>
+    <div class="snav-item" data-target="presets"><div class="dot"></div> Quick Presets</div>
+    <div class="snav-item" data-target="privacy"><div class="dot"></div> Privacy</div>
+    <div class="snav-item" data-target="panic"><div class="dot"></div> Panic</div>
+    <div class="nav-gap"></div>
+    <div class="nav-section-label">Appearance</div>
+    <div class="snav-item" data-target="themes"><div class="dot"></div> Themes</div>
+    <div class="nav-gap"></div>
+    <div class="nav-section-label">Data</div>
+    <div class="snav-item" data-target="data"><div class="dot"></div> Import / Export</div>
+  </nav>
 
-<div class="settings-card">
-    <h2>Panic Settings</h2>
-
-    <div class="setting-group">
-        <label>Panic Key</label>
-        <input type="text" id="panic-key" maxlength="1" placeholder="\"">
-    </div>
-
-    <div class="setting-group">
-        <label>Panic Redirect URL</label>
-        <input type="text" id="panic-url" placeholder="https://google.com">
-    </div>
-
-    <div class="button-row">
-        <button class="nrg-btn" onclick="savePanicSettings()">Save Panic Settings</button>
-    </div>
-</div>
-
-
-<div class="settings-card">
-    <h2>Import / Export Settings</h2>
-
-    <div class="button-row">
-        <button class="nrg-btn" onclick="exportSettings()">
-            Export Settings
-        </button>
-
-        <button class="nrg-btn secondary"
-            onclick="document.getElementById('import-file').click()">
-            Import Settings
-        </button>
-    </div>
-
-    <input type="file" id="import-file" style="display:none;" accept=".json">
-</div>
   
-<div class="settings-card">
-    <h2>Themes</h2>
+  <div class="settings-content" id="settings-content">
 
-    <div class="setting-group">
-        <label>Select Theme</label>
-        <select id="theme-chooser">
-            <option value="default">Default</option>
-            <option value="ocean">Ocean</option>
-            <option value="sunset">Sunset</option>
-            <option value="neon">Neon</option>
-            <option value="forest">Forest</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="sunrise">Sunrise</option>
-            <option value="aurora">Aurora</option>
-            <option value="candy">Candy</option>
-        </select>
+    <div class="section" id="cloak">
+      <div class="section-head">
+        <span class="section-title">Website Cloak</span>
+        <span class="section-sub">disguise the tab</span>
+      </div>
+      <div class="field">
+        <label>Tab title</label>
+        <input type="text" id="cloakTitle" placeholder="Google Classroom">
+      </div>
+      <div class="field">
+        <label>Tab icon URL</label>
+        <input type="text" id="cloakIcon" placeholder="https://example.com/favicon.ico">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveCloak()">apply</button>
+        <button class="btn btn-ghost" onclick="doResetCloak()">reset</button>
+      </div>
     </div>
 
-    <div class="button-row">
-        <button class="nrg-btn" onclick="applyTheme()">Apply Theme</button>
-        <button class="nrg-btn secondary" onclick="resetTheme()">Reset Theme</button>
+    
+    <div class="section" id="presets">
+      <div class="section-head">
+        <span class="section-title">Quick Presets</span>
+        <span class="section-sub">one click cloak</span>
+      </div>
+      <div class="presets">
+        <button class="preset-pill" onclick="applyPreset('Google','https://www.google.com/favicon.ico')">Google</button>
+        <button class="preset-pill" onclick="applyPreset('Google Classroom','https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
+        <button class="preset-pill" onclick="applyPreset('Canvas','https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico')">Canvas</button>
+        <button class="preset-pill" onclick="applyPreset('I-Ready','https://cdn.i-ready.com/favicon.ico')">i-Ready</button>
+        <button class="preset-pill" onclick="applyPreset('IXL','https://www.ixl.com/favicon.ico')">IXL</button>
+        <button class="preset-pill" onclick="applyPreset('Classlink','https://launchpad.classlink.com/favicon.ico')">Classlink</button>
+        <button class="preset-pill" onclick="applyPreset('Khan Academy','https://www.khanacademy.org/favicon.ico')">Khan Academy</button>
+        <button class="preset-pill" onclick="applyPreset('Edmodo','https://www.edmodo.com/favicon.ico')">Edmodo</button>
+        <button class="preset-pill" onclick="applyPreset('Schoology','https://www.schoology.com/favicon.ico')">Schoology</button>
+        <button class="preset-pill" onclick="applyPreset('PowerSchool','https://www.powerschool.com/favicon.ico')">PowerSchool</button>
+      </div>
     </div>
+
+    
+    <div class="section" id="privacy">
+      <div class="section-head">
+        <span class="section-title">Privacy</span>
+        <span class="section-sub">hide your tracks</span>
+      </div>
+      <p class="prose">Opens NRG inside an about:blank tab so it won't show in browser history or tab previews.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="openAboutBlank()">open in about:blank</button>
+      </div>
+    </div>
+
+
+    <div class="section" id="panic">
+      <div class="section-head">
+        <span class="section-title">Panic Key</span>
+        <span class="section-sub">emergency redirect</span>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Key</label>
+          <input type="text" class="key-input" id="panic-key" maxlength="1" placeholder="\">
+        </div>
+        <div class="field" style="flex:1">
+          <label>Redirect URL</label>
+          <input type="text" id="panic-url" placeholder="https://google.com">
+        </div>
+      </div>
+      <div class="field-hint">Press this key anywhere on the site to instantly redirect.</div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-primary" onclick="savePanic()">save</button>
+      </div>
+    </div>
+
+
+    <div class="section" id="themes">
+      <div class="section-head">
+        <span class="section-title">Themes</span>
+        <span class="section-sub">pick your vibe</span>
+      </div>
+      <div class="theme-grid" id="theme-grid">
+      
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="applySelectedTheme()">apply theme</button>
+        <button class="btn btn-ghost" onclick="resetThemeToDefault()">reset</button>
+      </div>
+    </div>
+
+   
+    <div class="section" id="data">
+      <div class="section-head">
+        <span class="section-title">Import / Export</span>
+        <span class="section-sub">backup your settings</span>
+      </div>
+      <p class="prose">Export all your settings as a JSON file, or import a backup to restore them.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="exportSettings()">export settings</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">import settings</button>
+      </div>
+      <input type="file" id="import-file" style="display:none" accept=".json">
+    </div>
+
+  </div>
 </div>
 
+
+<div class="nrg-sidebar">
+  <div class="nav-icon" data-page="index.html">Home</div>
+  <div class="nav-icon" data-page="games.html">Games</div>
+  <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="ai.html">AI</div>
+  <div class="nav-icon" data-page="proxy.html">Proxy</div>
+  <div class="nav-icon" data-page="settings.html">Settings</div>
+  <div class="nav-icon" data-page="music.html">Music</div>
+</div>
 
 <div class="bottom-sidebar">
-    <div class="nav-icon" data-page="index.html">🏠</div>
-    <div class="nav-icon" data-page="games.html">🎮</div>
-     <div class="nav-icon" data-page="movies.html">🎬</div>
-    <div class="nav-icon" data-page="ai.html">🤖</div>
-    <div class="nav-icon" data-page="proxy.html">🌐</div>
-    <div class="nav-icon" data-page="settings.html">⚙</div>
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
 </div>
-     
+
+<div class="toast" id="toast"></div>
+
 <script>
+
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  var navItems = document.querySelectorAll('.snav-item');
+  var content  = document.getElementById('settings-content');
+
+  
+  navItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      var target = document.getElementById(item.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      navItems.forEach(function(n) { n.classList.remove('active'); });
+      item.classList.add('active');
+    });
+  });
+
+  
+  content.addEventListener('scroll', function() {
+    var scrollTop = content.scrollTop;
+    var current   = null;
+    ['cloak','presets','privacy','panic','themes','data'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.offsetTop - 60 <= scrollTop) current = id;
+    });
+    if (!current) current = 'cloak';
+    navItems.forEach(function(n) {
+      n.classList.toggle('active', n.getAttribute('data-target') === current);
+    });
+  });
+
+
+  var ct = localStorage.getItem('nrg_cloak_title');
+  var ci = localStorage.getItem('nrg_cloak_icon');
+  if (ct) { document.getElementById('cloakTitle').value = ct; }
+  if (ci) { document.getElementById('cloakIcon').value  = ci; }
+
+ 
+  document.getElementById('panic-key').value = localStorage.getItem('nrg_panic_key') || '\\';
+  document.getElementById('panic-url').value = localStorage.getItem('nrg_panic_url') || 'https://google.com';
+
+
+  buildThemeGrid();
+
+
+  var currentPage = window.location.pathname.split('/').pop();
+  document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(function(icon) {
+    if (icon.getAttribute('data-page') === currentPage) icon.classList.add('active');
+    icon.addEventListener('click', function() {
+      var page = icon.getAttribute('data-page');
+      if (page) window.location.href = '/' + page;
+    });
+  });
+});
+
+
 function saveCloak() {
-    const title = document.getElementById("cloakTitle").value;
-    const icon = document.getElementById("cloakIcon").value;
-
-    if(title) {
-        localStorage.setItem("nrg_cloak_title", title);
-        document.title = title;
-    }
-
-    if(icon) {
-        localStorage.setItem("nrg_cloak_icon", icon);
-        setIcon(icon);
-    }
-
-    alert("Cloak Applied");
+  var title = document.getElementById('cloakTitle').value.trim();
+  var icon  = document.getElementById('cloakIcon').value.trim();
+  if (title) { localStorage.setItem('nrg_cloak_title', title); document.title = title; }
+  if (icon)  { localStorage.setItem('nrg_cloak_icon', icon);   window.setFavicon(icon); }
+  toast('cloak applied');
 }
 
-function resetCloak() {
-    localStorage.removeItem("nrg_cloak_title");
-    localStorage.removeItem("nrg_cloak_icon");
-    location.reload();
+function doResetCloak() {
+  localStorage.removeItem('nrg_cloak_title');
+  localStorage.removeItem('nrg_cloak_icon');
+  document.getElementById('cloakTitle').value = '';
+  document.getElementById('cloakIcon').value  = '';
+  location.reload();
 }
 
-function setIcon(url) {
-    let link = document.querySelector("link[rel~='icon']");
-    if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.head.appendChild(link);
-    }
-    link.href = url;
-}
-
-window.addEventListener("load", () => {
-    const savedTitle = localStorage.getItem("nrg_cloak_title");
-    const savedIcon = localStorage.getItem("nrg_cloak_icon");
-
-    if(savedTitle) document.title = savedTitle;
-    if(savedIcon) setIcon(savedIcon);
-
-
-    document.getElementById("panic-key").value = localStorage.getItem("nrg_panic_key") || "\\";
-    document.getElementById("panic-url").value = localStorage.getItem("nrg_panic_url") || "https://google.com";
-
-
-    const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
-        if(icon.dataset.page === currentPage) icon.classList.add("active");
-    });
-});
-
-
-function presetGoogle() {
-    document.getElementById("cloakTitle").value = "Google";
-    document.getElementById("cloakIcon").value = "https://www.google.com/favicon.ico";
-}
-
-function presetClassroom() {
-    document.getElementById("cloakTitle").value = "Google Classroom";
-    document.getElementById("cloakIcon").value = "https://ssl.gstatic.com/classroom/favicon.png";
-}
-
-function presetCanvas() {
-    document.getElementById("cloakTitle").value = "Canvas";
-    document.getElementById("cloakIcon").value = "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico";
+function applyPreset(title, icon) {
+  document.getElementById('cloakTitle').value = title;
+  document.getElementById('cloakIcon').value  = icon;
+  localStorage.setItem('nrg_cloak_title', title);
+  localStorage.setItem('nrg_cloak_icon', icon);
+  document.title = title;
+  window.setFavicon(icon);
+  toast('preset: ' + title.toLowerCase());
 }
 
 
-function presetIready() {
-    document.getElementById("cloakTitle").value = "I-Ready";
-    document.getElementById("cloakIcon").value = "https://cdn.i-ready.com/favicon.ico";
-}
-
-function presetIXL() {
-    document.getElementById("cloakTitle").value = "IXL";
-    document.getElementById("cloakIcon").value = "https://www.ixl.com/favicon.ico";
-}
-
-function presetClasslink() {
-    document.getElementById("cloakTitle").value = "Classlink";
-    document.getElementById("cloakIcon").value = "https://launchpad.classlink.com/favicon.ico";
-}
-
-function presetKhanAcademy() {
-    document.getElementById("cloakTitle").value = "Khan Academy";
-    document.getElementById("cloakIcon").value = "https://www.khanacademy.org/favicon.ico";
-}
-
-function presetEdmodo() {
-    document.getElementById("cloakTitle").value = "Edmodo";
-    document.getElementById("cloakIcon").value = "https://www.edmodo.com/favicon.ico";
+function openAboutBlank() {
+  var win = window.open('about:blank', '_blank');
+  win.document.write('<iframe src="' + location.href + '" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;"></iframe>');
 }
 
 
-  function openAboutBlank() {
-    const win = window.open("about:blank", "_blank");
-    win.document.write(`
-        <iframe src="${location.href}" style="width:100%;height:100%;border:none;"></iframe>
-    `);
-}
-
-
-document.querySelectorAll('.bottom-sidebar .nav-icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-        const page = icon.dataset.page;
-        if(page) window.location.href = "/" + page;
-    });
-});
-
-
-function savePanicSettings() {
-    const key = document.getElementById("panic-key").value;
-    const url = document.getElementById("panic-url").value;
-
-    localStorage.setItem("nrg_panic_key", key);
-    localStorage.setItem("nrg_panic_url", url);
-
-    alert("Panic settings saved.");
+function savePanic() {
+  var key = document.getElementById('panic-key').value;
+  var url = document.getElementById('panic-url').value;
+  localStorage.setItem('nrg_panic_key', key);
+  localStorage.setItem('nrg_panic_url', url);
+  toast('panic settings saved');
 }
 
 
 function exportSettings() {
-    const data = {};
-    for(let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        data[key] = localStorage.getItem(key);
-    }
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "nrg-settings.json";
-    link.click();
+  var data = {};
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    data[k] = localStorage.getItem(k);
+  }
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'nrg-settings.json';
+  a.click();
+  toast('settings exported');
 }
 
-document.getElementById("import-file").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        try {
-            const data = JSON.parse(event.target.result);
-            Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
-            alert("Settings imported. Reloading...");
-            location.reload();
-        } catch(err) {
-            alert("Failed to import settings: Invalid JSON");
-        }
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('import-file').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var data = JSON.parse(ev.target.result);
+        Object.keys(data).forEach(function(k) { localStorage.setItem(k, data[k]); });
+        toast('imported — reloading...');
+        setTimeout(function() { location.reload(); }, 1200);
+      } catch(err) { toast('invalid file'); }
     };
     reader.readAsText(file);
+  });
 });
 
 
-const themes = {
-    default: {
-        '--bg-gradient-1': '#0a0a0a',
-        '--bg-gradient-2': '#0a1f3f',
-        '--bg-gradient-3': '#001f4f',
-        '--bg-gradient-4': '#0a0a0a',
-        '--btn-primary-bg': '#00d9ff',
-        '--btn-primary-hover': '#00b8e6',
-        '--btn-secondary-bg': '#1e1e2e'
-    },
-    ocean: {
-        '--bg-gradient-1': '#001f3f',
-        '--bg-gradient-2': '#003366',
-        '--bg-gradient-3': '#0055a5',
-        '--bg-gradient-4': '#001f3f',
-        '--btn-primary-bg': '#00ffaa',
-        '--btn-primary-hover': '#00dd88',
-        '--btn-secondary-bg': '#0a1f3f'
-    },
-    sunset: {
-        '--bg-gradient-1': '#ff6b6b',
-        '--bg-gradient-2': '#ff8e53',
-        '--bg-gradient-3': '#ffb347',
-        '--bg-gradient-4': '#ff6b6b',
-        '--btn-primary-bg': '#ffb347',
-        '--btn-primary-hover': '#ffa500',
-        '--btn-secondary-bg': '#1a1a1a'
-    },
-  forest: {
-  '--bg-gradient-1': '#0b3d0b',
-  '--bg-gradient-2': '#1e5e1e',
-  '--bg-gradient-3': '#2e7d2e',
-  '--bg-gradient-4': '#0b3d0b',
-  '--btn-primary-bg': '#4CAF50',
-  '--btn-primary-hover': '#45a049',
-  '--btn-secondary-bg': '#1a2e1a'
-},
-  cyberpunk: {
-  '--bg-gradient-1': '#0a0a0a',
-  '--bg-gradient-2': '#ff00ff',
-  '--bg-gradient-3': '#00ffff',
-  '--bg-gradient-4': '#0a0a0a',
-  '--btn-primary-bg': '#ff00ff',
-  '--btn-primary-hover': '#ff66ff',
-  '--btn-secondary-bg': '#1e1e1e'
-},
-  sunrise: {
-  '--bg-gradient-1': '#ffb347',
-  '--bg-gradient-2': '#ffcc70',
-  '--bg-gradient-3': '#ffd699',
-  '--bg-gradient-4': '#ffb347',
-  '--btn-primary-bg': '#ff9966',
-  '--btn-primary-hover': '#ff7f50',
-  '--btn-secondary-bg': '#ffe6cc'
-},
-  aurora: {
-  '--bg-gradient-1': '#0d0d50',
-  '--bg-gradient-2': '#004d99',
-  '--bg-gradient-3': '#6600cc',
-  '--bg-gradient-4': '#0d0d50',
-  '--btn-primary-bg': '#66ccff',
-  '--btn-primary-hover': '#3399ff',
-  '--btn-secondary-bg': '#1a1a3d'
-},
-  candy: {
-  '--bg-gradient-1': '#ffb6c1',
-  '--bg-gradient-2': '#ffd1dc',
-  '--bg-gradient-3': '#ffe4e1',
-  '--bg-gradient-4': '#ffb6c1',
-  '--btn-primary-bg': '#ff69b4',
-  '--btn-primary-hover': '#ff1493',
-  '--btn-secondary-bg': '#ffe4e1'
-},
-    neon: {
-        '--bg-gradient-1': '#0f0f0f',
-        '--bg-gradient-2': '#ff00ff',
-        '--bg-gradient-3': '#00ffff',
-        '--bg-gradient-4': '#0f0f0f',
-        '--btn-primary-bg': '#ff00ff',
-        '--btn-primary-hover': '#ff66ff',
-        '--btn-secondary-bg': '#1e1e1e'
-    }
-};
-
-
-  function applyTheme() {
-    const themeName = document.getElementById('theme-chooser').value;
-    const theme = themes[themeName];
-
-    if (!theme) return;
-
-    Object.keys(theme).forEach(key => {
-        document.documentElement.style.setProperty(key, theme[key]);
-        localStorage.setItem('nrg_theme_' + key, theme[key]);
-    });
-
-    localStorage.setItem('nrg_theme_selected', themeName);
-    alert(`Theme "${themeName}" applied.`);
-}
-
-
-function resetTheme() {
-    applyThemeDefault();
-    document.getElementById('theme-chooser').value = 'default';
-    alert('Theme reset to default.');
-}
-
-
-window.addEventListener('load', () => {
-    const savedTheme = localStorage.getItem('nrg_theme_selected') || 'default';
-    document.getElementById('theme-chooser').value = savedTheme;
-
-    if (themes[savedTheme]) {
-        Object.keys(themes[savedTheme]).forEach(key => {
-            const value = localStorage.getItem('nrg_theme_' + key) || themes[savedTheme][key];
-            document.documentElement.style.setProperty(key, value);
-        });
-    }
-});
-
-
-function applyThemeDefault() {
-    Object.keys(themes.default).forEach(key => {
-        document.documentElement.style.setProperty(key, themes.default[key]);
-        localStorage.setItem('nrg_theme_' + key, themes.default[key]);
-    });
-}
-
-const bgMusic = new Audio('music/random music.mp3');
+var bgMusic = new Audio('music/random music.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
-
-function startFaintMusic() {
-    bgMusic.play()
-    .then(() => {
-        window.removeEventListener('click', startFaintMusic);
-    })
-    .catch(error => {
-        console.error("Playback failed:", error);
-    });
+function startMusic() {
+  bgMusic.play().then(function() { window.removeEventListener('click', startMusic); }).catch(function(){});
 }
-
-window.addEventListener('click', startFaintMusic);
+window.addEventListener('click', startMusic);
 </script>
+
 <script src="sidebar-logic.js"></script>
-
-<div class="sidebar">
-<div class="nav-icon" data-page="index.html">Home</div>
-<div class="nav-icon" data-page="games.html">Games</div>
-<div class="nav-icon" data-page="index.html">Movies</div>
-<div class="nav-icon" data-page="ai.html">AI</div>
-<div class="nav-icon" data-page="proxy.html">Proxy</div>
-<div class="nav-icon" data-page="settings.html">Settings</div>
-<div class="nav-icon" data-page="support.html">Support Us</div>
-</div>
-
-<div class="bottom-sidebar">
-<div class="status-card" id="time-status">Time: --:--</div>
-<div class="status-card" id="battery-status">Battery: --%</div>
-<div class="status-card" id="temperature-status">Temp: -- °C</div>
-<div class="status-card" id="ping-status">Ping: -- ms</div>
-</div>
 
 </body>
 </html>

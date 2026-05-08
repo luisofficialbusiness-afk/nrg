@@ -1,4 +1,4 @@
-// ── Cloak — runs immediately ───────────────────────────────
+
 (function () {
     var savedTitle = localStorage.getItem("nrg_cloak_title");
     var savedIcon  = localStorage.getItem("nrg_cloak_icon");
@@ -23,7 +23,7 @@ function resetCloak() {
     location.reload();
 }
 
-// ── Panic key ──────────────────────────────────────────────
+
 if (!localStorage.getItem("nrg_panic_key")) localStorage.setItem("nrg_panic_key", "\\");
 if (!localStorage.getItem("nrg_panic_url")) localStorage.setItem("nrg_panic_url", "https://google.com");
 
@@ -32,9 +32,7 @@ document.addEventListener("keydown", function (e) {
     if (k && e.key === k) window.location.href = localStorage.getItem("nrg_panic_url") || "https://google.com";
 });
 
-// ── Themes ─────────────────────────────────────────────────
-// Every theme sets ALL CSS variables used across every NRG page:
-//   backgrounds, surfaces, borders, text, accent, gradients, buttons.
+
 var themes = {
 
     midnight: {
@@ -386,7 +384,7 @@ var themes = {
     }
 };
 
-// Restore saved theme immediately — runs before DOM paints, no flash
+
 (function restoreTheme() {
     var name  = localStorage.getItem("nrg_theme_selected") || "midnight";
     var theme = themes[name];
@@ -397,7 +395,7 @@ var themes = {
     });
 })();
 
-// Apply a theme by name and persist every variable
+
 function applyTheme(name) {
     var theme = themes[name];
     if (!theme) return;
@@ -417,7 +415,7 @@ window.resetTheme = function() {
     if (typeof toast === "function") toast("theme reset");
 };
 
-// ── Settings page helpers ──────────────────────────────────
+
 var _selectedTheme = localStorage.getItem("nrg_theme_selected") || "midnight";
 
 function buildThemeGrid() {

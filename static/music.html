@@ -38,7 +38,7 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* ══ SIDEBAR ══ */
+
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
@@ -76,7 +76,7 @@
   }
   .playlist-scroll { flex: 1; overflow-y: auto; padding-bottom: 8px; }
 
-  /* Track row */
+ 
   .track-row {
     display: flex; align-items: center; gap: 11px;
     padding: 8px 20px; cursor: pointer;
@@ -131,7 +131,7 @@
     color: var(--text-muted); letter-spacing: 0.1em; text-align: center;
   }
 
-  /* ══ MAIN PLAYER ══ */
+
   .player-main {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -234,13 +234,13 @@
   }
   input[type=range]:hover::-webkit-slider-thumb { background: var(--accent); }
 
-  /* ══ QUEUE / LYRICS PANEL ══ */
+
   .queue-panel {
     background: var(--surface); border-left: 1px solid var(--border);
     display: flex; flex-direction: column; overflow: hidden;
   }
 
-  /* Tabs */
+  
   .panel-tabs {
     display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
   }
@@ -256,11 +256,11 @@
   .panel-pane { display: none; flex: 1; overflow: hidden; flex-direction: column; }
   .panel-pane.active { display: flex; }
 
-  /* Queue pane */
+
   .queue-scroll { flex: 1; overflow-y: auto; }
   .queue-next-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); padding: 12px 18px 4px; }
 
-  /* Lyrics pane */
+
   .lyrics-pane { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
   .lyrics-state {
     padding: 60px 20px; text-align: center;
@@ -277,7 +277,7 @@
   .lyric-line.active { color: var(--text); font-size: 15px; font-weight: 500; padding-left: 24px; }
   .lyric-line.passed { color: var(--text-dim); }
 
-  /* Offset bar */
+
   .offset-bar {
     flex-shrink: 0; padding: 10px 16px;
     border-top: 1px solid var(--border);
@@ -2279,6 +2279,155 @@ z-index: 999;
       </div>
     </div>
 
+                 <div class="track-row"
+         data-src="music/Puppet.mp3"
+         data-cover="images/Puppet.jpg"
+         data-title="Puppet"
+         data-artist="John Micheal Howell"
+         data-duration="2:14">
+      <div class="t-cover">
+        <img src="images/Puppet.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Puppet</div>
+        <div class="t-artist">John Micheal Howell</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">2:14</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+                 <div class="track-row"
+         data-src="music/Call Me By Your Name.mp3"
+         data-cover="images/Call Me By Your Name.jpg"
+         data-title="Call Me By Your Name"
+         data-artist="Lil Nas X"
+         data-duration="2:17">
+      <div class="t-cover">
+        <img src="images/Call Me By Your Name.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Call Me By Your Name</div>
+        <div class="t-artist">Lil Nas X</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">2:17</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+                 <div class="track-row"
+         data-src="music/Dream On.mp3"
+         data-cover="images/Dream On.jpg"
+         data-title="Dream On"
+         data-artist="Aerosmith"
+         data-duration="4:25">
+      <div class="t-cover">
+        <img src="images/Dream On.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Dream On</div>
+        <div class="t-artist">Aerosmith</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">4:25</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+                     <div class="track-row"
+         data-src="music/Dracula.mp3"
+         data-cover="images/Dracula.jpg"
+         data-title="Dracula"
+         data-artist="Tame Impala"
+         data-duration="3:25">
+      <div class="t-cover">
+        <img src="images/Dracula.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Dracula</div>
+        <div class="t-artist">Tame Impala</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">3:25</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+        <div class="track-row"
+         data-src="music/Cant the Future Just Wait.mp3"
+         data-cover="images/Cant the Future Just Wait.jpg"
+         data-title="Can´t the Future Just Wait"
+         data-artist="Kaden MacKay"
+         data-duration="3:13">
+      <div class="t-cover">
+        <img src="images/Cant the Future Just Wait.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Can´t the Future Just Wait</div>
+        <div class="t-artist">Kaden MacKay</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">3:13</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+        <div class="track-row"
+         data-src="music/Beat It.mp3"
+         data-cover="images/Beat It.jpg"
+         data-title="Beat It"
+         data-artist="Micheal Jackson"
+         data-duration="4:18">
+      <div class="t-cover">
+        <img src="images/Beat It.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Beat It</div>
+        <div class="t-artist">Micheal Jackson</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">4:18</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+         <div class="track-row"
+         data-src="music/Billie Jean.mp3"
+         data-cover="images/Billie Jean.jpg"
+         data-title="Billie Jean"
+         data-artist="Micheal Jackson"
+         data-duration="4:53">
+      <div class="t-cover">
+        <img src="images/Billie Jean.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cover-fallback" style="display:none">♪</div>
+        <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="t-meta">
+        <div class="t-name">Billie Jean</div>
+        <div class="t-artist">Micheal Jackson</div>
+      </div>
+      <div class="t-right">
+        <span class="t-dur">4:53</span>
+        <button class="q-add-btn">+ Q</button>
+      </div>
+    </div>
+
+
+
     <!--- All Tracks Must Not Cross This Line --->
     <!--- As Per Order of Head Dev & Owner RVEPRTY-->
 
@@ -2677,7 +2826,7 @@ function renderQueue() {
   <div class="nav-icon" data-page="ai.html">AI</div>
   <div class="nav-icon" data-page="proxy.html">Proxy</div>
   <div class="nav-icon" data-page="settings.html">Settings</div>
-  <div class="nav-icon" data-page="support.html">Support Us</div>
+  <div class="nav-icon" data-page="music.html">Music</div>
 </div>
     
 <div class="bottom-sidebar">
