@@ -45,7 +45,7 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* ── STATUS LINE ── */
+   
     .nrg-status-line {
       position: fixed;
       top: 17px;
@@ -59,7 +59,7 @@
     }
     .nrg-status-line span { color: var(--accent); }
 
-    /* ── RAIL (left tab strip) ── */
+    
     .nrg-rail {
       position: fixed;
       left: 0; top: 0; bottom: 0;
@@ -133,7 +133,7 @@
     }
     .node-wrapper:hover .close-node { opacity: 1; }
 
-    /* + new tab button */
+   
     #init-node {
       width: 36px; height: 36px;
       background: none;
@@ -150,7 +150,7 @@
     }
     #init-node:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── VIEWPORT (iframe area) ── */
+
     #nrg-viewport {
       position: fixed;
       left: 52px; right: 0; top: 0; bottom: 0;
@@ -160,7 +160,7 @@
     #nrg-viewport.active { display: block; }
     iframe { width: 100%; height: 100%; border: none; background: #fff; }
 
-    /* ── DASHBOARD (home screen) ── */
+
     #nrg-dashboard {
       position: fixed;
       left: 52px; right: 0; top: 0; bottom: 0;
@@ -173,7 +173,7 @@
       background: var(--bg);
     }
 
-    /* background glow */
+
     #nrg-dashboard::before {
       content: '';
       position: absolute; inset: 0;
@@ -181,7 +181,7 @@
       pointer-events: none;
     }
 
-    /* logo */
+
     .nrg-logo-container {
       text-align: center;
       position: relative;
@@ -198,7 +198,7 @@
       position: relative;
       display: inline-block;
     }
-    /* glitch layer */
+
     .nrg-logo-container h1::before {
       content: attr(data-text);
       position: absolute; top: 0; left: 0;
@@ -228,7 +228,7 @@
       text-transform: uppercase;
     }
 
-    /* input */
+  
     .nrg-input-wrap {
       width: 90%;
       max-width: 520px;
@@ -290,61 +290,23 @@
       text-align: center;
     }
 
-    /* ── NRG SIDEBAR ── */
-    .nrg-sidebar {
-      width: 110px;
-      background: rgba(15,15,15,0.95);
-      border-right: 1px solid rgba(255,255,255,0.05);
-      display: flex; flex-direction: column; align-items: center;
-      padding: 28px 0;
-      position: fixed; top: 0; bottom: 0; left: 52px;
-      transform: translateX(-96px);
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
-    .nrg-sidebar:hover { transform: translateX(0); }
-    .nrg-sidebar .nav-icon {
-      width: 86px; height: 56px; margin: 6px 0;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 12px; cursor: pointer;
-      font-size: 16px; color: #ccc;
-      font-family: var(--sans);
-      transition: background 0.2s ease;
-    }
-    .nrg-sidebar .nav-icon:hover,
-    .nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
 
-    /* ── BOTTOM SIDEBAR ── */
-    .bottom-sidebar {
-      position: fixed; bottom: 0; left: 50%;
-      transform: translate(-50%, 70%);
-      display: flex; gap: 20px; padding: 10px 18px;
-      background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
-      border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
-      transition: transform 0.3s ease; z-index: 999;
-    }
-    .bottom-sidebar:hover { transform: translate(-50%, 0); }
-    .status-card {
-      color: white; background: var(--surface2); padding: 8px 12px;
-      border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;
-    }
   </style>
 </head>
 <body>
 
   <div class="nrg-status-line">proxy — <span>active</span></div>
 
-  <!-- RAIL -->
+
   <nav class="nrg-rail">
     <div id="node-stack"></div>
     <div class="nrg-node" id="init-node" title="New tab">+</div>
   </nav>
 
-  <!-- IFRAME VIEWPORT -->
+
   <div id="nrg-viewport"></div>
 
-  <!-- DASHBOARD -->
+
   <main id="nrg-dashboard">
     <div class="nrg-logo-container">
       <h1 data-text="NRG">NRG</h1>
@@ -364,25 +326,10 @@
     </div>
   </main>
 
-  <!-- NRG SIDEBAR -->
-  <div class="nrg-sidebar">
-    <div class="nav-icon" data-page="index.html">Home</div>
-    <div class="nav-icon" data-page="games.html">Games</div>
-    <div class="nav-icon" data-page="movies.html">Movies</div>
-    <div class="nav-icon" data-page="ai.html">AI</div>
-    <div class="nav-icon" data-page="proxy.html">Proxy</div>
-    <div class="nav-icon" data-page="settings.html">Settings</div>
-    <div class="nav-icon" data-page="support.html">Support Us</div>
-  </div>
 
-  <div class="bottom-sidebar">
-    <div class="status-card" id="time-status">Time: --:--</div>
-    <div class="status-card" id="battery-status">Battery: --%</div>
-    <div class="status-card" id="temperature-status">Temp: -- °C</div>
-    <div class="status-card" id="ping-status">Ping: -- ms</div>
-  </div>
 
-  <!-- ALL JS BELOW IS UNTOUCHED -->
+
+  
   <script>
     const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
     

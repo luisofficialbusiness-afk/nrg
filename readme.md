@@ -1,17 +1,15 @@
-# NRG v1
+# NRG v2
 
-- Abt 46 Games (VM Powered by XCloud)
+- Abt 96 Games (VM Powered by XCloud)
 
-- A somewhat working movie page
+- Movies Page
 
-- AI (Def Not Stolen from GN-Math)
+- AI (will change to gn-math version soon)
 
-- Proxy (Only works on Non-Bunny Links)
+- Proxy (SuperUV)
 
 - Settings
 
-Working on:
-
 - NRG Music
 
-- Fixing Movies
+
