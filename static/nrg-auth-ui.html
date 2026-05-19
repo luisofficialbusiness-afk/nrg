@@ -8,124 +8,68 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a; --surface3: #222;
-  --border: #2a2a2a; --accent: #c50cf9; --accent-dim: rgba(197,12,249,0.08);
+  --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a;
+  --border: #2a2a2a; --accent: #c50cf9;
   --text: #e8e8e8; --text-dim: #666; --text-muted: #3a3a3a;
   --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
   --red: #ff4f4f; --green: #39d98a;
 }
-
 html, body { height: 100%; overflow: hidden; }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; flex-direction: column; }
-
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-.topbar {
-  flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
-  padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface);
-}
+
+.topbar { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-nrg { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; }
 .brand-divider { width: 1px; height: 13px; background: var(--border); }
-.brand-page { font-family: var(--sans); font-size: 13px; color: var(--text-dim); }
+.brand-page { font-size: 13px; color: var(--text-dim); }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 
-#topbar-login-btn {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
-  padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
-  background: none; color: var(--text-dim); cursor: pointer;
-  transition: border-color 0.13s, color 0.13s;
-}
+#topbar-login-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border); background: none; color: var(--text-dim); cursor: pointer; transition: border-color 0.13s, color 0.13s; }
 #topbar-login-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-#topbar-user-btn {
-  display: none; align-items: center; gap: 8px;
-  background: var(--surface2); border: 1px solid var(--border);
-  color: var(--text-dim); font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; padding: 5px 12px 5px 6px; border-radius: 4px;
-  cursor: pointer; position: relative; transition: border-color 0.13s, color 0.13s;
-}
+#topbar-user-btn { display: none; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; padding: 5px 12px 5px 6px; border-radius: 4px; cursor: pointer; position: relative; transition: border-color 0.13s, color 0.13s; }
 #topbar-user-btn:hover { border-color: var(--accent); color: var(--text); }
 #topbar-user-btn.visible { display: flex; }
 
-.tb-avatar {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--accent); display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: #000; font-weight: 700; flex-shrink: 0; overflow: hidden;
-}
+.tb-avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #000; font-weight: 700; flex-shrink: 0; overflow: hidden; }
 .tb-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.tb-dropdown {
-  position: absolute; top: calc(100% + 6px); right: 0;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 4px; min-width: 170px; display: none;
-  flex-direction: column; z-index: 10000;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-}
+.tb-dropdown { position: absolute; top: calc(100% + 6px); right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; min-width: 170px; display: none; flex-direction: column; z-index: 10000; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
 .tb-dropdown.open { display: flex; }
 .tb-dd-header { padding: 10px 14px; border-bottom: 1px solid var(--border); }
-.tb-dd-name { display: block; font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; font-family: var(--sans); }
+.tb-dd-name { display: block; font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
 .tb-dd-email { font-family: var(--mono); font-size: 10px; color: var(--text-dim); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-.tb-dd-item {
-  padding: 9px 14px; border: none; background: none; width: 100%; text-align: left;
-  cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
-  color: var(--text-dim); transition: background 0.1s, color 0.1s;
-}
+.tb-dd-item { padding: 9px 14px; border: none; background: none; width: 100%; text-align: left; cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); transition: background 0.1s, color 0.1s; }
 .tb-dd-item:hover { background: var(--surface2); color: var(--text); }
 .tb-dd-item.danger:hover { color: var(--red); }
 .tb-dd-sep { height: 1px; background: var(--border); margin: 2px 0; }
 
-.main {
-  flex: 1; overflow-y: auto; display: flex;
-  align-items: flex-start; justify-content: center;
-  padding: 48px 24px 80px;
-}
 
-.wrap { width: 100%; max-width: 380px; }
+.main { flex: 1; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px 80px; }
+.wrap { width: 100%; max-width: 420px; }
 
-.auth-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-top: 2px solid var(--accent); border-radius: 5px; padding: 26px;
-}
-.auth-card-title {
-  font-family: var(--mono); font-size: 12px; font-weight: 700;
-  color: var(--text); letter-spacing: 0.06em;
-  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
-}
 
+.auth-card { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 5px; padding: 26px; }
+.auth-card-title { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: 0.06em; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
 .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-.tab {
-  flex: 1; padding: 8px 0; text-align: center;
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
-  color: var(--text-muted); cursor: pointer; text-transform: uppercase;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-  transition: color 0.13s, border-color 0.13s;
-}
+.tab { flex: 1; padding: 8px 0; text-align: center; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.13s, border-color 0.13s; }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
 .pane { display: none; }
 .pane.active { display: block; }
 
 .field { margin-bottom: 13px; }
 .field label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 5px; }
-.field input {
-  width: 100%; background: var(--surface2); border: 1px solid var(--border);
-  color: var(--text); font-family: var(--sans); font-size: 13px;
-  padding: 9px 12px; border-radius: 4px; outline: none; transition: border-color 0.15s;
-}
-.field input:focus { border-color: var(--accent); }
-.field input::placeholder { color: var(--text-muted); }
+.field input, .edit-row input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 13px; padding: 9px 12px; border-radius: 4px; outline: none; transition: border-color 0.15s; }
+.field input { width: 100%; }
+.field input:focus, .edit-row input:focus { border-color: var(--accent); }
+.field input::placeholder, .edit-row input::placeholder { color: var(--text-muted); }
 
-.btn {
-  width: 100%; padding: 10px; border-radius: 4px; border: none;
-  font-family: var(--mono); font-size: 9px; font-weight: 700;
-  letter-spacing: 0.15em; cursor: pointer; margin-bottom: 8px;
-  transition: opacity 0.13s, border-color 0.13s, color 0.13s;
-}
+.btn { width: 100%; padding: 10px; border-radius: 4px; border: none; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.15em; cursor: pointer; margin-bottom: 8px; transition: opacity 0.13s, border-color 0.13s, color 0.13s; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn.primary { background: var(--accent); color: #000; }
 .btn.primary:hover:not(:disabled) { opacity: 0.86; }
@@ -133,85 +77,66 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .btn.ghost:hover { border-color: var(--text-dim); color: var(--text); }
 .btn.danger { background: none; color: var(--red); border: 1px solid var(--border); }
 .btn.danger:hover { border-color: var(--red); }
+.btn.sm { padding: 7px 14px; font-size: 8px; width: auto; margin-bottom: 0; }
 
-.divider {
-  display: flex; align-items: center; gap: 10px; margin: 12px 0;
-  color: var(--text-muted); font-size: 10px; font-family: var(--mono);
-}
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.divider { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: var(--text-muted); font-size: 10px; font-family: var(--mono); }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
 .msg { font-size: 11px; text-align: center; margin-top: 8px; min-height: 16px; font-family: var(--mono); letter-spacing: 0.04em; }
-.msg.error   { color: var(--red); }
+.msg.error { color: var(--red); }
 .msg.success { color: var(--green); }
 
-.forgot {
-  background: none; border: none; cursor: pointer;
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
-  color: var(--text-muted); margin-top: 2px; display: block; transition: color 0.13s;
-}
+.forgot { background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 2px; display: block; transition: color 0.13s; }
 .forgot:hover { color: var(--accent); }
 
-.dashboard {
-  display: none; background: var(--surface);
-  border: 1px solid var(--border); border-top: 2px solid var(--accent);
-  border-radius: 5px; overflow: hidden;
-}
-.dash-header {
-  padding: 28px 26px 24px; border-bottom: 1px solid var(--border);
-  background: var(--surface2);
-}
-.dash-greeting {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
-  color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;
-}
-.dash-name { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+
+.dashboard { display: none; background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 5px; overflow: hidden; }
+
+.dash-header { padding: 24px 26px; border-bottom: 1px solid var(--border); background: var(--surface2); display: flex; align-items: center; gap: 18px; }
+.dash-avatar-wrap { position: relative; flex-shrink: 0; cursor: pointer; }
+.dash-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #000; overflow: hidden; border: 2px solid var(--border); transition: border-color 0.15s; }
+.dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dash-avatar-wrap:hover .dash-avatar { border-color: var(--accent); }
+.dash-avatar-overlay { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.15s; pointer-events: none; font-size: 10px; font-family: var(--mono); color: #fff; letter-spacing: 0.05em; }
+.dash-avatar-wrap:hover .dash-avatar-overlay { opacity: 1; }
+#avatar-file-input { display: none; }
+
+.dash-header-info { flex: 1; min-width: 0; }
+.dash-greeting { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+.dash-name { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dash-email { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
-.dash-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 10px; }
-.dash-section-label {
-  font-family: var(--mono); font-size: 8px; letter-spacing: 0.22em;
-  color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;
-}
+.dash-joined { font-family: var(--mono); font-size: 9px; color: var(--text-muted); margin-top: 4px; }
+
+.dash-stats { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+.dash-stat { padding: 14px 22px; border-right: 1px solid var(--border); }
+.dash-stat:last-child { border-right: none; }
+.dash-stat-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.dash-stat-value { font-size: 22px; font-weight: 500; color: var(--text); }
+.dash-stat-sub { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+
+.dash-body { display: flex; flex-direction: column; }
+.dash-section { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+.dash-section:last-child { border-bottom: none; }
+.dash-section-title { font-family: var(--mono); font-size: 8px; letter-spacing: 0.22em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+
+.edit-row { display: flex; gap: 8px; align-items: center; }
+.edit-row input { flex: 1; }
+
 .dash-links { display: flex; flex-direction: column; gap: 6px; }
-.dash-link {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 13px; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 4px; cursor: pointer; transition: border-color 0.13s; text-decoration: none;
-}
+.dash-link { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: border-color 0.13s; text-decoration: none; }
 .dash-link:hover { border-color: var(--accent); }
 .dash-link-label { font-size: 13px; color: var(--text); }
 .dash-link-arrow { font-size: 12px; color: var(--text-muted); }
 
-.nrg-sidebar {
-  width: 110px; background: rgba(15,15,15,0.95);
-  border-right: 1px solid rgba(255,255,255,0.05);
-  display: flex; flex-direction: column; align-items: center;
-  padding: 28px 0; position: fixed; top: 0; bottom: 0; left: 0;
-  transform: translateX(-96px); transition: transform 0.3s ease; z-index: 999;
-}
-.nrg-sidebar:hover { transform: translateX(0); }
-.nrg-sidebar .nav-icon {
-  width: 86px; height: 56px; margin: 6px 0;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 12px; cursor: pointer; font-size: 16px; color: #ccc;
-  font-family: var(--sans); transition: background 0.2s ease;
-}
-.nrg-sidebar .nav-icon:hover,
-.nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
 
-.bottom-sidebar {
-  position: fixed; bottom: 0; left: 50%;
-  transform: translate(-50%, 70%);
-  display: flex; gap: 20px; padding: 10px 18px;
-  background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
-  border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
-  transition: transform 0.3s ease; z-index: 999;
-}
+.nrg-sidebar { width: 110px; background: rgba(15,15,15,0.95); border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 28px 0; position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-96px); transition: transform 0.3s ease; z-index: 999; }
+.nrg-sidebar:hover { transform: translateX(0); }
+.nrg-sidebar .nav-icon { width: 86px; height: 56px; margin: 6px 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; font-size: 16px; color: #ccc; font-family: var(--sans); transition: background 0.2s ease; }
+.nrg-sidebar .nav-icon:hover, .nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
+
+.bottom-sidebar { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 70%); display: flex; gap: 20px; padding: 10px 18px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; z-index: 999; }
 .bottom-sidebar:hover { transform: translate(-50%, 0); }
-.status-card {
-  color: white; background: var(--surface2); padding: 8px 12px;
-  border-radius: 10px; font-size: 0.75rem;
-  font-family: var(--mono); letter-spacing: 0.04em;
-}
+.status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
 </style>
 </head>
 <body>
@@ -250,7 +175,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         <div class="tab active" data-tab="login">Login</div>
         <div class="tab" data-tab="signup">Sign Up</div>
       </div>
-
       <div class="pane active" id="pane-login">
         <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@example.com" autocomplete="email"></div>
         <div class="field"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
@@ -260,7 +184,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         <button class="btn ghost" id="l-google">continue with Google</button>
         <div class="msg" id="l-msg"></div>
       </div>
-
       <div class="pane" id="pane-signup">
         <div class="field"><label>Display Name</label><input type="text" id="s-name" placeholder="your name" autocomplete="name"></div>
         <div class="field"><label>Email</label><input type="email" id="s-email" placeholder="you@example.com" autocomplete="email"></div>
@@ -272,23 +195,69 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
       </div>
     </div>
 
+
     <div class="dashboard" id="dashboard">
+
       <div class="dash-header">
-        <div class="dash-greeting">welcome back</div>
-        <div class="dash-name" id="dash-name">—</div>
-        <div class="dash-email" id="dash-email">—</div>
+        <div class="dash-avatar-wrap" id="dash-avatar-wrap" title="Change photo">
+          <div class="dash-avatar" id="dash-avatar">?</div>
+          <div class="dash-avatar-overlay">edit</div>
+          <input type="file" id="avatar-file-input" accept="image/png, image/jpeg, image/gif, image/webp">
+        </div>
+        <div class="dash-header-info">
+          <div class="dash-greeting">welcome back</div>
+          <div class="dash-name" id="dash-name">—</div>
+          <div class="dash-email" id="dash-email">—</div>
+          <div class="dash-joined" id="dash-joined">—</div>
+        </div>
       </div>
+
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="dash-stat-label">Time on NRG</div>
+          <div class="dash-stat-value" id="stat-time">0</div>
+          <div class="dash-stat-sub" id="stat-time-sub">minutes</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-label">Member for</div>
+          <div class="dash-stat-value" id="stat-days">—</div>
+          <div class="dash-stat-sub">days</div>
+        </div>
+      </div>
+
       <div class="dash-body">
-        <div>
-          <div class="dash-section-label">Quick links</div>
+
+        <div class="dash-section">
+          <div class="dash-section-title">Display Name</div>
+          <div class="edit-row">
+            <input type="text" id="edit-name" placeholder="new display name">
+            <button class="btn primary sm" id="edit-name-btn">Save</button>
+          </div>
+          <div class="msg" id="edit-name-msg"></div>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-section-title">Change Password</div>
+          <div class="field" style="margin-bottom:8px"><input type="password" id="edit-pass-current" placeholder="current password"></div>
+          <div class="field" style="margin-bottom:8px"><input type="password" id="edit-pass-new" placeholder="new password (min 6)"></div>
+          <button class="btn ghost" id="edit-pass-btn">Update Password</button>
+          <div class="msg" id="edit-pass-msg"></div>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-section-title">Quick Links</div>
           <div class="dash-links">
-            <a class="dash-link" href="/games.html"><span class="dash-link-label">Games</span><span class="dash-link-arrow">→</span></a>
-            <a class="dash-link" href="/music.html"><span class="dash-link-label">Music</span><span class="dash-link-arrow">→</span></a>
-            <a class="dash-link" href="/movies.html"><span class="dash-link-label">Movies</span><span class="dash-link-arrow">→</span></a>
-            <a class="dash-link" href="/settings.html"><span class="dash-link-label">Settings</span><span class="dash-link-arrow">→</span></a>
+            <a class="dash-link" href="/games.html"><span class="dash-link-label">Games</span><span class="dash-link-arrow">&#8594;</span></a>
+            <a class="dash-link" href="/music.html"><span class="dash-link-label">Music</span><span class="dash-link-arrow">&#8594;</span></a>
+            <a class="dash-link" href="/movies.html"><span class="dash-link-label">Movies</span><span class="dash-link-arrow">&#8594;</span></a>
+            <a class="dash-link" href="/settings.html"><span class="dash-link-label">Settings</span><span class="dash-link-arrow">&#8594;</span></a>
           </div>
         </div>
-        <button class="btn danger" id="dash-logout">log out</button>
+
+        <div class="dash-section">
+          <button class="btn danger" id="dash-logout">log out</button>
+        </div>
+
       </div>
     </div>
 
@@ -308,18 +277,21 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 <div class="bottom-sidebar">
   <div class="status-card" id="time-status">Time: --:--</div>
   <div class="status-card" id="battery-status">Battery: --%</div>
-  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="temperature-status">Temp: -- C</div>
   <div class="status-card" id="ping-status">Ping: -- ms</div>
 </div>
 
 <script type="module">
-import { initializeApp }   from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-         signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
-         updateProfile, sendPasswordResetEmail }
-  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+  updateProfile, sendPasswordResetEmail,
+  EmailAuthProvider, reauthenticateWithCredential, updatePassword
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
@@ -333,25 +305,55 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+const $    = id => document.getElementById(id);
 
-const $ = id => document.getElementById(id);
+
+const SESSION_KEY = "nrg_session_start";
+if (!localStorage.getItem(SESSION_KEY)) {
+  localStorage.setItem(SESSION_KEY, Date.now().toString());
+}
+
+function getSessionMinutes() {
+  const start = parseInt(localStorage.getItem(SESSION_KEY));
+  return Math.floor((Date.now() - start) / 60000);
+}
+
+async function flushTime(uid) {
+  const mins = getSessionMinutes();
+  if (mins < 1) return;
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (!snap.exists()) return;
+    const prev = snap.data().timeSpentMinutes || 0;
+    await updateDoc(doc(db, "users", uid), { timeSpentMinutes: prev + mins });
+    localStorage.setItem(SESSION_KEY, Date.now().toString());
+  } catch (e) {  }
+}
+
+window.addEventListener("beforeunload", () => {
+  const user = auth.currentUser;
+  if (user) flushTime(user.uid); 
+});
+
 
 async function createUserDoc(user) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     await setDoc(ref, {
-      uid:         user.uid,
-      email:       user.email,
-      displayName: user.displayName || user.email.split("@")[0],
-      photoURL:    user.photoURL    || null,
-      createdAt:   serverTimestamp(),
-      theme:       localStorage.getItem("nrg_theme_selected") || "midnight",
-      favorites:   [],
-      recentGames: []
+      uid:              user.uid,
+      email:            user.email,
+      displayName:      user.displayName || user.email.split("@")[0],
+      photoURL:         user.photoURL || null,
+      createdAt:        serverTimestamp(),
+      theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
+      favorites:        [],
+      recentGames:      [],
+      timeSpentMinutes: 0
     });
   }
 }
+
 
 function friendlyError(code) {
   const map = {
@@ -364,19 +366,100 @@ function friendlyError(code) {
     "auth/too-many-requests":      "too many attempts — try again later.",
     "auth/popup-closed-by-user":   "popup closed.",
     "auth/network-request-failed": "network error.",
+    "auth/requires-recent-login":  "please log out and log back in first.",
   };
   return map[code] || "something went wrong — try again.";
 }
 
+
 function setMsg(id, text, type) {
-  const el = $(id); if (!el) return;
-  el.textContent = text; el.className = "msg " + type;
+  const el = $(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className   = "msg " + type;
 }
 
-function setLoading(btnId, loading, label) {
-  const btn = $(btnId); if (!btn) return;
-  btn.disabled = loading; btn.textContent = loading ? "..." : label;
+function setLoading(id, loading, label) {
+  const btn = $(id);
+  if (!btn) return;
+  btn.disabled    = loading;
+  btn.textContent = loading ? "..." : label;
 }
+
+function setAvatar(el, photoURL, name) {
+  if (photoURL) {
+    el.innerHTML = '<img src="' + photoURL + '" alt="">';
+  } else {
+    el.textContent = (name || "?")[0].toUpperCase();
+  }
+}
+
+function formatDate(ts) {
+  if (!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function daysSince(ts) {
+  if (!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
+}
+
+function fmtMinutes(m) {
+  if (m < 60)   return { value: m,                 unit: "minutes" };
+  if (m < 1440) return { value: Math.floor(m / 60),  unit: "hours"   };
+  return               { value: Math.floor(m / 1440), unit: "days"    };
+}
+
+
+function showAuthCard() {
+  $("auth-card").style.display = "block";
+  $("dashboard").style.display = "none";
+}
+
+async function showDashboard(user) {
+  $("auth-card").style.display = "none";
+  $("dashboard").style.display = "block";
+
+  const name = user.displayName || user.email.split("@")[0];
+  $("dash-name").textContent  = name;
+  $("dash-email").textContent = user.email;
+  $("edit-name").value        = name;
+  setAvatar($("dash-avatar"), user.photoURL, name);
+
+
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      const d         = snap.data();
+      const totalMins = (d.timeSpentMinutes || 0) + getSessionMinutes();
+      const fmt       = fmtMinutes(totalMins);
+
+      $("dash-joined").textContent   = "joined " + formatDate(d.createdAt);
+      $("stat-days").textContent     = daysSince(d.createdAt);
+      $("stat-time").textContent     = fmt.value;
+      $("stat-time-sub").textContent = fmt.unit;
+    }
+  } catch (e) { }
+}
+
+
+function updateTopbar(user) {
+  if (user) {
+    $("topbar-login-btn").style.display = "none";
+    $("topbar-user-btn").classList.add("visible");
+    const name = user.displayName || user.email.split("@")[0];
+    setAvatar($("tb-avatar"), user.photoURL, name);
+    $("tb-name").textContent     = name;
+    $("tb-dd-name").textContent  = name;
+    $("tb-dd-email").textContent = user.email;
+  } else {
+    $("topbar-login-btn").style.display = "";
+    $("topbar-user-btn").classList.remove("visible");
+  }
+}
+
 
 function switchTab(tab) {
   document.querySelectorAll(".tab").forEach(t =>
@@ -385,57 +468,34 @@ function switchTab(tab) {
   $("pane-login").classList.toggle("active",  tab === "login");
   $("pane-signup").classList.toggle("active", tab === "signup");
   $("auth-title").textContent = tab === "login" ? "Sign in to NRG" : "Create NRG account";
-  ["l-msg","s-msg"].forEach(id => {
-    const el = $(id); if (el) { el.textContent = ""; el.className = "msg"; }
+  ["l-msg", "s-msg"].forEach(id => {
+    const el = $(id);
+    if (el) { el.textContent = ""; el.className = "msg"; }
   });
-}
-
-function showDashboard(user) {
-  $("auth-card").style.display  = "none";
-  $("dashboard").style.display  = "";
-  $("dash-name").textContent    = "Welcome, " + user.email;
-  $("dash-email").textContent   = user.displayName || user.email.split("@")[0];
-}
-
-function showAuthCard() {
-  $("auth-card").style.display  = "";
-  $("dashboard").style.display  = "none";
-}
-
-function updateTopbar(user) {
-  const loginBtn = $("topbar-login-btn");
-  const userBtn  = $("topbar-user-btn");
-  if (user) {
-    loginBtn.style.display = "none";
-    userBtn.classList.add("visible");
-    const name = user.displayName || user.email.split("@")[0];
-    const av   = $("tb-avatar");
-    av.innerHTML = user.photoURL ? `<img src="${user.photoURL}" alt="">` : name[0].toUpperCase();
-    $("tb-name").textContent    = name;
-    $("tb-dd-name").textContent  = name;
-    $("tb-dd-email").textContent = user.email;
-  } else {
-    loginBtn.style.display = "";
-    userBtn.classList.remove("visible");
-  }
 }
 
 document.querySelectorAll(".tab").forEach(t =>
   t.addEventListener("click", () => switchTab(t.dataset.tab))
 );
 
-$("topbar-login-btn").addEventListener("click", () => {
-  $("auth-card").scrollIntoView({ behavior: "smooth" });
-});
+
+$("topbar-login-btn").addEventListener("click", showAuthCard);
 
 $("topbar-user-btn").addEventListener("click", e => {
   e.stopPropagation();
   $("tb-dropdown").classList.toggle("open");
 });
-document.addEventListener("click", () => $("tb-dropdown")?.classList.remove("open"));
+document.addEventListener("click", () => {
+  $("tb-dropdown").classList.remove("open");
+});
+
 $("tb-dd-settings").addEventListener("click", () => { window.location.href = "/settings.html"; });
 $("tb-dd-favs").addEventListener("click",     () => { window.location.href = "/games.html?favorites=1"; });
-$("tb-dd-logout").addEventListener("click",   async () => { await signOut(auth); });
+$("tb-dd-logout").addEventListener("click", async () => {
+  if (auth.currentUser) await flushTime(auth.currentUser.uid);
+  await signOut(auth);
+});
+
 
 $("l-submit").addEventListener("click", async () => {
   const email = $("l-email").value.trim();
@@ -445,13 +505,14 @@ $("l-submit").addEventListener("click", async () => {
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pass);
     await createUserDoc(cred.user);
-  } catch(e) {
+  } catch (e) {
     setMsg("l-msg", friendlyError(e.code), "error");
   } finally {
     setLoading("l-submit", false, "LOGIN");
   }
 });
 $("l-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("l-submit").click(); });
+
 
 $("s-submit").addEventListener("click", async () => {
   const name  = $("s-name").value.trim();
@@ -465,7 +526,7 @@ $("s-submit").addEventListener("click", async () => {
     await updateProfile(cred.user, { displayName: name });
     await createUserDoc(cred.user);
     setMsg("s-msg", "account created!", "success");
-  } catch(e) {
+  } catch (e) {
     setMsg("s-msg", friendlyError(e.code), "error");
   } finally {
     setLoading("s-submit", false, "CREATE ACCOUNT");
@@ -473,16 +534,20 @@ $("s-submit").addEventListener("click", async () => {
 });
 $("s-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("s-submit").click(); });
 
+
 async function handleGoogle(msgId) {
   try {
     const cred = await signInWithPopup(auth, new GoogleAuthProvider());
     await createUserDoc(cred.user);
-  } catch(e) {
-    if (e.code !== "auth/popup-closed-by-user") setMsg(msgId, friendlyError(e.code), "error");
+  } catch (e) {
+    if (e.code !== "auth/popup-closed-by-user") {
+      setMsg(msgId, friendlyError(e.code), "error");
+    }
   }
 }
 $("l-google").addEventListener("click", () => handleGoogle("l-msg"));
 $("s-google").addEventListener("click", () => handleGoogle("s-msg"));
+
 
 $("l-forgot").addEventListener("click", async () => {
   const email = $("l-email").value.trim();
@@ -490,16 +555,107 @@ $("l-forgot").addEventListener("click", async () => {
   try {
     await sendPasswordResetEmail(auth, email);
     setMsg("l-msg", "reset email sent.", "success");
-  } catch(e) { setMsg("l-msg", friendlyError(e.code), "error"); }
+  } catch (e) {
+    setMsg("l-msg", friendlyError(e.code), "error");
+  }
 });
 
-$("dash-logout").addEventListener("click", async () => { await signOut(auth); });
+
+$("dash-avatar-wrap").addEventListener("click", () => $("avatar-file-input").click());
+
+$("avatar-file-input").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file || !auth.currentUser) return;
+  const user = auth.currentUser;
+
+
+  if (file.size > 1024 * 1024) {
+    alert("Image must be under 1MB.");
+    e.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    const dataUrl = ev.target.result;
+
+    $("dash-avatar").innerHTML = '<img src="' + dataUrl + '" alt="">';
+    $("tb-avatar").innerHTML   = '<img src="' + dataUrl + '" alt="">';
+
+    try {
+      await updateProfile(user, { photoURL: dataUrl });
+      await updateDoc(doc(db, "users", user.uid), { photoURL: dataUrl });
+    } catch (err) {
+      console.error("Avatar save failed:", err);
+    }
+  };
+  reader.readAsDataURL(file);
+  e.target.value = "";
+});
+
+
+$("edit-name-btn").addEventListener("click", async () => {
+  const newName = $("edit-name").value.trim();
+  if (!newName) { setMsg("edit-name-msg", "enter a display name.", "error"); return; }
+  const user = auth.currentUser;
+  if (!user) return;
+  setLoading("edit-name-btn", true, "Save");
+  try {
+    await updateProfile(user, { displayName: newName });
+    await updateDoc(doc(db, "users", user.uid), { displayName: newName });
+    $("dash-name").textContent  = newName;
+    $("tb-name").textContent    = newName;
+    $("tb-dd-name").textContent = newName;
+    if (!user.photoURL) {
+      $("dash-avatar").textContent = newName[0].toUpperCase();
+      $("tb-avatar").textContent   = newName[0].toUpperCase();
+    }
+    setMsg("edit-name-msg", "name updated.", "success");
+  } catch (e) {
+    setMsg("edit-name-msg", friendlyError(e.code), "error");
+  } finally {
+    setLoading("edit-name-btn", false, "Save");
+  }
+});
+
+$("edit-pass-btn").addEventListener("click", async () => {
+  const current = $("edit-pass-current").value;
+  const next    = $("edit-pass-new").value;
+  if (!current || !next) { setMsg("edit-pass-msg", "fill in both fields.", "error"); return; }
+  if (next.length < 6)   { setMsg("edit-pass-msg", "new password must be at least 6 characters.", "error"); return; }
+  const user = auth.currentUser;
+  if (!user) return;
+  setLoading("edit-pass-btn", true, "Update Password");
+  try {
+    const credential = EmailAuthProvider.credential(user.email, current);
+    await reauthenticateWithCredential(user, credential);
+    await updatePassword(user, next);
+    $("edit-pass-current").value = "";
+    $("edit-pass-new").value     = "";
+    setMsg("edit-pass-msg", "password updated.", "success");
+  } catch (e) {
+    setMsg("edit-pass-msg", friendlyError(e.code), "error");
+  } finally {
+    setLoading("edit-pass-btn", false, "Update Password");
+  }
+});
+
+
+$("dash-logout").addEventListener("click", async () => {
+  if (auth.currentUser) await flushTime(auth.currentUser.uid);
+  await signOut(auth);
+});
+
 
 onAuthStateChanged(auth, user => {
   updateTopbar(user);
-  if (user) showDashboard(user);
-  else showAuthCard();
+  if (user) {
+    showDashboard(user).catch(console.error);
+  } else {
+    showAuthCard();
+  }
 });
+
 
 document.querySelectorAll(".nrg-sidebar .nav-icon[data-page]").forEach(icon => {
   const cur = window.location.pathname.split("/").pop();
