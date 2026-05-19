@@ -31,7 +31,7 @@ app.use(
 
 // 404 Handler
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "static", "404.html"));
+  res.status(404).sendFile(path.join(__dirname, "static", "proxy404.html"));
 });
 
 server.on("request", (req, res) => {

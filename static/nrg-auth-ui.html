@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | Account</title>
+<script type="module" src="nrg-auth-ui.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a; --surface3: #222;
+  --border: #2a2a2a; --accent: #c50cf9; --accent-dim: rgba(197,12,249,0.08);
+  --text: #e8e8e8; --text-dim: #666; --text-muted: #3a3a3a;
+  --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  --red: #ff4f4f; --green: #39d98a;
+}
+
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; flex-direction: column; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.topbar {
+  flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-nrg { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; }
+.brand-divider { width: 1px; height: 13px; background: var(--border); }
+.brand-page { font-family: var(--sans); font-size: 13px; color: var(--text-dim); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+
+#topbar-login-btn {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em;
+  padding: 6px 14px; border-radius: 4px;
+  border: 1px solid var(--border);
+  background: none; color: var(--text-dim);
+  cursor: pointer; transition: border-color 0.13s, color 0.13s;
+}
+#topbar-login-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+
+#topbar-user-btn {
+  display: none; align-items: center; gap: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-dim); font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.1em; padding: 5px 12px 5px 6px; border-radius: 4px;
+  cursor: pointer; position: relative; transition: border-color 0.13s, color 0.13s;
+}
+#topbar-user-btn:hover { border-color: var(--accent); color: var(--text); }
+#topbar-user-btn.visible { display: flex; }
+
+.tb-avatar {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #000; font-weight: 700; flex-shrink: 0; overflow: hidden;
+}
+.tb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+
+.tb-dropdown {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 4px; min-width: 170px;
+  display: none; flex-direction: column; z-index: 10000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.tb-dropdown.open { display: flex; }
+.tb-dd-header { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.tb-dd-name {
+  display: block; font-size: 12px; font-weight: 500;
+  color: var(--text); margin-bottom: 2px; font-family: var(--sans);
+}
+.tb-dd-email {
+  font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+  display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;
+}
+.tb-dd-item {
+  padding: 9px 14px; border: none; background: none; width: 100%;
+  text-align: left; cursor: pointer;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  color: var(--text-dim); transition: background 0.1s, color 0.1s;
+}
+.tb-dd-item:hover { background: var(--surface2); color: var(--text); }
+.tb-dd-item.danger:hover { color: var(--red); }
+.tb-dd-sep { height: 1px; background: var(--border); margin: 2px 0; }
+
+.main {
+  flex: 1; overflow-y: auto; display: flex;
+  align-items: flex-start; justify-content: center;
+  padding: 48px 24px 80px;
+}
+
+.wrap { width: 100%; max-width: 380px; }
+
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 5px;
+  padding: 26px;
+}
+
+.auth-card-title {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  color: var(--text); letter-spacing: 0.06em;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.tab {
+  flex: 1; padding: 8px 0; text-align: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+  color: var(--text-muted); cursor: pointer; text-transform: uppercase;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.13s, border-color 0.13s;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.pane { display: none; }
+.pane.active { display: block; }
+
+.field { margin-bottom: 13px; }
+.field label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 5px; }
+.field input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--sans); font-size: 13px;
+  padding: 9px 12px; border-radius: 4px; outline: none; transition: border-color 0.15s;
+}
+.field input:focus { border-color: var(--accent); }
+.field input::placeholder { color: var(--text-muted); }
+
+.btn {
+  width: 100%; padding: 10px; border-radius: 4px; border: none;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.15em; cursor: pointer; margin-bottom: 8px;
+  transition: opacity 0.13s, border-color 0.13s, color 0.13s;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.primary { background: var(--accent); color: #000; }
+.btn.primary:hover:not(:disabled) { opacity: 0.86; }
+.btn.ghost { background: none; color: var(--text-dim); border: 1px solid var(--border); }
+.btn.ghost:hover { border-color: var(--text-dim); color: var(--text); }
+.btn.danger { background: none; color: var(--red); border: 1px solid var(--border); }
+.btn.danger:hover { border-color: var(--red); }
+
+.divider {
+  display: flex; align-items: center; gap: 10px; margin: 12px 0;
+  color: var(--text-muted); font-size: 10px; font-family: var(--mono);
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.msg {
+  font-size: 11px; text-align: center; margin-top: 8px; min-height: 16px;
+  font-family: var(--mono); letter-spacing: 0.04em;
+}
+.msg.error   { color: var(--red); }
+.msg.success { color: var(--green); }
+
+.forgot {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  color: var(--text-muted); margin-top: 2px; display: block; transition: color 0.13s;
+}
+.forgot:hover { color: var(--accent); }
+
+
+.dashboard {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dash-header {
+  padding: 28px 26px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.dash-greeting {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;
+}
+.dash-name { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.dash-email { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+
+.dash-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 10px; }
+
+.dash-section-label {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.22em;
+  color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;
+}
+
+.dash-links { display: flex; flex-direction: column; gap: 6px; }
+.dash-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 13px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 4px; cursor: pointer; transition: border-color 0.13s;
+  text-decoration: none;
+}
+.dash-link:hover { border-color: var(--accent); }
+.dash-link-label { font-size: 13px; color: var(--text); }
+.dash-link-arrow { font-size: 12px; color: var(--text-muted); }
+
+.nrg-sidebar {
+  width: 110px; background: rgba(15,15,15,0.95);
+  border-right: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 28px 0; position: fixed; top: 0; bottom: 0; left: 0;
+  transform: translateX(-96px); transition: transform 0.3s ease; z-index: 999;
+}
+.nrg-sidebar:hover { transform: translateX(0); }
+.nrg-sidebar .nav-icon {
+  width: 86px; height: 56px; margin: 6px 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; cursor: pointer; font-size: 16px; color: #ccc;
+  font-family: var(--sans); transition: background 0.2s ease;
+}
+.nrg-sidebar .nav-icon:hover,
+.nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
+
+.bottom-sidebar {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translate(-50%, 70%);
+  display: flex; gap: 20px; padding: 10px 18px;
+  background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
+  border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+  transition: transform 0.3s ease; z-index: 999;
+}
+.bottom-sidebar:hover { transform: translate(-50%, 0); }
+.status-card {
+  color: white; background: var(--surface2); padding: 8px 12px;
+  border-radius: 10px; font-size: 0.75rem;
+  font-family: var(--mono); letter-spacing: 0.04em;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">NRG</span>
+    <div class="brand-divider"></div>
+    <span class="brand-page">Account</span>
+  </div>
+  <div class="topbar-right" id="topbar-right">
+
+
+
+
+    <div id="topbar-user-btn">
+      <div class="tb-avatar" id="tb-avatar">?</div>
+      <span id="tb-name">user</span>
+      <div class="tb-dropdown" id="tb-dropdown">
+        <div class="tb-dd-header">
+          <strong class="tb-dd-name" id="tb-dd-name">—</strong>
+          <span class="tb-dd-email" id="tb-dd-email">—</span>
+        </div>
+        <button class="tb-dd-item" id="tb-dd-account">account</button>
+        <button class="tb-dd-item" id="tb-dd-settings">settings</button>
+        <button class="tb-dd-item" id="tb-dd-favs">favorites</button>
+        <div class="tb-dd-sep"></div>
+        <button class="tb-dd-item danger" id="tb-dd-logout">log out</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="main">
+  <div class="wrap">
+
+
+    <div class="auth-card" id="auth-card">
+      <div class="auth-card-title" id="auth-title">Sign in to NRG</div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="login">Login</div>
+        <div class="tab" data-tab="signup">Sign Up</div>
+      </div>
+
+
+      <div class="pane active" id="pane-login">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="l-email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn primary" id="l-submit">LOGIN</button>
+        <button class="forgot" id="l-forgot">forgot password?</button>
+        <div class="divider">or</div>
+        <button class="btn ghost" id="l-google">continue with Google</button>
+        <div class="msg" id="l-msg"></div>
+      </div>
+
+
+      <div class="pane" id="pane-signup">
+        <div class="field">
+          <label>Display Name</label>
+          <input type="text" id="s-name" placeholder="your name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="s-email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="s-pass" placeholder="min 6 characters" autocomplete="new-password">
+        </div>
+        <button class="btn primary" id="s-submit">CREATE ACCOUNT</button>
+        <div class="divider">or</div>
+        <button class="btn ghost" id="s-google">continue with Google</button>
+        <div class="msg" id="s-msg"></div>
+      </div>
+    </div>
+
+
+    <div class="dashboard" id="dashboard">
+      <div class="dash-header">
+        <div class="dash-greeting">Welcome back</div>
+        <div class="dash-name" id="dash-name">—</div>
+        <div class="dash-email" id="dash-email">—</div>
+      </div>
+      <div class="dash-body">
+        <div>
+          <div class="dash-section-label">Quick links</div>
+          <div class="dash-links">
+            <a class="dash-link" href="/static/games.html">
+              <span class="dash-link-label">Games</span>
+              <span class="dash-link-arrow">→</span>
+            </a>
+            <a class="dash-link" href="/static/music.html">
+              <span class="dash-link-label">Music</span>
+              <span class="dash-link-arrow">→</span>
+            </a>
+            <a class="dash-link" href="/static/movies.html">
+              <span class="dash-link-label">Movies</span>
+              <span class="dash-link-arrow">→</span>
+            </a>
+            <a class="dash-link" href="/static/settings.html">
+              <span class="dash-link-label">Settings</span>
+              <span class="dash-link-arrow">→</span>
+            </a>
+          </div>
+        </div>
+        <button class="btn danger" id="dash-logout">log out</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nrg-sidebar">
+  <div class="nav-icon" data-page="index.html">Home</div>
+  <div class="nav-icon" data-page="games.html">Games</div>
+  <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="music.html">Music</div>
+  <div class="nav-icon" data-page="ai.html">AI</div>
+  <div class="nav-icon" data-page="proxy.html">Proxy</div>
+  <div class="nav-icon" data-page="settings.html">Settings</div>
+
+  <div class="nav-icon" id="sidebar-account-btn">Account</div>
+</div>
+
+<div class="bottom-sidebar">
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
+</div>
+
+<script type="module">
+import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword,
+         signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
+         updateProfile, sendPasswordResetEmail }
+  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { auth, db } from "./nrg-auth-ui.js";
+
+const $ = id => document.getElementById(id);
+
+
+async function createUserDoc(user) {
+  const ref  = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      uid:         user.uid,
+      email:       user.email,
+      displayName: user.displayName || user.email.split("@")[0],
+      photoURL:    user.photoURL    || null,
+      createdAt:   serverTimestamp(),
+      theme:       localStorage.getItem("nrg_theme_selected") || "midnight",
+      favorites:   [],
+      recentGames: []
+    });
+  }
+}
+
+
+function friendlyError(code) {
+  const map = {
+    "auth/invalid-email":          "invalid email address.",
+    "auth/user-not-found":         "no account with that email.",
+    "auth/wrong-password":         "incorrect password.",
+    "auth/invalid-credential":     "incorrect email or password.",
+    "auth/email-already-in-use":   "email already registered — try logging in.",
+    "auth/weak-password":          "password must be at least 6 characters.",
+    "auth/too-many-requests":      "too many attempts — try again later.",
+    "auth/popup-closed-by-user":   "popup closed.",
+    "auth/network-request-failed": "network error.",
+  };
+  return map[code] || "something went wrong — try again.";
+}
+
+
+function setMsg(id, text, type) {
+  const el = $(id); if (!el) return;
+  el.textContent = text; el.className = "msg " + type;
+}
+function setLoading(btnId, loading, label) {
+  const btn = $(btnId); if (!btn) return;
+  btn.disabled = loading; btn.textContent = loading ? "..." : label;
+}
+
+
+function showDashboard(user) {
+  $("auth-card").style.display = "none";
+  $("dashboard").style.display = "";
+  const name = user.displayName || user.email.split("@")[0];
+  $("dash-name").textContent  = name;
+  $("dash-email").textContent = user.email;
+}
+function showAuthCard() {
+  $("auth-card").style.display = "";
+  $("dashboard").style.display = "none";
+}
+
+
+function updateTopbar(user) {
+  const loginBtn = $("topbar-login-btn");
+  const userBtn  = $("topbar-user-btn");
+  if (user) {
+    loginBtn.style.display = "none";
+    userBtn.classList.add("visible");
+    const av   = $("tb-avatar");
+    const name = user.displayName || user.email.split("@")[0];
+    av.innerHTML = user.photoURL
+      ? `<img src="${user.photoURL}" alt="">`
+      : name[0].toUpperCase();
+    $("tb-name").textContent     = name;
+    $("tb-dd-name").textContent  = name;
+    $("tb-dd-email").textContent = user.email;
+  } else {
+    loginBtn.style.display = "";
+    userBtn.classList.remove("visible");
+  }
+}
+
+
+
+function scrollToPanel() {
+  const user = auth.currentUser;
+  if (user) {
+    showDashboard(user);
+  } else {
+    showAuthCard();
+  }
+
+  const main = document.querySelector(".main");
+  if (main) main.scrollTop = 0;
+}
+
+$("topbar-login-btn").addEventListener("click", () => {
+  showAuthCard();
+  const main = document.querySelector(".main");
+  if (main) main.scrollTop = 0;
+});
+
+
+$("topbar-user-btn").addEventListener("click", e => {
+  e.stopPropagation();
+  $("tb-dropdown").classList.toggle("open");
+});
+document.addEventListener("click", () => $("tb-dropdown")?.classList.remove("open"));
+
+
+$("tb-dd-account").addEventListener("click", () => {
+  scrollToPanel();
+  $("tb-dropdown").classList.remove("open");
+});
+$("tb-dd-settings").addEventListener("click", () => { window.location.href = "/static/settings.html"; });
+$("tb-dd-favs").addEventListener("click",     () => { window.location.href = "/static/games.html?favorites=1"; });
+$("tb-dd-logout").addEventListener("click",   async () => { await signOut(auth); });
+
+
+$("sidebar-account-btn").addEventListener("click", scrollToPanel);
+
+
+function switchTab(tab) {
+  document.querySelectorAll(".tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === tab)
+  );
+  $("pane-login").classList.toggle("active",  tab === "login");
+  $("pane-signup").classList.toggle("active", tab === "signup");
+  $("auth-title").textContent = tab === "login" ? "Sign in to NRG" : "Create NRG account";
+  ["l-msg","s-msg"].forEach(id => { const el=$(id); if(el){el.textContent="";el.className="msg";} });
+}
+document.querySelectorAll(".tab").forEach(t =>
+  t.addEventListener("click", () => switchTab(t.dataset.tab))
+);
+
+
+$("l-submit").addEventListener("click", async () => {
+  const email = $("l-email").value.trim();
+  const pass  = $("l-pass").value;
+  if (!email || !pass) { setMsg("l-msg", "fill in all fields.", "error"); return; }
+  setLoading("l-submit", true, "LOGIN");
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    await createUserDoc(cred.user);
+  } catch(e) {
+    setMsg("l-msg", friendlyError(e.code), "error");
+  } finally {
+    setLoading("l-submit", false, "LOGIN");
+  }
+});
+$("l-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("l-submit").click(); });
+
+
+$("s-submit").addEventListener("click", async () => {
+  const name  = $("s-name").value.trim();
+  const email = $("s-email").value.trim();
+  const pass  = $("s-pass").value;
+  if (!name || !email || !pass) { setMsg("s-msg", "fill in all fields.", "error"); return; }
+  if (pass.length < 6) { setMsg("s-msg", "password must be at least 6 characters.", "error"); return; }
+  setLoading("s-submit", true, "CREATE ACCOUNT");
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, { displayName: name });
+    await createUserDoc(cred.user);
+    setMsg("s-msg", "account created!", "success");
+  } catch(e) {
+    setMsg("s-msg", friendlyError(e.code), "error");
+  } finally {
+    setLoading("s-submit", false, "CREATE ACCOUNT");
+  }
+});
+$("s-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("s-submit").click(); });
+
+
+async function handleGoogle(msgId) {
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    await createUserDoc(cred.user);
+  } catch(e) {
+    if (e.code !== "auth/popup-closed-by-user") setMsg(msgId, friendlyError(e.code), "error");
+  }
+}
+$("l-google").addEventListener("click", () => handleGoogle("l-msg"));
+$("s-google").addEventListener("click", () => handleGoogle("s-msg"));
+
+
+$("l-forgot").addEventListener("click", async () => {
+  const email = $("l-email").value.trim();
+  if (!email) { setMsg("l-msg", "enter your email above first.", "error"); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    setMsg("l-msg", "reset email sent.", "success");
+  } catch(e) { setMsg("l-msg", friendlyError(e.code), "error"); }
+});
+
+
+$("dash-logout").addEventListener("click", async () => { await signOut(auth); });
+
+
+onAuthStateChanged(auth, user => {
+  updateTopbar(user);
+  if (user) showDashboard(user);
+  else showAuthCard();
+});
+
+
+document.querySelectorAll(".nrg-sidebar .nav-icon[data-page]").forEach(icon => {
+  const cur = window.location.pathname.split("/").pop();
+  if (icon.dataset.page === cur) icon.classList.add("active");
+  icon.addEventListener("click", () => { window.location.href = "/static/" + icon.dataset.page; });
+});
+</script>
+
+<script src="sidebar-logic.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

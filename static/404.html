@@ -1,92 +1,380 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>ERR</title>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-		/>
-		<style>
-			:root{--primary:#e95420;--primary-hover:#cc3a0b;--primary-light:rgba(233, 84, 32, 0.1);--background:#121212;--sidebar-bg:#1a1a1a;--surface:#242424;--surface-elevated:#2a2a2a;--text-primary:#ffffff;--text-secondary:#e0e0e0;--text-tertiary:#a0a0a0;--border:rgba(255, 255, 255, 0.1);--shadow:0 8px 24px rgba(0, 0, 0, 0.2);--transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);--verified-blue:#4a90e2}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background-color:var(--background);color:var(--text-primary);position:relative;overflow-x:hidden;overflow-y:auto;padding:20px}body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgb(233 84 32 / .05) 1px,transparent 1px),linear-gradient(90deg,rgb(233 84 32 / .05) 1px,transparent 1px);background-size:40px 40px;z-index:-2}body::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at center,rgb(18 18 18 / .4) 0%,rgb(18 18 18 / .95) 70%);z-index:-1}.container{width:100%;max-width:380px;max-height:calc(100vh - 40px);overflow-y:auto;background-color:var(--surface);border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;z-index:1;animation:float 6s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}h1{color:var(--primary);margin-bottom:1.5rem;text-align:center;font-weight:700;font-size:28px}p{color:var(--text-secondary);text-align:center;margin-bottom:1rem;line-height:1.6}a{color:var(--primary);text-decoration:none;transition:var(--transition)}a:hover{color:var(--primary-hover);text-decoration:underline}.error-code{font-size:clamp(4rem, 12vw, 8rem);font-weight:700;line-height:1;margin-bottom:1rem;color:var(--primary)}.error-title{font-size:clamp(1.2rem, 4vw, 2rem);font-weight:600;margin-bottom:1.5rem;color:var(--text-primary);text-align:center}.error-message{font-size:clamp(0.9rem, 2vw, 1.1rem);margin-bottom:2rem;color:var(--text-secondary);text-align:center}.home-link{color:var(--primary);text-decoration:none;font-weight:500;transition:var(--transition);font-size:1.1rem;display:inline-block;margin-bottom:2rem;position:relative}.home-link:hover{color:var(--primary-hover)}.button{background-color:var(--primary);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:var(--transition);box-shadow:0 4px 20px rgb(233 84 32 / .3);margin-top:1rem;width:100%}.button:hover{background-color:var(--primary-hover);transform:translateY(-2px);box-shadow:0 6px 25px rgb(233 84 32 / .4)}.hidden{display:none}.dots{display:flex;justify-content:center;margin-top:1.5rem}.dot{width:10px;height:10px;margin:0 5px;background-color:var(--primary);border-radius:50%;animation:dot-pulse 1.5s infinite ease-in-out}.dot:nth-child(2){animation-delay:0.2s}.dot:nth-child(3){animation-delay:0.4s}@keyframes dot-pulse{0%,100%{transform:scale(.8);opacity:.5}50%{transform:scale(1.2);opacity:1}}
-		</style>
-		<iframe src="/api/analytics/loadme" style="display: none"></iframe>
-	</head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | 404</title>
+<script src="index.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-	<body>
-		<div class="container">
-			<!-- 404 Error Content -->
-			<div id="error-content" class="animate__animated animate__fadeIn">
-				<h1 class="error-code">404</h1>
-				<h2 class="error-title">Page Not Found</h2>
-				<p class="error-message">
-					Welp, Idk what happen, did you go to the right page?
-				</p>
-				<center>
-					<a href="javascript:void(0)" onclick="gohome()" class="home-link"
-						>Return to Home</a
-					>
-				</center>
-			</div>
-			<!-- Proxy Loading Content -->
-			<div id="proxy-content" class="animate__animated animate__fadeIn hidden">
-				<center>
-					<h1 class="error-code">;)</h1>
-					<h2 class="error-title">Waking up server.</h2>
-					<p class="error-message">
-						Hit the button below. If you get an error clear your cache and
-						cookies!
-					</p>
-					<form id="regform">
-						<button
-							id="uv-register-sw"
-							class="button"
-							type="submit"
-							onclick="window.location.reload(1)"
-						>
-							Start up server
-						</button>
-					</form>
-				</center>
-				<div class="dots">
-					<div class="dot"></div>
-					<div class="dot"></div>
-					<div class="dot"></div>
-				</div>
-			</div>
-		</div>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111;
+  --surface2: #1a1a1a;
+  --border: #2a2a2a;
+  --accent: #c50cf9;
+  --accent-dim: rgba(197,12,249,0.08);
+  --text: #e8e8e8;
+  --text-dim: #666;
+  --text-muted: #3a3a3a;
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
 
-		<script>
-			if (
-				window.location.href.includes("/service/") ||
-				window.location.href.includes("/go/") ||
-				window.location.href.includes("/tiny/")
-			) {
-				document.getElementById("error-content").classList.add("hidden");
-				document.getElementById("proxy-content").classList.remove("hidden");
-			}
-			function gohome() {
-				window.location.href = window.location.origin;
-			}
+html, body { height: 100%; overflow: hidden; }
 
-			//shitty fix for scramjet
-			setTimeout(() => {
-				window.location.reload(1);
-			}, 1500);
-		</script>
-		<script src="/register-sw.js"></script>
-		<script src="/uv/uv.bundle.js" defer></script>
-		<script src="/uv/uv.config.js" defer></script>
-		<script src="/uv/bare.bundle.js" defer></script>
-		<script src="/uv/uv.init.js" defer></script>
-		<script src="/register-uv.js" defer></script>
-		<script src="/search.js" defer></script>
-		<script src="/scripts/load.js" defer></script>
-		<script src="/error.js" defer></script>
-	</body>
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+canvas#bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+  max-width: 520px;
+  padding: 0 24px;
+}
+
+.err-code {
+  font-family: var(--mono);
+  font-size: clamp(5rem, 15vw, 9rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+.err-code span {
+  color: var(--accent);
+}
+
+.err-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+.err-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.err-excuse-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.err-excuse {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.65;
+  font-style: italic;
+  transition: opacity 0.2s;
+}
+
+.err-excuse.fade { opacity: 0; }
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 9px 18px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: none;
+  color: var(--text-dim);
+  transition: border-color 0.13s, color 0.13s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover { border-color: var(--text-dim); color: var(--text); }
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+.btn.primary:hover { opacity: 0.86; }
+
+.btn-excuse {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.13s;
+  margin-top: 2px;
+}
+.btn-excuse:hover { color: var(--accent); }
+
+.err-path {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 20px;
+  letter-spacing: 0.05em;
+}
+
+.nrg-sidebar {
+  width: 110px;
+  background: rgba(15,15,15,0.95);
+  border-right: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 28px 0;
+  position: fixed; top: 0; bottom: 0; left: 0;
+  transform: translateX(-96px);
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+.nrg-sidebar:hover { transform: translateX(0); }
+.nrg-sidebar .nav-icon {
+  width: 86px; height: 56px; margin: 6px 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; cursor: pointer;
+  font-size: 16px; color: #ccc;
+  font-family: var(--sans);
+  transition: background 0.2s ease;
+}
+.nrg-sidebar .nav-icon:hover,
+.nrg-sidebar .nav-icon.active {
+  background: rgba(255,255,255,0.08); color: white;
+}
+
+.bottom-sidebar {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translate(-50%, 70%);
+  display: flex; gap: 20px; padding: 10px 18px;
+  background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
+  border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+  transition: transform 0.3s ease; z-index: 999;
+}
+.bottom-sidebar:hover { transform: translate(-50%, 0); }
+.status-card {
+  color: white; background: var(--surface2); padding: 8px 12px;
+  border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="content">
+  <div class="err-code">4<span>0</span>4</div>
+  <div class="err-rule"></div>
+  <div class="err-label">page not found</div>
+
+  <div class="err-excuse-wrap">
+    <div class="err-excuse" id="excuse">loading excuse...</div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn primary" href="index.html">take me home</a>
+    <a class="btn" href="javascript:history.back()">go back</a>
+    <a class="btn" href="games.html">play a game</a>
+  </div>
+
+  <button class="btn-excuse" onclick="newExcuse()">another excuse →</button>
+
+  <div class="err-path" id="err-path"></div>
+</div>
+
+<div class="nrg-sidebar">
+  <div class="nav-icon" data-page="index.html">Home</div>
+  <div class="nav-icon" data-page="games.html">Games</div>
+  <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="music.html">Music</div>
+  <div class="nav-icon" data-page="ai.html">AI</div>
+  <div class="nav-icon" data-page="proxy.html">Proxy</div>
+  <div class="nav-icon" data-page="settings.html">Settings</div>
+</div>
+
+<div class="bottom-sidebar">
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- °C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
+</div>
+
+<script>
+const EXCUSES = [
+  "rveprty deleted it by accident and blamed the old dev.",
+  "the page exists, it's just really really shy.",
+  "we outsourced this page to an intern who quit on day one.",
+  "the link worked fine until you clicked it.",
+  "our old dev dipped the internet and took the page with him.",
+  "it's in maintenance. we don't know what that means either.",
+  "this page was removed for being too good.",
+  "some kid found a bug here so we yeeted the whole thing.",
+  "the page is currently playing a game on our games page.",
+  "we were going to build this but got distracted watching movies.",
+  "404 means it's a feature, not a bug. trust.",
+  "rveprty is looking for a dev if you want to fix this.",
+  "we moved it. we just forgot where.",
+  "the page exists in a parallel NRG that's slightly better than ours.",
+  "someone tried to DMCA us and took the page down with them.",
+  "it's not a bug, it's a mystery. like a game but less fun.",
+  "the page was last seen heading toward the proxy. suspicious.",
+  "we asked NRG AI where it went. it said 'undefined'.",
+  "the URL is wrong. or the page is. honestly could be either.",
+  "whoever added this link to the sidebar has been fired.",
+  "it's giving 404 realness and we respect that.",
+  "we're looking for devs rn, so nobody built this page yet.",
+  "the page requested a day off. we said no. it left anyway.",
+  "loading... just kidding. it's gone.",
+  "the page is fine. your URL is the problem, bestie.",
+  "currently in a meeting about why it's 404. meeting has been 3 hours.",
+  "rveprty typed the filename wrong. again.",
+  "we legally cannot tell you where this page went.",
+  "it escaped through the proxy. we can't track it.",
+  "technically this is the support page now. you're welcome.",
+];
+
+let lastIdx = -1;
+
+function newExcuse() {
+  const el = document.getElementById('excuse');
+  el.classList.add('fade');
+  setTimeout(() => {
+    let idx;
+    do { idx = Math.floor(Math.random() * EXCUSES.length); } while (idx === lastIdx);
+    lastIdx = idx;
+    el.textContent = '"' + EXCUSES[idx] + '"';
+    el.classList.remove('fade');
+  }, 200);
+}
+
+newExcuse();
+
+const path = window.location.pathname;
+if (path && path !== '/404.html') {
+  document.getElementById('err-path').textContent = 'tried: ' + path;
+}
+
+document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(icon => {
+  const cur = window.location.pathname.split('/').pop();
+  if (icon.dataset.page === cur) icon.classList.add('active');
+  icon.addEventListener('click', () => { if (icon.dataset.page) window.location.href = '/' + icon.dataset.page; });
+});
+
+(function() {
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  const COLS = 28, ROWS = 20, RADIUS = 160, MAX_H = 24, SPEED = 0.1;
+  let W, H, cellW, cellH;
+  let mouse = { x: -999, y: -999 };
+  let cells = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cellW = W / COLS; cellH = H / ROWS;
+    if (!cells.length) {
+      for (let r = 0; r < ROWS; r++) {
+        cells[r] = [];
+        for (let c = 0; c < COLS; c++) cells[r][c] = { h: 0, target: 0 };
+      }
+    }
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+  function hexToRgb(hex) {
+    hex = hex.replace('#','');
+    const n = parseInt(hex,16);
+    return [(n>>16)&255,(n>>8)&255,n&255];
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c50cf9';
+    const [r,g,b] = hexToRgb(accent);
+
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const cx = (col + 0.5) * cellW;
+        const cy = (row + 0.5) * cellH;
+        const dx = cx - mouse.x, dy = cy - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const cell = cells[row][col];
+        cell.target = dist < RADIUS ? MAX_H * Math.pow(1 - dist / RADIUS, 1.8) : 0;
+        cell.h += (cell.target - cell.h) * SPEED;
+        const h = cell.h, t = h / MAX_H;
+        if (h < 0.5) {
+          ctx.fillStyle = `rgba(${r},${g},${b},0.05)`;
+          ctx.fillRect(cx - 1, cy - 1, 2, 2);
+          continue;
+        }
+        const barW = Math.max(1, cellW * 0.18);
+        const x = cx - barW / 2, y = cy - h / 2;
+        const grad = ctx.createLinearGradient(x, y + h, x, y);
+        grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},${0.15 + t * 0.3})`);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(x, y, barW, h, 1);
+        ctx.fill();
+        ctx.fillStyle = `rgba(${r},${g},${b},${0.07 + t * 0.13})`;
+        ctx.fillRect(cx - 1, cy - 1, 2, 2);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<script src="sidebar-logic.js"></script>
+</body>
 </html>
