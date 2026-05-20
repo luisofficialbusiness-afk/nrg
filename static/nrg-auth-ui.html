@@ -147,15 +147,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .bottom-sidebar { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 70%); display: flex; gap: 20px; padding: 10px 18px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; z-index: 999; }
 .bottom-sidebar:hover { transform: translate(-50%, 0); }
 
-/* bio */
+
 .bio-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 13px; padding: 9px 12px; border-radius: 4px; outline: none; resize: vertical; min-height: 72px; transition: border-color 0.15s; box-sizing: border-box; }
 .bio-textarea:focus { border-color: var(--accent); }
 .bio-textarea::placeholder { color: var(--text-muted); }
 
-/* username tag in header */
 .dash-username { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-top: 2px; }
 
-/* delete confirmation modal */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 99999; opacity: 0; pointer-events: none; transition: opacity 0.18s; }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
 .modal-box { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--red); border-radius: 5px; padding: 24px; width: 90%; max-width: 340px; }
@@ -197,7 +195,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .inv-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
 
 
-/* username color */
+
 .dash-username.uc-purple  { color: #c50cf9; }
 .dash-username.uc-blue    { color: #4f9cf9; }
 .dash-username.uc-gold    { color: #f5c518; }
@@ -206,14 +204,14 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .dash-username.uc-rainbow { background: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-spin 3s linear infinite; }
 @keyframes rainbow-spin { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
 
-/* title tag under name */
+
 .dash-title-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 0.15em; padding: 2px 8px; border-radius: 2px; margin-top: 3px; }
 .dash-title-tag.rarity-common    { color: #666; background: rgba(255,255,255,0.05); border: 1px solid #333; }
 .dash-title-tag.rarity-rare      { color: #4f9cf9; background: rgba(79,156,249,0.1); border: 1px solid rgba(79,156,249,0.25); }
 .dash-title-tag.rarity-epic      { color: #c50cf9; background: rgba(197,12,249,0.1); border: 1px solid rgba(197,12,249,0.25); }
 .dash-title-tag.rarity-legendary { color: #f5c518; background: rgba(245,197,24,0.12); border: 1px solid rgba(245,197,24,0.3); }
 
-/* pfp deco rings */
+
 .pfp-deco-glow      { box-shadow: 0 0 0 2px #c50cf9, 0 0 14px #c50cf9; animation: pulse-glow 2s ease-in-out infinite; }
 .pfp-deco-gold-ring { border: 3px solid #f5c518 !important; box-shadow: 0 0 10px rgba(245,197,24,0.4); }
 .pfp-deco-fire-ring { border: 3px solid #f50 !important; animation: fire-glow 1.5s ease-in-out infinite; }
@@ -713,7 +711,7 @@ function renderDashFavs(favs) {
   }
   empty.style.display = "none";
   favs.forEach(name => {
-    const imgSrc = "images/" + name + ".png"; // matches games.html naming convention
+    const imgSrc = "images/" + name + ".png"; 
     const card   = document.createElement("div");
     card.className = "dash-fav-card";
     card.innerHTML =
@@ -736,14 +734,12 @@ function renderDashFavs(favs) {
 async function createUserDoc(user) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-  if (snap.exists()) return; // already exists, skip
+  if (snap.exists()) return; 
 
-  // Generate a unique username for Google/OAuth sign-ins
   const base = (user.displayName || user.email.split("@")[0])
     .toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 20) || "user";
   let username = base;
   let attempt  = 0;
-  // Keep trying with a suffix until we find a free one
   while (true) {
     const taken = await isUsernameTaken(username);
     if (!taken) break;
@@ -769,8 +765,6 @@ async function createUserDoc(user) {
   await batch.commit();
 }
 
-
-// ── Username & email uniqueness ───────────────────────────────────
 function normalizeUsername(u) {
   return u.toLowerCase().replace(/[^a-z0-9_]/g, "");
 }
@@ -792,7 +786,6 @@ async function reserveUsernameAndEmail(uid, username, email) {
   await batch.commit();
 }
 
-// Live username availability check as user types
 let usernameCheckTimer = null;
 function wireUsernameCheck() {
   const input = document.getElementById("s-username");
@@ -855,9 +848,9 @@ function setAvatar(el, photoURL, name) {
 
 function toDate(ts) {
   if (!ts) return null;
-  if (ts.toDate) return ts.toDate();              // Firestore Timestamp
-  if (ts.seconds) return new Date(ts.seconds * 1000); // Firestore Timestamp as plain object
-  return new Date(ts);                             // ISO string or ms
+  if (ts.toDate) return ts.toDate();         
+  if (ts.seconds) return new Date(ts.seconds * 1000); 
+  return new Date(ts);                           
 }
 function formatDate(ts) {
   const d = toDate(ts);
@@ -891,7 +884,6 @@ async function showDashboard(user) {
   $("dash-email").textContent = user.email;
   $("edit-name").value        = name;
 
-  // Default to initial until Firestore loads
   setAvatar($("dash-avatar"), null, name);
 
   try {
@@ -916,22 +908,20 @@ async function showDashboard(user) {
       renderInventory(d.inventory || [], d.equipped || {});
       await handleDailyReward(d);
       setAvatar($("tb-avatar"),   photo, name);
-
-      // Bio
       const bio = d.bio || "";
       $("edit-bio").value = bio;
       $("bio-count").textContent = bio.length + "/200";
 
-      // Username
+   
       const uname = d.username || "";
       $("dash-username").textContent = uname ? "@" + uname : "";
       $("edit-username").value = uname;
 
-      // Profile link — uses the logged-in user's UID
+  
       const profileLink = $("view-profile-link");
-      if (profileLink) profileLink.href = "/profile.html?uid=" + user.uid;
+      if (profileLink) profileLink.href = "/profiles.html?uid=" + user.uid;
 
-      // UID section
+
       $("dash-uid").textContent = user.uid;
     }
   } catch (e) { console.error("showDashboard error:", e); }
@@ -946,7 +936,6 @@ async function updateTopbar(user) {
     $("tb-name").textContent     = name;
     $("tb-dd-name").textContent  = name;
     $("tb-dd-email").textContent = user.email;
-    // Set initial from name, then load photo from Firestore
     setAvatar($("tb-avatar"), null, name);
     try {
       const snap = await getDoc(doc(db, "users", user.uid));
@@ -1028,7 +1017,7 @@ $("s-submit").addEventListener("click", async () => {
 
   setLoading("s-submit", true, "CREATE ACCOUNT");
   try {
-    // Check uniqueness BEFORE creating the Firebase Auth account
+   
     const [usernameTaken, emailTaken] = await Promise.all([
       isUsernameTaken(username),
       isEmailTaken(email)
@@ -1036,11 +1025,10 @@ $("s-submit").addEventListener("click", async () => {
     if (usernameTaken) { setMsg("s-msg", "username already taken — pick another.", "error"); return; }
     if (emailTaken)    { setMsg("s-msg", "email already registered — try logging in.", "error"); return; }
 
-    // Create the account
+
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: name });
 
-    // Write user doc + reserve username + reserve email atomically
     const batch = writeBatch(db);
     batch.set(doc(db, "users",     cred.user.uid), {
       uid:              cred.user.uid,
@@ -1107,7 +1095,7 @@ $("avatar-file-input").addEventListener("change", async e => {
     return;
   }
 
-  // Compress + resize to a small JPEG before storing
+
   const bitmap = await createImageBitmap(file);
   const canvas = document.createElement("canvas");
   const MAX    = 256;
@@ -1117,14 +1105,13 @@ $("avatar-file-input").addEventListener("change", async e => {
   canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
 
-  // Preview immediately
+
   $("dash-avatar").innerHTML = '<img src="' + dataUrl + '" alt="">';
   $("tb-avatar").innerHTML   = '<img src="' + dataUrl + '" alt="">';
 
-  // Save to Firestore only — Firebase Auth photoURL can't hold base64
+
   try {
     await updateDoc(doc(db, "users", user.uid), { photoURL: dataUrl });
-    // Store a short placeholder in Auth so other pages know a photo exists
     await updateProfile(user, { photoURL: "firestore" });
     setMsg("edit-name-msg", "photo saved.", "success");
   } catch (err) {
@@ -1182,13 +1169,10 @@ $("edit-pass-btn").addEventListener("click", async () => {
   }
 });
 
-
-// ── Bio char counter ───────────────────────────────────────────────
 $("edit-bio").addEventListener("input", function() {
   $("bio-count").textContent = this.value.length + "/200";
 });
 
-// ── Save bio ───────────────────────────────────────────────────────
 $("edit-bio-btn").addEventListener("click", async () => {
   const bio  = $("edit-bio").value.trim();
   const user = auth.currentUser;
@@ -1204,7 +1188,6 @@ $("edit-bio-btn").addEventListener("click", async () => {
   }
 });
 
-// ── Username live availability check ──────────────────────────────
 let unameTimer = null;
 $("edit-username").addEventListener("input", function() {
   this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, "");
@@ -1226,7 +1209,6 @@ $("edit-username").addEventListener("input", function() {
   }, 500);
 });
 
-// ── Save username ──────────────────────────────────────────────────
 $("edit-username-btn").addEventListener("click", async () => {
   const newUsername = $("edit-username").value.toLowerCase().replace(/[^a-z0-9_]/g, "").trim();
   if (!newUsername)        { setMsg("edit-username-msg", "enter a username.", "error"); return; }
@@ -1260,7 +1242,7 @@ $("edit-username-btn").addEventListener("click", async () => {
   }
 });
 
-// ── Delete account ─────────────────────────────────────────────────
+
 $("dash-delete-btn").addEventListener("click", () => {
   $("delete-confirm-pass").value = "";
   $("delete-msg").textContent    = "";
