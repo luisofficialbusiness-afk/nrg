@@ -353,6 +353,25 @@
       font-family: var(--mono);
       letter-spacing: 0.05em;
     }
+
+    .fav-btn {
+      position: absolute; top: 7px; right: 7px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      transition: background 0.15s, border-color 0.15s;
+      font-size: 13px; line-height: 1;
+    }
+    .fav-btn:hover { background: rgba(197,12,249,0.3); border-color: var(--accent); }
+    .fav-btn.active { background: rgba(197,12,249,0.4); border-color: var(--accent); }
+    .fav-btn.active::after { content: "♥"; color: var(--accent); }
+    .fav-btn:not(.active)::after { content: "♡"; color: var(--text-dim); }
+
+    .favs-section { margin-bottom: 32px; display: none; }
+    .favs-section.visible { display: block; }
+    .favs-section .section-label { margin-bottom: 12px; }
+    .favs-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.15em; padding: 16px 0; }
   </style>
 </head>
 <body>
@@ -375,538 +394,543 @@
 
 
 <div class="content">
+  <div class="favs-section" id="favs-section">
+    <div class="section-label">&#9829; Favorites</div>
+    <div class="game-grid" id="favs-grid"></div>
+    <div class="favs-empty" id="favs-empty" style="display:none">NO FAVORITES YET — HEART A GAME TO ADD IT.</div>
+  </div>
   <div class="section-label" id="section-label">All Games</div>
   <div class="game-grid" id="game-grid">
 
     
 
     <div class="game-card" data-game="games/vm.html" data-name="VMs">
-      <div class="card-thumb"><img src="images/ubuntu.jpg" alt="VMs" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/ubuntu.jpg" alt="VMs" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">VMs</div></div>
     </div>
 
     <div class="game-card" data-game="games/1v1.LoL.html" data-name="1v1 LoL">
-      <div class="card-thumb"><img src="images/1v1-lol.png" alt="1v1 LoL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/1v1-lol.png" alt="1v1 LoL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">1v1 LoL</div></div>
     </div>
 
     <div class="game-card" data-game="games/2048.html" data-name="2048">
-      <div class="card-thumb"><img src="images/2048.png" alt="2048" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/2048.png" alt="2048" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">2048</div></div>
     </div>
 
     <div class="game-card" data-game="games/64 in 1 NES.html" data-name="64 in 1 NES">
-      <div class="card-thumb"><img src="images/64 in 1 NES.png" alt="64 in 1 NES" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/64 in 1 NES.png" alt="64 in 1 NES" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">64 in 1 NES</div></div>
     </div>
 
     <div class="game-card" data-game="games/A Dance of Fire and Ice.html" data-name="A Dance of Fire and Ice">
-      <div class="card-thumb"><img src="images/A Dance of Fire and Ice.png" alt="A Dance of Fire and Ice" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/A Dance of Fire and Ice.png" alt="A Dance of Fire and Ice" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">A Dance of Fire and Ice</div></div>
     </div>
 
     <div class="game-card" data-game="games/Andy's Apple Farm.html" data-name="Andy's Apple Farm">
-      <div class="card-thumb"><img src="images/Andy's Apple Farm.png" alt="Andy's Apple Farm" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Andy's Apple Farm.png" alt="Andy's Apple Farm" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Andy's Apple Farm</div></div>
     </div>
 
     <div class="game-card" data-game="games/Antonblast.html" data-name="Antonblast">
-      <div class="card-thumb"><img src="images/Antonblast.png" alt="Antonblast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Antonblast.png" alt="Antonblast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Antonblast</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bad Ice Cream.html" data-name="Bad Ice Cream">
-      <div class="card-thumb"><img src="images/Bad Ice Cream.png" alt="Bad Ice Cream" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bad Ice Cream.png" alt="Bad Ice Cream" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bad Ice Cream</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bad Ice Cream 2.html" data-name="Bad Ice Cream 2">
-      <div class="card-thumb"><img src="images/Bad Ice Cream 2.png" alt="Bad Ice Cream 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bad Ice Cream 2.png" alt="Bad Ice Cream 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bad Ice Cream 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bad Ice Cream 3.html" data-name="Bad Ice Cream 3">
-      <div class="card-thumb"><img src="images/Bad Ice Cream 3.png" alt="Bad Ice Cream 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bad Ice Cream 3.png" alt="Bad Ice Cream 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bad Ice Cream 3</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bad Parenting 1.html" data-name="Bad Parenting 1">
-      <div class="card-thumb"><img src="images/Bad Parenting 1.png" alt="Bad Parenting 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bad Parenting 1.png" alt="Bad Parenting 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bad Parenting 1</div></div>
     </div>
 
     <div class="game-card" data-game="games/Ball Blast.html" data-name="Ball Blast">
-      <div class="card-thumb"><img src="images/Ball Blast.png" alt="Ball Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Ball Blast.png" alt="Ball Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Ball Blast</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bank Robbery.html" data-name="Bank Robbery">
-      <div class="card-thumb"><img src="images/Bank Robbery.png" alt="Bank Robbery" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bank Robbery.png" alt="Bank Robbery" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bank Robbery</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bank Robbery 2.html" data-name="Bank Robbery 2">
-      <div class="card-thumb"><img src="images/Bank Robbery 2.png" alt="Bank Robbery 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bank Robbery 2.png" alt="Bank Robbery 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bank Robbery 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bank Robbery 3.html" data-name="Bank Robbery 3">
-      <div class="card-thumb"><img src="images/Bank Robbery 3.png" alt="Bank Robbery 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bank Robbery 3.png" alt="Bank Robbery 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bank Robbery 3</div></div>
     </div>
 
     <div class="game-card" data-game="games/Basketball Stars.html" data-name="Basketball Stars">
-      <div class="card-thumb"><img src="images/Basketball Stars.png" alt="Basketball Stars" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Basketball Stars.png" alt="Basketball Stars" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Basketball Stars</div></div>
     </div>
 
     <div class="game-card" data-game="games/Bendy and the Ink Machine.html" data-name="Bendy and the Ink Machine">
-      <div class="card-thumb"><img src="images/Bendy and the Ink Machine.png" alt="Bendy and the Ink Machine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Bendy and the Ink Machine.png" alt="Bendy and the Ink Machine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Bendy and the Ink Machine</div></div>
     </div>
 
     <div class="game-card" data-game="games/BlackJack.html" data-name="BlackJack">
-      <div class="card-thumb"><img src="images/BlackJack.png" alt="BlackJack" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/BlackJack.png" alt="BlackJack" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">BlackJack</div></div>
     </div>
 
     <div class="game-card" data-game="games/Block Blast.html" data-name="Block Blast">
-      <div class="card-thumb"><img src="images/Block Blast.png" alt="Block Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Block Blast.png" alt="Block Blast" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Block Blast</div></div>
     </div>
 
     <div class="game-card" data-game="games/Brawl Simulator 3D.html" data-name="Brawl Simulator 3D">
-      <div class="card-thumb"><img src="images/Brawl Simulator 3D.png" alt="Brawl Simulator 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Brawl Simulator 3D.png" alt="Brawl Simulator 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Brawl Simulator 3D</div></div>
     </div>
 
     <div class="game-card" data-game="games/Buckshot Roulette.html" data-name="Buckshot Roulette">
-      <div class="card-thumb"><img src="images/Buckshot Roulette.png" alt="Buckshot Roulette" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Buckshot Roulette.png" alt="Buckshot Roulette" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Buckshot Roulette</div></div>
     </div>
 
     <div class="game-card" data-game="games/Celeste.html" data-name="Celeste">
-      <div class="card-thumb"><img src="images/Celeste.png" alt="Celeste" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Celeste.png" alt="Celeste" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Celeste</div></div>
     </div>
 
     <div class="game-card" data-game="games/Chess Classic.html" data-name="Chess Classic">
-      <div class="card-thumb"><img src="images/Chess Classic.png" alt="Chess Classic" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Chess Classic.png" alt="Chess Classic" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Chess Classic</div></div>
     </div>
 
     <div class="game-card" data-game="games/CircloO.html" data-name="CircloO">
-      <div class="card-thumb"><img src="images/CircloO.png" alt="CircloO" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/CircloO.png" alt="CircloO" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">CircloO</div></div>
     </div>
 
     <div class="game-card" data-game="games/Clash Of Vikings.html" data-name="Clash Of Vikings">
-      <div class="card-thumb"><img src="images/Clash Of Vikings.png" alt="Clash Of Vikings" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Clash Of Vikings.png" alt="Clash Of Vikings" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Clash Of Vikings</div></div>
     </div>
 
     <div class="game-card" data-game="games/Clover Pit.html" data-name="Clover Pit">
-      <div class="card-thumb"><img src="images/Clover Pit.png" alt="Clover Pit" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Clover Pit.png" alt="Clover Pit" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Clover Pit</div></div>
     </div>
 
     <div class="game-card" data-game="games/Cooking Mama.html" data-name="Cooking Mama">
-      <div class="card-thumb"><img src="images/Cooking Mama.png" alt="Cooking Mama" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Cooking Mama.png" alt="Cooking Mama" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Cooking Mama</div></div>
     </div>
 
     <div class="game-card" data-game="games/Count Masters_ Stickman Games.html" data-name="Count Masters">
-      <div class="card-thumb"><img src="images/Count Masters_ Stickman Games.png" alt="Count Masters" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Count Masters_ Stickman Games.png" alt="Count Masters" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Count Masters</div></div>
     </div>
 
     <div class="game-card" data-game="games/Crazy Cattle 3D.html" data-name="Crazy Cattle 3D">
-      <div class="card-thumb"><img src="images/Crazy Cattle 3D.png" alt="Crazy Cattle 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Crazy Cattle 3D.png" alt="Crazy Cattle 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Crazy Cattle 3D</div></div>
     </div>
 
     <div class="game-card" data-game="games/Crossy Road.html" data-name="Crossy Road">
-      <div class="card-thumb"><img src="images/Crossy Road.png" alt="Crossy Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Crossy Road.png" alt="Crossy Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Crossy Road</div></div>
     </div>
 
     <div class="game-card" data-game="games/Cuphead.html" data-name="Cuphead">
-      <div class="card-thumb"><img src="images/Cuphead.png" alt="Cuphead" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Cuphead.png" alt="Cuphead" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Cuphead</div></div>
     </div>
 
     <div class="game-card" data-game="games/Cut the Rope.html" data-name="Cut the Rope">
-      <div class="card-thumb"><img src="images/Cut the Rope.png" alt="Cut the Rope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Cut the Rope.png" alt="Cut the Rope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Cut the Rope</div></div>
     </div>
 
     <div class="game-card" data-game="games/Dadish.html" data-name="Dadish">
-      <div class="card-thumb"><img src="images/Dadish.png" alt="Dadish" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Dadish.png" alt="Dadish" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Dadish</div></div>
     </div>
 
     <div class="game-card" data-game="games/Death Run 3D.html" data-name="Death Run 3D">
-      <div class="card-thumb"><img src="images/Death Run 3D.png" alt="Death Run 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Death Run 3D.png" alt="Death Run 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Death Run 3D</div></div>
     </div>
 
     <div class="game-card" data-game="games/Destroy The Car 3D.html" data-name="Destroy The Car 3D">
-      <div class="card-thumb"><img src="images/Destroy The Car 3D.png" alt="Destroy The Car 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Destroy The Car 3D.png" alt="Destroy The Car 3D" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Destroy The Car 3D</div></div>
     </div>
 
     <div class="game-card" data-game="games/Dice a Million.html" data-name="Dice a Million">
-      <div class="card-thumb"><img src="images/Dice a Million.png" alt="Dice a Million" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Dice a Million.png" alt="Dice a Million" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Dice a Million</div></div>
     </div>
 
     <div class="game-card" data-game="games/DOOM.html" data-name="DOOM">
-      <div class="card-thumb"><img src="images/DOOM.png" alt="DOOM" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/DOOM.png" alt="DOOM" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">DOOM</div></div>
     </div>
 
     <div class="game-card" data-game="games/Doodle Jump.html" data-name="Doodle Jump">
-      <div class="card-thumb"><img src="images/Doodle Jump.png" alt="Doodle Jump" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Doodle Jump.png" alt="Doodle Jump" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Doodle Jump</div></div>
     </div>
 
     <div class="game-card" data-game="games/Draw Joust.html" data-name="Draw Joust">
-      <div class="card-thumb"><img src="images/Draw Joust.png" alt="Draw Joust" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Draw Joust.png" alt="Draw Joust" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Draw Joust</div></div>
     </div>
 
     <div class="game-card" data-game="games/Drift Boss.html" data-name="Drift Boss">
-      <div class="card-thumb"><img src="images/Drift Boss.png" alt="Drift Boss" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Drift Boss.png" alt="Drift Boss" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Drift Boss</div></div>
     </div>
 
     <div class="game-card" data-game="games/Duck Life.html" data-name="Duck Life">
-      <div class="card-thumb"><img src="images/Duck Life.png" alt="Duck Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Duck Life.png" alt="Duck Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Duck Life</div></div>
     </div>
 
     <div class="game-card" data-game="games/Escape Road.html" data-name="Escape Road">
-      <div class="card-thumb"><img src="images/Escape Road.png" alt="Escape Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Escape Road.png" alt="Escape Road" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Escape Road</div></div>
     </div>
 
     <div class="game-card" data-game="games/Escape Road 2.html" data-name="Escape Road 2">
-      <div class="card-thumb"><img src="images/Escape Road 2.png" alt="Escape Road 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Escape Road 2.png" alt="Escape Road 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Escape Road 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Escape Road City 2.html" data-name="Escape Road City 2">
-      <div class="card-thumb"><img src="images/Escape Road City 2.png" alt="Escape Road City 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Escape Road City 2.png" alt="Escape Road City 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Escape Road City 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Fancy Pants Adventure 2.html" data-name="Fancy Pants Adventure 2">
-      <div class="card-thumb"><img src="images/Fancy Pants Adventure 2.png" alt="Fancy Pants Adventure 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Fancy Pants Adventure 2.png" alt="Fancy Pants Adventure 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Fancy Pants Adventure 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Find the Alien.html" data-name="Find the Alien">
-      <div class="card-thumb"><img src="images/Find the Alien.png" alt="Find the Alien" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Find the Alien.png" alt="Find the Alien" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Find the Alien</div></div>
     </div>
 
     <div class="game-card" data-game="games/Fitness Empire.html" data-name="Fitness Empire">
-      <div class="card-thumb"><img src="images/FItness Empire.png" alt="Fitness Empire" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/FItness Empire.png" alt="Fitness Empire" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Fitness Empire</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Candy's.html" data-name="Five Nights at Candy's">
-      <div class="card-thumb"><img src="images/Five Nights at Candy's.png" alt="Five Nights at Candy's" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Candy's.png" alt="Five Nights at Candy's" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Five Nights at Candy's</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Epsteins.html" data-name="Five Nights at Epsteins">
-      <div class="card-thumb"><img src="images/Five Nights at Epsteins.png" alt="FNAE" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Epsteins.png" alt="FNAE" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">FNAE</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys.html" data-name="Five Nights at Freddys">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys.png" alt="Five Nights at Freddys" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys.png" alt="Five Nights at Freddys" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Five Nights at Freddys</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys 2.html" data-name="Five Nights at Freddys 2">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys 2.png" alt="Five Nights at Freddys 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 2.png" alt="Five Nights at Freddys 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Five Nights at Freddys 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys 3.html" data-name="Five Nights at Freddys 3">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys 3.png" alt="Five Nights at Freddys 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 3.png" alt="Five Nights at Freddys 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Five Nights at Freddys 3</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys 4.html" data-name="Five Nights at Freddys 4">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys 4.png" alt="Five Nights at Freddys 4" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 4.png" alt="Five Nights at Freddys 4" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Five Nights at Freddys 4</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys 4  Halloween.html" data-name="FNAF 4 Halloween">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys 4  Halloween.png" alt="FNAF 4 Halloween" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys 4  Halloween.png" alt="FNAF 4 Halloween" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">FNAF 4 Halloween</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys Pizza Simulator.html" data-name="FNAF Pizza Simulator">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys Pizza Simulator.png" alt="FNAF Pizza Simulator" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Pizza Simulator.png" alt="FNAF Pizza Simulator" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">FNAF Pizza Simulator</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddys Sister Location.html" data-name="FNAF Sister Location">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys Sister Location.png" alt="FNAF Sister Location" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Sister Location.png" alt="FNAF Sister Location" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">FNAF Sister Location</div></div>
     </div>
 
     <div class="game-card" data-game="games/Five Nights at Freddy's_ Ultimate Custom Night.html" data-name="FNAF Ultimate Custom Night">
-      <div class="card-thumb"><img src="images/Five Nights at Freddys Ultimate Custom Night.png" alt="FNAF Ultimate Custom Night" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Five Nights at Freddys Ultimate Custom Night.png" alt="FNAF Ultimate Custom Night" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">FNAF Ultimate Custom Night</div></div>
     </div>
 
     <div class="game-card" data-game="games/Fork n Sausage.html" data-name="Fork n Sausage">
-      <div class="card-thumb"><img src="images/Fork n Sausage.png" alt="Fork n Sausage" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Fork n Sausage.png" alt="Fork n Sausage" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Fork n Sausage</div></div>
     </div>
 
     <div class="game-card" data-game="games/Fruit Ninja.html" data-name="Fruit Ninja">
-      <div class="card-thumb"><img src="images/Fruit Ninja.png" alt="Fruit Ninja" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Fruit Ninja.png" alt="Fruit Ninja" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Fruit Ninja</div></div>
     </div>
 
     <div class="game-card" data-game="games/Geometry Dash World.html" data-name="GD World">
-      <div class="card-thumb"><img src="images/Geometry Dash World.webp" alt="GD World" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Geometry Dash World.webp" alt="GD World" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">GD World</div></div>
     </div>
 
     <div class="game-card" data-game="games/Granny.html.html" data-name="Granny">
-      <div class="card-thumb"><img src="images/Granny.png" alt="Granny" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Granny.png" alt="Granny" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Granny</div></div>
     </div>
 
     <div class="game-card" data-game="games/Half Life.html" data-name="Half Life">
-      <div class="card-thumb"><img src="images/Half Life.png" alt="Half Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Half Life.png" alt="Half Life" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Half Life</div></div>
     </div>
 
     <div class="game-card" data-game="games/Hobo 1.html" data-name="Hobo 1">
-      <div class="card-thumb"><img src="images/Hobo 1.png" alt="Hobo 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Hobo 1.png" alt="Hobo 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Hobo 1</div></div>
     </div>
 
     <div class="game-card" data-game="games/Hobo 2.html" data-name="Hobo 2">
-      <div class="card-thumb"><img src="images/Hobo 2.png" alt="Hobo 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Hobo 2.png" alt="Hobo 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Hobo 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Idle Breakout.html" data-name="Idle Breakout">
-      <div class="card-thumb"><img src="images/Idle Breakout.png" alt="Idle Breakout" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Idle Breakout.png" alt="Idle Breakout" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Idle Breakout</div></div>
     </div>
 
     <div class="game-card" data-game="games/Infinimoes.html" data-name="Infinimoes">
-      <div class="card-thumb"><img src="images/Infinimoes.png" alt="Infinimoes" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Infinimoes.png" alt="Infinimoes" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Infinimoes</div></div>
     </div>
 
     <div class="game-card" data-game="games/Jelly Restaurant.html" data-name="Jelly Restaurant">
-      <div class="card-thumb"><img src="images/Jelly Restaurant.png" alt="Jelly Restaurant" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Jelly Restaurant.png" alt="Jelly Restaurant" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Jelly Restaurant</div></div>
     </div>
 
     <div class="game-card" data-game="games/Johnny Upgrade.html" data-name="Johnny Upgrade">
-      <div class="card-thumb"><img src="images/Johnny Upgrade.png" alt="Johnny Upgrade" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Johnny Upgrade.png" alt="Johnny Upgrade" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Johnny Upgrade</div></div>
     </div>
 
     <div class="game-card" data-game="games/Mr Mine.html" data-name="Mr Mine">
-      <div class="card-thumb"><img src="images/Mr Mine.png" alt="Mr Mine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Mr Mine.png" alt="Mr Mine" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Mr Mine</div></div>
     </div>
 
     <div class="game-card" data-game="games/Papa's Donuteria.html" data-name="Papa's Donuteria">
-      <div class="card-thumb"><img src="images/Papa's Donuteria.png" alt="Papa's Donuteria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Papa's Donuteria.png" alt="Papa's Donuteria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Papa's Donuteria</div></div>
     </div>
 
     <div class="game-card" data-game="games/Papa's Freezeria.html" data-name="Papa's Freezeria">
-      <div class="card-thumb"><img src="images/Papa's Freezeria.png" alt="Papa's Freezeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Papa's Freezeria.png" alt="Papa's Freezeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Papa's Freezeria</div></div>
     </div>
 
     <div class="game-card" data-game="games/Papa's Wingeria.html" data-name="Papa's Wingeria">
-      <div class="card-thumb"><img src="images/Papa's Wingeria.png" alt="Papa's Wingeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Papa's Wingeria.png" alt="Papa's Wingeria" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Papa's Wingeria</div></div>
     </div>
 
     <div class="game-card" data-game="games/Papers, Please.html" data-name="Papers Please">
-      <div class="card-thumb"><img src="images/Papers, Please.png" alt="Papers, Please" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Papers, Please.png" alt="Papers, Please" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Papers, Please</div></div>
     </div>
 
     <div class="game-card" data-game="games/Peggle.html" data-name="Peggle">
-      <div class="card-thumb"><img src="images/Peggle.png" alt="Peggle" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Peggle.png" alt="Peggle" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Peggle</div></div>
     </div>
 
     <div class="game-card" data-game="games/People Playground.html" data-name="People Playground">
-      <div class="card-thumb"><img src="images/People Playground.png" alt="People Playground" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/People Playground.png" alt="People Playground" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">People Playground</div></div>
     </div>
 
     <div class="game-card" data-game="games/Riddle School.html" data-name="Riddle School">
-      <div class="card-thumb"><img src="images/Riddle School.png" alt="Riddle School" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Riddle School.png" alt="Riddle School" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Riddle School</div></div>
     </div>
 
     <div class="game-card" data-game="games/Riddle School 3.html" data-name="Riddle School 3">
-      <div class="card-thumb"><img src="images/Riddle School 3.png" alt="Riddle School 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Riddle School 3.png" alt="Riddle School 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Riddle School 3</div></div>
     </div>
 
     <div class="game-card" data-game="games/Riddle School 5.html" data-name="Riddle School 5">
-      <div class="card-thumb"><img src="images/Riddle School 5.png" alt="Riddle School 5" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Riddle School 5.png" alt="Riddle School 5" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Riddle School 5</div></div>
     </div>
 
     <div class="game-card" data-game="games/Riddle Transfer.html" data-name="Riddle Transfer">
-      <div class="card-thumb"><img src="images/Riddle Transfer.png" alt="Riddle Transfer" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Riddle Transfer.png" alt="Riddle Transfer" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Riddle Transfer</div></div>
     </div>
 
     <div class="game-card" data-game="games/Roulette Hero.html" data-name="Roulette Hero">
-      <div class="card-thumb"><img src="images/Roulette Hero.png" alt="Roulette Hero" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Roulette Hero.png" alt="Roulette Hero" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Roulette Hero</div></div>
     </div>
 
     <div class="game-card" data-game="games/Run 1.html" data-name="Run 1">
-      <div class="card-thumb"><img src="images/Run 1.png" alt="Run 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Run 1.png" alt="Run 1" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Run 1</div></div>
     </div>
 
     <div class="game-card" data-game="games/Run 2.html" data-name="Run 2">
-      <div class="card-thumb"><img src="images/Run 2.png" alt="Run 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Run 2.png" alt="Run 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Run 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Run 3.html" data-name="Run 3">
-      <div class="card-thumb"><img src="images/Run 3.png" alt="Run 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Run 3.png" alt="Run 3" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Run 3</div></div>
     </div>
 
     <div class="game-card" data-game="games/Slope.html" data-name="Slope">
-      <div class="card-thumb"><img src="images/Slope.png" alt="Slope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Slope.png" alt="Slope" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Slope</div></div>
     </div>
 
     <div class="game-card" data-game="games/Steal A Brainrot.html" data-name="Steal A Brainrot">
-      <div class="card-thumb"><img src="images/Steal A Brainrot.png" alt="Steal A Brainrot" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Steal A Brainrot.png" alt="Steal A Brainrot" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Steal A Brainrot</div></div>
     </div>
 
     <div class="game-card" data-game="games/Survivor.io.html" data-name="Survivor io">
-      <div class="card-thumb"><img src="images/Survivor.io.png" alt="Survivor.io" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Survivor.io.png" alt="Survivor.io" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Survivor.io</div></div>
     </div>
 
     <div class="game-card" data-game="games/Tetris.html" data-name="Tetris">
-      <div class="card-thumb"><img src="images/Tetris.png" alt="Tetris" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Tetris.png" alt="Tetris" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Tetris</div></div>
     </div>
 
     <div class="game-card" data-game="games/That's Not My Neighbor.html" data-name="That's Not My Neighbor">
-      <div class="card-thumb"><img src="images/That's Not My Neighbor.png" alt="That's Not My Neighbor" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/That's Not My Neighbor.png" alt="That's Not My Neighbor" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">That's Not My Neighbor</div></div>
     </div>
 
     <div class="game-card" data-game="games/Time Shooter 2.html" data-name="Time Shooter 2">
-      <div class="card-thumb"><img src="images/Time Shooter 2.png" alt="Time Shooter 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Time Shooter 2.png" alt="Time Shooter 2" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Time Shooter 2</div></div>
     </div>
 
     <div class="game-card" data-game="games/Time Shooter 3_ SWAT.html" data-name="Time Shooter 3 SWAT">
-      <div class="card-thumb"><img src="images/Time Shooter 3_ SWAT.png" alt="Time Shooter 3: SWAT" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Time Shooter 3_ SWAT.png" alt="Time Shooter 3: SWAT" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Time Shooter 3: SWAT</div></div>
     </div>
 
     <div class="game-card" data-game="games/ULTRAKILL.html" data-name="ULTRAKILL">
-      <div class="card-thumb"><img src="images/ULTRAKILL.png" alt="ULTRAKILL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/ULTRAKILL.png" alt="ULTRAKILL" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">ULTRAKILL</div></div>
     </div>
 
     <div class="game-card" data-game="games/Untitled Goose Game.html" data-name="Untitled Goose Game">
-      <div class="card-thumb"><img src="images/Untitled Goose Game.png" alt="Untitled Goose Game" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Untitled Goose Game.png" alt="Untitled Goose Game" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Untitled Goose Game</div></div>
     </div>
 
     <div class="game-card" data-game="games/Volley Random.html" data-name="Volley Random">
-      <div class="card-thumb"><img src="images/Volley Random.png" alt="Volley Random" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/Volley Random.png" alt="Volley Random" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Volley Random</div></div>
     </div>
 
     <div class="game-card" data-game="games/We Become What We Behold.html" data-name="We Become What We Behold">
-      <div class="card-thumb"><img src="images/We Become What We Behold.png" alt="We Become What We Behold" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/We Become What We Behold.png" alt="We Become What We Behold" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">We Become What We Behold</div></div>
     </div>
 
     <div class="game-card" data-game="games/WebFishing.html" data-name="WebFishing">
-      <div class="card-thumb"><img src="images/WebFishing.png" alt="WebFishing" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/WebFishing.png" alt="WebFishing" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">WebFishing</div></div>
     </div>
 
     <div class="game-card" data-game="games/windowkill/index.html" data-name="Windowkill">
-      <div class="card-thumb"><img src="images/windowkill.png" alt="Windowkill" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/windowkill.png" alt="Windowkill" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Windowkill</div></div>
     </div>
 
         <div class="game-card" data-game="games/clovofixed.html" data-name="OvO">
-      <div class="card-thumb"><img src="images/clovofixed.jpg" alt="OvO" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clovofixed.jpg" alt="OvO" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">OvO</div></div>
     </div>
 
         <div class="game-card" data-game="games/clminecraftpocketedition.html" data-name="Minecraft Pocket Edition">
-      <div class="card-thumb"><img src="images/clminecraftpocketedition.jpg" alt="Minecraft Pocket Edition" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clminecraftpocketedition.jpg" alt="Minecraft Pocket Edition" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Minecraft Pocket Edition</div></div>
     </div>
 
         <div class="game-card" data-game="games/clpushyourluck.html" data-name="Push Your Luck">
-      <div class="card-thumb"><img src="images/clpushyourluck.png" alt="Push Your Luck" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clpushyourluck.png" alt="Push Your Luck" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Push Your Luck</div></div>
     </div>
 
         <div class="game-card" data-game="games/clretropingpong.html" data-name="Retro Ping Pong">
-      <div class="card-thumb"><img src="images/clretropingpong.png" alt="Retro Ping Pong" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clretropingpong.png" alt="Retro Ping Pong" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Retro Ping Pong</div></div>
     </div>
 
         <div class="game-card" data-game="games/clsnowrider.html" data-name="Snow Rider">
-      <div class="card-thumb"><img src="images/clsnowrider.jpg" alt="Snow Rider" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clsnowrider.jpg" alt="Snow Rider" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Snow Rider</div></div>
     </div>
 
         <div class="game-card" data-game="games/clsubwaysurfersbarcelona.html" data-name="Subway Surfers Barcelona">
-      <div class="card-thumb"><img src="images/clsubwaysurfersbarcelona.jpg" alt="Subway Surfers Barcelona" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clsubwaysurfersbarcelona.jpg" alt="Subway Surfers Barcelona" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Subway Surfers Barcelona</div></div>
     </div>
 
         <div class="game-card" data-game="games/clswordfight.html" data-name="Sword Fight">
-      <div class="card-thumb"><img src="images/clswordfight.jpg" alt="Sword Fight" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/clswordfight.jpg" alt="Sword Fight" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Sword Fight</div></div>
     </div>
 
         <div class="game-card" data-game="games/cltagcm.html" data-name="Tag">
-      <div class="card-thumb"><img src="images/cltagcm.png" alt="Tag" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/cltagcm.png" alt="Tag" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Tag</div></div>
     </div>
 
         <div class="game-card" data-game="games/cltotm.html" data-name="Tomb of the Mask">
-      <div class="card-thumb"><img src="images/cltotm.png" alt="Tomb of the Mask" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/cltotm.png" alt="Tomb of the Mask" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Tomb of the Mask</div></div>
     </div>
 
         <div class="game-card" data-game="games/cluno.html" data-name="Uno">
-      <div class="card-thumb"><img src="images/cluno.png" alt="Uno" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="card-thumb"><img src="images/cluno.png" alt="Uno" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
       <div class="card-info"><div class="card-title">Uno</div></div>
     </div>
 
@@ -930,7 +954,6 @@
   <div class="nav-icon" data-page="index.html">Home</div>
   <div class="nav-icon" data-page="games.html">Games</div>
   <div class="nav-icon" data-page="movies.html">Movies</div>
-  <div class="nav-icon" data-page="ai.html">AI</div>
   <div class="nav-icon" data-page="proxy.html">Proxy</div>
   <div class="nav-icon" data-page="settings.html">Settings</div>
   <div class="nav-icon" data-page="music.html">Music</div>
@@ -943,6 +966,109 @@
   <div class="status-card" id="temperature-status">Temp: -- °C</div>
   <div class="status-card" id="ping-status">Ping: -- ms</div>
 </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
+  authDomain:        "nrg-accounts.firebaseapp.com",
+  projectId:         "nrg-accounts",
+  storageBucket:     "nrg-accounts.firebasestorage.app",
+  messagingSenderId: "969467601192",
+  appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser  = null;
+let userFavorites = []; // in-memory cache of favorites array
+
+async function loadFavorites(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) return [];
+  return snap.data().favorites || [];
+}
+
+async function saveFavorites(uid, favs) {
+  await updateDoc(doc(db, "users", uid), { favorites: favs }); // write full array back
+}
+
+function buildFavsSection(favs) {
+  const section  = document.getElementById("favs-section");
+  const grid     = document.getElementById("favs-grid");
+  const empty    = document.getElementById("favs-empty");
+  grid.innerHTML = "";
+
+  if (favs.length === 0) {
+    section.classList.add("visible");
+    empty.style.display = "";
+    return;
+  }
+
+  empty.style.display = "none";
+  section.classList.add("visible");
+
+  favs.forEach(name => {
+    const original = document.querySelector(`.game-card[data-name="${CSS.escape(name)}"]`);
+    if (!original) return;
+    const clone = original.cloneNode(true); // clone the real card so it has same thumb/image
+    const btn   = clone.querySelector(".fav-btn");
+    if (btn) {
+      btn.classList.add("active");
+      btn.onclick = e => { e.stopPropagation(); toggleFav(btn); };
+    }
+    clone.addEventListener("click", () => {
+      const frame     = document.getElementById("game-frame");
+      const titleText = document.getElementById("overlay-title-text");
+      const overlay   = document.getElementById("game-overlay");
+      frame.src          = original.dataset.game;
+      titleText.textContent = original.dataset.name;
+      overlay.classList.add("open");
+    });
+    grid.appendChild(clone);
+  });
+}
+
+function syncAllFavBtns(favs) {
+  document.querySelectorAll(".game-card[data-name]").forEach(card => {
+    const btn = card.querySelector(".fav-btn");
+    if (!btn) return;
+    if (favs.includes(card.dataset.name)) btn.classList.add("active");
+    else btn.classList.remove("active");
+  });
+}
+
+window.toggleFav = async function(btn) {
+  if (!currentUser) return; // silently ignore if not logged in
+  const card = btn.closest(".game-card");
+  const name = card.dataset.name;
+  const idx  = userFavorites.indexOf(name);
+  if (idx === -1) userFavorites.push(name); // add
+  else userFavorites.splice(idx, 1);        // remove
+
+  syncAllFavBtns(userFavorites);
+  buildFavsSection(userFavorites);
+  await saveFavorites(currentUser.uid, userFavorites); // persist to Firestore
+};
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    currentUser   = null;
+    userFavorites = [];
+    document.getElementById("favs-section").classList.remove("visible");
+    return;
+  }
+  currentUser   = user;
+  userFavorites = await loadFavorites(user.uid);
+  syncAllFavBtns(userFavorites);
+  buildFavsSection(userFavorites);
+});
+</script>
 
 <script>
 
@@ -1022,12 +1148,7 @@
   window.addEventListener('click', startFaintMusic);
 </script>
 
-<script src="nrg-system.js"></script>
-<script>
-  addXP(25);
-  addCoins(5);
-  addProgress("gamesPlayed");
-</script>
+<script type="module" src="nrg-system.js"></script>
 <script src="index.js"></script>
 <script src="sidebar-logic.js"></script>
 

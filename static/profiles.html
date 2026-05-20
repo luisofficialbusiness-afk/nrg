@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a;
+  --border: #2a2a2a; --accent: #c50cf9;
+  --text: #e8e8e8; --text-dim: #666; --text-muted: #3a3a3a;
+  --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  --red: #ff4f4f; --green: #39d98a;
+}
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); }
+body { display: flex; flex-direction: column; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-nrg { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; }
+.brand-divider { width: 1px; height: 13px; background: var(--border); }
+.brand-page { font-size: 13px; color: var(--text-dim); }
+.back-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border); background: none; color: var(--text-dim); cursor: pointer; text-decoration: none; transition: border-color 0.13s, color 0.13s; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.main { flex: 1; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px 80px; }
+.wrap { width: 100%; max-width: 480px; }
+
+/* loading / not found states */
+.state-msg { text-align: center; padding: 60px 0; font-family: var(--mono); font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; }
+
+/* profile card */
+.profile-card { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 5px; overflow: hidden; }
+
+.profile-header { padding: 32px 28px 24px; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 22px; }
+.profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; color: #000; overflow: hidden; border: 2px solid var(--border); flex-shrink: 0; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.profile-info { flex: 1; min-width: 0; }
+.profile-name { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.profile-username { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 6px; }
+.profile-bio { font-size: 13px; color: var(--text-dim); line-height: 1.55; margin-top: 6px; }
+.profile-joined { font-family: var(--mono); font-size: 9px; color: var(--text-muted); margin-top: 8px; letter-spacing: 0.08em; }
+
+/* stats */
+.profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--border); }
+.profile-stat { padding: 16px 18px; border-right: 1px solid var(--border); text-align: center; }
+.profile-stat:last-child { border-right: none; }
+.profile-stat-value { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.profile-stat-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; }
+
+/* favorites */
+.profile-section { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+.profile-section:last-child { border-bottom: none; }
+.profile-section-title { font-family: var(--mono); font-size: 8px; letter-spacing: 0.22em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+.fav-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.fav-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; padding: 5px 10px; border: 1px solid var(--border); border-radius: 20px; color: var(--text-dim); }
+.no-favs { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">NRG</span>
+    <div class="brand-divider"></div>
+    <span class="brand-page">Profile</span>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">&#8592; back</a>
+</div>
+
+<div class="main">
+  <div class="wrap">
+    <div id="state" class="state-msg">loading profile...</div>
+    <div class="profile-card" id="profile-card" style="display:none">
+
+      <div class="profile-header">
+        <div class="profile-avatar" id="p-avatar">?</div>
+        <div class="profile-info">
+          <div class="profile-name" id="p-name">—</div>
+          <div class="profile-username" id="p-username"></div>
+          <div class="profile-bio" id="p-bio"></div>
+          <div class="profile-joined" id="p-joined"></div>
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="p-days">—</div>
+          <div class="profile-stat-label">Days on NRG</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="p-time">—</div>
+          <div class="profile-stat-label" id="p-time-label">Minutes</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="p-favs">0</div>
+          <div class="profile-stat-label">Favorites</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Favorite Games</div>
+        <div class="fav-list" id="p-fav-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
+  authDomain:        "nrg-accounts.firebaseapp.com",
+  projectId:         "nrg-accounts",
+  storageBucket:     "nrg-accounts.firebasestorage.app",
+  messagingSenderId: "969467601192",
+  appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const $   = id => document.getElementById(id);
+
+function toDate(ts) {
+  if (!ts) return null;
+  if (ts.toDate) return ts.toDate();
+  if (ts.seconds) return new Date(ts.seconds * 1000);
+  return new Date(ts);
+}
+function formatDate(ts) {
+  const d = toDate(ts);
+  if (!d || isNaN(d)) return "—";
+  return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+function daysSince(ts) {
+  const d = toDate(ts);
+  if (!d || isNaN(d)) return "—";
+  return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
+}
+function fmtMinutes(m) {
+  if (m < 60)   return { value: m,                  label: "Minutes"  };
+  if (m < 1440) return { value: Math.floor(m / 60),  label: "Hours"    };
+  return               { value: Math.floor(m / 1440), label: "Days active" };
+}
+
+async function loadProfile() {
+  const uid = new URLSearchParams(window.location.search).get("uid");
+  if (!uid) { $("state").textContent = "no profile found."; return; }
+
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (!snap.exists()) { $("state").textContent = "profile not found."; return; }
+
+    const d    = snap.data();
+    const name = d.displayName || d.email?.split("@")[0] || "NRG User";
+
+    // Avatar
+    const av = $("p-avatar");
+    if (d.photoURL && d.photoURL !== "firestore") {
+      av.innerHTML = '<img src="' + d.photoURL + '" alt="">';
+    } else if (d.photoURL === "firestore") {
+      // photoURL stored as base64 in Firestore — already loaded in d.photoURL above
+      // this path won't hit since we read from Firestore directly
+      av.textContent = name[0].toUpperCase();
+    } else {
+      av.textContent = name[0].toUpperCase();
+    }
+
+    // Header info
+    $("p-name").textContent    = name;
+    $("p-username").textContent = d.username ? "@" + d.username : "";
+    $("p-bio").textContent     = d.bio || "";
+    $("p-joined").textContent  = d.createdAt ? "member since " + formatDate(d.createdAt) : "";
+
+    // Stats
+    $("p-days").textContent = daysSince(d.createdAt);
+    const fmt = fmtMinutes(d.timeSpentMinutes || 0);
+    $("p-time").textContent       = fmt.value;
+    $("p-time-label").textContent = fmt.label;
+    $("p-favs").textContent       = (d.favorites || []).length;
+
+    // Favorites list
+    const favList = $("p-fav-list");
+    const favs    = d.favorites || [];
+    if (favs.length === 0) {
+      favList.innerHTML = '<span class="no-favs">no favorites yet.</span>';
+    } else {
+      favList.innerHTML = favs.map(g => '<span class="fav-tag">' + g + '</span>').join("");
+    }
+
+    // Show card
+    $("state").style.display        = "none";
+    $("profile-card").style.display = "";
+
+    // Update page title
+    document.title = "NRG | " + name + (d.username ? " (@" + d.username + ")" : "");
+
+  } catch (e) {
+    console.error(e);
+    $("state").textContent = "failed to load profile.";
+  }
+}
+
+loadProfile();
+</script>
+</body>
+</html>

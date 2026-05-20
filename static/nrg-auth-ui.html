@@ -122,6 +122,16 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .edit-row { display: flex; gap: 8px; align-items: center; }
 .edit-row input { flex: 1; }
 
+
+.dash-fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap: 10px; }
+.dash-fav-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; position: relative; cursor: default; }
+.dash-fav-thumb { width: 100%; aspect-ratio: 16/10; background: var(--surface3); overflow: hidden; }
+.dash-fav-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dash-fav-name { font-size: 10px; padding: 6px 8px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-fav-remove { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.7); border: none; color: var(--red); font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.13s; }
+.dash-fav-remove:hover { background: rgba(255,79,79,0.3); }
+.dash-fav-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.12em; }
+
 .dash-links { display: flex; flex-direction: column; gap: 6px; }
 .dash-link { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: border-color 0.13s; text-decoration: none; }
 .dash-link:hover { border-color: var(--accent); }
@@ -136,6 +146,56 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 
 .bottom-sidebar { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 70%); display: flex; gap: 20px; padding: 10px 18px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; z-index: 999; }
 .bottom-sidebar:hover { transform: translate(-50%, 0); }
+
+/* bio */
+.bio-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 13px; padding: 9px 12px; border-radius: 4px; outline: none; resize: vertical; min-height: 72px; transition: border-color 0.15s; box-sizing: border-box; }
+.bio-textarea:focus { border-color: var(--accent); }
+.bio-textarea::placeholder { color: var(--text-muted); }
+
+/* username tag in header */
+.dash-username { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-top: 2px; }
+
+/* delete confirmation modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 99999; opacity: 0; pointer-events: none; transition: opacity 0.18s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--red); border-radius: 5px; padding: 24px; width: 90%; max-width: 340px; }
+.modal-title { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 0.08em; margin-bottom: 10px; }
+.modal-body { font-size: 13px; color: var(--text-dim); margin-bottom: 18px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 8px; }
+.modal-actions .btn { margin-bottom: 0; }
+
+
+.dash-economy { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+.dash-eco-stat { padding: 14px 22px; border-right: 1px solid var(--border); }
+.dash-eco-stat:last-child { border-right: none; }
+.dash-eco-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.dash-eco-value { font-size: 22px; font-weight: 500; color: var(--text); }
+.dash-eco-sub { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+
+.xp-bar-wrap { margin-top: 8px; }
+.xp-bar-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 8px; color: var(--text-muted); margin-bottom: 4px; }
+.xp-bar-track { height: 4px; background: var(--surface3, #222); border-radius: 2px; overflow: hidden; }
+.xp-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+
+.daily-reward-btn { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent-dim, rgba(197,12,249,0.08)); color: var(--accent); font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.15em; cursor: pointer; transition: background 0.13s; margin-bottom: 0; }
+.daily-reward-btn:hover:not(:disabled) { background: rgba(197,12,249,0.18); }
+.daily-reward-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.streak-label { font-family: var(--mono); font-size: 9px; color: var(--text-muted); margin-top: 6px; text-align: center; }
+
+.boost-active-bar { background: rgba(197,12,249,0.1); border: 1px solid rgba(197,12,249,0.3); border-radius: 4px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.boost-active-label { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.08em; }
+.boost-timer { font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
+
+.inv-grid { display: flex; flex-direction: column; gap: 8px; }
+.inv-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; }
+.inv-item-info { flex: 1; min-width: 0; }
+.inv-item-name { font-size: 13px; color: var(--text); margin-bottom: 2px; }
+.inv-item-desc { font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
+.inv-item-action { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.1em; padding: 5px 12px; border-radius: 3px; border: 1px solid var(--accent); background: none; color: var(--accent); cursor: pointer; flex-shrink: 0; transition: background 0.13s; }
+.inv-item-action:hover { background: rgba(197,12,249,0.15); }
+.inv-item-action.active { background: rgba(197,12,249,0.2); }
+.inv-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
+
 .status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
 </style>
 </head>
@@ -208,6 +268,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
           <div class="dash-greeting">welcome back</div>
           <div class="dash-name" id="dash-name">—</div>
           <div class="dash-email" id="dash-email">—</div>
+          <div class="dash-username" id="dash-username"></div>
           <div class="dash-joined" id="dash-joined">—</div>
         </div>
       </div>
@@ -225,7 +286,38 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         </div>
       </div>
 
+
+      <div class="dash-economy">
+        <div class="dash-eco-stat">
+          <div class="dash-eco-label">Level</div>
+          <div class="dash-eco-value" id="stat-level">1</div>
+          <div class="dash-eco-sub" id="stat-level-sub">0 XP</div>
+          <div class="xp-bar-wrap">
+            <div class="xp-bar-labels">
+              <span id="xp-bar-cur">0</span>
+              <span id="xp-bar-next">100 to next</span>
+            </div>
+            <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-bar-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="dash-eco-stat">
+          <div class="dash-eco-label">Coins</div>
+          <div class="dash-eco-value" id="stat-coins">0</div>
+          <div class="dash-eco-sub">nrg coins</div>
+        </div>
+      </div>
       <div class="dash-body">
+
+        <div class="dash-section" id="daily-section">
+          <div class="dash-section-title">Daily Reward</div>
+          <div id="boost-active-bar" class="boost-active-bar" style="display:none">
+            <span class="boost-active-label">&#9889; XP BOOST ACTIVE</span>
+            <span class="boost-timer" id="boost-timer">--:--</span>
+          </div>
+          <button class="daily-reward-btn" id="daily-claim-btn">CLAIM DAILY REWARD</button>
+          <div class="streak-label" id="streak-label"></div>
+          <div class="msg" id="daily-msg"></div>
+        </div>
 
         <div class="dash-section">
           <div class="dash-section-title">Display Name</div>
@@ -245,6 +337,53 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         </div>
 
         <div class="dash-section">
+          <div class="dash-section-title">Bio</div>
+          <textarea class="bio-textarea" id="edit-bio" placeholder="write a short bio..." maxlength="200"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+            <span id="bio-count" style="font-family:var(--mono);font-size:9px;color:var(--text-muted)">0/200</span>
+            <button class="btn primary sm" id="edit-bio-btn">Save Bio</button>
+          </div>
+          <div class="msg" id="edit-bio-msg"></div>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-section-title">Username</div>
+          <div class="edit-row">
+            <div style="position:relative;flex:1">
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-family:var(--mono);font-size:13px">@</span>
+              <input type="text" id="edit-username" placeholder="new username" style="padding-left:22px;width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:13px;padding-top:9px;padding-bottom:9px;border-radius:4px;outline:none;box-sizing:border-box">
+            </div>
+            <button class="btn primary sm" id="edit-username-btn">Save</button>
+          </div>
+          <div class="msg" id="edit-username-msg"></div>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-section-title">Public Profile</div>
+          <a id="view-profile-link" class="dash-link" href="#" target="_blank" style="margin-bottom:8px">
+            <span class="dash-link-label">View my profile page</span>
+            <span class="dash-link-arrow">&#8594;</span>
+          </a>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+            <span style="font-family:var(--mono);font-size:9px;color:var(--text-muted);flex-shrink:0">UID</span>
+            <span id="dash-uid" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">—</span>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('dash-uid').textContent).then(()=>{this.textContent='copied!';setTimeout(()=>this.textContent='copy',1200)})" style="font-family:var(--mono);font-size:8px;padding:4px 9px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;flex-shrink:0">copy</button>
+          </div>
+        </div>
+
+        <div class="dash-section" id="dash-favs-section">
+          <div class="dash-section-title">Favorite Games</div>
+          <div class="dash-fav-grid" id="dash-fav-grid"></div>
+          <div class="dash-fav-empty" id="dash-fav-empty" style="display:none">No favorites yet — heart a game on the games page.</div>
+        </div>
+
+        <div class="dash-section" id="inv-section">
+          <div class="dash-section-title">Inventory</div>
+          <div class="inv-grid" id="inv-grid"></div>
+          <div class="inv-empty" id="inv-empty" style="display:none">Your inventory is empty — visit the shop!</div>
+        </div>
+
+        <div class="dash-section">
           <div class="dash-section-title">Quick Links</div>
           <div class="dash-links">
             <a class="dash-link" href="/games.html"><span class="dash-link-label">Games</span><span class="dash-link-arrow">&#8594;</span></a>
@@ -254,8 +393,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
           </div>
         </div>
 
-        <div class="dash-section">
-          <button class="btn danger" id="dash-logout">log out</button>
+        <div class="dash-section" style="display:flex;gap:8px">
+          <button class="btn ghost" id="dash-logout" style="margin-bottom:0">log out</button>
+          <button class="btn danger" id="dash-delete-btn" style="margin-bottom:0">delete account</button>
         </div>
 
       </div>
@@ -269,7 +409,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
   <div class="nav-icon" data-page="games.html">Games</div>
   <div class="nav-icon" data-page="movies.html">Movies</div>
   <div class="nav-icon" data-page="music.html">Music</div>
-  <div class="nav-icon" data-page="ai.html">AI</div>
   <div class="nav-icon" data-page="proxy.html">Proxy</div>
   <div class="nav-icon" data-page="settings.html">Settings</div>
 </div>
@@ -287,10 +426,10 @@ import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
   updateProfile, sendPasswordResetEmail,
-  EmailAuthProvider, reauthenticateWithCredential, updatePassword
+  EmailAuthProvider, reauthenticateWithCredential, updatePassword, deleteUser
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp
+  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp, writeBatch
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -301,6 +440,9 @@ const firebaseConfig = {
   messagingSenderId: "969467601192",
   appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
 };
+
+let NRGSys = {};
+import("./nrg-system.js").then(m => { NRGSys = m; }).catch(() => {});
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -336,24 +478,211 @@ window.addEventListener("beforeunload", () => {
 });
 
 
+
+
+function renderXPBar(xp) {
+  const THRESHOLDS = [0, 0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200, 4000, 5000];
+  let level = 1;
+  for (let i = 1; i < THRESHOLDS.length; i++) { if (xp >= THRESHOLDS[i]) level = i; else break; }
+  const cur  = THRESHOLDS[level]     ?? THRESHOLDS[THRESHOLDS.length - 1];
+  const next = THRESHOLDS[level + 1] ?? (cur + 3000);
+  const pct  = Math.min(100, Math.floor(((xp - cur) / (next - cur)) * 100));
+  $("stat-level").textContent     = level;
+  $("stat-level-sub").textContent = xp + " XP total";
+  $("xp-bar-cur").textContent     = (xp - cur) + " XP";
+  $("xp-bar-next").textContent    = (next - cur) + " to next";
+  $("xp-bar-fill").style.width    = pct + "%";
+}
+
+function renderBoostTimer(expiry) {
+  const bar = $("boost-active-bar");
+  if (!expiry) { bar.style.display = "none"; return; }
+  const update = () => {
+    const ms  = new Date(expiry).getTime() - Date.now();
+    if (ms <= 0) { bar.style.display = "none"; return; }
+    bar.style.display = "flex";
+    const m = Math.floor(ms / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    $("boost-timer").textContent = m + ":" + String(s).padStart(2, "0");
+    setTimeout(update, 1000);
+  };
+  update();
+}
+
+function renderInventory(inventory, equipped) {
+  const grid  = $("inv-grid");
+  const empty = $("inv-empty");
+  grid.innerHTML = "";
+  const boostItems = (inventory || []).filter(i => i.category === "xpboost");
+  if (boostItems.length === 0) { empty.style.display = ""; return; }
+  empty.style.display = "none";
+  boostItems.forEach(item => {
+    const isActive = equipped?.xpBoost === item.id;
+    const div = document.createElement("div");
+    div.className = "inv-item";
+    div.innerHTML =
+      '<div class="inv-item-info">' +
+        '<div class="inv-item-name">' + item.name + '</div>' +
+        '<div class="inv-item-desc">' + (item.desc || "") + '</div>' +
+      '</div>' +
+      '<button class="inv-item-action' + (isActive ? ' active' : '') + '" data-id="' + item.id + '" data-dur="' + (item.duration || 60) + '" data-mult="' + (item.multiplier || 2) + '">' +
+        (isActive ? 'ACTIVE' : 'ACTIVATE') +
+      '</button>';
+    div.querySelector(".inv-item-action").addEventListener("click", async () => {
+      if (isActive) return;
+      const dur  = parseInt(div.querySelector(".inv-item-action").dataset.dur);
+      const mult = parseFloat(div.querySelector(".inv-item-action").dataset.mult);
+      if (NRGSys.activateXPBoost) await NRGSys.activateXPBoost(dur, mult);
+      const expiry = new Date(Date.now() + dur * 60000).toISOString();
+      renderBoostTimer(expiry);
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {
+        xpBoostActive: true, xpBoostExpiry: expiry, xpBoostMult: mult,
+        equipped: { ...(equipped || {}), xpBoost: item.id }
+      });
+      renderInventory(inventory, { ...(equipped || {}), xpBoost: item.id });
+    });
+    grid.appendChild(div);
+  });
+}
+
+async function handleDailyReward(d) {
+  const btn    = $("daily-claim-btn");
+  const streak = $("streak-label");
+  const today  = new Date().toDateString();
+  if (d.lastLoginDate === today) {
+    btn.disabled = true;
+    btn.textContent = "CLAIMED TODAY";
+    streak.textContent = "streak: " + (d.loginStreak || 1) + " day" + ((d.loginStreak || 1) !== 1 ? "s" : "");
+    return;
+  }
+  streak.textContent = "streak: " + (d.loginStreak || 0) + " days — claim to continue!";
+  btn.disabled = false;
+  btn.textContent = "CLAIM DAILY REWARD";
+  btn.onclick = async () => {
+    if (NRGSys.claimDailyReward) {
+      const result = await NRGSys.claimDailyReward();
+      if (result?.claimed) {
+        setMsg("daily-msg", "+" + result.coins + " coins! streak: " + result.streak + " days", "success");
+        $("stat-coins").textContent = (parseInt($("stat-coins").textContent) || 0) + result.coins;
+        btn.disabled = true;
+        btn.textContent = "CLAIMED TODAY";
+        streak.textContent = "streak: " + result.streak + " day" + (result.streak !== 1 ? "s" : "");
+      }
+    }
+  };
+}
+
+function renderDashFavs(favs) {
+  const grid  = document.getElementById("dash-fav-grid");
+  const empty = document.getElementById("dash-fav-empty");
+  if (!grid) return;
+  grid.innerHTML = "";
+  if (!favs || favs.length === 0) {
+    empty.style.display = "";
+    return;
+  }
+  empty.style.display = "none";
+  favs.forEach(name => {
+    const imgSrc = "images/" + name + ".png"; // matches games.html naming convention
+    const card   = document.createElement("div");
+    card.className = "dash-fav-card";
+    card.innerHTML =
+      '<div class="dash-fav-thumb"><img src="' + imgSrc + '" alt="" onerror="this.style.visibility=\'hidden\'"></div>' +
+      '<div class="dash-fav-name">' + name + '</div>' +
+      '<button class="dash-fav-remove" title="Remove" data-name="' + name + '">&#x2715;</button>';
+    card.querySelector(".dash-fav-remove").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (!snap.exists()) return;
+      const updated = (snap.data().favorites || []).filter(g => g !== name); // remove this game
+      await updateDoc(doc(db, "users", user.uid), { favorites: updated });
+      renderDashFavs(updated);
+    });
+    grid.appendChild(card);
+  });
+}
+
 async function createUserDoc(user) {
   const ref  = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      uid:              user.uid,
-      email:            user.email,
-      displayName:      user.displayName || user.email.split("@")[0],
-      photoURL:         user.photoURL || null,
-      createdAt:        serverTimestamp(),
-      theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
-      favorites:        [],
-      recentGames:      [],
-      timeSpentMinutes: 0
-    });
+  if (snap.exists()) return; // already exists, skip
+
+  // Generate a unique username for Google/OAuth sign-ins
+  const base = (user.displayName || user.email.split("@")[0])
+    .toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 20) || "user";
+  let username = base;
+  let attempt  = 0;
+  // Keep trying with a suffix until we find a free one
+  while (true) {
+    const taken = await isUsernameTaken(username);
+    if (!taken) break;
+    attempt++;
+    username = base.slice(0, 16) + attempt;
   }
+
+  const batch = writeBatch(db);
+  batch.set(ref, {
+    uid:              user.uid,
+    email:            user.email,
+    username:         username,
+    displayName:      user.displayName || user.email.split("@")[0],
+    photoURL:         user.photoURL || null,
+    createdAt:        new Date().toISOString(),
+    theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
+    favorites:        [],
+    recentGames:      [],
+    timeSpentMinutes: 0
+  });
+  batch.set(doc(db, "usernames", username),              { uid: user.uid, createdAt: new Date().toISOString() });
+  batch.set(doc(db, "emails",    user.email.toLowerCase()), { uid: user.uid, createdAt: new Date().toISOString() });
+  await batch.commit();
 }
 
+
+// ── Username & email uniqueness ───────────────────────────────────
+function normalizeUsername(u) {
+  return u.toLowerCase().replace(/[^a-z0-9_]/g, "");
+}
+
+async function isUsernameTaken(username) {
+  const snap = await getDoc(doc(db, "usernames", username));
+  return snap.exists();
+}
+
+async function isEmailTaken(email) {
+  const snap = await getDoc(doc(db, "emails", email.toLowerCase()));
+  return snap.exists();
+}
+
+async function reserveUsernameAndEmail(uid, username, email) {
+  const batch = writeBatch(db);
+  batch.set(doc(db, "usernames", username),          { uid, createdAt: new Date().toISOString() });
+  batch.set(doc(db, "emails",    email.toLowerCase()), { uid, createdAt: new Date().toISOString() });
+  await batch.commit();
+}
+
+// Live username availability check as user types
+let usernameCheckTimer = null;
+function wireUsernameCheck() {
+  const input = document.getElementById("s-username");
+  if (!input) return;
+  input.addEventListener("input", () => {
+    input.value = normalizeUsername(input.value);
+    const val   = input.value;
+    clearTimeout(usernameCheckTimer);
+    const msgEl = document.getElementById("s-username-msg");
+    if (!val) { msgEl.textContent = ""; msgEl.className = "msg"; return; }
+    if (val.length < 3) { msgEl.textContent = "at least 3 characters."; msgEl.className = "msg error"; return; }
+    msgEl.textContent = "checking..."; msgEl.className = "msg";
+    usernameCheckTimer = setTimeout(async () => {
+      const taken = await isUsernameTaken(val);
+      msgEl.textContent = taken ? "username already taken." : "username available.";
+      msgEl.className   = taken ? "msg error" : "msg success";
+    }, 500);
+  });
+}
+wireUsernameCheck();
 
 function friendlyError(code) {
   const map = {
@@ -394,15 +723,20 @@ function setAvatar(el, photoURL, name) {
   }
 }
 
+function toDate(ts) {
+  if (!ts) return null;
+  if (ts.toDate) return ts.toDate();              // Firestore Timestamp
+  if (ts.seconds) return new Date(ts.seconds * 1000); // Firestore Timestamp as plain object
+  return new Date(ts);                             // ISO string or ms
+}
 function formatDate(ts) {
-  if (!ts) return "—";
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const d = toDate(ts);
+  if (!d || isNaN(d)) return "—";
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
-
 function daysSince(ts) {
-  if (!ts) return "—";
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const d = toDate(ts);
+  if (!d || isNaN(d)) return "—";
   return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
 }
 
@@ -426,8 +760,9 @@ async function showDashboard(user) {
   $("dash-name").textContent  = name;
   $("dash-email").textContent = user.email;
   $("edit-name").value        = name;
-  setAvatar($("dash-avatar"), user.photoURL, name);
 
+  // Default to initial until Firestore loads
+  setAvatar($("dash-avatar"), null, name);
 
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
@@ -440,20 +775,55 @@ async function showDashboard(user) {
       $("stat-days").textContent     = daysSince(d.createdAt);
       $("stat-time").textContent     = fmt.value;
       $("stat-time-sub").textContent = fmt.unit;
+
+      const photo = d.photoURL || null;
+      setAvatar($("dash-avatar"), photo, name);
+      renderDashFavs(d.favorites || []);
+      renderXPBar(d.xp || 0);
+      $("stat-coins").textContent = d.coins || 0;
+      renderBoostTimer(d.xpBoostActive ? d.xpBoostExpiry : null);
+      renderInventory(d.inventory || [], d.equipped || {});
+      await handleDailyReward(d);
+      setAvatar($("tb-avatar"),   photo, name);
+
+      // Bio
+      const bio = d.bio || "";
+      $("edit-bio").value = bio;
+      $("bio-count").textContent = bio.length + "/200";
+
+      // Username
+      const uname = d.username || "";
+      $("dash-username").textContent = uname ? "@" + uname : "";
+      $("edit-username").value = uname;
+
+      // Profile link — uses the logged-in user's UID
+      const profileLink = $("view-profile-link");
+      if (profileLink) profileLink.href = "/profile.html?uid=" + user.uid;
+
+      // UID section
+      $("dash-uid").textContent = user.uid;
     }
-  } catch (e) { }
+  } catch (e) { console.error("showDashboard error:", e); }
 }
 
 
-function updateTopbar(user) {
+async function updateTopbar(user) {
   if (user) {
     $("topbar-login-btn").style.display = "none";
     $("topbar-user-btn").classList.add("visible");
     const name = user.displayName || user.email.split("@")[0];
-    setAvatar($("tb-avatar"), user.photoURL, name);
     $("tb-name").textContent     = name;
     $("tb-dd-name").textContent  = name;
     $("tb-dd-email").textContent = user.email;
+    // Set initial from name, then load photo from Firestore
+    setAvatar($("tb-avatar"), null, name);
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        const photo = snap.data().photoURL || null;
+        setAvatar($("tb-avatar"), photo, name);
+      }
+    } catch (e) { }
   } else {
     $("topbar-login-btn").style.display = "";
     $("topbar-user-btn").classList.remove("visible");
@@ -515,16 +885,48 @@ $("l-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("l-submi
 
 
 $("s-submit").addEventListener("click", async () => {
-  const name  = $("s-name").value.trim();
-  const email = $("s-email").value.trim();
-  const pass  = $("s-pass").value;
-  if (!name || !email || !pass) { setMsg("s-msg", "fill in all fields.", "error"); return; }
-  if (pass.length < 6) { setMsg("s-msg", "password must be at least 6 characters.", "error"); return; }
+  const name     = $("s-name").value.trim();
+  const username = normalizeUsername($("s-username").value.trim());
+  const email    = $("s-email").value.trim();
+  const pass     = $("s-pass").value;
+
+  // Basic validation
+  if (!name || !username || !email || !pass) { setMsg("s-msg", "fill in all fields.", "error"); return; }
+  if (username.length < 3)  { setMsg("s-msg", "username must be at least 3 characters.", "error"); return; }
+  if (pass.length < 6)      { setMsg("s-msg", "password must be at least 6 characters.", "error"); return; }
+
   setLoading("s-submit", true, "CREATE ACCOUNT");
   try {
+    // Check uniqueness BEFORE creating the Firebase Auth account
+    const [usernameTaken, emailTaken] = await Promise.all([
+      isUsernameTaken(username),
+      isEmailTaken(email)
+    ]);
+    if (usernameTaken) { setMsg("s-msg", "username already taken — pick another.", "error"); return; }
+    if (emailTaken)    { setMsg("s-msg", "email already registered — try logging in.", "error"); return; }
+
+    // Create the account
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: name });
-    await createUserDoc(cred.user);
+
+    // Write user doc + reserve username + reserve email atomically
+    const batch = writeBatch(db);
+    batch.set(doc(db, "users",     cred.user.uid), {
+      uid:              cred.user.uid,
+      email:            email,
+      username:         username,
+      displayName:      name,
+      photoURL:         null,
+      createdAt:        new Date().toISOString(),
+      theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
+      favorites:        [],
+      recentGames:      [],
+      timeSpentMinutes: 0
+    });
+    batch.set(doc(db, "usernames", username),           { uid: cred.user.uid, createdAt: new Date().toISOString() });
+    batch.set(doc(db, "emails",    email.toLowerCase()), { uid: cred.user.uid, createdAt: new Date().toISOString() });
+    await batch.commit();
+
     setMsg("s-msg", "account created!", "success");
   } catch (e) {
     setMsg("s-msg", friendlyError(e.code), "error");
@@ -568,28 +970,37 @@ $("avatar-file-input").addEventListener("change", async e => {
   if (!file || !auth.currentUser) return;
   const user = auth.currentUser;
 
-
-  if (file.size > 1024 * 1024) {
-    alert("Image must be under 1MB.");
+  if (file.size > 800 * 1024) {
+    setMsg("edit-name-msg", "image must be under 800KB.", "error");
     e.target.value = "";
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = async ev => {
-    const dataUrl = ev.target.result;
+  // Compress + resize to a small JPEG before storing
+  const bitmap = await createImageBitmap(file);
+  const canvas = document.createElement("canvas");
+  const MAX    = 256;
+  const ratio  = Math.min(MAX / bitmap.width, MAX / bitmap.height, 1);
+  canvas.width  = Math.round(bitmap.width  * ratio);
+  canvas.height = Math.round(bitmap.height * ratio);
+  canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
 
-    $("dash-avatar").innerHTML = '<img src="' + dataUrl + '" alt="">';
-    $("tb-avatar").innerHTML   = '<img src="' + dataUrl + '" alt="">';
+  // Preview immediately
+  $("dash-avatar").innerHTML = '<img src="' + dataUrl + '" alt="">';
+  $("tb-avatar").innerHTML   = '<img src="' + dataUrl + '" alt="">';
 
-    try {
-      await updateProfile(user, { photoURL: dataUrl });
-      await updateDoc(doc(db, "users", user.uid), { photoURL: dataUrl });
-    } catch (err) {
-      console.error("Avatar save failed:", err);
-    }
-  };
-  reader.readAsDataURL(file);
+  // Save to Firestore only — Firebase Auth photoURL can't hold base64
+  try {
+    await updateDoc(doc(db, "users", user.uid), { photoURL: dataUrl });
+    // Store a short placeholder in Auth so other pages know a photo exists
+    await updateProfile(user, { photoURL: "firestore" });
+    setMsg("edit-name-msg", "photo saved.", "success");
+  } catch (err) {
+    console.error("Avatar save failed:", err);
+    setMsg("edit-name-msg", "photo save failed — try a smaller image.", "error");
+  }
+
   e.target.value = "";
 });
 
@@ -641,6 +1052,125 @@ $("edit-pass-btn").addEventListener("click", async () => {
 });
 
 
+// ── Bio char counter ───────────────────────────────────────────────
+$("edit-bio").addEventListener("input", function() {
+  $("bio-count").textContent = this.value.length + "/200";
+});
+
+// ── Save bio ───────────────────────────────────────────────────────
+$("edit-bio-btn").addEventListener("click", async () => {
+  const bio  = $("edit-bio").value.trim();
+  const user = auth.currentUser;
+  if (!user) return;
+  setLoading("edit-bio-btn", true, "Save Bio");
+  try {
+    await updateDoc(doc(db, "users", user.uid), { bio });
+    setMsg("edit-bio-msg", "bio saved.", "success");
+  } catch (e) {
+    setMsg("edit-bio-msg", "failed to save bio.", "error");
+  } finally {
+    setLoading("edit-bio-btn", false, "Save Bio");
+  }
+});
+
+// ── Username live availability check ──────────────────────────────
+let unameTimer = null;
+$("edit-username").addEventListener("input", function() {
+  this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, "");
+  const val  = this.value;
+  clearTimeout(unameTimer);
+  const msgEl = $("edit-username-msg");
+  if (!val) { msgEl.textContent = ""; msgEl.className = "msg"; return; }
+  if (val.length < 3) { msgEl.textContent = "at least 3 characters."; msgEl.className = "msg error"; return; }
+  msgEl.textContent = "checking..."; msgEl.className = "msg";
+  unameTimer = setTimeout(async () => {
+    const taken    = await getDoc(doc(db, "usernames", val));
+    const userSnap = await getDoc(doc(db, "users", auth.currentUser?.uid || "x"));
+    const isMine   = userSnap.exists() && userSnap.data().username === val;
+    if (taken.exists() && !isMine) {
+      msgEl.textContent = "username already taken."; msgEl.className = "msg error";
+    } else {
+      msgEl.textContent = "username available.";    msgEl.className = "msg success";
+    }
+  }, 500);
+});
+
+// ── Save username ──────────────────────────────────────────────────
+$("edit-username-btn").addEventListener("click", async () => {
+  const newUsername = $("edit-username").value.toLowerCase().replace(/[^a-z0-9_]/g, "").trim();
+  if (!newUsername)        { setMsg("edit-username-msg", "enter a username.", "error"); return; }
+  if (newUsername.length < 3) { setMsg("edit-username-msg", "at least 3 characters.", "error"); return; }
+  const user = auth.currentUser;
+  if (!user) return;
+  setLoading("edit-username-btn", true, "Save");
+  try {
+    const takenSnap = await getDoc(doc(db, "usernames", newUsername));
+    const userSnap  = await getDoc(doc(db, "users", user.uid));
+    const oldUsername = userSnap.exists() ? userSnap.data().username : null;
+    if (takenSnap.exists() && oldUsername !== newUsername) {
+      setMsg("edit-username-msg", "username already taken.", "error"); return;
+    }
+    const batch = writeBatch(db);
+    batch.update(doc(db, "users", user.uid), { username: newUsername });
+    batch.set(doc(db, "usernames", newUsername), { uid: user.uid, createdAt: new Date().toISOString() });
+    if (oldUsername && oldUsername !== newUsername) {
+      batch.delete(doc(db, "usernames", oldUsername));
+    }
+    await batch.commit();
+    $("dash-username").textContent = "@" + newUsername;
+    const profileLink = $("view-profile-link");
+    if (profileLink) profileLink.href = "/profile.html?uid=" + user.uid;
+    setMsg("edit-username-msg", "username updated.", "success");
+  } catch (e) {
+    setMsg("edit-username-msg", "failed to update username.", "error");
+    console.error(e);
+  } finally {
+    setLoading("edit-username-btn", false, "Save");
+  }
+});
+
+// ── Delete account ─────────────────────────────────────────────────
+$("dash-delete-btn").addEventListener("click", () => {
+  $("delete-confirm-pass").value = "";
+  $("delete-msg").textContent    = "";
+  $("delete-msg").className      = "msg";
+  $("delete-modal").classList.add("open");
+});
+
+$("delete-cancel-btn").addEventListener("click", () => {
+  $("delete-modal").classList.remove("open");
+});
+
+$("delete-confirm-btn").addEventListener("click", async () => {
+  const pass = $("delete-confirm-pass").value;
+  if (!pass) { $("delete-msg").textContent = "enter your password."; $("delete-msg").className = "msg error"; return; }
+  const user = auth.currentUser;
+  if (!user) return;
+  setLoading("delete-confirm-btn", true, "Delete Forever");
+  try {
+    const credential = EmailAuthProvider.credential(user.email, pass);
+    await reauthenticateWithCredential(user, credential);
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    if (userSnap.exists()) {
+      const d     = userSnap.data();
+      const batch = writeBatch(db);
+      batch.delete(doc(db, "users", user.uid));
+      if (d.username) batch.delete(doc(db, "usernames", d.username));
+      if (d.email)    batch.delete(doc(db, "emails", d.email.toLowerCase()));
+      await batch.commit();
+    }
+    await deleteUser(user);
+    $("delete-modal").classList.remove("open");
+  } catch (e) {
+    const msg = (e.code === "auth/wrong-password" || e.code === "auth/invalid-credential")
+      ? "incorrect password." : friendlyError(e.code);
+    $("delete-msg").textContent = msg;
+    $("delete-msg").className   = "msg error";
+  } finally {
+    setLoading("delete-confirm-btn", false, "Delete Forever");
+  }
+});
+
 $("dash-logout").addEventListener("click", async () => {
   if (auth.currentUser) await flushTime(auth.currentUser.uid);
   await signOut(auth);
@@ -648,7 +1178,7 @@ $("dash-logout").addEventListener("click", async () => {
 
 
 onAuthStateChanged(auth, user => {
-  updateTopbar(user);
+  updateTopbar(user).catch(console.error);
   if (user) {
     showDashboard(user).catch(console.error);
   } else {
@@ -663,6 +1193,19 @@ document.querySelectorAll(".nrg-sidebar .nav-icon[data-page]").forEach(icon => {
   icon.addEventListener("click", () => { window.location.href = "/" + icon.dataset.page; });
 });
 </script>
+
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-box">
+    <div class="modal-title">Delete Account</div>
+    <div class="modal-body">This is permanent and cannot be undone. All your data will be deleted. Enter your password to confirm.</div>
+    <div class="field" style="margin-bottom:12px"><input type="password" id="delete-confirm-pass" placeholder="your password"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="delete-cancel-btn" style="margin-bottom:0">Cancel</button>
+      <button class="btn danger" id="delete-confirm-btn" style="margin-bottom:0">Delete Forever</button>
+    </div>
+    <div class="msg" id="delete-msg"></div>
+  </div>
+</div>
 
 <script src="sidebar-logic.js"></script>
 </body>

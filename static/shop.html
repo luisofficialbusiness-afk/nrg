@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a; --surface3: #222;
+  --border: #2a2a2a; --accent: #c50cf9; --accent-dim: rgba(197,12,249,0.08);
+  --text: #e8e8e8; --text-dim: #666; --text-muted: #3a3a3a;
+  --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  --red: #ff4f4f; --green: #39d98a; --gold: #f5c518; --blue: #4f9cf9;
+  --rare: #4f9cf9; --epic: #c50cf9; --legendary: #f5c518; --common: #666;
+}
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; flex-direction: column; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.topbar { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-nrg { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; }
+.brand-divider { width: 1px; height: 13px; background: var(--border); }
+.brand-page { font-size: 13px; color: var(--text-dim); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.coin-display { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); background: var(--surface2); border: 1px solid var(--border); padding: 5px 12px; border-radius: 4px; }
+.coin-icon { color: var(--gold); font-size: 13px; }
+.coin-count { color: var(--text); font-weight: 700; }
+
+.login-prompt { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
+
+.main { flex: 1; overflow-y: auto; padding: 28px 24px 80px; }
+
+.shop-header { margin-bottom: 28px; }
+.shop-title { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: 0.08em; margin-bottom: 6px; }
+.shop-sub { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.15em; }
+
+.category-tabs { display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap; }
+.cat-tab { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; padding: 6px 14px; border-radius: 3px; border: 1px solid var(--border); background: none; color: var(--text-muted); cursor: pointer; transition: border-color 0.13s, color 0.13s, background 0.13s; text-transform: uppercase; }
+.cat-tab:hover { border-color: var(--text-dim); color: var(--text); }
+.cat-tab.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+
+.shop-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; position: relative; }
+.shop-card:hover { transform: translateY(-2px); }
+.shop-card.rarity-common  { border-top: 2px solid var(--common); }
+.shop-card.rarity-rare    { border-top: 2px solid var(--rare); }
+.shop-card.rarity-epic    { border-top: 2px solid var(--epic); }
+.shop-card.rarity-legendary { border-top: 2px solid var(--legendary); box-shadow: 0 0 20px rgba(245,197,24,0.1); }
+
+.shop-card-preview { width: 100%; height: 110px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 36px; position: relative; overflow: hidden; }
+.shop-card-preview.username-color { font-family: var(--mono); font-size: 15px; font-weight: 700; }
+.shop-card-preview.xpboost { flex-direction: column; gap: 4px; }
+.shop-card-preview.xpboost .boost-mult { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--accent); }
+.shop-card-preview.xpboost .boost-dur  { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
+
+.rarity-badge { position: absolute; top: 8px; left: 8px; font-family: var(--mono); font-size: 7px; letter-spacing: 0.15em; padding: 2px 7px; border-radius: 2px; text-transform: uppercase; font-weight: 700; }
+.rarity-common    { background: rgba(102,102,102,0.2); color: var(--common); }
+.rarity-rare      { background: rgba(79,156,249,0.15); color: var(--rare); }
+.rarity-epic      { background: rgba(197,12,249,0.15); color: var(--epic); }
+.rarity-legendary { background: rgba(245,197,24,0.15); color: var(--legendary); }
+
+.shop-card-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; }
+.shop-card-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.shop-card-desc { font-family: var(--mono); font-size: 9px; color: var(--text-dim); line-height: 1.5; letter-spacing: 0.04em; flex: 1; }
+
+.shop-card-footer { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.shop-card-price { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--gold); }
+.shop-card-price .coin-icon { font-size: 11px; }
+
+.buy-btn { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.1em; padding: 6px 12px; border-radius: 3px; border: 1px solid var(--accent); background: none; color: var(--accent); cursor: pointer; transition: background 0.13s; }
+.buy-btn:hover:not(:disabled) { background: var(--accent-dim); }
+.buy-btn:disabled { opacity: 0.45; cursor: not-allowed; border-color: var(--border); color: var(--text-muted); }
+.buy-btn.owned { border-color: var(--green); color: var(--green); }
+
+.no-items { font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.15em; text-align: center; padding: 60px 0; grid-column: 1/-1; }
+
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 10px 18px; border-radius: 4px; font-family: var(--mono); font-size: 10px; color: var(--text); letter-spacing: 0.06em; opacity: 0; transition: opacity 0.2s, transform 0.2s; z-index: 9999; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { border-left-color: var(--red); }
+
+.nrg-sidebar { width: 110px; background: rgba(15,15,15,0.95); border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 28px 0; position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-96px); transition: transform 0.3s ease; z-index: 999; }
+.nrg-sidebar:hover { transform: translateX(0); }
+.nrg-sidebar .nav-icon { width: 86px; height: 56px; margin: 6px 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; font-size: 16px; color: #ccc; font-family: var(--sans); transition: background 0.2s ease; }
+.nrg-sidebar .nav-icon:hover, .nrg-sidebar .nav-icon.active { background: rgba(255,255,255,0.08); color: white; }
+
+.bottom-sidebar { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 70%); display: flex; gap: 20px; padding: 10px 18px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; z-index: 999; }
+.bottom-sidebar:hover { transform: translate(-50%, 0); }
+.status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">NRG</span>
+    <div class="brand-divider"></div>
+    <span class="brand-page">Shop</span>
+  </div>
+  <div class="topbar-right">
+    <div class="coin-display" id="coin-display" style="display:none">
+      <span class="coin-icon">&#9733;</span>
+      <span class="coin-count" id="coin-count">0</span>
+      <span style="color:var(--text-muted)">coins</span>
+    </div>
+    <span class="login-prompt" id="login-prompt" style="display:none">log in to buy items</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="shop-header">
+    <div class="shop-title">SHOP</div>
+    <div class="shop-sub">spend your coins on cosmetics and boosts</div>
+  </div>
+
+  <div class="category-tabs">
+    <button class="cat-tab active" data-cat="all">All</button>
+    <button class="cat-tab" data-cat="usernamecolor">Username Colors</button>
+    <button class="cat-tab" data-cat="xpboost">XP Boosts</button>
+    <button class="cat-tab" data-cat="profiledeco">Profile Decos</button>
+    <button class="cat-tab" data-cat="pfpdeco">PFP Decos</button>
+    <button class="cat-tab" data-cat="title">Titles</button>
+  </div>
+
+  <div class="shop-grid" id="shop-grid">
+    <div class="no-items">Loading shop...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="nrg-sidebar">
+  <div class="nav-icon" data-page="index.html">Home</div>
+  <div class="nav-icon" data-page="games.html">Games</div>
+  <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="music.html">Music</div>
+  <div class="nav-icon" data-page="shop.html">Shop</div>
+  <div class="nav-icon" data-page="nrg-auth-ui.html">Account</div>
+  <div class="nav-icon" data-page="settings.html">Settings</div>
+</div>
+
+<div class="bottom-sidebar">
+  <div class="status-card" id="time-status">Time: --:--</div>
+  <div class="status-card" id="battery-status">Battery: --%</div>
+  <div class="status-card" id="temperature-status">Temp: -- C</div>
+  <div class="status-card" id="ping-status">Ping: -- ms</div>
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
+  authDomain:        "nrg-accounts.firebaseapp.com",
+  projectId:         "nrg-accounts",
+  storageBucket:     "nrg-accounts.firebasestorage.app",
+  messagingSenderId: "969467601192",
+  appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let NRGSys = {};
+import("./nrg-system.js").then(m => { NRGSys = m; }).catch(() => {});
+
+const $ = id => document.getElementById(id);
+
+let currentUser  = null;
+let userCoins    = 0;
+let userInventory = [];
+let allItems     = [];
+let activeCategory = "all";
+
+// hardcoded fallback items — admin can override these via Firestore shopItems collection
+const FALLBACK_ITEMS = [
+  { id: "color_purple",   name: "Purple Handle",    category: "usernamecolor", rarity: "common",    price: 50,   color: "#c50cf9", desc: "Make your @username purple." },
+  { id: "color_blue",     name: "Blue Handle",      category: "usernamecolor", rarity: "common",    price: 50,   color: "#4f9cf9", desc: "Make your @username blue." },
+  { id: "color_gold",     name: "Gold Handle",      category: "usernamecolor", rarity: "rare",      price: 150,  color: "#f5c518", desc: "Make your @username gold." },
+  { id: "color_red",      name: "Red Handle",       category: "usernamecolor", rarity: "rare",      price: 150,  color: "#ff4f4f", desc: "Make your @username red." },
+  { id: "color_green",    name: "Green Handle",     category: "usernamecolor", rarity: "rare",      price: 150,  color: "#39d98a", desc: "Make your @username green." },
+  { id: "color_rainbow",  name: "Rainbow Handle",   category: "usernamecolor", rarity: "legendary", price: 800,  color: "rainbow", desc: "Animated rainbow @username." },
+
+  { id: "boost_2x_30",    name: "2x XP — 30 min",  category: "xpboost",       rarity: "common",    price: 80,   multiplier: 2, duration: 30,  desc: "Double your XP for 30 minutes." },
+  { id: "boost_2x_60",    name: "2x XP — 1 hour",  category: "xpboost",       rarity: "rare",      price: 140,  multiplier: 2, duration: 60,  desc: "Double your XP for 1 hour." },
+  { id: "boost_3x_60",    name: "3x XP — 1 hour",  category: "xpboost",       rarity: "epic",      price: 300,  multiplier: 3, duration: 60,  desc: "Triple your XP for 1 hour." },
+  { id: "boost_5x_30",    name: "5x XP — 30 min",  category: "xpboost",       rarity: "legendary", price: 600,  multiplier: 5, duration: 30,  desc: "5x XP for 30 minutes. Rare." },
+
+  { id: "profile_dark",   name: "Dark Theme",       category: "profiledeco",   rarity: "common",    price: 100,  emoji: "🌑", desc: "Deep dark theme on your public profile." },
+  { id: "profile_neon",   name: "Neon Theme",       category: "profiledeco",   rarity: "rare",      price: 200,  emoji: "⚡", desc: "Neon glow effect on your public profile." },
+  { id: "profile_galaxy", name: "Galaxy Theme",     category: "profiledeco",   rarity: "epic",      price: 450,  emoji: "🌌", desc: "Animated galaxy background on your profile." },
+  { id: "profile_fire",   name: "Fire Theme",       category: "profiledeco",   rarity: "legendary", price: 900,  emoji: "🔥", desc: "Animated fire border on your profile." },
+
+  { id: "pfp_glow",       name: "Purple Glow",      category: "pfpdeco",       rarity: "common",    price: 120,  emoji: "💜", desc: "Purple glow ring around your avatar." },
+  { id: "pfp_gold_ring",  name: "Gold Ring",        category: "pfpdeco",       rarity: "rare",      price: 250,  emoji: "👑", desc: "Gold border ring around your avatar." },
+  { id: "pfp_fire_ring",  name: "Fire Ring",        category: "pfpdeco",       rarity: "epic",      price: 500,  emoji: "🔥", desc: "Animated fire ring around your avatar." },
+  { id: "pfp_rainbow",    name: "Rainbow Aura",     category: "pfpdeco",       rarity: "legendary", price: 1000, emoji: "🌈", desc: "Animated rainbow aura around your avatar." },
+
+  { id: "title_gamer",    name: "Gamer",            category: "title",         rarity: "common",    price: 75,   desc: "Show 'Gamer' under your name." },
+  { id: "title_veteran",  name: "Veteran",          category: "title",         rarity: "rare",      price: 200,  desc: "Show 'Veteran' under your name." },
+  { id: "title_legend",   name: "Legend",           category: "title",         rarity: "epic",      price: 500,  desc: "Show 'Legend' under your name." },
+  { id: "title_nrg",      name: "NRG Elite",        category: "title",         rarity: "legendary", price: 1200, desc: "The rarest title. For the dedicated." },
+];
+
+function toast(msg, type = "success") {
+  const el = $("toast");
+  el.textContent = msg;
+  el.className   = "toast " + type + " show";
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function buildPreview(item) {
+  if (item.category === "usernamecolor") {
+    const style = item.color === "rainbow"
+      ? "background:linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent"
+      : "color:" + item.color;
+    return '<div class="shop-card-preview username-color" style="' + style + '">@username</div>';
+  }
+  if (item.category === "xpboost") {
+    return '<div class="shop-card-preview xpboost"><span class="boost-mult">' + item.multiplier + 'x</span><span class="boost-dur">' + (item.duration >= 60 ? item.duration/60 + ' hr' : item.duration + ' min') + '</span></div>';
+  }
+  return '<div class="shop-card-preview">' + (item.emoji || "🎁") + '</div>';
+}
+
+function renderShop(items, inventory) {
+  const grid = $("shop-grid");
+  const filtered = activeCategory === "all" ? items : items.filter(i => i.category === activeCategory);
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-items">NO ITEMS IN THIS CATEGORY YET.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(item => {
+    const owned    = inventory.includes(item.id);
+    const canAfford = userCoins >= item.price;
+    return `
+      <div class="shop-card rarity-${item.rarity}" data-id="${item.id}">
+        ${buildPreview(item)}
+        <span class="rarity-badge rarity-${item.rarity}">${item.rarity}</span>
+        <div class="shop-card-body">
+          <div class="shop-card-name">${item.name}</div>
+          <div class="shop-card-desc">${item.desc}</div>
+        </div>
+        <div class="shop-card-footer">
+          <div class="shop-card-price"><span class="coin-icon">&#9733;</span>${item.price}</div>
+          <button class="buy-btn ${owned ? 'owned' : ''}" data-id="${item.id}"
+            ${owned ? 'disabled' : (!currentUser || !canAfford) ? 'disabled' : ''}>
+            ${owned ? 'OWNED' : !currentUser ? 'LOG IN' : !canAfford ? 'NEED COINS' : 'BUY'}
+          </button>
+        </div>
+      </div>`;
+  }).join("");
+
+  grid.querySelectorAll(".buy-btn:not([disabled])").forEach(btn => {
+    btn.addEventListener("click", () => buyItem(btn.dataset.id));
+  });
+}
+
+async function buyItem(itemId) {
+  if (!currentUser) return;
+  const item = allItems.find(i => i.id === itemId);
+  if (!item) return;
+  if (userCoins < item.price) { toast("not enough coins.", "error"); return; }
+
+  const btn = document.querySelector(`.buy-btn[data-id="${itemId}"]`);
+  if (btn) { btn.disabled = true; btn.textContent = "..."; }
+
+  try {
+    const snap = await getDoc(doc(db, "users", currentUser.uid));
+    if (!snap.exists()) return;
+    const d       = snap.data();
+    const newCoins = (d.coins || 0) - item.price;
+    if (newCoins < 0) { toast("not enough coins.", "error"); return; }
+
+    // build the inventory item object to store
+    const invItem = {
+      id:         item.id,
+      name:       item.name,
+      category:   item.category,
+      rarity:     item.rarity,
+      desc:       item.desc,
+      purchasedAt: new Date().toISOString(),
+    };
+    if (item.multiplier) invItem.multiplier = item.multiplier;
+    if (item.duration)   invItem.duration   = item.duration;
+    if (item.color)      invItem.color      = item.color;
+    if (item.emoji)      invItem.emoji      = item.emoji;
+
+    const newInventory = [...(d.inventory || []), invItem];
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      coins:     newCoins,
+      inventory: newInventory
+    });
+
+    userCoins     = newCoins;
+    userInventory = newInventory.map(i => i.id);
+    $("coin-count").textContent = userCoins;
+    toast("purchased " + item.name + "!", "success");
+    renderShop(allItems, userInventory);
+  } catch (e) {
+    console.error(e);
+    toast("purchase failed — try again.", "error");
+    if (btn) { btn.disabled = false; btn.textContent = "BUY"; }
+  }
+}
+
+async function loadShopItems() {
+  try {
+    const snap = await getDocs(collection(db, "shopItems"));
+    if (!snap.empty) {
+      allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } else {
+      allItems = FALLBACK_ITEMS; // use hardcoded items if Firestore collection is empty
+    }
+  } catch (e) {
+    allItems = FALLBACK_ITEMS;
+  }
+}
+
+document.querySelectorAll(".cat-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    activeCategory = tab.dataset.cat;
+    renderShop(allItems, userInventory);
+  });
+});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  if (user) {
+    $("coin-display").style.display  = "flex";
+    $("login-prompt").style.display  = "none";
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      const d       = snap.data();
+      userCoins     = d.coins || 0;
+      userInventory = (d.inventory || []).map(i => i.id ?? i); // handle both object and string arrays
+      $("coin-count").textContent = userCoins;
+    }
+  } else {
+    $("coin-display").style.display  = "none";
+    $("login-prompt").style.display  = "";
+    userCoins     = 0;
+    userInventory = [];
+  }
+  renderShop(allItems, userInventory);
+});
+
+await loadShopItems();
+renderShop(allItems, userInventory);
+
+document.querySelectorAll(".nrg-sidebar .nav-icon").forEach(icon => {
+  const cur = window.location.pathname.split("/").pop();
+  if (icon.dataset.page === cur) icon.classList.add("active");
+  icon.addEventListener("click", () => { if (icon.dataset.page) window.location.href = "/" + icon.dataset.page; });
+});
+</script>
+
+<script src="sidebar-logic.js"></script>
+</body>
+</html>

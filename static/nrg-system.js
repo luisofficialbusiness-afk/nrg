@@ -1,265 +1,146 @@
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-function getProfile() {
-    let profile = JSON.parse(localStorage.getItem("nrg_profile"));
+const firebaseConfig = {
+  apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
+  authDomain:        "nrg-accounts.firebaseapp.com",
+  projectId:         "nrg-accounts",
+  storageBucket:     "nrg-accounts.firebasestorage.app",
+  messagingSenderId: "969467601192",
+  appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
+};
 
-    if (!profile) {
-        profile = {
-            username: "Guest",
-            pfp: null,
-            banner: null,
-            xp: 0,
-            nCoins: 0,
-            achievements: [],
-            progress: {
-                gamesPlayed: 0,
-                aiUses: 0,
-                visits: 0
-            }
-        };
-        localStorage.setItem("nrg_profile", JSON.stringify(profile));
-    }
+// reuse existing Firebase app if already initialised on this page
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-    return profile;
+// XP required to reach each level — index = level number
+// level 1 needs 0 XP, level 2 needs 100, level 3 needs 250, etc.
+const LEVEL_THRESHOLDS = [0, 0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200,
+  4000, 5000, 6200, 7600, 9200, 11000, 13000, 15500, 18500, 22000];
+
+export function xpForLevel(level) {
+  return LEVEL_THRESHOLDS[level] ?? (LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1] + (level - LEVEL_THRESHOLDS.length + 1) * 3000);
 }
 
-function saveProfile(profile) {
-    localStorage.setItem("nrg_profile", JSON.stringify(profile));
+export function levelFromXP(xp) {
+  let level = 1;
+  for (let i = 1; i < LEVEL_THRESHOLDS.length; i++) {
+    if (xp >= LEVEL_THRESHOLDS[i]) level = i; // walk up until xp no longer qualifies
+    else break;
+  }
+  return level;
 }
 
-function getLevel(xp) {
-    return Math.floor(xp / 100) + 1;
+export function xpProgressInLevel(xp) {
+  const level    = levelFromXP(xp);
+  const current  = xpForLevel(level);     // XP at start of this level
+  const next     = xpForLevel(level + 1); // XP needed for next level
+  const progress = xp - current;
+  const needed   = next - current;
+  return { level, progress, needed, pct: Math.min(100, Math.floor((progress / needed) * 100)) };
 }
 
-function getRank(level) {
-    if (level >= 100) return "NRG Legend";
-    if (level >= 75) return "Ascended";
-    if (level >= 50) return "NRG Master";
-    if (level >= 40) return "Veteran";
-    if (level >= 30) return "Elite";
-    if (level >= 20) return "Specialist";
-    if (level >= 15) return "Operator";
-    if (level >= 10) return "Explorer";
-    if (level >= 5) return "Rising";
-    return "Rookie";
+// returns the user's active XP multiplier (1 if no boost active or boost expired)
+async function getXPMultiplier(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) return 1;
+  const d = snap.data();
+  if (!d.xpBoostActive || !d.xpBoostExpiry) return 1;
+  const expiry = new Date(d.xpBoostExpiry).getTime();
+  if (Date.now() > expiry) {
+    await updateDoc(doc(db, "users", uid), { xpBoostActive: false, xpBoostExpiry: null, xpBoostMult: 1 });
+    return 1;
+  }
+  return d.xpBoostMult || 1;
 }
 
-
-function showAchievementPopup(name) {
-    const popup = document.createElement("div");
-    popup.className = "achievement-popup";
-    popup.innerText = `🏆 Achievement Unlocked: ${name}!`;
-    document.body.appendChild(popup);
-
-    setTimeout(() => {
-        popup.remove();
-    }, 2500);
+// awards XP to the current user, recalculates level, writes both back
+export async function addXP(amount) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const mult     = await getXPMultiplier(user.uid);
+  const actual   = Math.floor(amount * mult); // apply boost multiplier
+  const snap     = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return;
+  const newXP    = (snap.data().xp || 0) + actual;
+  const newLevel = levelFromXP(newXP);
+  await updateDoc(doc(db, "users", user.uid), { xp: newXP, level: newLevel });
+  return { xp: newXP, level: newLevel, gained: actual };
 }
 
-
-
-function addXP(amount) {
-    let profile = getProfile();
-    profile.xp = (profile.xp || 0) + amount;
-    saveProfile(profile);
-    updateProfileUI();
-    checkAchievements();
+// adds coins to the current user
+export async function addCoins(amount) {
+  const user = auth.currentUser;
+  if (!user) return;
+  await updateDoc(doc(db, "users", user.uid), { coins: increment(amount) });
 }
 
-function addProgress(type, amount = 1) {
-    let profile = getProfile();
-    if (profile.progress[type] !== undefined) {
-        profile.progress[type] += amount;
-        saveProfile(profile);
-        updateProfileUI();
-        checkAchievements();
-    }
+// removes coins — returns false if not enough balance
+export async function spendCoins(amount) {
+  const user = auth.currentUser;
+  if (!user) return false;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return false;
+  const current = snap.data().coins || 0;
+  if (current < amount) return false; // not enough coins
+  await updateDoc(doc(db, "users", user.uid), { coins: increment(-amount) });
+  return true;
 }
 
-function addCoins(amount) {
-    let profile = getProfile();
-    profile.nCoins = (profile.nCoins || 0) + amount;
-    saveProfile(profile);
-    updateCoinsUI();
-    checkAchievements();
+// activates an XP boost item — duration in minutes, multiplier e.g. 2 for 2x
+export async function activateXPBoost(durationMinutes, multiplier) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const expiry = new Date(Date.now() + durationMinutes * 60 * 1000).toISOString();
+  await updateDoc(doc(db, "users", user.uid), {
+    xpBoostActive: true,
+    xpBoostExpiry: expiry,
+    xpBoostMult:   multiplier
+  });
 }
 
+// checks and handles the daily login reward — call once on page load
+// returns { claimed, coins, streak } or null if already claimed today
+export async function claimDailyReward() {
+  const user = auth.currentUser;
+  if (!user) return null;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return null;
+  const d         = snap.data();
+  const today     = new Date().toDateString(); // e.g. "Mon May 20 2026"
+  const lastLogin = d.lastLoginDate || "";
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
 
-function spendCoins(amount) {
-    let profile = getProfile();
-    if ((profile.nCoins || 0) >= amount) {
-        profile.nCoins -= amount;
-        saveProfile(profile);
-        updateCoinsUI();
-        return true;
-    } else {
-        alert("Not enough N-Coins!");
-        return false;
-    }
+  if (lastLogin === today) return { claimed: false }; // already claimed today
+
+  // streak continues if last login was yesterday, otherwise resets to 1
+  const streak     = lastLogin === yesterday ? (d.loginStreak || 0) + 1 : 1;
+  const coinsEarned = Math.min(10 + (streak - 1) * 15, 200); // 10 base, +15 per streak day, cap 200
+
+  await updateDoc(doc(db, "users", user.uid), {
+    lastLoginDate: today,
+    loginStreak:   streak,
+    coins:         increment(coinsEarned)
+  });
+
+  return { claimed: true, coins: coinsEarned, streak };
 }
 
-
-
-function unlockAchievement(id) {
-    let profile = getProfile();
-
-    const achievementList = {
-        first_game: " First Game",
-        gamer_10: " Played 10 Games",
-        gamer_50: " Played 50 Games",
-        ai_user: " AI Beginner",
-        ai_20: " AI Expert (20 Uses)",
-        xp_100: " 100 XP",
-        xp_500: "500 XP",
-        xp_1000: " 1000 XP",
-        level_5: " Level 5",
-        level_10: " Level 10",
-        level_25: " Level 25",
-        coins_100: " 100 N-Coins",
-        coins_500: " 500 N-Coins",
-        visitor_10: " 10 Visits"
-    };
-
-    if (!profile.achievements.includes(id) && achievementList[id]) {
-        profile.achievements.push(id);
-        saveProfile(profile);
-        showAchievementPopup(achievementList[id]);
-        renderAchievements(); 
-    }
+// returns current user doc data or null
+export async function getUserData() {
+  const user = auth.currentUser;
+  if (!user) return null;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  return snap.exists() ? snap.data() : null;
 }
 
-function checkAchievements() {
-    let profile = getProfile();
-    let level = getLevel(profile.xp);
-
-    
-    if (profile.progress.gamesPlayed >= 1) unlockAchievement("first_game");
-    if (profile.progress.gamesPlayed >= 10) unlockAchievement("gamer_10");
-    if (profile.progress.gamesPlayed >= 50) unlockAchievement("gamer_50");
-
-    
-    if (profile.progress.aiUses >= 1) unlockAchievement("ai_user");
-    if (profile.progress.aiUses >= 20) unlockAchievement("ai_20");
-
-    
-    if (profile.xp >= 100) unlockAchievement("xp_100");
-    if (profile.xp >= 500) unlockAchievement("xp_500");
-    if (profile.xp >= 1000) unlockAchievement("xp_1000");
-
-    
-    if (level >= 5) unlockAchievement("level_5");
-    if (level >= 10) unlockAchievement("level_10");
-    if (level >= 25) unlockAchievement("level_25");
-
-    
-    if (profile.nCoins >= 100) unlockAchievement("coins_100");
-    if (profile.nCoins >= 500) unlockAchievement("coins_500");
-
-    
-    if (profile.progress.visits >= 10) unlockAchievement("visitor_10");
+// waits for auth to resolve then calls callback with user (or null)
+export function onReady(callback) {
+  return onAuthStateChanged(auth, callback);
 }
 
-
-
-function updateProfileUI() {
-    const profile = getProfile();
-
-    const xpElem = document.getElementById('xp');
-    if (xpElem) xpElem.innerText = profile.xp || 0;
-
-    const levelElem = document.getElementById('level');
-    if (levelElem) levelElem.innerText = getLevel(profile.xp);
-
-    const rankElem = document.getElementById('rank');
-    if (rankElem) rankElem.innerText = getRank(getLevel(profile.xp));
-
-    const xpFillElem = document.getElementById('xp-fill');
-    if (xpFillElem) xpFillElem.style.width = (profile.xp % 100) + '%';
-
-    renderAchievements();
-    updateCoinsUI();
-}
-
-function updateCoinsUI() {
-    const profile = getProfile();
-    const coinsElements = document.querySelectorAll(".ncoins-display, #ncoins");
-    coinsElements.forEach(el => el.innerText = profile.nCoins || 0);
-}
-
-function renderAchievements() {
-    const profile = getProfile();
-    const grid = document.getElementById("achievements-grid");
-    if (!grid) return;
-
-    const achievementList = {
-        first_game:  " First Game",
-        gamer_10: " Played 10 Games",
-        gamer_50: " Played 50 Games",
-        ai_user: " AI Beginner",
-        ai_20: " AI Expert (20 Uses)",
-        xp_100: " 100 XP",
-        xp_500: " 500 XP",
-        xp_1000: " 1000 XP",
-        level_5: " Level 5",
-        level_10: " Level 10",
-        level_25: " Level 25",
-        coins_100: " 100 N-Coins",
-        coins_500: " 500 N-Coins",
-        visitor_10: " 10 Visits"
-    };
-
-    grid.innerHTML = "";
-    for (let id in achievementList) {
-        let div = document.createElement("div");
-        div.className = profile.achievements.includes(id) ? "ach unlocked" : "ach locked";
-        div.innerText = achievementList[id];
-        grid.appendChild(div);
-    }
-}
-
-
-
-function trackGamePlayed() {
-    addProgress("gamesPlayed");
-    addXP(5);
-    addCoins(2);
-}
-
-function trackAiUsage() {
-    addProgress("aiUses");
-    addXP(3);
-    addCoins(1);
-}
-
-
-
-function dailyBonus() {
-    const lastBonus = localStorage.getItem('nrg_last_daily_bonus') || 0;
-    const now = Date.now();
-    const oneDay = 24*60*60*1000;
-
-    if(now - lastBonus >= oneDay) {
-        addCoins(50);
-        localStorage.setItem('nrg_last_daily_bonus', now);
-        alert("Daily bonus: +50 N-Coins!");
-    } else {
-        console.log("Daily bonus already claimed.");
-    }
-}
-
-
-
-window.addXP = addXP;
-window.addCoins = addCoins;
-window.addProgress = addProgress;
-window.trackGamePlayed = trackGamePlayed;
-window.trackAiUsage = trackAiUsage;
-window.dailyBonus = dailyBonus;
-window.getProfile = getProfile;
-window.saveProfile = saveProfile;
-window.updateProfileUI = updateProfileUI;
-
-
-window.addEventListener('load', () => {
-    updateProfileUI();
-    checkAchievements(); 
-});
+// expose on window so non-module scripts (games.html legacy scripts) can still call them
+window.NRGSystem = { addXP, addCoins, spendCoins, activateXPBoost, claimDailyReward, getUserData, levelFromXP, xpForLevel, xpProgressInLevel };
