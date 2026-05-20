@@ -196,6 +196,31 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .inv-item-action.active { background: rgba(197,12,249,0.2); }
 .inv-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
 
+
+/* username color */
+.dash-username.uc-purple  { color: #c50cf9; }
+.dash-username.uc-blue    { color: #4f9cf9; }
+.dash-username.uc-gold    { color: #f5c518; }
+.dash-username.uc-red     { color: #ff4f4f; }
+.dash-username.uc-green   { color: #39d98a; }
+.dash-username.uc-rainbow { background: linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-spin 3s linear infinite; }
+@keyframes rainbow-spin { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
+
+/* title tag under name */
+.dash-title-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 0.15em; padding: 2px 8px; border-radius: 2px; margin-top: 3px; }
+.dash-title-tag.rarity-common    { color: #666; background: rgba(255,255,255,0.05); border: 1px solid #333; }
+.dash-title-tag.rarity-rare      { color: #4f9cf9; background: rgba(79,156,249,0.1); border: 1px solid rgba(79,156,249,0.25); }
+.dash-title-tag.rarity-epic      { color: #c50cf9; background: rgba(197,12,249,0.1); border: 1px solid rgba(197,12,249,0.25); }
+.dash-title-tag.rarity-legendary { color: #f5c518; background: rgba(245,197,24,0.12); border: 1px solid rgba(245,197,24,0.3); }
+
+/* pfp deco rings */
+.pfp-deco-glow      { box-shadow: 0 0 0 2px #c50cf9, 0 0 14px #c50cf9; animation: pulse-glow 2s ease-in-out infinite; }
+.pfp-deco-gold-ring { border: 3px solid #f5c518 !important; box-shadow: 0 0 10px rgba(245,197,24,0.4); }
+.pfp-deco-fire-ring { border: 3px solid #f50 !important; animation: fire-glow 1.5s ease-in-out infinite; }
+.pfp-deco-rainbow   { border: 3px solid transparent !important; background-clip: padding-box; animation: rainbow-spin 2s linear infinite; outline: 3px solid; outline-color: #c50cf9; }
+@keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 2px #c50cf9,0 0 8px #c50cf9} 50%{box-shadow:0 0 0 2px #c50cf9,0 0 20px #c50cf9} }
+@keyframes fire-glow  { 0%,100%{box-shadow:0 0 8px #f50,0 0 16px #f50} 50%{box-shadow:0 0 16px #ff0,0 0 30px #f50} }
+
 .status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
 </style>
 </head>
@@ -269,6 +294,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
           <div class="dash-name" id="dash-name">—</div>
           <div class="dash-email" id="dash-email">—</div>
           <div class="dash-username" id="dash-username"></div>
+          <div id="dash-title-tag"></div>
           <div class="dash-joined" id="dash-joined">—</div>
         </div>
       </div>
@@ -386,9 +412,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         <div class="dash-section">
           <div class="dash-section-title">Quick Links</div>
           <div class="dash-links">
+            <a class="dash-link" href="/shop.html"><span class="dash-link-label">Shop</span><span class="dash-link-arrow">&#8594;</span></a>
             <a class="dash-link" href="/games.html"><span class="dash-link-label">Games</span><span class="dash-link-arrow">&#8594;</span></a>
-            <a class="dash-link" href="/music.html"><span class="dash-link-label">Music</span><span class="dash-link-arrow">&#8594;</span></a>
-            <a class="dash-link" href="/movies.html"><span class="dash-link-label">Movies</span><span class="dash-link-arrow">&#8594;</span></a>
+            <a class="dash-link" href="/profiles.html"><span class="dash-link-label">Profiles</span><span class="dash-link-arrow">&#8594;</span></a>
             <a class="dash-link" href="/settings.html"><span class="dash-link-label">Settings</span><span class="dash-link-arrow">&#8594;</span></a>
           </div>
         </div>
@@ -509,39 +535,79 @@ function renderBoostTimer(expiry) {
   update();
 }
 
+function equippedKeyForCategory(cat) {
+  const map = { usernamecolor: "usernameColor", xpboost: "xpBoost", profiledeco: "profileDeco", pfpdeco: "pfpDeco", title: "title" };
+  return map[cat] || cat;
+}
+
+function categoryLabel(cat) {
+  const map = { usernamecolor: "Username Color", xpboost: "XP Boost", profiledeco: "Profile Deco", pfpdeco: "PFP Deco", title: "Title" };
+  return map[cat] || cat;
+}
+
 function renderInventory(inventory, equipped) {
   const grid  = $("inv-grid");
   const empty = $("inv-empty");
   grid.innerHTML = "";
-  const boostItems = (inventory || []).filter(i => i.category === "xpboost");
-  if (boostItems.length === 0) { empty.style.display = ""; return; }
+
+  const items = inventory || [];
+  if (items.length === 0) { empty.style.display = ""; return; }
   empty.style.display = "none";
-  boostItems.forEach(item => {
-    const isActive = equipped?.xpBoost === item.id;
-    const div = document.createElement("div");
-    div.className = "inv-item";
-    div.innerHTML =
-      '<div class="inv-item-info">' +
-        '<div class="inv-item-name">' + item.name + '</div>' +
-        '<div class="inv-item-desc">' + (item.desc || "") + '</div>' +
-      '</div>' +
-      '<button class="inv-item-action' + (isActive ? ' active' : '') + '" data-id="' + item.id + '" data-dur="' + (item.duration || 60) + '" data-mult="' + (item.multiplier || 2) + '">' +
-        (isActive ? 'ACTIVE' : 'ACTIVATE') +
-      '</button>';
-    div.querySelector(".inv-item-action").addEventListener("click", async () => {
-      if (isActive) return;
-      const dur  = parseInt(div.querySelector(".inv-item-action").dataset.dur);
-      const mult = parseFloat(div.querySelector(".inv-item-action").dataset.mult);
-      if (NRGSys.activateXPBoost) await NRGSys.activateXPBoost(dur, mult);
-      const expiry = new Date(Date.now() + dur * 60000).toISOString();
-      renderBoostTimer(expiry);
-      await updateDoc(doc(db, "users", auth.currentUser.uid), {
-        xpBoostActive: true, xpBoostExpiry: expiry, xpBoostMult: mult,
-        equipped: { ...(equipped || {}), xpBoost: item.id }
+
+  const byCategory = {};
+  items.forEach(item => {
+    if (!byCategory[item.category]) byCategory[item.category] = [];
+    byCategory[item.category].push(item);
+  });
+
+  Object.entries(byCategory).forEach(([cat, catItems]) => {
+    const header = document.createElement("div");
+    header.style.cssText = "font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;margin-top:10px";
+    header.textContent = categoryLabel(cat);
+    grid.appendChild(header);
+
+    catItems.forEach(item => {
+      const eqKey    = equippedKeyForCategory(cat);
+      const isEquipped = equipped?.[eqKey] === item.id;
+      const isBoostActive = cat === "xpboost" && equipped?.xpBoost === item.id;
+
+      const div = document.createElement("div");
+      div.className = "inv-item";
+      div.innerHTML =
+        '<div class="inv-item-info">' +
+          '<div class="inv-item-name">' + item.name + '</div>' +
+          '<div class="inv-item-desc">' + (item.desc || categoryLabel(cat)) + '</div>' +
+        '</div>' +
+        '<button class="inv-item-action' + (isEquipped ? ' active' : '') + '" data-id="' + item.id + '" data-cat="' + cat + '" data-dur="' + (item.duration || 60) + '" data-mult="' + (item.multiplier || 2) + '">' +
+          (cat === "xpboost" ? (isBoostActive ? 'ACTIVE' : 'ACTIVATE') : (isEquipped ? 'EQUIPPED' : 'EQUIP')) +
+        '</button>';
+
+      div.querySelector(".inv-item-action").addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const btn  = div.querySelector(".inv-item-action");
+        const cat  = btn.dataset.cat;
+        const eqK  = equippedKeyForCategory(cat);
+
+        if (cat === "xpboost") {
+          if (isBoostActive) return;
+          const dur  = parseInt(btn.dataset.dur);
+          const mult = parseFloat(btn.dataset.mult);
+          if (NRGSys.activateXPBoost) await NRGSys.activateXPBoost(dur, mult);
+          const expiry = new Date(Date.now() + dur * 60000).toISOString();
+          renderBoostTimer(expiry);
+          const newEquipped = { ...(equipped || {}), xpBoost: item.id };
+          await updateDoc(doc(db, "users", user.uid), { xpBoostActive: true, xpBoostExpiry: expiry, xpBoostMult: mult, equipped: newEquipped });
+          renderInventory(inventory, newEquipped);
+        } else {
+          const newEquipped = { ...(equipped || {}), [eqK]: isEquipped ? null : item.id };
+          await updateDoc(doc(db, "users", user.uid), { equipped: newEquipped });
+          renderInventory(inventory, newEquipped);
+        }
       });
-      renderInventory(inventory, { ...(equipped || {}), xpBoost: item.id });
+
+      grid.appendChild(div);
     });
-    grid.appendChild(div);
   });
 }
 
@@ -570,6 +636,70 @@ async function handleDailyReward(d) {
       }
     }
   };
+}
+
+
+const TITLE_ITEMS = {
+  title_gamer:   { name: "Gamer",    rarity: "common"    },
+  title_veteran: { name: "Veteran",  rarity: "rare"      },
+  title_legend:  { name: "Legend",   rarity: "epic"      },
+  title_nrg:     { name: "NRG Elite",rarity: "legendary" },
+};
+
+const UC_CLASS = {
+  color_purple:  "uc-purple",
+  color_blue:    "uc-blue",
+  color_gold:    "uc-gold",
+  color_red:     "uc-red",
+  color_green:   "uc-green",
+  color_rainbow: "uc-rainbow",
+};
+
+const PFP_CLASS = {
+  pfp_glow:      "pfp-deco-glow",
+  pfp_gold_ring: "pfp-deco-gold-ring",
+  pfp_fire_ring: "pfp-deco-fire-ring",
+  pfp_rainbow:   "pfp-deco-rainbow",
+};
+
+function applyCosmetics(equipped) {
+  equipped = equipped || {};
+
+  const unameEl = $("dash-username");
+  if (unameEl) {
+    unameEl.className = "dash-username";
+    if (equipped.usernameColor && UC_CLASS[equipped.usernameColor]) {
+      unameEl.classList.add(UC_CLASS[equipped.usernameColor]);
+    }
+  }
+
+  const titleEl = $("dash-title-tag");
+  if (titleEl) {
+    const t = TITLE_ITEMS[equipped.title];
+    if (t) {
+      titleEl.textContent = t.name;
+      titleEl.className   = "dash-title-tag rarity-" + t.rarity;
+    } else {
+      titleEl.textContent = "";
+      titleEl.className   = "";
+    }
+  }
+
+  const avatarEl = $("dash-avatar");
+  if (avatarEl) {
+    avatarEl.className = "dash-avatar";
+    if (equipped.pfpDeco && PFP_CLASS[equipped.pfpDeco]) {
+      avatarEl.classList.add(PFP_CLASS[equipped.pfpDeco]);
+    }
+  }
+
+  const tbAv = $("tb-avatar");
+  if (tbAv) {
+    tbAv.className = "tb-avatar";
+    if (equipped.pfpDeco && PFP_CLASS[equipped.pfpDeco]) {
+      tbAv.classList.add(PFP_CLASS[equipped.pfpDeco]);
+    }
+  }
 }
 
 function renderDashFavs(favs) {
@@ -779,6 +909,7 @@ async function showDashboard(user) {
       const photo = d.photoURL || null;
       setAvatar($("dash-avatar"), photo, name);
       renderDashFavs(d.favorites || []);
+      applyCosmetics(d.equipped || {});
       renderXPBar(d.xp || 0);
       $("stat-coins").textContent = d.coins || 0;
       renderBoostTimer(d.xpBoostActive ? d.xpBoostExpiry : null);

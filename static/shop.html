@@ -92,6 +92,26 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 
 .bottom-sidebar { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 70%); display: flex; gap: 20px; padding: 10px 18px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; z-index: 999; }
 .bottom-sidebar:hover { transform: translate(-50%, 0); }
+
+.preview-profiledeco { width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.preview-profiledeco .p-card-mock { width: 120px; height: 72px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; padding: 8px 10px; gap: 5px; position: relative; overflow: hidden; }
+.preview-profiledeco .p-avatar-mock { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; }
+.preview-profiledeco .p-line { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.15); }
+.preview-profiledeco .p-line.short { width: 50%; }
+
+.preview-pfpdeco { width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; background: var(--surface2); }
+.pfp-mock-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+.pfp-mock { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 20px; font-weight: 700; color: #000; }
+
+.preview-title { width: 100%; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: var(--surface2); }
+.title-name-mock { font-size: 14px; font-weight: 500; color: var(--text); font-family: var(--sans); }
+.title-tag-mock { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; padding: 2px 8px; border-radius: 2px; }
+
+@keyframes rainbow-spin { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
+@keyframes fire-glow { 0%,100%{box-shadow:0 0 8px #f50,0 0 16px #f50} 50%{box-shadow:0 0 16px #ff0,0 0 30px #f50} }
+@keyframes pulse-glow { 0%,100%{box-shadow:0 0 6px var(--accent)} 50%{box-shadow:0 0 18px var(--accent)} }
+@keyframes galaxy-bg { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
 .status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
 </style>
 </head>
@@ -222,14 +242,71 @@ function toast(msg, type = "success") {
 function buildPreview(item) {
   if (item.category === "usernamecolor") {
     const style = item.color === "rainbow"
-      ? "background:linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent"
+      ? "background:linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow-spin 3s linear infinite"
       : "color:" + item.color;
-    return '<div class="shop-card-preview username-color" style="' + style + '">@username</div>';
+    return '<div class="shop-card-preview username-color" style="background:var(--surface2)">' +
+           '<span style="font-family:var(--mono);font-size:15px;font-weight:700;' + style + '">@username</span>' +
+           '</div>';
   }
+
   if (item.category === "xpboost") {
-    return '<div class="shop-card-preview xpboost"><span class="boost-mult">' + item.multiplier + 'x</span><span class="boost-dur">' + (item.duration >= 60 ? item.duration/60 + ' hr' : item.duration + ' min') + '</span></div>';
+    const col = item.multiplier >= 5 ? "var(--legendary)" : item.multiplier >= 3 ? "var(--epic)" : "var(--accent)";
+    return '<div class="shop-card-preview xpboost" style="background:var(--surface2)">' +
+           '<span class="boost-mult" style="color:' + col + '">' + item.multiplier + 'x</span>' +
+           '<span class="boost-dur">' + (item.duration >= 60 ? item.duration/60 + ' hr' : item.duration + ' min') + '</span>' +
+           '</div>';
   }
-  return '<div class="shop-card-preview">' + (item.emoji || "🎁") + '</div>';
+
+  if (item.category === "profiledeco") {
+    const themes = {
+      profile_dark:   { bg: "#0a0a0a", border: "#2a2a2a", av: "#333" },
+      profile_neon:   { bg: "#0a0a1a", border: "#4f9cf9", av: "#4f9cf9", glow: "box-shadow:0 0 12px #4f9cf9" },
+      profile_galaxy: { bg: "linear-gradient(135deg,#0a0a2a,#1a0a3a,#0a1a2a)", border: "#c50cf9", av: "#c50cf9", anim: "animation:galaxy-bg 4s ease infinite;background-size:200% 200%" },
+      profile_fire:   { bg: "#1a0a00", border: "#f50", av: "#f50", glow: "animation:fire-glow 1.5s ease-in-out infinite" },
+    };
+    const t = themes[item.id] || { bg: "#111", border: "#2a2a2a", av: "#444" };
+    const bgStyle = typeof t.bg === "string" && t.bg.includes("gradient")
+      ? "background:" + t.bg + ";" + (t.anim || "")
+      : "background:" + t.bg;
+    return '<div class="preview-profiledeco" style="' + bgStyle + '">' +
+           '<div class="p-card-mock" style="border-color:' + t.border + ';' + (t.glow || '') + '">' +
+           '<div style="display:flex;align-items:center;gap:6px">' +
+           '<div class="p-avatar-mock" style="background:' + t.av + '"></div>' +
+           '<div style="flex:1"><div class="p-line" style="width:70%;margin-bottom:3px"></div><div class="p-line short"></div></div>' +
+           '</div>' +
+           '<div class="p-line" style="margin-top:6px"></div>' +
+           '<div class="p-line short" style="margin-top:3px"></div>' +
+           '</div></div>';
+  }
+
+  if (item.category === "pfpdeco") {
+    const decos = {
+      pfp_glow:      { ring: "none", shadow: "0 0 0 2px var(--accent),0 0 14px var(--accent)", anim: "animation:pulse-glow 2s ease-in-out infinite" },
+      pfp_gold_ring: { ring: "3px solid var(--gold)", shadow: "0 0 10px rgba(245,197,24,0.4)" },
+      pfp_fire_ring: { ring: "3px solid #f50", shadow: "none", anim: "animation:fire-glow 1.5s ease-in-out infinite" },
+      pfp_rainbow:   { ring: "3px solid transparent", shadow: "none", anim: "animation:rainbow-spin 2s linear infinite", extra: "background:linear-gradient(var(--surface2),var(--surface2)) padding-box,linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9) border-box" },
+    };
+    const d = decos[item.id] || { ring: "2px solid var(--border)" };
+    const ringStyle = "border:" + (d.ring || "none") + ";box-shadow:" + (d.shadow || "none") + ";" + (d.anim || "") + ";" + (d.extra || "");
+    return '<div class="preview-pfpdeco">' +
+           '<div class="pfp-mock-wrap"><div class="pfp-mock" style="' + ringStyle + '">A</div></div>' +
+           '</div>';
+  }
+
+  if (item.category === "title") {
+    const cols = { common: "var(--text-dim)", rare: "var(--rare)", epic: "var(--epic)", legendary: "var(--legendary)" };
+    const col  = cols[item.rarity] || "var(--text-dim)";
+    const bg   = item.rarity === "legendary" ? "background:rgba(245,197,24,0.12);border:1px solid rgba(245,197,24,0.3)"
+               : item.rarity === "epic"       ? "background:rgba(197,12,249,0.1);border:1px solid rgba(197,12,249,0.25)"
+               : item.rarity === "rare"       ? "background:rgba(79,156,249,0.1);border:1px solid rgba(79,156,249,0.25)"
+               : "background:rgba(255,255,255,0.05);border:1px solid var(--border)";
+    return '<div class="preview-title">' +
+           '<div class="title-name-mock">Player</div>' +
+           '<div class="title-tag-mock" style="color:' + col + ';' + bg + '">' + item.name + '</div>' +
+           '</div>';
+  }
+
+  return '<div class="shop-card-preview" style="background:var(--surface2)"></div>';
 }
 
 function renderShop(items, inventory) {

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRG | Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--surface3:#222;
+  --border:#2a2a2a;--accent:#c50cf9;--accent-dim:rgba(197,12,249,0.08);
+  --text:#e8e8e8;--text-dim:#666;--text-muted:#3a3a3a;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+  --red:#ff4f4f;--green:#39d98a;--gold:#f5c518;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--border);background:var(--surface)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-nrg{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.12em}
+.brand-divider{width:1px;height:13px;background:var(--border)}
+.brand-page{font-size:13px;color:var(--red)}
+.admin-badge{font-family:var(--mono);font-size:8px;letter-spacing:0.15em;padding:3px 8px;border-radius:2px;background:rgba(255,79,79,0.12);border:1px solid rgba(255,79,79,0.3);color:var(--red)}
+
+.main{flex:1;overflow-y:auto;padding:28px 24px 80px;display:flex;gap:20px;align-items:flex-start}
+.col-left{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:14px}
+.col-right{flex:1;display:flex;flex-direction:column;gap:14px}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.panel-header{padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--text-muted);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+.panel-body{padding:16px}
+
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:4px}
+.field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:13px;padding:8px 11px;border-radius:4px;outline:none;transition:border-color 0.15s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field input::placeholder{color:var(--text-muted)}
+.field select option{background:var(--surface2)}
+
+.btn{padding:8px 14px;border-radius:4px;border:none;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.12em;cursor:pointer;transition:opacity 0.13s,background 0.13s}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn.primary{background:var(--accent);color:#000}
+.btn.primary:hover:not(:disabled){opacity:0.85}
+.btn.ghost{background:none;color:var(--text-dim);border:1px solid var(--border)}
+.btn.ghost:hover{border-color:var(--text-dim);color:var(--text)}
+.btn.danger{background:none;color:var(--red);border:1px solid var(--border)}
+.btn.danger:hover{border-color:var(--red)}
+.btn.success{background:none;color:var(--green);border:1px solid var(--border)}
+.btn.success:hover{border-color:var(--green)}
+.btn.full{width:100%}
+
+.msg{font-size:10px;font-family:var(--mono);margin-top:6px;min-height:14px;letter-spacing:0.04em}
+.msg.error{color:var(--red)}.msg.success{color:var(--green)}
+
+/* user result card */
+.user-card{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:14px;display:none;flex-direction:column;gap:10px}
+.user-card.visible{display:flex}
+.user-card-header{display:flex;align-items:center;gap:12px}
+.user-av{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#000;overflow:hidden;flex-shrink:0}
+.user-av img{width:100%;height:100%;object-fit:cover}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.user-handle{font-family:var(--mono);font-size:10px;color:var(--accent)}
+.user-email{font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:7px;letter-spacing:0.12em;padding:2px 7px;border-radius:2px;text-transform:uppercase}
+.badge.admin{background:rgba(255,79,79,0.15);color:var(--red);border:1px solid rgba(255,79,79,0.3)}
+.badge.banned{background:rgba(255,79,79,0.08);color:#a00;border:1px solid rgba(160,0,0,0.3)}
+.badge.level{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(197,12,249,0.25)}
+.badge.coins{background:rgba(245,197,24,0.1);color:var(--gold);border:1px solid rgba(245,197,24,0.25)}
+
+.user-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.ustat{background:var(--surface3,#222);border-radius:3px;padding:8px 10px;text-align:center}
+.ustat-val{font-size:16px;font-weight:500;color:var(--text);margin-bottom:2px}
+.ustat-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.15em;color:var(--text-muted);text-transform:uppercase}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.action-input-row{display:flex;gap:6px;align-items:flex-end}
+.action-input-row input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:12px;padding:7px 10px;border-radius:4px;outline:none;transition:border-color 0.15s}
+.action-input-row input:focus{border-color:var(--accent)}
+
+/* shop item editor */
+.item-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.item-row:last-child{border-bottom:none}
+.item-row-name{flex:1;font-size:12px;color:var(--text)}
+.item-row-cat{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:0.08em}
+.item-row-price{font-family:var(--mono);font-size:10px;color:var(--gold);margin-right:6px}
+
+/* access denied */
+.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;font-family:var(--mono);text-align:center}
+.access-denied .big{font-size:13px;color:var(--red);letter-spacing:0.1em}
+.access-denied .small{font-size:9px;color:var(--text-muted);letter-spacing:0.12em}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:10px 18px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--text);letter-spacing:0.06em;opacity:0;transition:opacity 0.2s,transform 0.2s;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.error{border-left-color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-nrg">NRG</span>
+    <div class="brand-divider"></div>
+    <span class="brand-page">Admin Panel</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="admin-badge">ADMIN</span>
+    <a href="/nrg-auth-ui.html" style="font-family:var(--mono);font-size:9px;color:var(--text-muted);text-decoration:none;letter-spacing:0.1em">&#8592; back</a>
+  </div>
+</div>
+
+<div id="access-denied-screen" class="access-denied" style="display:none">
+  <div class="big">ACCESS DENIED</div>
+  <div class="small">YOU ARE NOT ON THE ADMIN WHITELIST</div>
+  <a href="/nrg-auth-ui.html" style="font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:0.1em;text-decoration:none;margin-top:8px">go back</a>
+</div>
+
+<div id="loading-screen" class="access-denied">
+  <div class="small">VERIFYING ACCESS...</div>
+</div>
+
+<div class="main" id="admin-main" style="display:none">
+
+  <div class="col-left">
+
+    <!-- Search user -->
+    <div class="panel">
+      <div class="panel-header">Find User</div>
+      <div class="panel-body">
+        <div class="field">
+          <label>Username or Email</label>
+          <input type="text" id="search-input" placeholder="@handle or email">
+        </div>
+        <button class="btn primary full" id="search-btn">SEARCH</button>
+        <div class="msg" id="search-msg"></div>
+      </div>
+    </div>
+
+    <!-- User result card -->
+    <div class="panel">
+      <div class="panel-header">User</div>
+      <div class="panel-body">
+        <div class="user-card" id="user-card">
+          <div class="user-card-header">
+            <div class="user-av" id="u-av">?</div>
+            <div class="user-info">
+              <div class="user-name" id="u-name">—</div>
+              <div class="user-handle" id="u-handle"></div>
+              <div class="user-email" id="u-email"></div>
+            </div>
+          </div>
+          <div class="user-badges" id="u-badges"></div>
+          <div class="user-stats">
+            <div class="ustat"><div class="ustat-val" id="u-level">1</div><div class="ustat-lbl">Level</div></div>
+            <div class="ustat"><div class="ustat-val" id="u-xp">0</div><div class="ustat-lbl">XP</div></div>
+            <div class="ustat"><div class="ustat-val" id="u-coins">0</div><div class="ustat-lbl">Coins</div></div>
+          </div>
+        </div>
+        <div id="no-user-msg" style="font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:0.1em">Search for a user to get started.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-right">
+
+    <!-- User actions -->
+    <div class="panel" id="action-panel" style="display:none">
+      <div class="panel-header">Actions <span id="action-target" style="color:var(--accent)"></span></div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:14px">
+
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">XP</div>
+          <div class="action-input-row">
+            <input type="number" id="xp-amount" placeholder="amount" min="1">
+            <button class="btn success" id="xp-add-btn">+ ADD</button>
+            <button class="btn danger"  id="xp-remove-btn">- REMOVE</button>
+          </div>
+          <div class="msg" id="xp-msg"></div>
+        </div>
+
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Coins</div>
+          <div class="action-input-row">
+            <input type="number" id="coins-amount" placeholder="amount" min="1">
+            <button class="btn success" id="coins-add-btn">+ ADD</button>
+            <button class="btn danger"  id="coins-remove-btn">- REMOVE</button>
+          </div>
+          <div class="msg" id="coins-msg"></div>
+        </div>
+
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Level Override</div>
+          <div class="action-input-row">
+            <input type="number" id="level-amount" placeholder="set level" min="1" max="100">
+            <button class="btn primary" id="level-set-btn">SET</button>
+          </div>
+          <div class="msg" id="level-msg"></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Admin</div>
+            <button class="btn ghost full" id="toggle-admin-btn">GRANT ADMIN</button>
+            <div class="msg" id="admin-msg"></div>
+          </div>
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Account</div>
+            <button class="btn danger full" id="toggle-ban-btn">BAN USER</button>
+            <div class="msg" id="ban-msg"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Shop item editor -->
+    <div class="panel">
+      <div class="panel-header">
+        Shop Items
+        <button class="btn primary" id="add-item-btn" style="font-size:7px;padding:4px 10px">+ ADD ITEM</button>
+      </div>
+      <div class="panel-body">
+        <div id="shop-item-list"><div style="font-family:var(--mono);font-size:9px;color:var(--text-muted)">Loading...</div></div>
+        <div class="msg" id="shop-msg"></div>
+      </div>
+    </div>
+
+    <!-- Add item form (hidden until + ADD ITEM clicked) -->
+    <div class="panel" id="add-item-panel" style="display:none">
+      <div class="panel-header">New Shop Item</div>
+      <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><label>ID</label><input type="text" id="ni-id" placeholder="unique_id"></div>
+        <div class="field"><label>Name</label><input type="text" id="ni-name" placeholder="Item Name"></div>
+        <div class="field">
+          <label>Category</label>
+          <select id="ni-cat">
+            <option value="usernamecolor">Username Color</option>
+            <option value="xpboost">XP Boost</option>
+            <option value="profiledeco">Profile Deco</option>
+            <option value="pfpdeco">PFP Deco</option>
+            <option value="title">Title</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Rarity</label>
+          <select id="ni-rarity">
+            <option value="common">Common</option>
+            <option value="rare">Rare</option>
+            <option value="epic">Epic</option>
+            <option value="legendary">Legendary</option>
+          </select>
+        </div>
+        <div class="field"><label>Price (coins)</label><input type="number" id="ni-price" placeholder="100" min="1"></div>
+        <div class="field"><label>Description</label><input type="text" id="ni-desc" placeholder="Short description"></div>
+        <div class="field"><label>Multiplier (XP boost)</label><input type="number" id="ni-mult" placeholder="2" min="1"></div>
+        <div class="field"><label>Duration (XP boost, mins)</label><input type="number" id="ni-dur" placeholder="60" min="1"></div>
+        <div class="field"><label>Color (username color)</label><input type="text" id="ni-color" placeholder="#c50cf9 or rainbow"></div>
+        <div style="display:flex;align-items:flex-end;gap:8px">
+          <button class="btn primary" id="save-item-btn">SAVE</button>
+          <button class="btn ghost"   id="cancel-item-btn">CANCEL</button>
+        </div>
+        <div class="msg" id="new-item-msg" style="grid-column:1/-1"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, updateDoc, setDoc, deleteDoc,
+  collection, getDocs, query, where, increment, writeBatch
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
+  authDomain:        "nrg-accounts.firebaseapp.com",
+  projectId:         "nrg-accounts",
+  storageBucket:     "nrg-accounts.firebasestorage.app",
+  messagingSenderId: "969467601192",
+  appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const $    = id => document.getElementById(id);
+
+let currentAdminUid = null;
+let targetUid       = null;
+let targetData      = null;
+
+const THRESHOLDS = [0,0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000];
+function levelFromXP(xp) {
+  let l = 1;
+  for (let i=1;i<THRESHOLDS.length;i++){if(xp>=THRESHOLDS[i])l=i;else break;}
+  return l;
+}
+
+function toast(msg, type="success") {
+  const el = $("toast");
+  el.textContent = msg; el.className = "toast " + type + " show";
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove("show"), 2800);
+}
+
+function setMsg(id, text, type) {
+  const el=$(id); if(!el)return;
+  el.textContent=text; el.className="msg "+type;
+  setTimeout(()=>{if(el.textContent===text){el.textContent="";el.className="msg";}},3000);
+}
+
+async function checkAdmin(uid) {
+  const snap = await getDoc(doc(db, "admins", uid));
+  return snap.exists();
+}
+
+function showUserCard(d, uid) {
+  targetUid  = uid;
+  targetData = d;
+  $("no-user-msg").style.display = "none";
+  $("user-card").classList.add("visible");
+  $("action-panel").style.display = "";
+  $("action-target").textContent  = d.username ? "@" + d.username : d.displayName;
+
+  const av = $("u-av");
+  av.innerHTML = d.photoURL && d.photoURL !== "firestore"
+    ? '<img src="' + d.photoURL + '" alt="">'
+    : (d.displayName || "?")[0].toUpperCase();
+
+  $("u-name").textContent   = d.displayName || "—";
+  $("u-handle").textContent = d.username ? "@" + d.username : "";
+  $("u-email").textContent  = d.email || "";
+  $("u-level").textContent  = d.level || levelFromXP(d.xp || 0);
+  $("u-xp").textContent     = d.xp || 0;
+  $("u-coins").textContent  = d.coins || 0;
+
+  const badges = $("u-badges");
+  badges.innerHTML = "";
+  if (d.isAdmin)  badges.innerHTML += '<span class="badge admin">ADMIN</span>';
+  if (d.isBanned) badges.innerHTML += '<span class="badge banned">BANNED</span>';
+  badges.innerHTML += '<span class="badge level">LVL ' + (d.level||1) + '</span>';
+  badges.innerHTML += '<span class="badge coins">&#9733; ' + (d.coins||0) + '</span>';
+
+  $("toggle-admin-btn").textContent = d.isAdmin ? "REVOKE ADMIN" : "GRANT ADMIN";
+  $("toggle-admin-btn").className   = d.isAdmin ? "btn danger full" : "btn ghost full";
+  $("toggle-ban-btn").textContent   = d.isBanned ? "UNBAN USER" : "BAN USER";
+}
+
+$("search-btn").addEventListener("click", async () => {
+  const val = $("search-input").value.trim().toLowerCase().replace(/^@/,"");
+  if (!val) { setMsg("search-msg","enter a username or email.","error"); return; }
+  $("search-btn").disabled = true;
+
+  try {
+    let uid = null;
+
+    // try username lookup first
+    const unameSnap = await getDoc(doc(db, "usernames", val));
+    if (unameSnap.exists()) {
+      uid = unameSnap.data().uid;
+    } else {
+      // try email lookup
+      const emailSnap = await getDoc(doc(db, "emails", val));
+      if (emailSnap.exists()) uid = emailSnap.data().uid;
+    }
+
+    if (!uid) { setMsg("search-msg","user not found.","error"); return; }
+
+    const userSnap = await getDoc(doc(db, "users", uid));
+    if (!userSnap.exists()) { setMsg("search-msg","user doc not found.","error"); return; }
+
+    showUserCard(userSnap.data(), uid);
+    setMsg("search-msg","","");
+  } catch(e) {
+    setMsg("search-msg","search failed.","error");
+    console.error(e);
+  } finally {
+    $("search-btn").disabled = false;
+  }
+});
+
+$("search-input").addEventListener("keydown", e => { if(e.key==="Enter") $("search-btn").click(); });
+
+async function refreshTargetCard() {
+  if (!targetUid) return;
+  const snap = await getDoc(doc(db, "users", targetUid));
+  if (snap.exists()) showUserCard(snap.data(), targetUid);
+}
+
+$("xp-add-btn").addEventListener("click", async () => {
+  if (!targetUid) return;
+  const amt = parseInt($("xp-amount").value);
+  if (!amt || amt < 1) { setMsg("xp-msg","enter a valid amount.","error"); return; }
+  const snap = await getDoc(doc(db, "users", targetUid));
+  const newXP = (snap.data().xp || 0) + amt;
+  await updateDoc(doc(db, "users", targetUid), { xp: newXP, level: levelFromXP(newXP) });
+  toast("+" + amt + " XP added");
+  $("xp-amount").value = "";
+  refreshTargetCard();
+});
+
+$("xp-remove-btn").addEventListener("click", async () => {
+  if (!targetUid) return;
+  const amt = parseInt($("xp-amount").value);
+  if (!amt || amt < 1) { setMsg("xp-msg","enter a valid amount.","error"); return; }
+  const snap = await getDoc(doc(db, "users", targetUid));
+  const newXP = Math.max(0, (snap.data().xp || 0) - amt);
+  await updateDoc(doc(db, "users", targetUid), { xp: newXP, level: levelFromXP(newXP) });
+  toast("-" + amt + " XP removed");
+  $("xp-amount").value = "";
+  refreshTargetCard();
+});
+
+$("coins-add-btn").addEventListener("click", async () => {
+  if (!targetUid) return;
+  const amt = parseInt($("coins-amount").value);
+  if (!amt || amt < 1) { setMsg("coins-msg","enter a valid amount.","error"); return; }
+  await updateDoc(doc(db, "users", targetUid), { coins: increment(amt) });
+  toast("+" + amt + " coins added");
+  $("coins-amount").value = "";
+  refreshTargetCard();
+});
+
+$("coins-remove-btn").addEventListener("click", async () => {
+  if (!targetUid) return;
+  const amt = parseInt($("coins-amount").value);
+  if (!amt || amt < 1) { setMsg("coins-msg","enter a valid amount.","error"); return; }
+  const snap = await getDoc(doc(db, "users", targetUid));
+  const newCoins = Math.max(0, (snap.data().coins || 0) - amt);
+  await updateDoc(doc(db, "users", targetUid), { coins: newCoins });
+  toast("-" + amt + " coins removed");
+  $("coins-amount").value = "";
+  refreshTargetCard();
+});
+
+$("level-set-btn").addEventListener("click", async () => {
+  if (!targetUid) return;
+  const lvl = parseInt($("level-amount").value);
+  if (!lvl || lvl < 1) { setMsg("level-msg","enter a valid level.","error"); return; }
+  const xpNeeded = THRESHOLDS[lvl] ?? (THRESHOLDS[THRESHOLDS.length-1] + (lvl - THRESHOLDS.length + 1) * 3000);
+  await updateDoc(doc(db, "users", targetUid), { level: lvl, xp: xpNeeded });
+  toast("level set to " + lvl);
+  $("level-amount").value = "";
+  refreshTargetCard();
+});
+
+$("toggle-admin-btn").addEventListener("click", async () => {
+  if (!targetUid || !targetData) return;
+  const isAdmin = targetData.isAdmin;
+  const batch = writeBatch(db);
+  batch.update(doc(db, "users", targetUid), { isAdmin: !isAdmin });
+  if (isAdmin) batch.delete(doc(db, "admins", targetUid));
+  else         batch.set(doc(db, "admins", targetUid), { uid: targetUid, grantedBy: currentAdminUid, grantedAt: new Date().toISOString() });
+  await batch.commit();
+  toast(isAdmin ? "admin revoked" : "admin granted");
+  refreshTargetCard();
+});
+
+$("toggle-ban-btn").addEventListener("click", async () => {
+  if (!targetUid || !targetData) return;
+  const isBanned = targetData.isBanned;
+  await updateDoc(doc(db, "users", targetUid), { isBanned: !isBanned });
+  toast(isBanned ? "user unbanned" : "user banned");
+  refreshTargetCard();
+});
+
+// Shop item list
+async function loadShopItems() {
+  const list = $("shop-item-list");
+  try {
+    const snap = await getDocs(collection(db, "shopItems"));
+    if (snap.empty) { list.innerHTML = '<div style="font-family:var(--mono);font-size:9px;color:var(--text-muted)">No items in Firestore yet — using fallback items in shop.html.</div>'; return; }
+    list.innerHTML = snap.docs.map(d => {
+      const i = d.data();
+      return '<div class="item-row">' +
+        '<div><div class="item-row-name">' + i.name + '</div><div class="item-row-cat">' + i.category + ' — ' + i.rarity + '</div></div>' +
+        '<span class="item-row-price">&#9733; ' + i.price + '</span>' +
+        '<button class="btn danger" style="padding:4px 8px;font-size:7px" data-id="' + d.id + '">DEL</button>' +
+        '</div>';
+    }).join("");
+    list.querySelectorAll(".btn.danger").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("Delete item " + btn.dataset.id + "?")) return;
+        await deleteDoc(doc(db, "shopItems", btn.dataset.id));
+        toast("item deleted");
+        loadShopItems();
+      });
+    });
+  } catch(e) { list.innerHTML = '<div style="color:var(--red);font-family:var(--mono);font-size:9px">failed to load items.</div>'; }
+}
+
+$("add-item-btn").addEventListener("click", () => { $("add-item-panel").style.display = ""; });
+$("cancel-item-btn").addEventListener("click", () => { $("add-item-panel").style.display = "none"; });
+
+$("save-item-btn").addEventListener("click", async () => {
+  const id     = $("ni-id").value.trim();
+  const name   = $("ni-name").value.trim();
+  const cat    = $("ni-cat").value;
+  const rarity = $("ni-rarity").value;
+  const price  = parseInt($("ni-price").value);
+  const desc   = $("ni-desc").value.trim();
+  if (!id || !name || !price) { setMsg("new-item-msg","fill in ID, name, and price.","error"); return; }
+  const item = { name, category: cat, rarity, price, desc };
+  if ($("ni-mult").value)  item.multiplier = parseFloat($("ni-mult").value);
+  if ($("ni-dur").value)   item.duration   = parseInt($("ni-dur").value);
+  if ($("ni-color").value) item.color      = $("ni-color").value.trim();
+  try {
+    await setDoc(doc(db, "shopItems", id), item);
+    toast("item saved");
+    $("add-item-panel").style.display = "none";
+    loadShopItems();
+  } catch(e) { setMsg("new-item-msg","save failed.","error"); }
+});
+
+// Auth gate — check admin whitelist
+onAuthStateChanged(auth, async user => {
+  $("loading-screen").style.display = "none";
+  if (!user) { window.location.href = "/nrg-auth-ui.html"; return; }
+  const isAdmin = await checkAdmin(user.uid);
+  if (!isAdmin) { $("access-denied-screen").style.display = "flex"; return; }
+  currentAdminUid = user.uid;
+  $("admin-main").style.display = "flex";
+  loadShopItems();
+});
+</script>
+</body>
+</html>
