@@ -67,8 +67,7 @@
     .watchlist-tab-btn.active { background: var(--surface2); border-color: var(--accent); color: var(--accent); }
     .watchlist-count {
       background: var(--accent); color: #000; font-size: 8px; font-weight: 700;
-      padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center;
-      display: none;
+      padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; display: none;
     }
     .watchlist-count.has-items { display: inline-block; }
 
@@ -95,8 +94,7 @@
     .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px 9px; }
 
     .skeleton-card {
-      border-radius: 5px; overflow: hidden; background: var(--surface);
-      border: 1px solid var(--border); aspect-ratio: 2/3;
+      border-radius: 5px; aspect-ratio: 2/3;
       background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
       background-size: 200% 100%; animation: shimmer 1.4s infinite;
     }
@@ -215,8 +213,8 @@
     }
     .next-ep-btn:hover { opacity: 0.85; }
     .next-ep-countdown {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
       font-size: 9px; font-weight: 700; background: rgba(0,0,0,0.2);
     }
 
@@ -229,10 +227,7 @@
     .more-like-section { margin-top: 4px; }
     .more-like-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; }
     .more-like-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
-    .more-like-card {
-      border-radius: 4px; overflow: hidden; cursor: pointer; position: relative;
-      border: 1px solid var(--border); transition: border-color 0.15s, transform 0.15s;
-    }
+    .more-like-card { border-radius: 4px; overflow: hidden; cursor: pointer; position: relative; border: 1px solid var(--border); transition: border-color 0.15s, transform 0.15s; }
     .more-like-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .more-like-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
     .more-like-card .mlc-title { font-size: 9px; color: var(--text-dim); padding: 4px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: var(--surface); }
@@ -242,8 +237,7 @@
       background: var(--surface2); border: 1px solid var(--border); color: var(--text);
       font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
       padding: 10px 18px; border-radius: 6px; z-index: 99998;
-      opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; pointer-events: none;
-      white-space: nowrap;
+      opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; pointer-events: none; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast .toast-accent { color: var(--accent); }
@@ -332,7 +326,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Watchlist
       </button>
-      <select class="player-select" id="server-select"></select>
       <select class="player-select" id="season-select" style="display:none"></select>
       <select class="player-select" id="episode-select" style="display:none"></select>
     </div>
@@ -367,6 +360,7 @@
   <div class="nav-icon" data-page="index.html">Home</div>
   <div class="nav-icon" data-page="games.html">Games</div>
   <div class="nav-icon" data-page="movies.html">Movies</div>
+  <div class="nav-icon" data-page="ai.html">AI</div>
   <div class="nav-icon" data-page="proxy.html">Proxy</div>
   <div class="nav-icon" data-page="settings.html">Settings</div>
   <div class="nav-icon" data-page="music.html">Music</div>
@@ -381,60 +375,34 @@
 
 <script>
 const API_KEY = "3d0c0b6872d2e83bcefefb408ca93da1";
+const BASE    = "https://toustream.glseries.net";
 
-const MOVIE_SERVERS = [
-  { name: "Videasy",    url: (id)       => `https://player.videasy.net/movie/${id}` },
-  { name: "VidLink",    url: (id)       => `https://vidlink.pro/movie/${id}` },
-  { name: "VidSrc",     url: (id)       => `https://vidsrc.rip/embed/movie/${id}` },
-  { name: "Embed.su",   url: (id)       => `https://embed.su/embed/movie/${id}` },
-  { name: "AutoEmbed",  url: (id)       => `https://autoembed.co/movie/tmdb/${id}` },
-  { name: "VidFast",    url: (id)       => `https://vidfast.pro/movie/${id}` },
-  { name: "2Embed",     url: (id)       => `https://www.2embed.stream/embed/movie/${id}` },
-  { name: "SuperEmbed", url: (id)       => `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-];
-
-const TV_SERVERS = [
-  { name: "Videasy",    url: (id,s,e) => `https://player.videasy.net/tv/${id}/${s}/${e}` },
-  { name: "VidLink",    url: (id,s,e) => `https://vidlink.pro/tv/${id}/${s}/${e}` },
-  { name: "VidSrc",     url: (id,s,e) => `https://vidsrc.rip/embed/tv/${id}/${s}/${e}` },
-  { name: "Embed.su",   url: (id,s,e) => `https://embed.su/embed/tv/${id}/${s}/${e}` },
-  { name: "AutoEmbed",  url: (id,s,e) => `https://autoembed.co/tv/tmdb/${id}-${s}-${e}` },
-  { name: "VidFast",    url: (id,s,e) => `https://vidfast.pro/tv/${id}/${s}/${e}` },
-  { name: "2Embed",     url: (id,s,e) => `https://www.2embed.stream/embed/tv/${id}/${s}/${e}` },
-  { name: "SuperEmbed", url: (id,s,e) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
-];
+function movieUrl(id)      { return `${BASE}/embed/movie/${id}`; }
+function tvUrl(id, s, e)   { return `${BASE}/embed/tv/${id}/${s}/${e}`; }
 
 const MOVIE_GENRES = { 28:"Action",12:"Adventure",16:"Animation",35:"Comedy",80:"Crime",99:"Documentary",18:"Drama",10751:"Family",14:"Fantasy",36:"History",27:"Horror",10402:"Music",9648:"Mystery",10749:"Romance",878:"Sci-Fi",53:"Thriller",10752:"War",37:"Western" };
 const TV_GENRES    = { 10759:"Action & Adventure",16:"Animation",35:"Comedy",80:"Crime",99:"Documentary",18:"Drama",10762:"Kids",9648:"Mystery",10765:"Sci-Fi & Fantasy",10768:"War & Politics",37:"Western" };
 
-let currentType   = "movie";
-let currentSort   = "popularity.desc";
-let currentGenre  = "";
-let currentQuery  = "";
-let currentPage   = 1;
-let totalPages    = 1;
-let isFetching    = false;
-let isWatchlist   = false;
-let selectedItem  = null;
-let selectedDetails = null;
-let currentSeason = 1;
-let currentEp     = 1;
-let currentServer = 0;
-let nextEpTimer   = null;
+let currentType     = "movie";
+let currentSort     = "popularity.desc";
+let currentGenre    = "";
+let currentQuery    = "";
+let currentPage     = 1;
+let totalPages      = 1;
+let isFetching      = false;
+let isWatchlist     = false;
+let selectedItem    = null;
+let currentSeason   = 1;
+let currentEp       = 1;
+let nextEpTimer     = null;
 let nextEpCountdown = 15;
-let scrollObserver = null;
-let searchTimer   = null;
-let toastTimer    = null;
+let scrollObserver  = null;
+let searchTimer     = null;
+let toastTimer      = null;
 
-function getWatchlist() {
-  try { return JSON.parse(localStorage.getItem('nrg_watchlist') || '[]'); } catch { return []; }
-}
-function saveWatchlist(list) {
-  localStorage.setItem('nrg_watchlist', JSON.stringify(list));
-}
-function isInWatchlist(id) {
-  return getWatchlist().some(i => i.id === id);
-}
+function getWatchlist() { try { return JSON.parse(localStorage.getItem('nrg_watchlist') || '[]'); } catch { return []; } }
+function saveWatchlist(list) { localStorage.setItem('nrg_watchlist', JSON.stringify(list)); }
+function isInWatchlist(id) { return getWatchlist().some(i => i.id === id); }
 function addToWatchlist(item) {
   const list = getWatchlist();
   if (!list.some(i => i.id === item.id)) {
@@ -443,10 +411,7 @@ function addToWatchlist(item) {
   }
   updateWatchlistUI();
 }
-function removeFromWatchlist(id) {
-  saveWatchlist(getWatchlist().filter(i => i.id !== id));
-  updateWatchlistUI();
-}
+function removeFromWatchlist(id) { saveWatchlist(getWatchlist().filter(i => i.id !== id)); updateWatchlistUI(); }
 function toggleWatchlist(item) {
   if (isInWatchlist(item.id)) { removeFromWatchlist(item.id); showToast('Removed from watchlist'); }
   else { addToWatchlist(item); showToast('<span class="toast-accent">♥</span> Added to watchlist'); }
@@ -465,25 +430,23 @@ function updateWatchlistUI() {
   if (isWatchlist) renderWatchlistGrid();
 }
 function updatePlayerWlBtn() {
-  const btn = document.getElementById('player-wl-btn');
   if (!selectedItem) return;
+  const btn = document.getElementById('player-wl-btn');
   const inList = isInWatchlist(selectedItem.id);
   btn.classList.toggle('in-list', inList);
   btn.querySelector('svg').setAttribute('fill', inList ? 'currentColor' : 'none');
 }
-
 function showToast(html) {
   const t = document.getElementById('toast');
-  t.innerHTML = html;
-  t.classList.add('show');
+  t.innerHTML = html; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-function getServers() { return currentType === "tv" ? TV_SERVERS : MOVIE_SERVERS; }
-function buildPlayerUrl(idx) {
-  const srv = getServers()[idx] || getServers()[0];
-  return currentType === "tv" ? srv.url(selectedItem.id, currentSeason, currentEp) : srv.url(selectedItem.id);
+function buildPlayerUrl() {
+  return currentType === "tv"
+    ? tvUrl(selectedItem.id, currentSeason, currentEp)
+    : movieUrl(selectedItem.id);
 }
 
 function setupScrollObserver() {
@@ -497,7 +460,6 @@ function setupScrollObserver() {
 
 function init() {
   animateLoadingScreen();
-  buildServerDropdown();
   buildGenreDropdown();
   bindEvents();
   updateWatchlistUI();
@@ -507,46 +469,22 @@ function init() {
 function animateLoadingScreen() {
   const bar  = document.getElementById('loading-bar');
   const text = document.getElementById('loading-text');
-  const steps = [
-    [10, 'connecting to tmdb…'],
-    [40, 'fetching titles…'],
-    [70, 'building grid…'],
-    [90, 'almost ready…'],
-    [100,'ready'],
-  ];
+  const steps = [[10,'connecting…'],[40,'fetching titles…'],[70,'building grid…'],[90,'almost ready…'],[100,'ready']];
   let i = 0;
-  const tick = () => {
-    if (i >= steps.length) return;
-    bar.style.width = steps[i][0] + '%';
-    text.textContent = steps[i][1];
-    i++;
-    setTimeout(tick, 320);
-  };
+  const tick = () => { if (i >= steps.length) return; bar.style.width = steps[i][0]+'%'; text.textContent = steps[i][1]; i++; setTimeout(tick, 320); };
   tick();
   setTimeout(() => {
-    const screen = document.getElementById('loading-screen');
-    screen.classList.add('fade-out');
-    setTimeout(() => screen.remove(), 550);
+    const s = document.getElementById('loading-screen');
+    s.classList.add('fade-out');
+    setTimeout(() => s.remove(), 550);
   }, 1900);
-}
-
-function buildServerDropdown() {
-  const s = document.getElementById('server-select');
-  s.innerHTML = '';
-  getServers().forEach((srv, i) => {
-    const o = document.createElement('option');
-    o.value = i; o.textContent = srv.name;
-    if (i === currentServer) o.selected = true;
-    s.appendChild(o);
-  });
 }
 
 function buildGenreDropdown() {
   const s = document.getElementById('genre-select');
   s.innerHTML = '<option value="">All Genres</option>';
   Object.entries(currentType === 'tv' ? TV_GENRES : MOVIE_GENRES).forEach(([id, name]) => {
-    const o = document.createElement('option');
-    o.value = id; o.textContent = name; s.appendChild(o);
+    const o = document.createElement('option'); o.value = id; o.textContent = name; s.appendChild(o);
   });
 }
 
@@ -562,11 +500,7 @@ function resetAndFetch() {
 function renderSkeletons() {
   const grid = document.getElementById('content-grid');
   grid.innerHTML = '';
-  for (let i = 0; i < 20; i++) {
-    const d = document.createElement('div');
-    d.className = 'skeleton-card';
-    grid.appendChild(d);
-  }
+  for (let i = 0; i < 20; i++) { const d = document.createElement('div'); d.className = 'skeleton-card'; grid.appendChild(d); }
 }
 
 async function fetchPage(page, replace) {
@@ -579,20 +513,11 @@ async function fetchPage(page, replace) {
     const data = await (await fetch(url)).json();
     currentPage = data.page || page;
     totalPages  = data.total_pages || 1;
-    if (replace) {
-      renderFresh(data.results || []);
-      updateSectionLabel(data.total_results);
-      setupScrollObserver();
-    } else {
-      appendCards(data.results || []);
-      if (currentPage >= totalPages) showEndMessage();
-    }
+    if (replace) { renderFresh(data.results || []); updateSectionLabel(data.total_results); setupScrollObserver(); }
+    else { appendCards(data.results || []); if (currentPage >= totalPages) showEndMessage(); }
   } catch {
     if (replace) document.getElementById('content-grid').innerHTML = '<div class="loading-msg">failed to load — check connection</div>';
-  } finally {
-    setSpinner(false);
-    isFetching = false;
-  }
+  } finally { setSpinner(false); isFetching = false; }
 }
 
 function setSpinner(on) { document.getElementById('load-spinner').classList.toggle('visible', on); }
@@ -613,11 +538,10 @@ function renderFresh(items) {
   if (!items.length) { grid.innerHTML = '<div class="loading-msg">nothing found</div>'; return; }
   appendCards(items);
 }
-
 function renderWatchlistGrid() {
   const list = getWatchlist();
-  const grid = document.getElementById('content-grid');
   document.getElementById('section-label').textContent = list.length + ' in watchlist';
+  const grid = document.getElementById('content-grid');
   grid.innerHTML = '';
   if (!list.length) { grid.innerHTML = '<div class="watchlist-empty">your watchlist is empty — heart a title to save it</div>'; return; }
   appendCards(list);
@@ -659,30 +583,28 @@ function appendCards(items) {
 }
 
 async function openPlayer(item) {
-  selectedItem = item; currentServer = 0;
-  clearNextEpTimer();
-  buildServerDropdown();
+  selectedItem = item;
+  clearNextEpTimer(); hideNextEpBar();
   document.getElementById('more-like-section').style.display = 'none';
   document.getElementById('more-like-grid').innerHTML = '';
-  hideNextEpBar();
 
   try {
     const res     = await fetch(`https://api.themoviedb.org/3/${currentType}/${item.id}?api_key=${API_KEY}`);
-    selectedDetails = await res.json();
+    const details = await res.json();
     const title   = item.title || item.name;
     document.getElementById('watch-title').textContent       = title;
     document.getElementById('watch-title-short').textContent = title;
     document.getElementById('watch-year').textContent        = (item.release_date || item.first_air_date || '').split('-')[0];
     document.getElementById('watch-rating').textContent      = item.vote_average ? '★ ' + item.vote_average.toFixed(1) + ' / 10' : '';
-    document.getElementById('watch-runtime').textContent     = selectedDetails.runtime
-      ? selectedDetails.runtime + ' min'
-      : selectedDetails.number_of_seasons ? selectedDetails.number_of_seasons + ' season' + (selectedDetails.number_of_seasons > 1 ? 's' : '') : '';
-    document.getElementById('watch-desc').textContent = selectedDetails.overview || '';
+    document.getElementById('watch-runtime').textContent     = details.runtime
+      ? details.runtime + ' min'
+      : details.number_of_seasons ? details.number_of_seasons + ' season' + (details.number_of_seasons > 1 ? 's' : '') : '';
+    document.getElementById('watch-desc').textContent = details.overview || '';
 
-    if (currentType === 'tv' && selectedDetails.seasons) {
+    if (currentType === 'tv' && details.seasons) {
       document.getElementById('season-select').style.display  = '';
       document.getElementById('episode-select').style.display = '';
-      populateSeasons(selectedDetails.seasons);
+      populateSeasons(details.seasons);
     } else {
       document.getElementById('season-select').style.display  = 'none';
       document.getElementById('episode-select').style.display = 'none';
@@ -691,11 +613,9 @@ async function openPlayer(item) {
 
     updatePlayerWlBtn();
     document.getElementById('player-modal').classList.add('open');
-    setServer(currentServer);
+    document.getElementById('main-player').src = buildPlayerUrl();
     fetchMoreLikeThis(item.id);
-
     if (currentType === 'tv') scheduleNextEpBar();
-
   } catch(e) { console.error('openPlayer:', e); }
 }
 
@@ -711,7 +631,6 @@ function populateSeasons(seasons) {
   const first = valid.find(s => s.season_number === 1) || valid[0];
   if (first) { currentSeason = first.season_number; populateEpisodes(first.episode_count); }
 }
-
 function populateEpisodes(count) {
   const s = document.getElementById('episode-select');
   s.innerHTML = '';
@@ -721,22 +640,18 @@ function populateEpisodes(count) {
   currentEp = 1;
 }
 
-function setServer(idx) { document.getElementById('main-player').src = buildPlayerUrl(idx); }
-
 function closePlayer() {
   document.getElementById('player-modal').classList.remove('open');
   document.getElementById('main-player').src = '';
-  clearNextEpTimer();
-  hideNextEpBar();
+  clearNextEpTimer(); hideNextEpBar();
 }
 
 async function fetchMoreLikeThis(id) {
   try {
-    const data = await (await fetch(`https://api.themoviedb.org/3/${currentType}/${id}/recommendations?api_key=${API_KEY}&page=1`)).json();
+    const data  = await (await fetch(`https://api.themoviedb.org/3/${currentType}/${id}/recommendations?api_key=${API_KEY}&page=1`)).json();
     const items = (data.results || []).filter(r => r.poster_path).slice(0, 12);
     if (!items.length) return;
-    const section = document.getElementById('more-like-section');
-    const grid    = document.getElementById('more-like-grid');
+    const grid = document.getElementById('more-like-grid');
     grid.innerHTML = '';
     items.forEach(item => {
       const card = document.createElement('div');
@@ -745,7 +660,7 @@ async function fetchMoreLikeThis(id) {
       card.addEventListener('click', () => openPlayer(item));
       grid.appendChild(card);
     });
-    section.style.display = 'block';
+    document.getElementById('more-like-section').style.display = 'block';
   } catch {}
 }
 
@@ -755,15 +670,12 @@ function getEpisodeCount() {
   const opt = sel.options[sel.selectedIndex];
   return opt ? parseInt(opt.getAttribute('data-episodes') || 0) : 0;
 }
-
 function scheduleNextEpBar() {
   clearNextEpTimer();
   if (currentType !== 'tv') return;
   nextEpTimer = setTimeout(() => {
-    const epCount = getEpisodeCount();
-    if (currentEp >= epCount) return;
-    const nextEp = parseInt(currentEp) + 1;
-    document.getElementById('next-ep-label').textContent = `Season ${currentSeason} · Episode ${nextEp}`;
+    if (currentEp >= getEpisodeCount()) return;
+    document.getElementById('next-ep-label').textContent = `Season ${currentSeason} · Episode ${parseInt(currentEp) + 1}`;
     nextEpCountdown = 15;
     document.getElementById('next-ep-countdown').textContent = nextEpCountdown;
     document.getElementById('next-ep-bar').classList.add('visible');
@@ -775,29 +687,23 @@ function scheduleNextEpBar() {
     nextEpTimer = tick;
   }, 20 * 60 * 1000);
 }
-
 function clearNextEpTimer() { clearTimeout(nextEpTimer); clearInterval(nextEpTimer); nextEpTimer = null; }
 function hideNextEpBar() { document.getElementById('next-ep-bar').classList.remove('visible'); }
-
 function goNextEpisode() {
-  clearNextEpTimer();
-  hideNextEpBar();
+  clearNextEpTimer(); hideNextEpBar();
   const epSel = document.getElementById('episode-select');
-  const epCount = getEpisodeCount();
-  if (currentEp < epCount) {
-    currentEp++;
-    epSel.value = currentEp;
-    setServer(currentServer);
+  if (currentEp < getEpisodeCount()) {
+    currentEp++; epSel.value = currentEp;
+    document.getElementById('main-player').src = buildPlayerUrl();
     scheduleNextEpBar();
   } else {
     const seasonSel = document.getElementById('season-select');
-    const nextSeasonOpt = seasonSel.options[seasonSel.selectedIndex + 1];
-    if (nextSeasonOpt) {
-      nextSeasonOpt.selected = true;
-      currentSeason = parseInt(nextSeasonOpt.value);
-      populateEpisodes(nextSeasonOpt.getAttribute('data-episodes'));
+    const nextOpt = seasonSel.options[seasonSel.selectedIndex + 1];
+    if (nextOpt) {
+      nextOpt.selected = true; currentSeason = parseInt(nextOpt.value);
+      populateEpisodes(nextOpt.getAttribute('data-episodes'));
       currentEp = 1;
-      setServer(currentServer);
+      document.getElementById('main-player').src = buildPlayerUrl();
       scheduleNextEpBar();
     }
   }
@@ -821,11 +727,8 @@ function bindEvents() {
     if (isWatchlist) {
       const old = document.getElementById('end-msg'); if (old) old.remove();
       if (scrollObserver) scrollObserver.disconnect();
-      setSpinner(false);
-      renderWatchlistGrid();
-    } else {
-      resetAndFetch();
-    }
+      setSpinner(false); renderWatchlistGrid();
+    } else { resetAndFetch(); }
   });
 
   document.getElementById('search-input').addEventListener('input', e => {
@@ -839,17 +742,15 @@ function bindEvents() {
   document.getElementById('sort-select').addEventListener('change', e => { currentSort = e.target.value; resetAndFetch(); });
   document.getElementById('genre-select').addEventListener('change', e => { currentGenre = e.target.value; resetAndFetch(); });
 
-  document.getElementById('server-select').addEventListener('change', e => {
-    currentServer = parseInt(e.target.value); setServer(currentServer);
-  });
   document.getElementById('season-select').addEventListener('change', e => {
     currentSeason = parseInt(e.target.value);
     populateEpisodes(e.target.options[e.target.selectedIndex].getAttribute('data-episodes'));
-    setServer(currentServer);
+    document.getElementById('main-player').src = buildPlayerUrl();
     clearNextEpTimer(); hideNextEpBar(); scheduleNextEpBar();
   });
   document.getElementById('episode-select').addEventListener('change', e => {
-    currentEp = parseInt(e.target.value); setServer(currentServer);
+    currentEp = parseInt(e.target.value);
+    document.getElementById('main-player').src = buildPlayerUrl();
     clearNextEpTimer(); hideNextEpBar(); scheduleNextEpBar();
   });
 

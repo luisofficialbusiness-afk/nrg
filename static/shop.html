@@ -108,6 +108,8 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .title-tag-mock { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; padding: 2px 8px; border-radius: 2px; }
 
 @keyframes rainbow-spin { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
+    @keyframes blue-pulse { 0%,100%{box-shadow:0 0 0 2px #4f9cf9,0 0 8px #4f9cf9} 50%{box-shadow:0 0 0 2px #4f9cf9,0 0 20px #4f9cf9} }
+    @keyframes diamond-spin { 0%{filter:hue-rotate(0deg) brightness(1)} 50%{filter:hue-rotate(180deg) brightness(1.4)} 100%{filter:hue-rotate(360deg) brightness(1)} }
 @keyframes fire-glow { 0%,100%{box-shadow:0 0 8px #f50,0 0 16px #f50} 50%{box-shadow:0 0 16px #ff0,0 0 30px #f50} }
 @keyframes pulse-glow { 0%,100%{box-shadow:0 0 6px var(--accent)} 50%{box-shadow:0 0 18px var(--accent)} }
 @keyframes galaxy-bg { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
@@ -201,34 +203,62 @@ let userInventory = [];
 let allItems     = [];
 let activeCategory = "all";
 
-// hardcoded fallback items — admin can override these via Firestore shopItems collection
 const FALLBACK_ITEMS = [
   { id: "color_purple",   name: "Purple Handle",    category: "usernamecolor", rarity: "common",    price: 50,   color: "#c50cf9", desc: "Make your @username purple." },
   { id: "color_blue",     name: "Blue Handle",      category: "usernamecolor", rarity: "common",    price: 50,   color: "#4f9cf9", desc: "Make your @username blue." },
+  { id: "color_rose",     name: "Rose Pink Handle", category: "usernamecolor", rarity: "common",    price: 50,   color: "#ff6b9d", desc: "Make your @username rose pink." },
+  { id: "color_lavender", name: "Lavender Handle",  category: "usernamecolor", rarity: "common",    price: 50,   color: "#b57bee", desc: "Make your @username lavender." },
   { id: "color_gold",     name: "Gold Handle",      category: "usernamecolor", rarity: "rare",      price: 150,  color: "#f5c518", desc: "Make your @username gold." },
   { id: "color_red",      name: "Red Handle",       category: "usernamecolor", rarity: "rare",      price: 150,  color: "#ff4f4f", desc: "Make your @username red." },
   { id: "color_green",    name: "Green Handle",     category: "usernamecolor", rarity: "rare",      price: 150,  color: "#39d98a", desc: "Make your @username green." },
+  { id: "color_orange",   name: "Blood Orange",     category: "usernamecolor", rarity: "rare",      price: 150,  color: "#ff4500", desc: "Make your @username blood orange." },
+  { id: "color_crimson",  name: "Crimson Handle",   category: "usernamecolor", rarity: "epic",      price: 300,  color: "#dc143c", desc: "Make your @username crimson." },
+  { id: "color_toxic",    name: "Toxic Green",      category: "usernamecolor", rarity: "epic",      price: 300,  color: "#00ff41", desc: "Glowing toxic green @username." },
+  { id: "color_yellow",   name: "Cyber Yellow",     category: "usernamecolor", rarity: "epic",      price: 300,  color: "#ffe600", desc: "Bright cyber yellow @username." },
+  { id: "color_ice",      name: "Ice White",        category: "usernamecolor", rarity: "epic",      price: 300,  color: "#e8f4ff", desc: "Ice white @username." },
   { id: "color_rainbow",  name: "Rainbow Handle",   category: "usernamecolor", rarity: "legendary", price: 800,  color: "rainbow", desc: "Animated rainbow @username." },
 
-  { id: "boost_2x_30",    name: "2x XP — 30 min",  category: "xpboost",       rarity: "common",    price: 80,   multiplier: 2, duration: 30,  desc: "Double your XP for 30 minutes." },
-  { id: "boost_2x_60",    name: "2x XP — 1 hour",  category: "xpboost",       rarity: "rare",      price: 140,  multiplier: 2, duration: 60,  desc: "Double your XP for 1 hour." },
-  { id: "boost_3x_60",    name: "3x XP — 1 hour",  category: "xpboost",       rarity: "epic",      price: 300,  multiplier: 3, duration: 60,  desc: "Triple your XP for 1 hour." },
-  { id: "boost_5x_30",    name: "5x XP — 30 min",  category: "xpboost",       rarity: "legendary", price: 600,  multiplier: 5, duration: 30,  desc: "5x XP for 30 minutes. Rare." },
+  { id: "boost_1x5_120",  name: "1.5x XP — 2 hrs", category: "xpboost",       rarity: "common",    price: 60,   multiplier: 1.5, duration: 120, desc: "50% more XP for 2 hours." },
+  { id: "boost_2x_30",    name: "2x XP — 30 min",  category: "xpboost",       rarity: "common",    price: 80,   multiplier: 2,   duration: 30,  desc: "Double your XP for 30 minutes." },
+  { id: "boost_2x_60",    name: "2x XP — 1 hour",  category: "xpboost",       rarity: "rare",      price: 140,  multiplier: 2,   duration: 60,  desc: "Double your XP for 1 hour." },
+  { id: "boost_2x_180",   name: "2x XP — 3 hrs",   category: "xpboost",       rarity: "rare",      price: 220,  multiplier: 2,   duration: 180, desc: "Double your XP for 3 hours." },
+  { id: "boost_3x_60",    name: "3x XP — 1 hour",  category: "xpboost",       rarity: "epic",      price: 300,  multiplier: 3,   duration: 60,  desc: "Triple your XP for 1 hour." },
+  { id: "boost_4x_45",    name: "4x XP — 45 min",  category: "xpboost",       rarity: "epic",      price: 420,  multiplier: 4,   duration: 45,  desc: "4x XP for 45 minutes." },
+  { id: "boost_5x_30",    name: "5x XP — 30 min",  category: "xpboost",       rarity: "legendary", price: 600,  multiplier: 5,   duration: 30,  desc: "5x XP for 30 minutes." },
+  { id: "boost_10x_15",   name: "10x XP — 15 min", category: "xpboost",       rarity: "legendary", price: 1000, multiplier: 10,  duration: 15,  desc: "10x XP for 15 minutes. Insane." },
 
-  { id: "profile_dark",   name: "Dark Theme",       category: "profiledeco",   rarity: "common",    price: 100,  emoji: "🌑", desc: "Deep dark theme on your public profile." },
-  { id: "profile_neon",   name: "Neon Theme",       category: "profiledeco",   rarity: "rare",      price: 200,  emoji: "⚡", desc: "Neon glow effect on your public profile." },
-  { id: "profile_galaxy", name: "Galaxy Theme",     category: "profiledeco",   rarity: "epic",      price: 450,  emoji: "🌌", desc: "Animated galaxy background on your profile." },
-  { id: "profile_fire",   name: "Fire Theme",       category: "profiledeco",   rarity: "legendary", price: 900,  emoji: "🔥", desc: "Animated fire border on your profile." },
+  { id: "profile_dark",    name: "Dark Theme",      category: "profiledeco",   rarity: "common",    price: 100,  desc: "Deep dark theme on your public profile." },
+  { id: "profile_neon",    name: "Neon Theme",      category: "profiledeco",   rarity: "rare",      price: 200,  desc: "Neon glow effect on your public profile." },
+  { id: "profile_crimson", name: "Crimson Theme",   category: "profiledeco",   rarity: "rare",      price: 200,  desc: "Deep red crimson theme on your profile." },
+  { id: "profile_ocean",   name: "Ocean Theme",     category: "profiledeco",   rarity: "rare",      price: 200,  desc: "Deep ocean blue theme on your profile." },
+  { id: "profile_galaxy",  name: "Galaxy Theme",    category: "profiledeco",   rarity: "epic",      price: 450,  desc: "Animated galaxy background on your profile." },
+  { id: "profile_gold",    name: "Gold Theme",      category: "profiledeco",   rarity: "epic",      price: 450,  desc: "Black and gold prestige theme." },
+  { id: "profile_sakura",  name: "Sakura Theme",    category: "profiledeco",   rarity: "epic",      price: 450,  desc: "Soft pink sakura blossom theme." },
+  { id: "profile_glitch",  name: "Glitch Theme",    category: "profiledeco",   rarity: "legendary", price: 750,  desc: "Animated glitch scanline effect." },
+  { id: "profile_fire",    name: "Fire Theme",      category: "profiledeco",   rarity: "legendary", price: 900,  desc: "Animated fire border on your profile." },
 
-  { id: "pfp_glow",       name: "Purple Glow",      category: "pfpdeco",       rarity: "common",    price: 120,  emoji: "💜", desc: "Purple glow ring around your avatar." },
-  { id: "pfp_gold_ring",  name: "Gold Ring",        category: "pfpdeco",       rarity: "rare",      price: 250,  emoji: "👑", desc: "Gold border ring around your avatar." },
-  { id: "pfp_fire_ring",  name: "Fire Ring",        category: "pfpdeco",       rarity: "epic",      price: 500,  emoji: "🔥", desc: "Animated fire ring around your avatar." },
-  { id: "pfp_rainbow",    name: "Rainbow Aura",     category: "pfpdeco",       rarity: "legendary", price: 1000, emoji: "🌈", desc: "Animated rainbow aura around your avatar." },
+  { id: "pfp_glow",        name: "Purple Glow",     category: "pfpdeco",       rarity: "common",    price: 120,  desc: "Purple glow ring around your avatar." },
+  { id: "pfp_blue_glow",   name: "Neon Blue Glow",  category: "pfpdeco",       rarity: "common",    price: 120,  desc: "Neon blue glow around your avatar." },
+  { id: "pfp_silver_ring", name: "Silver Ring",     category: "pfpdeco",       rarity: "rare",      price: 200,  desc: "Clean silver border ring." },
+  { id: "pfp_gold_ring",   name: "Gold Ring",       category: "pfpdeco",       rarity: "rare",      price: 250,  desc: "Gold border ring around your avatar." },
+  { id: "pfp_void_ring",   name: "Void Ring",       category: "pfpdeco",       rarity: "epic",      price: 400,  desc: "Black ring with white glow." },
+  { id: "pfp_fire_ring",   name: "Fire Ring",       category: "pfpdeco",       rarity: "epic",      price: 500,  desc: "Animated fire ring around your avatar." },
+  { id: "pfp_diamond",     name: "Diamond Ring",    category: "pfpdeco",       rarity: "legendary", price: 800,  desc: "Animated sparkling diamond ring." },
+  { id: "pfp_rainbow",     name: "Rainbow Aura",    category: "pfpdeco",       rarity: "legendary", price: 1000, desc: "Animated rainbow aura around your avatar." },
 
-  { id: "title_gamer",    name: "Gamer",            category: "title",         rarity: "common",    price: 75,   desc: "Show 'Gamer' under your name." },
-  { id: "title_veteran",  name: "Veteran",          category: "title",         rarity: "rare",      price: 200,  desc: "Show 'Veteran' under your name." },
-  { id: "title_legend",   name: "Legend",           category: "title",         rarity: "epic",      price: 500,  desc: "Show 'Legend' under your name." },
-  { id: "title_nrg",      name: "NRG Elite",        category: "title",         rarity: "legendary", price: 1200, desc: "The rarest title. For the dedicated." },
+  { id: "title_rookie",    name: "Rookie",          category: "title",         rarity: "common",    price: 40,   desc: "Just getting started." },
+  { id: "title_gamer",     name: "Gamer",           category: "title",         rarity: "common",    price: 75,   desc: "A true gamer." },
+  { id: "title_ghost",     name: "Ghost",           category: "title",         rarity: "common",    price: 75,   desc: "Silent and deadly." },
+  { id: "title_grinder",   name: "Grinder",         category: "title",         rarity: "rare",      price: 150,  desc: "Never stops playing." },
+  { id: "title_veteran",   name: "Veteran",         category: "title",         rarity: "rare",      price: 200,  desc: "Been here a while." },
+  { id: "title_shadow",    name: "Shadow",          category: "title",         rarity: "rare",      price: 200,  desc: "Lurking in the shadows." },
+  { id: "title_elite",     name: "Elite",           category: "title",         rarity: "epic",      price: 350,  desc: "Above the rest." },
+  { id: "title_phantom",   name: "Phantom",         category: "title",         rarity: "epic",      price: 400,  desc: "You were never here." },
+  { id: "title_champion",  name: "Champion",        category: "title",         rarity: "epic",      price: 500,  desc: "A true champion." },
+  { id: "title_legend",    name: "Legend",          category: "title",         rarity: "epic",      price: 500,  desc: "Legendary status." },
+  { id: "title_goat",      name: "G.O.A.T",         category: "title",         rarity: "legendary", price: 900,  desc: "Greatest of all time." },
+  { id: "title_og",        name: "NRG OG",          category: "title",         rarity: "legendary", price: 1000, desc: "An original NRG member." },
+  { id: "title_nrg",       name: "NRG Elite",       category: "title",         rarity: "legendary", price: 1200, desc: "The rarest title. For the dedicated." },
 ];
 
 function toast(msg, type = "success") {
@@ -259,10 +289,15 @@ function buildPreview(item) {
 
   if (item.category === "profiledeco") {
     const themes = {
-      profile_dark:   { bg: "#0a0a0a", border: "#2a2a2a", av: "#333" },
-      profile_neon:   { bg: "#0a0a1a", border: "#4f9cf9", av: "#4f9cf9", glow: "box-shadow:0 0 12px #4f9cf9" },
-      profile_galaxy: { bg: "linear-gradient(135deg,#0a0a2a,#1a0a3a,#0a1a2a)", border: "#c50cf9", av: "#c50cf9", anim: "animation:galaxy-bg 4s ease infinite;background-size:200% 200%" },
-      profile_fire:   { bg: "#1a0a00", border: "#f50", av: "#f50", glow: "animation:fire-glow 1.5s ease-in-out infinite" },
+      profile_dark:    { bg: "#0a0a0a", border: "#2a2a2a", av: "#333" },
+      profile_neon:    { bg: "#0a0a1a", border: "#4f9cf9", av: "#4f9cf9", glow: "box-shadow:0 0 12px #4f9cf9" },
+      profile_crimson: { bg: "#1a0008", border: "#dc143c", av: "#dc143c", glow: "box-shadow:0 0 12px #dc143c" },
+      profile_ocean:   { bg: "#020a14", border: "#0077b6", av: "#0077b6", glow: "box-shadow:0 0 12px #0077b6" },
+      profile_galaxy:  { bg: "linear-gradient(135deg,#0a0a2a,#1a0a3a,#0a1a2a)", border: "#c50cf9", av: "#c50cf9", anim: "animation:galaxy-bg 4s ease infinite;background-size:200% 200%" },
+      profile_gold:    { bg: "#0d0900", border: "#f5c518", av: "#f5c518", glow: "box-shadow:0 0 12px rgba(245,197,24,0.5)" },
+      profile_sakura:  { bg: "#1a0a0f", border: "#ff9db5", av: "#ff9db5", glow: "box-shadow:0 0 12px #ff9db5" },
+      profile_glitch:  { bg: "#000", border: "#0ff", av: "#0ff", glow: "box-shadow:0 0 8px #0ff,0 0 16px #f0f;animation:fire-glow 0.3s ease-in-out infinite" },
+      profile_fire:    { bg: "#1a0a00", border: "#f50", av: "#f50", glow: "animation:fire-glow 1.5s ease-in-out infinite" },
     };
     const t = themes[item.id] || { bg: "#111", border: "#2a2a2a", av: "#444" };
     const bgStyle = typeof t.bg === "string" && t.bg.includes("gradient")
@@ -281,10 +316,14 @@ function buildPreview(item) {
 
   if (item.category === "pfpdeco") {
     const decos = {
-      pfp_glow:      { ring: "none", shadow: "0 0 0 2px var(--accent),0 0 14px var(--accent)", anim: "animation:pulse-glow 2s ease-in-out infinite" },
-      pfp_gold_ring: { ring: "3px solid var(--gold)", shadow: "0 0 10px rgba(245,197,24,0.4)" },
-      pfp_fire_ring: { ring: "3px solid #f50", shadow: "none", anim: "animation:fire-glow 1.5s ease-in-out infinite" },
-      pfp_rainbow:   { ring: "3px solid transparent", shadow: "none", anim: "animation:rainbow-spin 2s linear infinite", extra: "background:linear-gradient(var(--surface2),var(--surface2)) padding-box,linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9) border-box" },
+      pfp_glow:        { ring: "none",                    shadow: "0 0 0 2px #c50cf9,0 0 14px #c50cf9",          anim: "animation:pulse-glow 2s ease-in-out infinite" },
+      pfp_blue_glow:   { ring: "none",                    shadow: "0 0 0 2px #4f9cf9,0 0 14px #4f9cf9",          anim: "animation:blue-pulse 2s ease-in-out infinite" },
+      pfp_silver_ring: { ring: "3px solid #aaa",          shadow: "0 0 8px rgba(170,170,170,0.4)" },
+      pfp_gold_ring:   { ring: "3px solid #f5c518",       shadow: "0 0 10px rgba(245,197,24,0.4)" },
+      pfp_void_ring:   { ring: "3px solid #fff",          shadow: "0 0 12px rgba(255,255,255,0.15),inset 0 0 12px rgba(0,0,0,0.8)" },
+      pfp_fire_ring:   { ring: "3px solid #f50",          shadow: "none",                                         anim: "animation:fire-glow 1.5s ease-in-out infinite" },
+      pfp_diamond:     { ring: "3px solid #a8d8ea",       shadow: "0 0 8px #a8d8ea,0 0 20px rgba(168,216,234,0.4)", anim: "animation:diamond-spin 3s linear infinite" },
+      pfp_rainbow:     { ring: "3px solid transparent",   shadow: "none",                                         anim: "animation:rainbow-spin 2s linear infinite", extra: "background:linear-gradient(var(--surface2),var(--surface2)) padding-box,linear-gradient(90deg,#f00,#f90,#ff0,#0f0,#09f,#c50cf9) border-box" },
     };
     const d = decos[item.id] || { ring: "2px solid var(--border)" };
     const ringStyle = "border:" + (d.ring || "none") + ";box-shadow:" + (d.shadow || "none") + ";" + (d.anim || "") + ";" + (d.extra || "");
@@ -358,7 +397,6 @@ async function buyItem(itemId) {
     const newCoins = (d.coins || 0) - item.price;
     if (newCoins < 0) { toast("not enough coins.", "error"); return; }
 
-    // build the inventory item object to store
     const invItem = {
       id:         item.id,
       name:       item.name,
@@ -396,7 +434,7 @@ async function loadShopItems() {
     if (!snap.empty) {
       allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     } else {
-      allItems = FALLBACK_ITEMS; // use hardcoded items if Firestore collection is empty
+      allItems = FALLBACK_ITEMS; 
     }
   } catch (e) {
     allItems = FALLBACK_ITEMS;
@@ -421,7 +459,7 @@ onAuthStateChanged(auth, async user => {
     if (snap.exists()) {
       const d       = snap.data();
       userCoins     = d.coins || 0;
-      userInventory = (d.inventory || []).map(i => i.id ?? i); // handle both object and string arrays
+      userInventory = (d.inventory || []).map(i => i.id ?? i); 
       $("coin-count").textContent = userCoins;
     }
   } else {

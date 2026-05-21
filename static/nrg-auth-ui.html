@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NRG | Account</title>
 <script src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -216,8 +217,52 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .pfp-deco-gold-ring { border: 3px solid #f5c518 !important; box-shadow: 0 0 10px rgba(245,197,24,0.4); }
 .pfp-deco-fire-ring { border: 3px solid #f50 !important; animation: fire-glow 1.5s ease-in-out infinite; }
 .pfp-deco-rainbow   { border: 3px solid transparent !important; background-clip: padding-box; animation: rainbow-spin 2s linear infinite; outline: 3px solid; outline-color: #c50cf9; }
+
+.dash-username.uc-rose     { color: #ff6b9d; }
+.dash-username.uc-lavender { color: #b57bee; }
+.dash-username.uc-orange   { color: #ff4500; }
+.dash-username.uc-crimson  { color: #dc143c; }
+.dash-username.uc-toxic    { color: #00ff41; }
+.dash-username.uc-yellow   { color: #ffe600; }
+.dash-username.uc-ice      { color: #e8f4ff; }
+
+.pfp-deco-blue-glow   { box-shadow: 0 0 0 2px #4f9cf9, 0 0 14px #4f9cf9; animation: blue-pulse 2s ease-in-out infinite; }
+.pfp-deco-silver-ring { border: 3px solid #aaa !important; box-shadow: 0 0 8px rgba(170,170,170,0.4); }
+.pfp-deco-void-ring   { border: 3px solid #fff !important; box-shadow: 0 0 12px rgba(255,255,255,0.15); }
+.pfp-deco-diamond     { border: 3px solid #a8d8ea !important; box-shadow: 0 0 8px #a8d8ea, 0 0 20px rgba(168,216,234,0.4); animation: diamond-spin 3s linear infinite; }
+@keyframes blue-pulse    { 0%,100%{box-shadow:0 0 0 2px #4f9cf9,0 0 8px #4f9cf9} 50%{box-shadow:0 0 0 2px #4f9cf9,0 0 20px #4f9cf9} }
+@keyframes diamond-spin  { 0%{filter:hue-rotate(0deg) brightness(1)} 50%{filter:hue-rotate(180deg) brightness(1.4)} 100%{filter:hue-rotate(360deg) brightness(1)} }
+
 @keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 2px #c50cf9,0 0 8px #c50cf9} 50%{box-shadow:0 0 0 2px #c50cf9,0 0 20px #c50cf9} }
 @keyframes fire-glow  { 0%,100%{box-shadow:0 0 8px #f50,0 0 16px #f50} 50%{box-shadow:0 0 16px #ff0,0 0 30px #f50} }
+
+
+.friend-search-row { display: flex; gap: 8px; }
+.friend-search-row input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: var(--sans); font-size: 13px; padding: 8px 11px; border-radius: 4px; outline: none; transition: border-color 0.15s; }
+.friend-search-row input:focus { border-color: var(--accent); }
+.friend-search-row input::placeholder { color: var(--text-muted); }
+
+.friend-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.friend-item:last-child { border-bottom: none; }
+.friend-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #000; flex-shrink: 0; overflow: hidden; }
+.friend-av img { width: 100%; height: 100%; object-fit: cover; }
+.friend-info { flex: 1; min-width: 0; }
+.friend-name { font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.friend-handle { font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
+.friend-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.friend-btn { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.1em; padding: 5px 10px; border-radius: 3px; cursor: pointer; transition: background 0.13s, color 0.13s; }
+.friend-btn.accept { border: 1px solid var(--green); color: var(--green); background: none; }
+.friend-btn.accept:hover { background: rgba(57,217,138,0.12); }
+.friend-btn.decline { border: 1px solid var(--border); color: var(--text-muted); background: none; }
+.friend-btn.decline:hover { border-color: var(--red); color: var(--red); }
+.friend-btn.remove { border: 1px solid var(--border); color: var(--text-muted); background: none; }
+.friend-btn.remove:hover { border-color: var(--red); color: var(--red); }
+.friend-btn.view { border: 1px solid var(--border); color: var(--text-dim); background: none; text-decoration: none; display: flex; align-items: center; }
+.friend-btn.view:hover { border-color: var(--accent); color: var(--accent); }
+.friend-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; padding: 4px 0; }
+.friend-section-sub { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; margin-top: 14px; }
+.friend-section-sub:first-child { margin-top: 0; }
+.req-badge { display: inline-block; background: var(--accent); color: #000; font-family: var(--mono); font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 10px; margin-left: 5px; vertical-align: middle; }
 
 .status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
 </style>
@@ -269,12 +314,34 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
       </div>
       <div class="pane" id="pane-signup">
         <div class="field"><label>Display Name</label><input type="text" id="s-name" placeholder="your name" autocomplete="name"></div>
+        <div class="field">
+          <label>Username</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-family:var(--mono);font-size:13px;pointer-events:none">@</span>
+            <input type="text" id="s-username" placeholder="handle" autocomplete="off" style="padding-left:22px;width:100%">
+          </div>
+          <div class="msg" id="s-username-msg" style="text-align:left;margin-top:4px;min-height:0"></div>
+        </div>
         <div class="field"><label>Email</label><input type="email" id="s-email" placeholder="you@example.com" autocomplete="email"></div>
         <div class="field"><label>Password</label><input type="password" id="s-pass" placeholder="min 6 characters" autocomplete="new-password"></div>
         <button class="btn primary" id="s-submit">CREATE ACCOUNT</button>
         <div class="divider">or</div>
         <button class="btn ghost" id="s-google">continue with Google</button>
         <div class="msg" id="s-msg"></div>
+      </div>
+
+      <div class="pane" id="pane-verify">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:14px;line-height:1.6;letter-spacing:0.04em">
+          A 6-digit code was sent to <strong id="verify-email-display" style="color:var(--text)"></strong>.<br>Enter it below to verify your email.
+        </div>
+        <div class="field">
+          <label>Verification Code</label>
+          <input type="text" id="v-code" placeholder="000000" maxlength="6" autocomplete="one-time-code" style="letter-spacing:0.3em;font-size:18px;text-align:center;font-family:var(--mono)">
+        </div>
+        <button class="btn primary" id="v-submit">VERIFY & CREATE ACCOUNT</button>
+        <button class="forgot" id="v-resend">resend code</button>
+        <button class="forgot" id="v-back" style="margin-top:4px">&#8592; go back</button>
+        <div class="msg" id="v-msg"></div>
       </div>
     </div>
 
@@ -407,6 +474,24 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
           <div class="inv-empty" id="inv-empty" style="display:none">Your inventory is empty — visit the shop!</div>
         </div>
 
+        <div class="dash-section" id="friends-section">
+          <div class="dash-section-title">Friends <span class="req-badge" id="req-count" style="display:none">0</span></div>
+          <div class="friend-section-sub">Add Friend</div>
+          <div class="friend-search-row">
+            <input type="text" id="friend-search-input" placeholder="@username">
+            <button class="btn primary sm" id="friend-send-btn">Send</button>
+          </div>
+          <div class="msg" id="friend-send-msg"></div>
+          <div id="incoming-wrap">
+            <div class="friend-section-sub" id="incoming-label" style="display:none">Incoming Requests</div>
+            <div id="incoming-list"></div>
+          </div>
+          <div id="friends-wrap">
+            <div class="friend-section-sub">Friends</div>
+            <div id="friends-list"></div>
+          </div>
+        </div>
+
         <div class="dash-section">
           <div class="dash-section-title">Quick Links</div>
           <div class="dash-links">
@@ -453,7 +538,8 @@ import {
   EmailAuthProvider, reauthenticateWithCredential, updatePassword, deleteUser
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp, writeBatch
+  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp, writeBatch,
+  collection, addDoc, query, where, getDocs, deleteDoc, arrayUnion, arrayRemove
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -471,6 +557,55 @@ import("./nrg-system.js").then(m => { NRGSys = m; }).catch(() => {});
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+
+window._nrgFirebase = { db, updateDoc, doc, uid: null };
+
+emailjs.init("iPFh09JqEj0LAofyT");
+
+let _pendingSignup = null;
+
+function generateCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+async function sendVerificationCode(email, code) {
+  await emailjs.send("service_97egajt", "template_5rpglqi", {
+    to_email: email,
+    code:     code
+  });
+}
+
+async function storeVerificationCode(email, code) {
+  const expiry = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+  await setDoc(doc(db, "emailVerifications", email.toLowerCase()), {
+    code,
+    expiry,
+    createdAt: new Date().toISOString()
+  });
+}
+
+async function checkVerificationCode(email, inputCode) {
+  const snap = await getDoc(doc(db, "emailVerifications", email.toLowerCase()));
+  if (!snap.exists()) return { valid: false, reason: "no code found — resend." };
+  const d = snap.data();
+  if (new Date(d.expiry).getTime() < Date.now()) return { valid: false, reason: "code expired — resend." };
+  if (d.code !== inputCode.trim()) return { valid: false, reason: "incorrect code." };
+  return { valid: true };
+}
+
+function switchToVerifyPane(email) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  $("pane-login").classList.remove("active");
+  $("pane-signup").classList.remove("active");
+  $("pane-verify").classList.add("active");
+  $("auth-title").textContent = "Verify your email";
+  $("verify-email-display").textContent = email;
+  $("v-code").value = "";
+  $("v-msg").textContent = "";
+  $("v-msg").className = "msg";
+}
+
+
 const $    = id => document.getElementById(id);
 
 
@@ -638,26 +773,46 @@ async function handleDailyReward(d) {
 
 
 const TITLE_ITEMS = {
-  title_gamer:   { name: "Gamer",    rarity: "common"    },
-  title_veteran: { name: "Veteran",  rarity: "rare"      },
-  title_legend:  { name: "Legend",   rarity: "epic"      },
-  title_nrg:     { name: "NRG Elite",rarity: "legendary" },
+  title_rookie:   { name: "Rookie",    rarity: "common"    },
+  title_gamer:    { name: "Gamer",     rarity: "common"    },
+  title_ghost:    { name: "Ghost",     rarity: "common"    },
+  title_grinder:  { name: "Grinder",   rarity: "rare"      },
+  title_veteran:  { name: "Veteran",   rarity: "rare"      },
+  title_shadow:   { name: "Shadow",    rarity: "rare"      },
+  title_elite:    { name: "Elite",     rarity: "epic"      },
+  title_phantom:  { name: "Phantom",   rarity: "epic"      },
+  title_champion: { name: "Champion",  rarity: "epic"      },
+  title_legend:   { name: "Legend",    rarity: "epic"      },
+  title_goat:     { name: "G.O.A.T",   rarity: "legendary" },
+  title_og:       { name: "NRG OG",    rarity: "legendary" },
+  title_nrg:      { name: "NRG Elite", rarity: "legendary" },
 };
 
 const UC_CLASS = {
-  color_purple:  "uc-purple",
-  color_blue:    "uc-blue",
-  color_gold:    "uc-gold",
-  color_red:     "uc-red",
-  color_green:   "uc-green",
-  color_rainbow: "uc-rainbow",
+  color_purple:   "uc-purple",
+  color_blue:     "uc-blue",
+  color_rose:     "uc-rose",
+  color_lavender: "uc-lavender",
+  color_gold:     "uc-gold",
+  color_red:      "uc-red",
+  color_green:    "uc-green",
+  color_orange:   "uc-orange",
+  color_crimson:  "uc-crimson",
+  color_toxic:    "uc-toxic",
+  color_yellow:   "uc-yellow",
+  color_ice:      "uc-ice",
+  color_rainbow:  "uc-rainbow",
 };
 
 const PFP_CLASS = {
-  pfp_glow:      "pfp-deco-glow",
-  pfp_gold_ring: "pfp-deco-gold-ring",
-  pfp_fire_ring: "pfp-deco-fire-ring",
-  pfp_rainbow:   "pfp-deco-rainbow",
+  pfp_glow:        "pfp-deco-glow",
+  pfp_blue_glow:   "pfp-deco-blue-glow",
+  pfp_silver_ring: "pfp-deco-silver-ring",
+  pfp_gold_ring:   "pfp-deco-gold-ring",
+  pfp_void_ring:   "pfp-deco-void-ring",
+  pfp_fire_ring:   "pfp-deco-fire-ring",
+  pfp_diamond:     "pfp-deco-diamond",
+  pfp_rainbow:     "pfp-deco-rainbow",
 };
 
 function applyCosmetics(equipped) {
@@ -699,6 +854,135 @@ function applyCosmetics(equipped) {
     }
   }
 }
+
+
+async function loadFriends(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) return;
+  const d       = snap.data();
+  const friends = d.friends || [];
+
+  const incomingQ  = query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending"));
+  const incomingSnap = await getDocs(incomingQ);
+  const incoming   = incomingSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  const reqBadge = $("req-count");
+  if (incoming.length > 0) {
+    reqBadge.textContent    = incoming.length;
+    reqBadge.style.display  = "";
+  } else {
+    reqBadge.style.display  = "none";
+  }
+
+  const incomingLabel = $("incoming-label");
+  const incomingList  = $("incoming-list");
+  incomingList.innerHTML = "";
+  if (incoming.length > 0) {
+    incomingLabel.style.display = "";
+    for (const req of incoming) {
+      const senderSnap = await getDoc(doc(db, "users", req.from));
+      if (!senderSnap.exists()) continue;
+      const s   = senderSnap.data();
+      const name = s.displayName || s.email?.split("@")[0] || "User";
+      const div = document.createElement("div");
+      div.className = "friend-item";
+      div.innerHTML =
+        '<div class="friend-av">' + (s.photoURL && s.photoURL !== "firestore" ? '<img src="' + s.photoURL + '">' : name[0].toUpperCase()) + '</div>' +
+        '<div class="friend-info"><div class="friend-name">' + name + '</div><div class="friend-handle">' + (s.username ? "@" + s.username : "") + '</div></div>' +
+        '<div class="friend-actions">' +
+          '<button class="friend-btn accept" data-rid="' + req.id + '" data-uid="' + req.from + '">Accept</button>' +
+          '<button class="friend-btn decline" data-rid="' + req.id + '">Decline</button>' +
+        '</div>';
+      div.querySelector(".friend-btn.accept").addEventListener("click", async () => {
+        const rid  = div.querySelector(".friend-btn.accept").dataset.rid;
+        const fuid = div.querySelector(".friend-btn.accept").dataset.uid;
+        const batch = writeBatch(db);
+        batch.update(doc(db, "friendRequests", rid), { status: "accepted" });
+        batch.update(doc(db, "users", uid),  { friends: arrayUnion(fuid) });
+        batch.update(doc(db, "users", fuid), { friends: arrayUnion(uid)  });
+        await batch.commit();
+        loadFriends(uid);
+      });
+      div.querySelector(".friend-btn.decline").addEventListener("click", async () => {
+        const rid = div.querySelector(".friend-btn.decline").dataset.rid;
+        await updateDoc(doc(db, "friendRequests", rid), { status: "declined" });
+        loadFriends(uid);
+      });
+      incomingList.appendChild(div);
+    }
+  } else {
+    incomingLabel.style.display = "none";
+  }
+
+  const friendsList = $("friends-list");
+  friendsList.innerHTML = "";
+  if (friends.length === 0) {
+    friendsList.innerHTML = '<div class="friend-empty">No friends yet — search by @username to add someone.</div>';
+    return;
+  }
+  for (const fuid of friends) {
+    const fsnap = await getDoc(doc(db, "users", fuid));
+    if (!fsnap.exists()) continue;
+    const f    = fsnap.data();
+    const fname = f.displayName || f.email?.split("@")[0] || "User";
+    const div  = document.createElement("div");
+    div.className = "friend-item";
+    div.innerHTML =
+      '<div class="friend-av">' + (f.photoURL && f.photoURL !== "firestore" ? '<img src="' + f.photoURL + '">' : fname[0].toUpperCase()) + '</div>' +
+      '<div class="friend-info"><div class="friend-name">' + fname + '</div><div class="friend-handle">' + (f.username ? "@" + f.username : "") + '</div></div>' +
+      '<div class="friend-actions">' +
+        '<a class="friend-btn view" href="/profiles.html?uid=' + fuid + '" target="_blank">View</a>' +
+        '<button class="friend-btn remove" data-fuid="' + fuid + '">Remove</button>' +
+      '</div>';
+    div.querySelector(".friend-btn.remove").addEventListener("click", async () => {
+      const fuid2 = div.querySelector(".friend-btn.remove").dataset.fuid;
+      const batch = writeBatch(db);
+      batch.update(doc(db, "users", uid),   { friends: arrayRemove(fuid2) });
+      batch.update(doc(db, "users", fuid2), { friends: arrayRemove(uid)   });
+      await batch.commit();
+      loadFriends(uid);
+    });
+    friendsList.appendChild(div);
+  }
+}
+
+$("friend-send-btn").addEventListener("click", async () => {
+  const raw    = $("friend-search-input").value.trim().toLowerCase().replace(/^@/, "");
+  const user   = auth.currentUser;
+  if (!raw || !user) { setMsg("friend-send-msg", "enter a username.", "error"); return; }
+
+  setLoading("friend-send-btn", true, "Send");
+  try {
+    const unameSnap = await getDoc(doc(db, "usernames", raw));
+    if (!unameSnap.exists()) { setMsg("friend-send-msg", "user not found.", "error"); return; }
+    const targetUid = unameSnap.data().uid;
+
+    if (targetUid === user.uid) { setMsg("friend-send-msg", "you can't add yourself.", "error"); return; }
+
+    const mySnap = await getDoc(doc(db, "users", user.uid));
+    const myData = mySnap.data();
+    if ((myData.friends || []).includes(targetUid)) { setMsg("friend-send-msg", "already friends.", "error"); return; }
+
+    const existingQ  = query(collection(db, "friendRequests"),
+      where("from", "==", user.uid), where("to", "==", targetUid), where("status", "==", "pending"));
+    const existingSnap = await getDocs(existingQ);
+    if (!existingSnap.empty) { setMsg("friend-send-msg", "request already sent.", "error"); return; }
+
+    await addDoc(collection(db, "friendRequests"), {
+      from:      user.uid,
+      to:        targetUid,
+      status:    "pending",
+      createdAt: new Date().toISOString()
+    });
+    $("friend-search-input").value = "";
+    setMsg("friend-send-msg", "friend request sent!", "success");
+  } catch(e) {
+    setMsg("friend-send-msg", "failed to send request.", "error");
+    console.error(e);
+  } finally {
+    setLoading("friend-send-btn", false, "Send");
+  }
+});
 
 function renderDashFavs(favs) {
   const grid  = document.getElementById("dash-fav-grid");
@@ -758,9 +1042,18 @@ async function createUserDoc(user) {
     theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
     favorites:        [],
     recentGames:      [],
-    timeSpentMinutes: 0
+    inventory:        [],
+    equipped:         {},
+    timeSpentMinutes: 0,
+    xp:               0,
+    level:            1,
+    coins:            0,
+    loginStreak:      0,
+    lastLoginDate:    "",
+    isAdmin:          false,
+    isBanned:         false
   });
-  batch.set(doc(db, "usernames", username),              { uid: user.uid, createdAt: new Date().toISOString() });
+  batch.set(doc(db, "usernames", username),                 { uid: user.uid, createdAt: new Date().toISOString() });
   batch.set(doc(db, "emails",    user.email.toLowerCase()), { uid: user.uid, createdAt: new Date().toISOString() });
   await batch.commit();
 }
@@ -902,6 +1195,12 @@ async function showDashboard(user) {
       setAvatar($("dash-avatar"), photo, name);
       renderDashFavs(d.favorites || []);
       applyCosmetics(d.equipped || {});
+      loadFriends(user.uid);
+
+      if (d.theme && d.theme !== localStorage.getItem("nrg_theme_selected")) {
+        localStorage.setItem("nrg_theme_selected", d.theme);
+        if (window.applyTheme) window.applyTheme(d.theme);
+      }
       renderXPBar(d.xp || 0);
       $("stat-coins").textContent = d.coins || 0;
       renderBoostTimer(d.xpBoostActive ? d.xpBoostExpiry : null);
@@ -957,6 +1256,7 @@ function switchTab(tab) {
   );
   $("pane-login").classList.toggle("active",  tab === "login");
   $("pane-signup").classList.toggle("active", tab === "signup");
+  if ($("pane-verify")) $("pane-verify").classList.remove("active");
   $("auth-title").textContent = tab === "login" ? "Sign in to NRG" : "Create NRG account";
   ["l-msg", "s-msg"].forEach(id => {
     const el = $(id);
@@ -993,7 +1293,13 @@ $("l-submit").addEventListener("click", async () => {
   if (!email || !pass) { setMsg("l-msg", "fill in all fields.", "error"); return; }
   setLoading("l-submit", true, "LOGIN");
   try {
-    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    const cred     = await signInWithEmailAndPassword(auth, email, pass);
+    const userSnap = await getDoc(doc(db, "users", cred.user.uid));
+    if (userSnap.exists() && userSnap.data().isBanned) {
+      await signOut(auth);
+      setMsg("l-msg", "this account has been banned.", "error");
+      return;
+    }
     await createUserDoc(cred.user);
   } catch (e) {
     setMsg("l-msg", friendlyError(e.code), "error");
@@ -1010,27 +1316,61 @@ $("s-submit").addEventListener("click", async () => {
   const email    = $("s-email").value.trim();
   const pass     = $("s-pass").value;
 
-  // Basic validation
   if (!name || !username || !email || !pass) { setMsg("s-msg", "fill in all fields.", "error"); return; }
-  if (username.length < 3)  { setMsg("s-msg", "username must be at least 3 characters.", "error"); return; }
-  if (pass.length < 6)      { setMsg("s-msg", "password must be at least 6 characters.", "error"); return; }
+  if (username.length < 3) { setMsg("s-msg", "username must be at least 3 characters.", "error"); return; }
+  if (pass.length < 6)     { setMsg("s-msg", "password must be at least 6 characters.", "error"); return; }
 
-  setLoading("s-submit", true, "CREATE ACCOUNT");
+  setLoading("s-submit", true, "SENDING CODE...");
+
+  const [usernameTaken, emailTaken] = await Promise.all([
+    isUsernameTaken(username),
+    isEmailTaken(email)
+  ]).catch(() => [false, false]);
+
+  if (usernameTaken) {
+    setMsg("s-msg", "username already taken — pick another.", "error");
+    setLoading("s-submit", false, "CREATE ACCOUNT");
+    return;
+  }
+  if (emailTaken) {
+    setMsg("s-msg", "email already registered — try logging in.", "error");
+    setLoading("s-submit", false, "CREATE ACCOUNT");
+    return;
+  }
+
   try {
-   
-    const [usernameTaken, emailTaken] = await Promise.all([
-      isUsernameTaken(username),
-      isEmailTaken(email)
-    ]);
-    if (usernameTaken) { setMsg("s-msg", "username already taken — pick another.", "error"); return; }
-    if (emailTaken)    { setMsg("s-msg", "email already registered — try logging in.", "error"); return; }
+    const code = generateCode();
+    await storeVerificationCode(email, code);
+    await sendVerificationCode(email, code);
+    _pendingSignup = { name, username, email, pass };
+    switchToVerifyPane(email);
+  } catch (e) {
+    setMsg("s-msg", "failed to send verification email — check your email address.", "error");
+    console.error(e);
+  } finally {
+    setLoading("s-submit", false, "CREATE ACCOUNT");
+  }
+});
+$("s-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("s-submit").click(); });
 
+$("v-submit").addEventListener("click", async () => {
+  const inputCode = $("v-code").value.trim();
+  if (!inputCode || inputCode.length !== 6) { setMsg("v-msg", "enter the 6-digit code.", "error"); return; }
+  if (!_pendingSignup) { setMsg("v-msg", "session expired — go back and try again.", "error"); return; }
+
+  setLoading("v-submit", true, "VERIFY & CREATE ACCOUNT");
+
+  const { name, username, email, pass } = _pendingSignup;
+
+  try {
+    const check = await checkVerificationCode(email, inputCode);
+    if (!check.valid) { setMsg("v-msg", check.reason, "error"); return; }
 
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: name });
 
     const batch = writeBatch(db);
-    batch.set(doc(db, "users",     cred.user.uid), {
+    batch.set(doc(db, "users", cred.user.uid), {
       uid:              cred.user.uid,
       email:            email,
       username:         username,
@@ -1040,25 +1380,68 @@ $("s-submit").addEventListener("click", async () => {
       theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
       favorites:        [],
       recentGames:      [],
-      timeSpentMinutes: 0
+      inventory:        [],
+      equipped:         {},
+      timeSpentMinutes: 0,
+      xp:               0,
+      level:            1,
+      coins:            0,
+      loginStreak:      0,
+      lastLoginDate:    "",
+      isAdmin:          false,
+      isBanned:         false
     });
-    batch.set(doc(db, "usernames", username),           { uid: cred.user.uid, createdAt: new Date().toISOString() });
+    batch.set(doc(db, "usernames", username),            { uid: cred.user.uid, createdAt: new Date().toISOString() });
     batch.set(doc(db, "emails",    email.toLowerCase()), { uid: cred.user.uid, createdAt: new Date().toISOString() });
     await batch.commit();
 
-    setMsg("s-msg", "account created!", "success");
+    await deleteDoc(doc(db, "emailVerifications", email.toLowerCase()));
+    _pendingSignup = null;
+
   } catch (e) {
-    setMsg("s-msg", friendlyError(e.code), "error");
+    setMsg("v-msg", friendlyError(e.code), "error");
   } finally {
-    setLoading("s-submit", false, "CREATE ACCOUNT");
+    setLoading("v-submit", false, "VERIFY & CREATE ACCOUNT");
   }
 });
-$("s-pass").addEventListener("keydown", e => { if (e.key === "Enter") $("s-submit").click(); });
+
+$("v-code").addEventListener("keydown", e => { if (e.key === "Enter") $("v-submit").click(); });
+
+$("v-resend").addEventListener("click", async () => {
+  if (!_pendingSignup) { setMsg("v-msg", "session expired — go back and try again.", "error"); return; }
+  $("v-resend").disabled = true;
+  try {
+    const code = generateCode();
+    await storeVerificationCode(_pendingSignup.email, code);
+    await sendVerificationCode(_pendingSignup.email, code);
+    setMsg("v-msg", "new code sent!", "success");
+  } catch (e) {
+    setMsg("v-msg", "failed to resend — try again.", "error");
+  } finally {
+    setTimeout(() => { $("v-resend").disabled = false; }, 15000);
+  }
+});
+
+$("v-back").addEventListener("click", () => {
+  _pendingSignup = null;
+  $("pane-verify").classList.remove("active");
+  $("pane-signup").classList.add("active");
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === "signup"));
+  $("auth-title").textContent = "Create NRG account";
+});
+
+
 
 
 async function handleGoogle(msgId) {
   try {
-    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const cred     = await signInWithPopup(auth, new GoogleAuthProvider());
+    const userSnap = await getDoc(doc(db, "users", cred.user.uid));
+    if (userSnap.exists() && userSnap.data().isBanned) {
+      await signOut(auth);
+      setMsg(msgId, "this account has been banned.", "error");
+      return;
+    }
     await createUserDoc(cred.user);
   } catch (e) {
     if (e.code !== "auth/popup-closed-by-user") {
@@ -1290,7 +1673,17 @@ $("dash-logout").addEventListener("click", async () => {
 });
 
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
+  if (window._nrgFirebase) window._nrgFirebase.uid = user ? user.uid : null;
+  if (user) {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists() && snap.data().isBanned) {
+      await signOut(auth);
+      showAuthCard();
+      setMsg("l-msg", "this account has been banned.", "error");
+      return;
+    }
+  }
   updateTopbar(user).catch(console.error);
   if (user) {
     showDashboard(user).catch(console.error);

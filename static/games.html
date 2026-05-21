@@ -252,7 +252,7 @@
     }
     .game-overlay.open { display: flex; }
 
-    .overlay-bar {
+    .overlay-bar { position: relative;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -372,6 +372,59 @@
     .favs-section.visible { display: block; }
     .favs-section .section-label { margin-bottom: 12px; }
     .favs-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.15em; padding: 16px 0; }
+
+    .live-ticker {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 12px;
+      margin: 0 4px;
+    }
+    .live-ticker.visible { display: flex; }
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .ticker-xp    { color: #c50cf9; }
+    .ticker-coins { color: #f5c518; }
+    .ticker-time  { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.06em; }
+    .ticker-sep   { width: 1px; height: 14px; background: var(--border); }
+    .ticker-label { font-size: 8px; color: var(--text-muted); font-weight: 400; margin-right: 1px; }
+    .ticker-boost { font-size: 7px; color: #c50cf9; letter-spacing: 0.1em; padding: 1px 5px; border: 1px solid rgba(197,12,249,0.3); border-radius: 2px; margin-left: 2px; }
+
+    .earn-toast {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: 4px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .earn-toast.show { opacity: 1; transform: translateY(0); }
+    .earn-toast .et-xp    { color: #c50cf9; font-weight: 700; }
+    .earn-toast .et-coins { color: #f5c518; font-weight: 700; }
+
   </style>
 </head>
 <body>
@@ -943,8 +996,15 @@
   <div class="overlay-bar">
     <button class="ov-btn" id="back-btn">← Back</button>
     <div class="overlay-title">NOW PLAYING — <span id="overlay-title-text"></span></div>
-    <button class="ov-btn" id="fullscreen-btn">⛶ Fullscreen</button>
-    <button class="ov-btn primary" id="blank-btn">↗ New Tab</button>
+    <div class="live-ticker" id="live-ticker">
+      <div class="ticker-item ticker-time"><span id="tk-time">0:00</span></div>
+      <div class="ticker-sep"></div>
+      <div class="ticker-item ticker-xp"><span class="ticker-label">XP</span>+<span id="tk-xp">0</span><span id="tk-boost" class="ticker-boost" style="display:none">BOOST</span></div>
+      <div class="ticker-sep"></div>
+      <div class="ticker-item ticker-coins"><span class="ticker-label">&#9733;</span>+<span id="tk-coins">0</span></div>
+    </div>
+    <button class="ov-btn" id="fullscreen-btn">&#x26F6; Fullscreen</button>
+    <button class="ov-btn primary" id="blank-btn">&#8599; New Tab</button>
   </div>
   <iframe class="game-frame" id="game-frame" src="" allowfullscreen></iframe>
 </div>
@@ -970,7 +1030,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
@@ -985,8 +1045,168 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-let currentUser  = null;
-let userFavorites = []; // in-memory cache of favorites array
+let currentUser   = null;
+let userFavorites = [];
+
+let sessionStart   = null;
+let rewardInterval = null;
+let currentGameName = "";
+let totalXPEarned  = 0;
+let totalCoinsEarned = 0;
+
+const XP_PER_MIN    = 8;
+const COINS_PER_MIN = 3;
+const XP_TICK_MIN   = 2;
+const MAX_XP_SESSION   = 120;
+const MAX_COINS_SESSION = 45;
+const FIRST_PLAY_BONUS_XP    = 20;
+const FIRST_PLAY_BONUS_COINS = 8;
+
+async function getMultiplier(uid) {
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (!snap.exists()) return 1;
+    const d = snap.data();
+    if (!d.xpBoostActive || !d.xpBoostExpiry) return 1;
+    if (Date.now() > new Date(d.xpBoostExpiry).getTime()) return 1;
+    return d.xpBoostMult || 1;
+  } catch { return 1; }
+}
+
+function fmtTime(ms) {
+  const m = Math.floor(ms / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return m + "m " + s + "s";
+}
+
+function showEarnToast(xp, coins) {
+  let toast = document.getElementById("earn-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "earn-toast";
+    toast.className = "earn-toast";
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = '<span>SESSION EARNED</span><span class="et-xp">+' + xp + ' XP</span><span class="et-coins">+' + coins + ' &#9733;</span>';
+  toast.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+async function awardReward(gameName) {
+  if (!currentUser || !sessionStart) return;
+  const elapsed  = Date.now() - sessionStart;
+  const mins     = elapsed / 60000;
+  if (mins < 0.25) return;
+
+  const mult   = await getMultiplier(currentUser.uid);
+  const rawXP  = Math.min(Math.floor(mins * XP_PER_MIN * mult), MAX_XP_SESSION);
+  const rawC   = Math.min(Math.floor(mins * COINS_PER_MIN), MAX_COINS_SESSION);
+
+  const today     = new Date().toDateString();
+  const playedKey = "nrg_played_" + gameName + "_" + today;
+  let bonusXP = 0, bonusCoins = 0;
+  if (!localStorage.getItem(playedKey)) {
+    bonusXP    = Math.floor(FIRST_PLAY_BONUS_XP * mult);
+    bonusCoins = FIRST_PLAY_BONUS_COINS;
+    localStorage.setItem(playedKey, "1");
+  }
+
+  const finalXP    = rawXP + bonusXP;
+  const finalCoins = rawC  + bonusCoins;
+
+  try {
+    const snap   = await getDoc(doc(db, "users", currentUser.uid));
+    if (!snap.exists()) return;
+    const d      = snap.data();
+    const newXP  = (d.xp || 0) + finalXP;
+    const THRESH = [0,0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000];
+    let level = 1;
+    for (let i=1;i<THRESH.length;i++){if(newXP>=THRESH[i])level=i;else break;}
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      xp:    newXP,
+      level: level,
+      coins: increment(finalCoins),
+      timeSpentMinutes: increment(Math.floor(mins))
+    });
+    showEarnToast(finalXP, finalCoins);
+  } catch(e) { console.error(e); }
+}
+
+let tickerInterval = null;
+
+function fmtElapsed(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return m + ":" + String(s).padStart(2, "0");
+}
+
+function updateTicker() {
+  if (!sessionStart) return;
+  const elapsed  = Date.now() - sessionStart;
+  const mins     = elapsed / 60000;
+  const mult     = 1;
+  const xpSoFar  = Math.min(Math.floor(mins * XP_PER_MIN * mult), MAX_XP_SESSION);
+  const coinsSoFar = Math.min(Math.floor(mins * COINS_PER_MIN), MAX_COINS_SESSION);
+
+  const ticker = document.getElementById("live-ticker");
+  if (ticker) {
+    document.getElementById("tk-time").textContent   = fmtElapsed(elapsed);
+    document.getElementById("tk-xp").textContent     = xpSoFar;
+    document.getElementById("tk-coins").textContent  = coinsSoFar;
+  }
+}
+
+async function updateTickerWithBoost() {
+  if (!currentUser || !sessionStart) return;
+  const elapsed    = Date.now() - sessionStart;
+  const mins       = elapsed / 60000;
+  const mult       = await getMultiplier(currentUser.uid);
+  const xpSoFar    = Math.min(Math.floor(mins * XP_PER_MIN * mult), MAX_XP_SESSION);
+  const coinsSoFar = Math.min(Math.floor(mins * COINS_PER_MIN), MAX_COINS_SESSION);
+  const boostEl    = document.getElementById("tk-boost");
+
+  document.getElementById("tk-time").textContent   = fmtElapsed(elapsed);
+  document.getElementById("tk-xp").textContent     = xpSoFar;
+  document.getElementById("tk-coins").textContent  = coinsSoFar;
+  if (boostEl) boostEl.style.display = mult > 1 ? "" : "none";
+}
+
+function startSession(gameName) {
+  sessionStart     = Date.now();
+  currentGameName  = gameName;
+  totalXPEarned    = 0;
+  totalCoinsEarned = 0;
+  clearInterval(tickerInterval);
+
+  const ticker = document.getElementById("live-ticker");
+  if (currentUser) {
+    if (ticker) ticker.classList.add("visible");
+    document.getElementById("tk-time").textContent   = "0:00";
+    document.getElementById("tk-xp").textContent     = "0";
+    document.getElementById("tk-coins").textContent  = "0";
+    document.getElementById("tk-boost").style.display = "none";
+    tickerInterval = setInterval(() => {
+      updateTicker();
+      if (Math.floor((Date.now() - sessionStart) / 1000) % 30 === 0) {
+        updateTickerWithBoost();
+      }
+    }, 1000);
+  }
+}
+
+function endSession() {
+  clearInterval(tickerInterval);
+  const ticker = document.getElementById("live-ticker");
+  if (ticker) ticker.classList.remove("visible");
+  if (currentUser && sessionStart) awardReward(currentGameName);
+  sessionStart = null;
+}
+
+window._gameSessionStart = startSession;
+window._gameSessionEnd   = endSession;
+
 
 async function loadFavorites(uid) {
   const snap = await getDoc(doc(db, "users", uid));
@@ -995,7 +1215,7 @@ async function loadFavorites(uid) {
 }
 
 async function saveFavorites(uid, favs) {
-  await updateDoc(doc(db, "users", uid), { favorites: favs }); // write full array back
+  await updateDoc(doc(db, "users", uid), { favorites: favs }); 
 }
 
 function buildFavsSection(favs) {
@@ -1016,7 +1236,7 @@ function buildFavsSection(favs) {
   favs.forEach(name => {
     const original = document.querySelector(`.game-card[data-name="${CSS.escape(name)}"]`);
     if (!original) return;
-    const clone = original.cloneNode(true); // clone the real card so it has same thumb/image
+    const clone = original.cloneNode(true);
     const btn   = clone.querySelector(".fav-btn");
     if (btn) {
       btn.classList.add("active");
@@ -1044,16 +1264,16 @@ function syncAllFavBtns(favs) {
 }
 
 window.toggleFav = async function(btn) {
-  if (!currentUser) return; // silently ignore if not logged in
+  if (!currentUser) return; 
   const card = btn.closest(".game-card");
   const name = card.dataset.name;
   const idx  = userFavorites.indexOf(name);
-  if (idx === -1) userFavorites.push(name); // add
-  else userFavorites.splice(idx, 1);        // remove
+  if (idx === -1) userFavorites.push(name);
+  else userFavorites.splice(idx, 1);      
 
   syncAllFavBtns(userFavorites);
   buildFavsSection(userFavorites);
-  await saveFavorites(currentUser.uid, userFavorites); // persist to Firestore
+  await saveFavorites(currentUser.uid, userFavorites); 
 };
 
 onAuthStateChanged(auth, async user => {
@@ -1085,10 +1305,12 @@ onAuthStateChanged(auth, async user => {
       frame.src = card.dataset.game;
       titleText.textContent = card.dataset.name;
       overlay.classList.add('open');
+      if (window._gameSessionStart) window._gameSessionStart(card.dataset.name);
     });
   });
 
   document.getElementById('back-btn').addEventListener('click', () => {
+    if (window._gameSessionEnd) window._gameSessionEnd();
     overlay.classList.remove('open');
     frame.src = '';
   });

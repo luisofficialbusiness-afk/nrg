@@ -55,7 +55,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .msg{font-size:10px;font-family:var(--mono);margin-top:6px;min-height:14px;letter-spacing:0.04em}
 .msg.error{color:var(--red)}.msg.success{color:var(--green)}
 
-/* user result card */
 .user-card{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:14px;display:none;flex-direction:column;gap:10px}
 .user-card.visible{display:flex}
 .user-card-header{display:flex;align-items:center;gap:12px}
@@ -82,14 +81,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .action-input-row input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:12px;padding:7px 10px;border-radius:4px;outline:none;transition:border-color 0.15s}
 .action-input-row input:focus{border-color:var(--accent)}
 
-/* shop item editor */
 .item-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
 .item-row:last-child{border-bottom:none}
 .item-row-name{flex:1;font-size:12px;color:var(--text)}
 .item-row-cat{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:0.08em}
 .item-row-price{font-family:var(--mono);font-size:10px;color:var(--gold);margin-right:6px}
 
-/* access denied */
 .access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;font-family:var(--mono);text-align:center}
 .access-denied .big{font-size:13px;color:var(--red);letter-spacing:0.1em}
 .access-denied .small{font-size:9px;color:var(--text-muted);letter-spacing:0.12em}
@@ -127,7 +124,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
   <div class="col-left">
 
-    <!-- Search user -->
     <div class="panel">
       <div class="panel-header">Find User</div>
       <div class="panel-body">
@@ -140,7 +136,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
-    <!-- User result card -->
     <div class="panel">
       <div class="panel-header">User</div>
       <div class="panel-body">
@@ -168,7 +163,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
   <div class="col-right">
 
-    <!-- User actions -->
     <div class="panel" id="action-panel" style="display:none">
       <div class="panel-header">Actions <span id="action-target" style="color:var(--accent)"></span></div>
       <div class="panel-body" style="display:flex;flex-direction:column;gap:14px">
@@ -218,7 +212,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
-    <!-- Shop item editor -->
+
     <div class="panel">
       <div class="panel-header">
         Shop Items
@@ -230,7 +224,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
-    <!-- Add item form (hidden until + ADD ITEM clicked) -->
+
     <div class="panel" id="add-item-panel" style="display:none">
       <div class="panel-header">New Shop Item</div>
       <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -363,12 +357,10 @@ $("search-btn").addEventListener("click", async () => {
   try {
     let uid = null;
 
-    // try username lookup first
     const unameSnap = await getDoc(doc(db, "usernames", val));
     if (unameSnap.exists()) {
       uid = unameSnap.data().uid;
     } else {
-      // try email lookup
       const emailSnap = await getDoc(doc(db, "emails", val));
       if (emailSnap.exists()) uid = emailSnap.data().uid;
     }
@@ -473,7 +465,7 @@ $("toggle-ban-btn").addEventListener("click", async () => {
   refreshTargetCard();
 });
 
-// Shop item list
+
 async function loadShopItems() {
   const list = $("shop-item-list");
   try {
@@ -500,7 +492,6 @@ async function loadShopItems() {
 
 $("add-item-btn").addEventListener("click", () => { $("add-item-panel").style.display = ""; });
 $("cancel-item-btn").addEventListener("click", () => { $("add-item-panel").style.display = "none"; });
-
 $("save-item-btn").addEventListener("click", async () => {
   const id     = $("ni-id").value.trim();
   const name   = $("ni-name").value.trim();
@@ -521,7 +512,6 @@ $("save-item-btn").addEventListener("click", async () => {
   } catch(e) { setMsg("new-item-msg","save failed.","error"); }
 });
 
-// Auth gate — check admin whitelist
 onAuthStateChanged(auth, async user => {
   $("loading-screen").style.display = "none";
   if (!user) { window.location.href = "/nrg-auth-ui.html"; return; }

@@ -1,4 +1,3 @@
-
 (function () {
     var savedTitle = localStorage.getItem("nrg_cloak_title");
     var savedIcon  = localStorage.getItem("nrg_cloak_icon");
@@ -440,10 +439,21 @@ function buildThemeGrid() {
     });
 }
 
+function _saveThemeToFirestore(themeName) {
+    if (!window._nrgFirebase) return;
+    var db        = window._nrgFirebase.db;
+    var uid       = window._nrgFirebase.uid;
+    var updateDoc = window._nrgFirebase.updateDoc;
+    var doc       = window._nrgFirebase.doc;
+    if (!db || !uid || !updateDoc || !doc) return;
+    updateDoc(doc(db, "users", uid), { theme: themeName }).catch(function(){});
+}
+
 function applySelectedTheme() {
     applyTheme(_selectedTheme);
     var label = (themes[_selectedTheme] && themes[_selectedTheme].label) || _selectedTheme;
     if (typeof toast === "function") toast("theme: " + label.toLowerCase());
+    _saveThemeToFirestore(_selectedTheme);
 }
 
 function resetThemeToDefault() {
@@ -451,6 +461,7 @@ function resetThemeToDefault() {
     applyTheme("midnight");
     buildThemeGrid();
     if (typeof toast === "function") toast("theme reset");
+    _saveThemeToFirestore("midnight");
 }
 
 // gay son or thot daugher procedure
