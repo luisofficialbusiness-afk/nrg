@@ -7,7 +7,7 @@ import express from "express";
 import basicAuth from "express-basic-auth";
 import config from "./config.js";
 
-console.log(chalk.yellow("🚀 Starting server..."));
+console.log(chalk.yellow("🚀 Starting Server..."));
 
 const __dirname = process.cwd();
 const server = http.createServer();
@@ -16,7 +16,7 @@ const PORT = 8080;
 
 // Authentication Logic
 if (config.challenge !== false) {
-  console.log(chalk.green("🔒 Password protection is enabled!"));
+  console.log(chalk.green("🔒 Password protection is enabled!!"));
   app.use(basicAuth({ users: config.users, challenge: true }));
 }
 
