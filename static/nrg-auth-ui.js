@@ -546,7 +546,7 @@ function init() {
   document.addEventListener("click", () => $("nrg-u-dropdown")?.classList.remove("open"));
 
   $("nrg-u-logout").addEventListener("click",   async () => { await doLogOut(); });
-  $("nrg-u-account").addEventListener("click",  () => { window.location.href = "/nrg-auth-ui.html"; });
+  $("nrg-u-account").addEventListener("click",  () => { window.location.href = "/accounts.html"; });
   $("nrg-u-settings").addEventListener("click", () => { window.location.href = "/settings.html"; });
   $("nrg-u-favs").addEventListener("click",     () => { window.location.href = "/games.html?favorites=1"; });
 
