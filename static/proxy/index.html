@@ -5,12 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NRG | Proxy</title>
 
-<script src="/sail/baremux/index.js" defer></script>
-<script src="/sail/scram/scramjet.all.js" defer></script>
-  <script>
-    navigator.serviceWorker.register("/sail/sw.js");
-  </script>
-
+  <script src="/sail/baremux/index.js"></script>
+  <script src="/sail/scram/scramjet.all.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -45,7 +41,6 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-   
     .nrg-status-line {
       position: fixed;
       top: 17px;
@@ -59,7 +54,6 @@
     }
     .nrg-status-line span { color: var(--accent); }
 
-    
     .nrg-rail {
       position: fixed;
       left: 0; top: 0; bottom: 0;
@@ -133,7 +127,6 @@
     }
     .node-wrapper:hover .close-node { opacity: 1; }
 
-   
     #init-node {
       width: 36px; height: 36px;
       background: none;
@@ -150,7 +143,6 @@
     }
     #init-node:hover { border-color: var(--accent); color: var(--accent); }
 
-
     #nrg-viewport {
       position: fixed;
       left: 52px; right: 0; top: 0; bottom: 0;
@@ -159,7 +151,6 @@
     }
     #nrg-viewport.active { display: block; }
     iframe { width: 100%; height: 100%; border: none; background: #fff; }
-
 
     #nrg-dashboard {
       position: fixed;
@@ -173,14 +164,12 @@
       background: var(--bg);
     }
 
-
     #nrg-dashboard::before {
       content: '';
       position: absolute; inset: 0;
       background: radial-gradient(ellipse 55% 40% at 50% 50%, var(--accent-dim) 0%, transparent 70%);
       pointer-events: none;
     }
-
 
     .nrg-logo-container {
       text-align: center;
@@ -228,7 +217,6 @@
       text-transform: uppercase;
     }
 
-  
     .nrg-input-wrap {
       width: 90%;
       max-width: 520px;
@@ -289,23 +277,18 @@
       margin-top: 8px;
       text-align: center;
     }
-
-
   </style>
 </head>
 <body>
 
   <div class="nrg-status-line">proxy — <span>active</span></div>
 
-
   <nav class="nrg-rail">
     <div id="node-stack"></div>
     <div class="nrg-node" id="init-node" title="New tab">+</div>
   </nav>
 
-
   <div id="nrg-viewport"></div>
-
 
   <main id="nrg-dashboard">
     <div class="nrg-logo-container">
@@ -326,128 +309,128 @@
     </div>
   </main>
 
-
-
-
-  
   <script>
-    const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
-    
-    const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
-    connection.setTransport("/sail/libcurl/index.mjs", [{ websocket: wispUrl }]);
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register("/sail/sw.js");
 
-    const { ScramjetController } = $scramjetLoadController();
-    const scramjet = new ScramjetController({
-        files: {
-            all: "/sail/scram/scramjet.all.js",
-            wasm: "/sail/scram/scramjet.wasm.wasm",
-            sync: "/sail/scram/scramjet.sync.js"
-        },
-        prefix: "/sail/go/"
-    });
-    scramjet.init();
+      const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
 
-    let nrg_nodes = [];
-    let active_node_id = null;
+      const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
+      connection.setTransport("/sail/libcurl/index.mjs", [{ websocket: wispUrl }]);
 
-    function createNode(url = null) {
-      const id = 'node_' + Date.now();
-      const nodeObj = { id, url };
-      nrg_nodes.push(nodeObj);
+      const { ScramjetController } = $scramjetLoadController();
+      const scramjet = new ScramjetController({
+          files: {
+              all: "/sail/scram/scramjet.all.js",
+              wasm: "/sail/scram/scramjet.wasm.wasm",
+              sync: "/sail/scram/scramjet.sync.js"
+          },
+          prefix: "/sail/go/"
+      });
+      scramjet.init();
 
-      const wrapper = document.createElement('div');
-      wrapper.className = 'node-wrapper';
-      wrapper.id = `wrap-${id}`;
+      let nrg_nodes = [];
+      let active_node_id = null;
 
-      const btn = document.createElement('div');
-      btn.className = 'nrg-node';
-      btn.id = `btn-${id}`;
-      btn.innerText = 'N';
-      btn.onclick = () => switchNode(id);
-      
-      const close = document.createElement('div');
-      close.className = 'close-node';
-      close.innerText = '×';
-      close.onclick = (e) => {
-        e.stopPropagation();
-        deleteNode(id);
-      };
+      function createNode(url = null) {
+        const id = 'node_' + Date.now();
+        const nodeObj = { id, url };
+        nrg_nodes.push(nodeObj);
 
-      wrapper.appendChild(btn);
-      wrapper.appendChild(close);
-      document.getElementById('node-stack').appendChild(wrapper);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'node-wrapper';
+        wrapper.id = `wrap-${id}`;
 
-      const frame = document.createElement('iframe');
-      frame.id = `frame-${id}`;
-      frame.style.display = 'none';
-      if (url) frame.src = url;
-      document.getElementById('nrg-viewport').appendChild(frame);
+        const btn = document.createElement('div');
+        btn.className = 'nrg-node';
+        btn.id = `btn-${id}`;
+        btn.innerText = 'N';
+        btn.onclick = () => switchNode(id);
 
-      switchNode(id);
-    }
+        const close = document.createElement('div');
+        close.className = 'close-node';
+        close.innerText = '×';
+        close.onclick = (e) => {
+          e.stopPropagation();
+          deleteNode(id);
+        };
 
-    function deleteNode(id) {
-      const index = nrg_nodes.findIndex(n => n.id === id);
-      if (index === -1) return;
-      nrg_nodes.splice(index, 1);
-      document.getElementById(`wrap-${id}`).remove();
-      document.getElementById(`frame-${id}`).remove();
+        wrapper.appendChild(btn);
+        wrapper.appendChild(close);
+        document.getElementById('node-stack').appendChild(wrapper);
 
-      if (active_node_id === id) {
-        if (nrg_nodes.length > 0) {
-          switchNode(nrg_nodes[nrg_nodes.length - 1].id);
-        } else {
-          createNode();
+        const frame = document.createElement('iframe');
+        frame.id = `frame-${id}`;
+        frame.style.display = 'none';
+        if (url) frame.src = url;
+        document.getElementById('nrg-viewport').appendChild(frame);
+
+        switchNode(id);
+      }
+
+      function deleteNode(id) {
+        const index = nrg_nodes.findIndex(n => n.id === id);
+        if (index === -1) return;
+        nrg_nodes.splice(index, 1);
+        document.getElementById(`wrap-${id}`).remove();
+        document.getElementById(`frame-${id}`).remove();
+
+        if (active_node_id === id) {
+          if (nrg_nodes.length > 0) {
+            switchNode(nrg_nodes[nrg_nodes.length - 1].id);
+          } else {
+            createNode();
+          }
         }
       }
-    }
 
-    function switchNode(id) {
-      active_node_id = id;
-      const node = nrg_nodes.find(n => n.id === id);
+      function switchNode(id) {
+        active_node_id = id;
+        const node = nrg_nodes.find(n => n.id === id);
 
-      document.querySelectorAll('.nrg-node').forEach(e => e.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-${id}`);
-      if(activeBtn) activeBtn.classList.add('active');
+        document.querySelectorAll('.nrg-node').forEach(e => e.classList.remove('active'));
+        const activeBtn = document.getElementById(`btn-${id}`);
+        if(activeBtn) activeBtn.classList.add('active');
 
-      document.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
-      const activeFrame = document.getElementById(`frame-${id}`);
-      if(activeFrame) activeFrame.style.display = 'block';
+        document.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
+        const activeFrame = document.getElementById(`frame-${id}`);
+        if(activeFrame) activeFrame.style.display = 'block';
 
-      if (node && node.url) {
-        document.getElementById('nrg-viewport').classList.add('active');
-        document.getElementById('nrg-dashboard').style.opacity = '0';
-        document.getElementById('nrg-dashboard').style.pointerEvents = 'none';
-      } else {
-        document.getElementById('nrg-viewport').classList.remove('active');
-        document.getElementById('nrg-dashboard').style.opacity = '1';
-        document.getElementById('nrg-dashboard').style.pointerEvents = 'all';
-      }
-    }
-
-    document.getElementById('nrg-core-form').onsubmit = (e) => {
-      e.preventDefault();
-      let raw = document.getElementById('nrg-query').value.trim();
-      if (!raw) return;
-
-      if (!raw.includes('.') || raw.includes(' ')) {
-        raw = "https://search.brave.com/search?q=" + encodeURIComponent(raw);
-      } else if (!/^https?:\/\//i.test(raw)) {
-        raw = "https://" + raw;
+        if (node && node.url) {
+          document.getElementById('nrg-viewport').classList.add('active');
+          document.getElementById('nrg-dashboard').style.opacity = '0';
+          document.getElementById('nrg-dashboard').style.pointerEvents = 'none';
+        } else {
+          document.getElementById('nrg-viewport').classList.remove('active');
+          document.getElementById('nrg-dashboard').style.opacity = '1';
+          document.getElementById('nrg-dashboard').style.pointerEvents = 'all';
+        }
       }
 
-      const encoded = scramjet.encodeUrl(raw);
-      const node = nrg_nodes.find(n => n.id === active_node_id);
-      node.url = encoded;
-      
-      document.getElementById(`frame-${active_node_id}`).src = encoded;
-      switchNode(active_node_id);
-      document.getElementById('nrg-query').value = "";
-    };
+      document.getElementById('nrg-core-form').onsubmit = (e) => {
+        e.preventDefault();
+        let raw = document.getElementById('nrg-query').value.trim();
+        if (!raw) return;
 
-    document.getElementById('init-node').onclick = () => createNode();
+        if (!raw.includes('.') || raw.includes(' ')) {
+          raw = "https://search.brave.com/search?q=" + encodeURIComponent(raw);
+        } else if (!/^https?:\/\//i.test(raw)) {
+          raw = "https://" + raw;
+        }
 
-    createNode();
+        const encoded = scramjet.encodeUrl(raw);
+        const node = nrg_nodes.find(n => n.id === active_node_id);
+        node.url = encoded;
+
+        document.getElementById(`frame-${active_node_id}`).src = encoded;
+        switchNode(active_node_id);
+        document.getElementById('nrg-query').value = "";
+      };
+
+      document.getElementById('init-node').onclick = () => createNode();
+
+      createNode();
+    });
   </script>
 
   <script>
