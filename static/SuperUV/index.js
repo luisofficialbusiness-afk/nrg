@@ -13,7 +13,7 @@ const __dirname = process.cwd();
 const server = http.createServer();
 const app = express();
 const bareServer = createBareServer("/edu/");
-const PORT = 80;
+const PORT = 8080;
 
 // Authentication Logic
 if (config.challenge !== false) {
