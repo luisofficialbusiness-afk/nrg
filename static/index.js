@@ -551,3 +551,213 @@ if (MAINTENANCE_MODE) {
   }
   setTimeout(tryStart, 2000);
 })();
+(function nrgNotifications() {
+  var NOTIF_KEY = "nrg_notifications";
+  var _queue    = [];
+  var _visible  = [];
+  var MAX_STACK = 4;
+  var GAP       = 12;
+  var HEIGHT    = 72;
+
+  function injectStyles() {
+    if (document.getElementById("nrg-notif-styles")) return;
+    var s = document.createElement("style");
+    s.id  = "nrg-notif-styles";
+    s.textContent = [
+      ".nrg-notif {",
+        "position:fixed; right:20px; z-index:999999;",
+        "background:var(--surface,#111);",
+        "border:1px solid var(--border,#2a2a2a);",
+        "border-left:3px solid var(--accent,#c50cf9);",
+        "border-radius:5px;",
+        "padding:12px 36px 12px 14px;",
+        "min-width:260px; max-width:320px;",
+        "box-shadow:0 8px 24px rgba(0,0,0,0.5);",
+        "font-family:'Space Mono',monospace;",
+        "transition:top 0.3s ease, opacity 0.25s, transform 0.25s;",
+        "opacity:0; transform:translateX(20px);",
+        "pointer-events:all;",
+      "}",
+      ".nrg-notif.show { opacity:1; transform:translateX(0); }",
+      ".nrg-notif.hide { opacity:0; transform:translateX(24px); }",
+      ".nrg-notif-close {",
+        "position:absolute; top:8px; right:10px;",
+        "background:none; border:none; cursor:pointer;",
+        "color:var(--text-muted,#3a3a3a); font-size:14px; line-height:1;",
+        "transition:color 0.13s; padding:2px;",
+      "}",
+      ".nrg-notif-close:hover { color:var(--text,#e8e8e8); }",
+      ".nrg-notif-type {",
+        "font-size:7px; letter-spacing:0.18em; text-transform:uppercase;",
+        "margin-bottom:4px; font-weight:700;",
+      "}",
+      ".nrg-notif-title { font-size:11px; color:var(--text,#e8e8e8); margin-bottom:2px; }",
+      ".nrg-notif-body  { font-size:9px; color:var(--text-dim,#666); letter-spacing:0.04em; line-height:1.5; }",
+      ".nrg-notif-progress {",
+        "position:absolute; bottom:0; left:0; height:2px;",
+        "background:var(--accent,#c50cf9); border-radius:0 0 0 4px;",
+        "transition:width linear;",
+      "}",
+      ".nrg-notif.type-friend  { border-left-color:#39d98a; }",
+      ".nrg-notif.type-friend  .nrg-notif-type { color:#39d98a; }",
+      ".nrg-notif.type-friend  .nrg-notif-progress { background:#39d98a; }",
+      ".nrg-notif.type-xp      { border-left-color:#c50cf9; }",
+      ".nrg-notif.type-xp      .nrg-notif-type { color:#c50cf9; }",
+      ".nrg-notif.type-coins   { border-left-color:#f5c518; }",
+      ".nrg-notif.type-coins   .nrg-notif-type { color:#f5c518; }",
+      ".nrg-notif.type-coins   .nrg-notif-progress { background:#f5c518; }",
+      ".nrg-notif.type-level   { border-left-color:#f5c518; }",
+      ".nrg-notif.type-level   .nrg-notif-type { color:#f5c518; }",
+      ".nrg-notif.type-level   .nrg-notif-progress { background:#f5c518; }",
+      ".nrg-notif.type-system  { border-left-color:#4f9cf9; }",
+      ".nrg-notif.type-system  .nrg-notif-type { color:#4f9cf9; }",
+      ".nrg-notif.type-system  .nrg-notif-progress { background:#4f9cf9; }",
+      ".nrg-notif.type-warning { border-left-color:#ff4f4f; }",
+      ".nrg-notif.type-warning .nrg-notif-type { color:#ff4f4f; }",
+      ".nrg-notif.type-warning .nrg-notif-progress { background:#ff4f4f; }",
+    ].join("");
+    document.head.appendChild(s);
+  }
+
+  function reposition() {
+    var startTop = 20;
+    _visible.forEach(function(el, i) {
+      el.style.top = (startTop + i * (HEIGHT + GAP)) + "px";
+    });
+  }
+
+  function removeNotif(el) {
+    el.classList.remove("show");
+    el.classList.add("hide");
+    setTimeout(function() {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      var idx = _visible.indexOf(el);
+      if (idx !== -1) _visible.splice(idx, 1);
+      reposition();
+      if (_queue.length > 0) showNext(_queue.shift());
+    }, 280);
+  }
+
+  function showNext(opts) {
+    injectStyles();
+    var duration = opts.duration || 5000;
+    var type     = opts.type     || "system";
+    var title    = opts.title    || "Notification";
+    var body     = opts.body     || "";
+
+    var el = document.createElement("div");
+    el.className = "nrg-notif type-" + type;
+    el.style.top = "20px";
+
+    el.innerHTML =
+      '<button class="nrg-notif-close" title="Close">&#215;</button>' +
+      '<div class="nrg-notif-type">' + type + '</div>' +
+      '<div class="nrg-notif-title">' + title + '</div>' +
+      (body ? '<div class="nrg-notif-body">' + body + '</div>' : '') +
+      '<div class="nrg-notif-progress" style="width:100%"></div>';
+
+    document.body.appendChild(el);
+    _visible.push(el);
+    reposition();
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        el.classList.add("show");
+        var prog = el.querySelector(".nrg-notif-progress");
+        if (prog) {
+          prog.style.transition = "width " + duration + "ms linear";
+          requestAnimationFrame(function() { prog.style.width = "0%"; });
+        }
+      });
+    });
+
+    el.querySelector(".nrg-notif-close").addEventListener("click", function() {
+      clearTimeout(el._autoClose);
+      removeNotif(el);
+    });
+
+    el._autoClose = setTimeout(function() { removeNotif(el); }, duration);
+  }
+
+  function push(opts) {
+    if (_visible.length >= MAX_STACK) {
+      _queue.push(opts);
+    } else {
+      showNext(opts);
+    }
+  }
+
+  window.NRGNotify = {
+    show: function(opts) { push(opts); },
+    friend:  function(title, body) { push({ type: "friend",  title: title, body: body }); },
+    xp:      function(title, body) { push({ type: "xp",      title: title, body: body }); },
+    coins:   function(title, body) { push({ type: "coins",   title: title, body: body }); },
+    level:   function(title, body) { push({ type: "level",   title: title, body: body }); },
+    system:  function(title, body) { push({ type: "system",  title: title, body: body }); },
+    warning: function(title, body) { push({ type: "warning", title: title, body: body }); },
+    test: function() {
+      push({ type: "friend",  title: "Friend Request",      body: "@shadow wants to be friends." });
+      setTimeout(function() { push({ type: "xp",     title: "XP Earned",  body: "+25 XP from playing Clash of Vikings." }); }, 600);
+      setTimeout(function() { push({ type: "level",  title: "Level Up!",  body: "You reached Level 5." }); }, 1200);
+      setTimeout(function() { push({ type: "coins",  title: "Coins",      body: "+10 coins from daily reward." }); }, 1800);
+      setTimeout(function() { push({ type: "system", title: "Welcome back!", body: "You have 2 unread friend requests." }); }, 2400);
+    }
+  };
+
+  console.log("%c[NRG] Notification system ready. Run NRGNotify.test() to preview.", "color:#c50cf9;font-family:monospace");
+})();
+
+(function nrgConsoleArt() {
+  var lines = [
+    " @@@@@@   @@@@@@@  @@@@@@   @@@@@@@  ",
+    "@@@       @@@     @@@  @@@  @@@  @@@ ",
+    " @@@@@@   @@@@@   @@@  @@@  @@@@@@@  ",
+    "     @@@  @@@     @@@  @@@  @@@      ",
+    " @@@@@@   @@@@@@@  @@@@@@   @@@      ",
+    "",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    " @@@      @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@   @@@@@@@  @@ @@  @@@  @@@ ",
+    "     @@@  @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    "",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    " @@@      @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@   @@@@@@@  @@ @@  @@@  @@@ ",
+    "     @@@  @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    "",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    " @@@      @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@   @@@@@@@  @@ @@  @@@  @@@ ",
+    "     @@@  @@@  @@@  @@@@   @@@  @@@ ",
+    "  @@@@@@  @@@  @@@  @@ @@  @@@@@@@  ",
+    "",
+    " @@@@@@@   @@@@@@  @@@  @@@  @@@   @@@ @@@@@@@  ",
+    "  @@@     @@@  @@@ @@@  @@@  @@@   @@@  @@@  @@@",
+    "  @@@     @@@@@@@@ @@@@@@@    @@@@@@@   @@@@@@@  ",
+    "  @@@     @@@  @@@  @@@  @@@   @@@@@    @@@  @@@ ",
+    "  @@@     @@@  @@@  @@@  @@@    @@@     @@@  @@@ ",
+    "",
+    " @@@@@@   @@@@@@  @@@  @@@  @@@   @@@ @@@@@@@  ",
+    "@@@      @@@  @@@ @@@  @@@  @@@   @@@  @@@  @@@",
+    " @@@@@   @@@@@@@  @@@@@@@    @@@@@@@   @@@@@@@  ",
+    "    @@@  @@@  @@@  @@@  @@@   @@@@@    @@@  @@@ ",
+    "@@@@@@@  @@@  @@@  @@@  @@@    @@@     @@@  @@@ ",
+  ];
+
+  var purple = "color:#c50cf9;font-family:monospace;font-size:11px;line-height:1.3";
+  var reset  = "color:inherit";
+
+  lines.forEach(function(line) {
+    if (line === "") {
+      console.log("");
+    } else {
+      console.log("%c" + line, purple);
+    }
+  });
+
+  console.log("%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", purple);
+  console.log("%c  NRG Platform  |  stop snooping around :)", "color:#666;font-family:monospace;font-size:11px");
+  console.log("%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", purple);
+})();
