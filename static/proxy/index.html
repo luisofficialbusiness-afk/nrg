@@ -311,7 +311,9 @@
 
   <script>
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register("/sail/sw.js");
+      if (navigator.serviceWorker) {
+  navigator.serviceWorker.register("/sail/sw.js");
+}
 
       const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
 
