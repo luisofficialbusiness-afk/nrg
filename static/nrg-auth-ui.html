@@ -217,22 +217,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .pfp-deco-gold-ring { border: 3px solid #f5c518 !important; box-shadow: 0 0 10px rgba(245,197,24,0.4); }
 .pfp-deco-fire-ring { border: 3px solid #f50 !important; animation: fire-glow 1.5s ease-in-out infinite; }
 .pfp-deco-rainbow   { border: 3px solid transparent !important; background-clip: padding-box; animation: rainbow-spin 2s linear infinite; outline: 3px solid; outline-color: #c50cf9; }
-
-.dash-username.uc-rose     { color: #ff6b9d; }
-.dash-username.uc-lavender { color: #b57bee; }
-.dash-username.uc-orange   { color: #ff4500; }
-.dash-username.uc-crimson  { color: #dc143c; }
-.dash-username.uc-toxic    { color: #00ff41; }
-.dash-username.uc-yellow   { color: #ffe600; }
-.dash-username.uc-ice      { color: #e8f4ff; }
-
-.pfp-deco-blue-glow   { box-shadow: 0 0 0 2px #4f9cf9, 0 0 14px #4f9cf9; animation: blue-pulse 2s ease-in-out infinite; }
-.pfp-deco-silver-ring { border: 3px solid #aaa !important; box-shadow: 0 0 8px rgba(170,170,170,0.4); }
-.pfp-deco-void-ring   { border: 3px solid #fff !important; box-shadow: 0 0 12px rgba(255,255,255,0.15); }
-.pfp-deco-diamond     { border: 3px solid #a8d8ea !important; box-shadow: 0 0 8px #a8d8ea, 0 0 20px rgba(168,216,234,0.4); animation: diamond-spin 3s linear infinite; }
-@keyframes blue-pulse    { 0%,100%{box-shadow:0 0 0 2px #4f9cf9,0 0 8px #4f9cf9} 50%{box-shadow:0 0 0 2px #4f9cf9,0 0 20px #4f9cf9} }
-@keyframes diamond-spin  { 0%{filter:hue-rotate(0deg) brightness(1)} 50%{filter:hue-rotate(180deg) brightness(1.4)} 100%{filter:hue-rotate(360deg) brightness(1)} }
-
 @keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 2px #c50cf9,0 0 8px #c50cf9} 50%{box-shadow:0 0 0 2px #c50cf9,0 0 20px #c50cf9} }
 @keyframes fire-glow  { 0%,100%{box-shadow:0 0 8px #f50,0 0 16px #f50} 50%{box-shadow:0 0 16px #ff0,0 0 30px #f50} }
 
@@ -538,7 +522,7 @@ import {
   EmailAuthProvider, reauthenticateWithCredential, updatePassword, deleteUser
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp, writeBatch,
+  getFirestore, doc, setDoc, getDoc, updateDoc, increment, serverTimestamp, writeBatch,
   collection, addDoc, query, where, getDocs, deleteDoc, arrayUnion, arrayRemove
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
@@ -558,7 +542,7 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-window._nrgFirebase = { db, updateDoc, doc, uid: null };
+window._nrgFirebase = { db, updateDoc, doc, getDoc, increment, uid: null };
 
 emailjs.init("iPFh09JqEj0LAofyT");
 
@@ -773,46 +757,26 @@ async function handleDailyReward(d) {
 
 
 const TITLE_ITEMS = {
-  title_rookie:   { name: "Rookie",    rarity: "common"    },
-  title_gamer:    { name: "Gamer",     rarity: "common"    },
-  title_ghost:    { name: "Ghost",     rarity: "common"    },
-  title_grinder:  { name: "Grinder",   rarity: "rare"      },
-  title_veteran:  { name: "Veteran",   rarity: "rare"      },
-  title_shadow:   { name: "Shadow",    rarity: "rare"      },
-  title_elite:    { name: "Elite",     rarity: "epic"      },
-  title_phantom:  { name: "Phantom",   rarity: "epic"      },
-  title_champion: { name: "Champion",  rarity: "epic"      },
-  title_legend:   { name: "Legend",    rarity: "epic"      },
-  title_goat:     { name: "G.O.A.T",   rarity: "legendary" },
-  title_og:       { name: "NRG OG",    rarity: "legendary" },
-  title_nrg:      { name: "NRG Elite", rarity: "legendary" },
+  title_gamer:   { name: "Gamer",    rarity: "common"    },
+  title_veteran: { name: "Veteran",  rarity: "rare"      },
+  title_legend:  { name: "Legend",   rarity: "epic"      },
+  title_nrg:     { name: "NRG Elite",rarity: "legendary" },
 };
 
 const UC_CLASS = {
-  color_purple:   "uc-purple",
-  color_blue:     "uc-blue",
-  color_rose:     "uc-rose",
-  color_lavender: "uc-lavender",
-  color_gold:     "uc-gold",
-  color_red:      "uc-red",
-  color_green:    "uc-green",
-  color_orange:   "uc-orange",
-  color_crimson:  "uc-crimson",
-  color_toxic:    "uc-toxic",
-  color_yellow:   "uc-yellow",
-  color_ice:      "uc-ice",
-  color_rainbow:  "uc-rainbow",
+  color_purple:  "uc-purple",
+  color_blue:    "uc-blue",
+  color_gold:    "uc-gold",
+  color_red:     "uc-red",
+  color_green:   "uc-green",
+  color_rainbow: "uc-rainbow",
 };
 
 const PFP_CLASS = {
-  pfp_glow:        "pfp-deco-glow",
-  pfp_blue_glow:   "pfp-deco-blue-glow",
-  pfp_silver_ring: "pfp-deco-silver-ring",
-  pfp_gold_ring:   "pfp-deco-gold-ring",
-  pfp_void_ring:   "pfp-deco-void-ring",
-  pfp_fire_ring:   "pfp-deco-fire-ring",
-  pfp_diamond:     "pfp-deco-diamond",
-  pfp_rainbow:     "pfp-deco-rainbow",
+  pfp_glow:      "pfp-deco-glow",
+  pfp_gold_ring: "pfp-deco-gold-ring",
+  pfp_fire_ring: "pfp-deco-fire-ring",
+  pfp_rainbow:   "pfp-deco-rainbow",
 };
 
 function applyCosmetics(equipped) {

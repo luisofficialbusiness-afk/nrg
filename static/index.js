@@ -471,3 +471,83 @@ const MAINTENANCE_MODE = false;
 if (MAINTENANCE_MODE) {
   window.location.replace("maintance.html");
 }
+
+(function passiveEarning() {
+  var TICK_MS        = 5 * 60 * 1000;
+  var XP_PER_TICK    = 5;
+  var COINS_PER_TICK = 2;
+  var MAX_TICKS_DAY  = 12;
+  var DAY_KEY        = "nrg_passive_day";
+  var TICKS_KEY      = "nrg_passive_ticks";
+
+  function todayStr() { return new Date().toDateString(); }
+
+  function getTicksToday() {
+    if (localStorage.getItem(DAY_KEY) !== todayStr()) {
+      localStorage.setItem(DAY_KEY, todayStr());
+      localStorage.setItem(TICKS_KEY, "0");
+      return 0;
+    }
+    return parseInt(localStorage.getItem(TICKS_KEY) || "0");
+  }
+
+  function incrementTicks() {
+    var t = getTicksToday() + 1;
+    localStorage.setItem(TICKS_KEY, String(t));
+    return t;
+  }
+
+  function showPassiveToast(xp, coins, mult) {
+    var existing = document.getElementById("nrg-passive-toast");
+    if (existing) existing.remove();
+    var el = document.createElement("div");
+    el.id  = "nrg-passive-toast";
+    el.style.cssText = "position:fixed;bottom:24px;left:24px;z-index:99999;background:var(--surface,#111);border:1px solid var(--border,#2a2a2a);border-left:2px solid var(--accent,#c50cf9);border-radius:4px;padding:10px 16px;display:flex;align-items:center;gap:12px;font-family:'Space Mono',monospace;font-size:10px;opacity:0;transform:translateY(8px);transition:opacity 0.25s,transform 0.25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.4)";
+    var boostHtml = mult > 1 ? '<span style="font-size:8px;color:var(--accent,#c50cf9);border:1px solid rgba(197,12,249,0.3);padding:1px 5px;border-radius:2px;margin-left:4px">' + mult + 'x</span>' : "";
+    el.innerHTML = '<span style="color:var(--text-muted,#3a3a3a);letter-spacing:0.12em;font-size:8px">PASSIVE</span><span style="color:#c50cf9;font-weight:700">+' + xp + ' XP' + boostHtml + '</span><span style="color:#f5c518;font-weight:700">+' + coins + ' &#9733;</span>';
+    document.body.appendChild(el);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { el.style.opacity = "1"; el.style.transform = "translateY(0)"; });
+    });
+    setTimeout(function() {
+      el.style.opacity = "0"; el.style.transform = "translateY(8px)";
+      setTimeout(function() { if (el.parentNode) el.remove(); }, 300);
+    }, 3500);
+  }
+
+  function doTick() {
+    var fb = window._nrgFirebase;
+    if (!fb || !fb.uid || !fb.db || !fb.updateDoc || !fb.doc || !fb.increment) return;
+    if (getTicksToday() >= MAX_TICKS_DAY) return;
+
+    var uid = fb.uid, db = fb.db, updateDoc = fb.updateDoc, doc = fb.doc, increment = fb.increment;
+
+    fb.getDoc(doc(db, "users", uid)).then(function(snap) {
+      if (!snap.exists()) return;
+      var d = snap.data();
+      var mult = 1;
+      if (d.xpBoostActive && d.xpBoostExpiry && Date.now() < new Date(d.xpBoostExpiry).getTime()) {
+        mult = d.xpBoostMult || 1;
+      }
+      var xpGain = Math.floor(XP_PER_TICK * mult);
+      var THRESH = [0,0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000];
+      var newXP  = (d.xp || 0) + xpGain;
+      var level  = 1;
+      for (var i = 1; i < THRESH.length; i++) { if (newXP >= THRESH[i]) level = i; else break; }
+
+      updateDoc(doc(db, "users", uid), { xp: newXP, level: level, coins: increment(COINS_PER_TICK) }).then(function() {
+        incrementTicks();
+        showPassiveToast(xpGain, COINS_PER_TICK, mult);
+      }).catch(function(e) { console.error("passive earn:", e); });
+    }).catch(function() {});
+  }
+
+  var _attempts = 0;
+  function tryStart() {
+    _attempts++;
+    if (_attempts > 30) return;
+    if (!window._nrgFirebase || !window._nrgFirebase.uid) { setTimeout(tryStart, 1000); return; }
+    setInterval(doTick, TICK_MS);
+  }
+  setTimeout(tryStart, 2000);
+})();
