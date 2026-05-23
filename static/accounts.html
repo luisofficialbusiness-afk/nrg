@@ -683,6 +683,7 @@ function renderXPBar(xp) {
   $("xp-bar-cur").textContent     = (xp - cur) + " XP";
   $("xp-bar-next").textContent    = (next - cur) + " to next";
   $("xp-bar-fill").style.width    = pct + "%";
+  return level;
 }
 
 function renderBoostTimer(expiry) {
@@ -764,6 +765,7 @@ function renderInventory(inventory, equipped) {
           const newEquipped = { ...(equipped || {}), xpBoost: item.id };
           await updateDoc(doc(db, "users", user.uid), { xpBoostActive: true, xpBoostExpiry: expiry, xpBoostMult: mult, equipped: newEquipped });
           renderInventory(inventory, newEquipped);
+          if (window.NRGNotify) NRGNotify.xp("XP Boost Active", mult + "x XP for " + (dur >= 60 ? dur/60 + " hour" + (dur/60 !== 1 ? "s" : "") : dur + " minutes") + ".");
         } else {
           const newEquipped = { ...(equipped || {}), [eqK]: isEquipped ? null : item.id };
           await updateDoc(doc(db, "users", user.uid), { equipped: newEquipped });
@@ -798,6 +800,7 @@ async function handleDailyReward(d) {
         btn.disabled = true;
         btn.textContent = "CLAIMED TODAY";
         streak.textContent = "streak: " + result.streak + " day" + (result.streak !== 1 ? "s" : "");
+        if (window.NRGNotify) NRGNotify.coins("Daily Reward", "+" + result.coins + " coins — " + result.streak + " day streak!");
       }
     }
   };
@@ -914,6 +917,11 @@ async function loadFriends(uid) {
         batch.update(doc(db, "users", fuid), { friends: arrayUnion(uid)  });
         await batch.commit();
         loadFriends(uid);
+        if (window.NRGNotify) {
+          const senderSnap2 = await getDoc(doc(db, "users", fuid));
+          const sname = senderSnap2.exists() ? (senderSnap2.data().displayName || senderSnap2.data().username || "Someone") : "Someone";
+          NRGNotify.friend("Friend Added", "You and " + sname + " are now friends.");
+        }
       });
       div.querySelector(".friend-btn.decline").addEventListener("click", async () => {
         const rid = div.querySelector(".friend-btn.decline").dataset.rid;
@@ -1231,7 +1239,14 @@ async function showDashboard(user) {
         localStorage.setItem("nrg_theme_selected", d.theme);
         if (window.applyTheme) window.applyTheme(d.theme);
       }
-      renderXPBar(d.xp || 0);
+      const _prevLevel = parseInt(localStorage.getItem("nrg_last_level") || "1");
+      const _newLevel  = renderXPBar(d.xp || 0);
+      if (_newLevel && _newLevel > _prevLevel) {
+        localStorage.setItem("nrg_last_level", String(_newLevel));
+        if (window.NRGNotify) NRGNotify.level("Level Up!", "You reached Level " + _newLevel + ". Keep going!");
+      } else if (_newLevel) {
+        localStorage.setItem("nrg_last_level", String(_newLevel));
+      }
       $("stat-coins").textContent = d.coins || 0;
       renderBoostTimer(d.xpBoostActive ? d.xpBoostExpiry : null);
       renderInventory(d.inventory || [], d.equipped || {});

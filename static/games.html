@@ -297,37 +297,50 @@
       background: #000;
     }
 
-   
-    .nrg-sidebar {
-      width: 110px;
-      background: rgba(15, 15, 15, 0.95);
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 28px 0;
-      position: fixed;
-      top: 0; bottom: 0; left: 0;
-      transform: translateX(-96px);
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
-    .nrg-sidebar:hover { transform: translateX(0); }
-    .nrg-sidebar .nav-icon {
-      width: 86px; height: 56px;
-      margin: 6px 0;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px; color: #ccc;
-      transition: background 0.2s ease;
-      font-family: var(--sans);
-    }
-    .nrg-sidebar .nav-icon:hover,
-    .nrg-sidebar .nav-icon.active {
-      background: rgba(255, 255, 255, 0.08);
-      color: white;
-    }
+   .nrg-nav-btn {
+  position: fixed; bottom: 24px; left: 24px; z-index: 9998;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--surface,#111); border: 1px solid var(--border,#2a2a2a);
+  color: var(--text-dim,#666); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, color 0.15s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.nrg-nav-btn:hover { border-color: var(--accent,#c50cf9); color: var(--accent,#c50cf9); }
+.nrg-nav-btn.open { border-color: var(--accent,#c50cf9); color: var(--accent,#c50cf9); transform: rotate(45deg); }
+.nrg-nav-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+.nrg-nav-menu {
+  position: fixed; bottom: 78px; left: 24px; z-index: 9997;
+  background: var(--surface,#111); border: 1px solid var(--border,#2a2a2a);
+  border-radius: 8px; padding: 6px;
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  opacity: 0; pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.nrg-nav-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+.nrg-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 5px; cursor: pointer;
+  font-family: var(--mono,'Space Mono',monospace);
+  font-size: 10px; letter-spacing: 0.1em;
+  color: var(--text-dim,#666);
+  transition: background 0.12s, color 0.12s;
+  text-decoration: none; border: none; background: none; width: 100%; text-align: left;
+}
+.nrg-nav-item:hover { background: var(--surface2,#1a1a1a); color: var(--text,#e8e8e8); }
+.nrg-nav-item.active { color: var(--accent,#c50cf9); }
+.nrg-nav-item-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border,#2a2a2a); flex-shrink: 0; transition: background 0.12s;
+}
+.nrg-nav-item:hover .nrg-nav-item-dot,
+.nrg-nav-item.active .nrg-nav-item-dot { background: var(--accent,#c50cf9); }
+.nrg-nav-divider { height: 1px; background: var(--border,#2a2a2a); margin: 4px 6px; }
 
     .bottom-sidebar {
       position: fixed;
@@ -429,7 +442,7 @@
 </head>
 <body>
 
-<!-- TOP BAR -->
+
 <div class="topbar">
   <div class="brand">
     <span class="brand-nrg">▶ NRG</span>
@@ -987,6 +1000,11 @@
       <div class="card-info"><div class="card-title">Uno</div></div>
     </div>
 
+            <div class="game-card" data-game="games/cltotm.html" data-name="">
+      <div class="card-thumb"><img src="images/cltotm.png" alt="Uno" loading="lazy"><div class="card-overlay"><div class="overlay-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav(this)"></button></div>
+      <div class="card-info"><div class="card-title">Tomb </div></div>
+    </div>
+
     <div class="no-results" id="no-results" style="display:none">NO GAMES FOUND.<br>TRY A DIFFERENT SEARCH.</div>
   </div>
 </div>
@@ -1010,15 +1028,22 @@
 </div>
 
 
-<div class="nrg-sidebar">
-  <div class="nav-icon" data-page="index.html">Home</div>
-  <div class="nav-icon" data-page="games.html">Games</div>
-  <div class="nav-icon" data-page="movies.html">Movies</div>
-  <div class="nav-icon" data-page="proxy.html">Proxy</div>
-  <div class="nav-icon" data-page="settings.html">Settings</div>
-  <div class="nav-icon" data-page="music.html">Music</div>
-</div>
-
+<button class="nrg-nav-btn" id="nrg-nav-btn" title="Navigation">
+  <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<nav class="nrg-nav-menu" id="nrg-nav-menu">
+  <a class="nrg-nav-item" data-page="index.html"    href="/index.html"><span class="nrg-nav-item-dot"></span>Home</a>
+  <a class="nrg-nav-item" data-page="games.html"    href="/games.html"><span class="nrg-nav-item-dot"></span>Games</a>
+  <a class="nrg-nav-item" data-page="movies.html"   href="/movies.html"><span class="nrg-nav-item-dot"></span>Movies</a>
+  <a class="nrg-nav-item" data-page="music.html"    href="/music.html"><span class="nrg-nav-item-dot"></span>Music</a>
+  <a class="nrg-nav-item" data-page="proxy.html"    href="/proxy.html"><span class="nrg-nav-item-dot"></span>Proxy</a>
+  <div class="nrg-nav-divider"></div>
+  <a class="nrg-nav-item" data-page="shop.html"     href="/shop.html"><span class="nrg-nav-item-dot"></span>Shop</a>
+  <a class="nrg-nav-item" data-page="profiles.html" href="/profiles.html"><span class="nrg-nav-item-dot"></span>Profiles</a>
+  <a class="nrg-nav-item" data-page="accounts.html" href="/accounts.html"><span class="nrg-nav-item-dot"></span>Account</a>
+  <div class="nrg-nav-divider"></div>
+  <a class="nrg-nav-item" data-page="settings.html" href="/settings.html"><span class="nrg-nav-item-dot"></span>Settings</a>
+</nav>
 
 <div class="bottom-sidebar">
   <div class="status-card" id="time-status">Time: --:--</div>
@@ -1130,6 +1155,18 @@ async function awardReward(gameName) {
       timeSpentMinutes: increment(Math.floor(mins))
     });
     showEarnToast(finalXP, finalCoins);
+
+    if (window.NRGNotify) {
+      const prevLevel = parseInt(localStorage.getItem("nrg_last_level") || "1");
+      const THRESH    = [0,0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000];
+      let newLevel = 1;
+      for (let i=1;i<THRESH.length;i++){if(newXP>=THRESH[i])newLevel=i;else break;}
+      if (newLevel > prevLevel) {
+        localStorage.setItem("nrg_last_level", String(newLevel));
+        NRGNotify.level("Level Up!", "You reached Level " + newLevel + ". Keep it up!");
+      }
+      NRGNotify.xp("XP Earned", "+" + finalXP + " XP from " + gameName + (bonusXP > 0 ? " (first play bonus!)" : "") + ".");
+    }
   } catch(e) { console.error(e); }
 }
 
@@ -1246,9 +1283,10 @@ function buildFavsSection(favs) {
       const frame     = document.getElementById("game-frame");
       const titleText = document.getElementById("overlay-title-text");
       const overlay   = document.getElementById("game-overlay");
-      frame.src          = original.dataset.game;
+      frame.src             = original.dataset.game;
       titleText.textContent = original.dataset.name;
       overlay.classList.add("open");
+      if (window._gameSessionStart) window._gameSessionStart(original.dataset.name);
     });
     grid.appendChild(clone);
   });
@@ -1352,13 +1390,29 @@ onAuthStateChanged(auth, async user => {
   });
 
   
-  document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(icon => {
-    const currentPage = window.location.pathname.split('/').pop();
-    if (icon.dataset.page === currentPage) icon.classList.add('active');
-    icon.addEventListener('click', () => {
-      if (icon.dataset.page) window.location.href = '/' + icon.dataset.page;
-    });
+(function() {
+  var btn  = document.getElementById("nrg-nav-btn");
+  var menu = document.getElementById("nrg-nav-menu");
+  if (!btn || !menu) return;
+
+  var cur = window.location.pathname.split("/").pop();
+  menu.querySelectorAll(".nrg-nav-item[data-page]").forEach(function(item) {
+    if (item.dataset.page === cur) item.classList.add("active");
   });
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var isOpen = menu.classList.toggle("open");
+    btn.classList.toggle("open", isOpen);
+  });
+
+  document.addEventListener("click", function() {
+    menu.classList.remove("open");
+    btn.classList.remove("open");
+  });
+
+  menu.addEventListener("click", function(e) { e.stopPropagation(); });
+})();
 
  
   const bgMusic = new Audio('music/random music.mp3');

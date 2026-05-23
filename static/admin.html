@@ -91,6 +91,34 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .access-denied .big{font-size:13px;color:var(--red);letter-spacing:0.1em}
 .access-denied .small{font-size:9px;color:var(--text-muted);letter-spacing:0.12em}
 
+
+.log-panel { display: none; }
+.log-panel.visible { display: block; }
+.log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.log-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; }
+.log-stat-label { font-family: var(--mono); font-size: 7px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.log-stat-value { font-size: 15px; font-weight: 500; color: var(--text); }
+.log-stat-sub { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+.log-stat.accent .log-stat-value { color: var(--accent); }
+.log-stat.gold   .log-stat-value { color: var(--gold); }
+.log-stat.green  .log-stat-value { color: var(--green); }
+
+.log-section-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; margin-top: 4px; }
+
+.log-inv-list { display: flex; flex-direction: column; gap: 4px; max-height: 140px; overflow-y: auto; }
+.log-inv-item { display: flex; align-items: center; justify-content: space-between; padding: 5px 8px; background: var(--surface2); border-radius: 3px; font-size: 11px; color: var(--text); }
+.log-inv-cat { font-family: var(--mono); font-size: 8px; color: var(--text-muted); letter-spacing: 0.06em; }
+.log-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); }
+
+.log-equipped-grid { display: flex; flex-direction: column; gap: 4px; }
+.log-eq-row { display: flex; align-items: center; gap: 8px; padding: 5px 8px; background: var(--surface2); border-radius: 3px; }
+.log-eq-key { font-family: var(--mono); font-size: 8px; color: var(--text-muted); width: 90px; flex-shrink: 0; letter-spacing: 0.06em; }
+.log-eq-val { font-size: 11px; color: var(--text); }
+
+.log-boost-active { background: rgba(197,12,249,0.1); border: 1px solid rgba(197,12,249,0.3); border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; }
+.log-boost-label { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.08em; }
+.log-boost-sub { font-family: var(--mono); font-size: 8px; color: var(--text-dim); margin-top: 3px; }
+
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:10px 18px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--text);letter-spacing:0.06em;opacity:0;transition:opacity 0.2s,transform 0.2s;z-index:9999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.error{border-left-color:var(--red)}
@@ -347,6 +375,7 @@ function showUserCard(d, uid) {
   $("toggle-admin-btn").textContent = d.isAdmin ? "REVOKE ADMIN" : "GRANT ADMIN";
   $("toggle-admin-btn").className   = d.isAdmin ? "btn danger full" : "btn ghost full";
   $("toggle-ban-btn").textContent   = d.isBanned ? "UNBAN USER" : "BAN USER";
+  loadUserLogs(d, uid);
 }
 
 $("search-btn").addEventListener("click", async () => {
@@ -381,6 +410,78 @@ $("search-btn").addEventListener("click", async () => {
 });
 
 $("search-input").addEventListener("keydown", e => { if(e.key==="Enter") $("search-btn").click(); });
+
+
+function fmtTime(m) {
+  if (m < 60)   return { val: m,                  unit: "minutes" };
+  if (m < 1440) return { val: Math.floor(m / 60),  unit: "hours"   };
+  return               { val: Math.floor(m / 1440), unit: "days"    };
+}
+
+function fmtDate(ts) {
+  if (!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function loadUserLogs(d, uid) {
+  const panel = $("log-panel");
+  panel.classList.add("visible");
+  $("log-target").textContent = d.username ? "@" + d.username : d.displayName || "";
+
+  $("log-xp").textContent        = (d.xp || 0).toLocaleString();
+  $("log-level-sub").textContent = "Level " + (d.level || 1);
+  $("log-coins").textContent     = (d.coins || 0).toLocaleString();
+  $("log-friends").textContent   = (d.friends || []).length;
+  $("log-favs").textContent      = (d.favorites || []).length;
+  $("log-inv-count").textContent = (d.inventory || []).length;
+  $("log-streak").textContent    = (d.loginStreak || 0) + " days";
+  $("log-last-login").textContent = "last login: " + (d.lastLoginDate || "never");
+  $("log-joined").textContent    = fmtDate(d.createdAt);
+
+  const timeFmt = fmtTime(d.timeSpentMinutes || 0);
+  $("log-time").textContent     = timeFmt.val;
+  $("log-time-unit").textContent = timeFmt.unit;
+
+  const boostWrap = $("log-boost-wrap");
+  if (d.xpBoostActive && d.xpBoostExpiry) {
+    const expiry = new Date(d.xpBoostExpiry);
+    const msLeft = expiry.getTime() - Date.now();
+    if (msLeft > 0) {
+      boostWrap.style.display = "";
+      const mLeft = Math.floor(msLeft / 60000);
+      $("log-boost-info").textContent = (d.xpBoostMult || 1) + "x multiplier — " + (mLeft >= 60 ? Math.floor(mLeft/60) + "h " + (mLeft%60) + "m" : mLeft + "m") + " remaining";
+    } else {
+      boostWrap.style.display = "none";
+    }
+  } else {
+    boostWrap.style.display = "none";
+  }
+
+  const eqGrid = $("log-equipped");
+  const equipped = d.equipped || {};
+  const eqKeys = { usernameColor: "Username Color", xpBoost: "XP Boost", profileDeco: "Profile Deco", pfpDeco: "PFP Deco", title: "Title" };
+  eqGrid.innerHTML = Object.entries(eqKeys).map(([k, label]) => {
+    const val = equipped[k] || "—";
+    return '<div class="log-eq-row"><span class="log-eq-key">' + label + '</span><span class="log-eq-val">' + val + '</span></div>';
+  }).join("");
+  if (!Object.values(equipped).some(Boolean)) {
+    eqGrid.innerHTML = '<div class="log-empty">nothing equipped.</div>';
+  }
+
+  const invList = $("log-inv-list");
+  const inv = d.inventory || [];
+  if (inv.length === 0) {
+    invList.innerHTML = '<div class="log-empty">inventory is empty.</div>';
+  } else {
+    invList.innerHTML = inv.map(item => {
+      const name = item.name || item.id || "Unknown";
+      const cat  = item.category || "";
+      const date = item.purchasedAt ? new Date(item.purchasedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "";
+      return '<div class="log-inv-item"><span>' + name + ' <span class="log-inv-cat">' + cat + '</span></span><span style="font-family:var(--mono);font-size:9px;color:var(--text-muted)">' + date + '</span></div>';
+    }).join("");
+  }
+}
 
 async function refreshTargetCard() {
   if (!targetUid) return;
