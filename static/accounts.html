@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NRG | Account</title>
+<title>NRG | Profile</title>
 <script src="index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -297,7 +297,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
   <div class="brand">
     <span class="brand-nrg">NRG</span>
     <div class="brand-divider"></div>
-    <span class="brand-page">Account</span>
+    <span class="brand-page">Profile</span>
   </div>
   <div class="topbar-right">
     <button id="topbar-login-btn">LOGIN</button>
@@ -348,9 +348,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
         </div>
         <div class="field"><label>Email</label><input type="email" id="s-email" placeholder="you@example.com" autocomplete="email"></div>
         <div class="field"><label>Password</label><input type="password" id="s-pass" placeholder="min 6 characters" autocomplete="new-password"></div>
-        <button class="btn primary" id="s-submit">CREATE ACCOUNT</button>
+        <button class="btn primary" id="s-submit">CREATE YOUR ACCOUNT</button>
         <div class="divider">or</div>
-        <button class="btn ghost" id="s-google">continue with Google</button>
+        <button class="btn ghost" id="s-google">Continue with Google</button>
         <div class="msg" id="s-msg"></div>
       </div>
 
@@ -359,7 +359,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
           A 6-digit code was sent to <strong id="verify-email-display" style="color:var(--text)"></strong>.<br>Enter it below to verify your email.
         </div>
         <div class="field">
-          <label>Verification Code</label>
+          <label>Verification Code:</label>
           <input type="text" id="v-code" placeholder="000000" maxlength="6" autocomplete="one-time-code" style="letter-spacing:0.3em;font-size:18px;text-align:center;font-family:var(--mono)">
         </div>
         <button class="btn primary" id="v-submit">VERIFY & CREATE ACCOUNT</button>
