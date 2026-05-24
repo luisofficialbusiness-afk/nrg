@@ -103,6 +103,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .nrg-nav-item:hover .nrg-nav-item-dot,.nrg-nav-item.active .nrg-nav-item-dot{background:var(--accent,#c50cf9)}
 .nrg-nav-divider{height:1px;background:var(--border,#2a2a2a);margin:4px 6px}
 
+
+/* edit mode */
+.msg-actions{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;gap:6px;opacity:0;transition:opacity 0.1s}
+.msg-item:hover .msg-actions{opacity:1}
+.msg-action-btn{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:8px;padding:3px 8px;border-radius:3px;cursor:pointer;transition:color 0.1s,border-color 0.1s}
+.msg-action-btn:hover{color:var(--text);border-color:var(--text-dim)}
+.msg-action-btn.danger:hover{color:var(--red);border-color:var(--red)}
+.msg-edit-wrap{margin-top:6px;display:none}
+.msg-edit-wrap.active{display:flex;gap:6px}
+.msg-edit-input{flex:1;background:var(--surface2);border:1px solid var(--accent);color:var(--text);font-family:var(--sans);font-size:13px;padding:6px 10px;border-radius:4px;outline:none}
+.msg-edit-save{font-family:var(--mono);font-size:8px;font-weight:700;padding:6px 12px;border-radius:3px;border:none;background:var(--accent);color:#000;cursor:pointer}
+.msg-edit-cancel{font-family:var(--mono);font-size:8px;padding:6px 10px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer}
+.msg-edited{font-family:var(--mono);font-size:8px;color:var(--text-muted);margin-left:4px}
+
+/* image/gif */
+.msg-img{max-width:280px;max-height:200px;border-radius:6px;margin-top:6px;display:block;cursor:pointer;border:1px solid var(--border)}
+.msg-img:hover{border-color:var(--accent)}
+
+/* input toolbar */
+.input-toolbar{display:flex;align-items:center;gap:6px;padding:6px 10px 2px}
+.toolbar-btn{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:8px;padding:4px 10px;border-radius:3px;cursor:pointer;transition:color 0.13s,border-color 0.13s;letter-spacing:0.08em}
+.toolbar-btn:hover{color:var(--accent);border-color:var(--accent)}
+#img-upload-input{display:none}
+
+/* image lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:99999;cursor:zoom-out;display:none}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain}
+
 .bottom-sidebar{position:fixed;bottom:0;left:50%;transform:translate(-50%,70%);display:flex;gap:20px;padding:10px 18px;background:rgba(15,15,15,0.95);backdrop-filter:blur(10px);border-radius:40px;border:1px solid rgba(255,255,255,0.05);transition:transform 0.3s ease;z-index:999}
 .bottom-sidebar:hover{transform:translate(-50%,0)}
 .status-card{color:white;background:var(--surface2);padding:8px 12px;border-radius:10px;font-size:0.75rem;font-family:var(--mono);letter-spacing:0.04em}
@@ -127,7 +156,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
     <div class="messages-wrap" id="messages-wrap"></div>
     <div class="input-bar" id="input-bar" style="display:none">
       <div class="input-wrap">
-        <textarea class="msg-input" id="msg-input" placeholder="say something..." rows="1" maxlength="500"></textarea>
+        <div class="input-toolbar">
+          <button class="toolbar-btn" id="img-btn">IMG / GIF</button>
+          <input type="file" id="img-upload-input" accept="image/*,.gif">
+        </div>
+        <textarea class="msg-input" id="msg-input" placeholder="say something... (Shift+Enter for new line)" rows="1" maxlength="500"></textarea>
         <div class="input-footer">
           <span class="char-count" id="char-count">0/500</span>
         </div>
@@ -144,6 +177,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
     <div class="online-list" id="online-list"></div>
   </div>
 </div>
+
+<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt=""></div>
 
 <button class="nrg-nav-btn" id="nrg-nav-btn" title="Navigation">
   <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -163,18 +198,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
   <a class="nrg-nav-item" data-page="settings.html" href="/settings.html"><span class="nrg-nav-item-dot"></span>Settings</a>
 </nav>
 
-<div class="bottom-sidebar">
-  <div class="status-card" id="time-status">Time: --:--</div>
-  <div class="status-card" id="battery-status">Battery: --%</div>
-  <div class="status-card" id="temperature-status">Temp: -- C</div>
-  <div class="status-card" id="ping-status">Ping: -- ms</div>
-</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc,
+  getFirestore, doc, getDoc, updateDoc,
   collection, addDoc, onSnapshot, query,
   orderBy, limit, deleteDoc, serverTimestamp,
   setDoc
@@ -265,60 +294,95 @@ function buildMessage(msg, showDate, canDelete) {
   const ucClass  = ucKey && UC_CLASS[ucKey] ? UC_CLASS[ucKey] : "";
   const titleKey = equipped.title;
   const titleDef = titleKey && TITLE_ITEMS[titleKey] ? TITLE_ITEMS[titleKey] : null;
+  const canEdit  = currentUser && currentUser.uid === msg.uid;
 
-  const dateDiv = showDate
-    ? '<div class="date-divider">' + fmtDate(msg.createdAt) + '</div>'
-    : "";
-
-  const av = document.createElement("div");
-  av.className = "msg-av";
-  setAvatar(av, msg.photoURL, msg.displayName);
-
-  const adminBadge  = msg.isAdmin ? '<span class="badge badge-admin">ADMIN</span>' : "";
-  const titleBadge  = titleDef   ? '<span class="badge badge-title-' + titleDef.rarity + '">' + titleDef.name + '</span>' : "";
-  const nameClass   = ucClass    ? " " + ucClass : "";
-  const deleteBtn   = canDelete
-    ? '<button class="msg-delete" data-id="' + msg.id + '">delete</button>'
-    : "";
+  const adminBadge = msg.isAdmin ? '<span class="badge badge-admin">ADMIN</span>' : "";
+  const titleBadge = titleDef   ? '<span class="badge badge-title-' + titleDef.rarity + '">' + titleDef.name + '</span>' : "";
+  const nameClass  = ucClass    ? " " + ucClass : "";
+  const editedTag  = msg.edited ? '<span class="msg-edited">(edited)</span>' : "";
+  const imgHtml    = msg.imageUrl ? '<img class="msg-img" src="' + msg.imageUrl + '" alt="image">' : "";
 
   const wrapper = document.createElement("div");
-  wrapper.innerHTML = dateDiv;
+  wrapper.dataset.msgWrapper = msg.id;
+
+  if (showDate) {
+    const dd = document.createElement("div");
+    dd.className = "date-divider";
+    dd.textContent = fmtDate(msg.createdAt) || "Today";
+    wrapper.appendChild(dd);
+  }
 
   const item = document.createElement("div");
   item.className = "msg-item";
   item.dataset.id = msg.id;
+  item.style.position = "relative";
   item.innerHTML =
+    '<div class="msg-av" style="position:absolute;left:20px;top:10px;cursor:pointer"></div>' +
     '<div class="msg-body" style="padding-left:42px">' +
       '<div class="msg-header">' +
-        '<span class="msg-name' + nameClass + '">' + (msg.displayName || "User") + '</span>' +
-        '<span class="msg-handle">' + (msg.username ? "@" + msg.username : "") + '</span>' +
+        '<span class="msg-name' + nameClass + '">' + escapeHtml(msg.displayName || "User") + '</span>' +
+        '<span class="msg-handle">' + (msg.username ? "@" + escapeHtml(msg.username) : "") + '</span>' +
         adminBadge + titleBadge +
         '<span class="msg-time">' + fmtTime(msg.createdAt) + '</span>' +
+        editedTag +
       '</div>' +
-      '<div class="msg-text">' + escapeHtml(msg.text) + '</div>' +
+      '<div class="msg-text">' + escapeHtml(msg.text || "") + '</div>' +
+      imgHtml +
+      '<div class="msg-edit-wrap">' +
+        '<input class="msg-edit-input" type="text" maxlength="500">' +
+        '<button class="msg-edit-save">Save</button>' +
+        '<button class="msg-edit-cancel">Cancel</button>' +
+      '</div>' +
     '</div>' +
-    deleteBtn;
+    '<div class="msg-actions">' +
+      (canEdit   ? '<button class="msg-action-btn edit-btn">edit</button>' : '') +
+      (canDelete ? '<button class="msg-action-btn danger del-btn">delete</button>' : '') +
+    '</div>';
 
-  const avEl = item.querySelector
-    ? item.querySelector(".msg-body") : null;
-  item.prepend(av);
-  av.style.cssText = "position:absolute;left:20px;top:10px";
-  item.style.position = "relative";
+  setAvatar(item.querySelector(".msg-av"), msg.photoURL, msg.displayName);
 
-  av.addEventListener("click", () => {
+  item.querySelector(".msg-av").addEventListener("click", () => {
     if (msg.uid) window.open("/profiles.html?uid=" + msg.uid, "_blank");
   });
-  item.querySelector(".msg-name")?.addEventListener("click", () => {
+  item.querySelector(".msg-name").addEventListener("click", () => {
     if (msg.uid) window.open("/profiles.html?uid=" + msg.uid, "_blank");
   });
 
-  const delBtn = item.querySelector(".msg-delete");
+  if (msg.imageUrl) {
+    item.querySelector(".msg-img").addEventListener("click", () => {
+      const lb = document.getElementById("lightbox");
+      document.getElementById("lightbox-img").src = msg.imageUrl;
+      lb.classList.add("open");
+    });
+  }
+
+  const editBtn = item.querySelector(".edit-btn");
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      const editWrap = item.querySelector(".msg-edit-wrap");
+      const editInput = item.querySelector(".msg-edit-input");
+      editInput.value = msg.text || "";
+      editWrap.classList.add("active");
+    });
+    item.querySelector(".msg-edit-cancel").addEventListener("click", () => {
+      item.querySelector(".msg-edit-wrap").classList.remove("active");
+    });
+    item.querySelector(".msg-edit-save").addEventListener("click", async () => {
+      const newText = item.querySelector(".msg-edit-input").value.trim();
+      if (!newText) return;
+      try {
+        await updateDoc(doc(chatDb, "messages", msg.id), { text: newText, edited: true });
+        item.querySelector(".msg-text").textContent = newText;
+        item.querySelector(".msg-edit-wrap").classList.remove("active");
+      } catch(e) { console.error(e); }
+    });
+  }
+
+  const delBtn = item.querySelector(".del-btn");
   if (delBtn) {
     delBtn.addEventListener("click", async () => {
       if (!confirm("Delete this message?")) return;
-      try {
-        await deleteDoc(doc(chatDb, "messages", msg.id));
-      } catch(e) { console.error(e); }
+      try { await deleteDoc(doc(chatDb, "messages", msg.id)); } catch(e) { console.error(e); }
     });
   }
 
@@ -352,8 +416,13 @@ function renderMessages(snap) {
     if (change.type === "modified") {
       const el = wrap.querySelector('[data-id="' + msg.id + '"]');
       if (el) {
-        const timeEl = el.querySelector(".msg-time");
-        if (timeEl && msg.createdAt) timeEl.textContent = fmtTime(msg.createdAt);
+        if (msg.createdAt) { const te = el.querySelector(".msg-time"); if(te) te.textContent = fmtTime(msg.createdAt); }
+        if (msg.text)      { const tx = el.querySelector(".msg-text"); if(tx) tx.textContent = msg.text; }
+        const ee = el.querySelector(".msg-edited");
+        if (msg.edited && !ee) {
+          const te = el.querySelector(".msg-time");
+          if (te) { const sp = document.createElement("span"); sp.className="msg-edited"; sp.textContent="(edited)"; te.after(sp); }
+        }
       }
       return;
     }
@@ -502,6 +571,43 @@ input.addEventListener("keydown", e => {
 });
 
 $("send-btn").addEventListener("click", sendMessage);
+
+$("img-btn").addEventListener("click", () => $("img-upload-input").click());
+
+$("img-upload-input").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file || !currentUser || !userProfile) return;
+  if (file.size > 2 * 1024 * 1024) {
+    if (window.NRGNotify) NRGNotify.warning("Too large", "Image must be under 2MB.");
+    e.target.value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    const dataUrl = ev.target.result;
+    const equipped = userProfile.equipped || {};
+    try {
+      await addDoc(collection(chatDb, "messages"), {
+        uid:         currentUser.uid,
+        username:    userProfile.username    || "",
+        displayName: userProfile.displayName || currentUser.email.split("@")[0],
+        photoURL:    userProfile.photoURL    || null,
+        equipped:    equipped,
+        isAdmin:     isAdmin,
+        isBanned:    userProfile.isBanned || false,
+        text:        "",
+        imageUrl:    dataUrl,
+        createdAt:   serverTimestamp()
+      });
+    } catch(err) { console.error(err); }
+  };
+  reader.readAsDataURL(file);
+  e.target.value = "";
+});
+
+document.getElementById("lightbox").addEventListener("click", () => {
+  document.getElementById("lightbox").classList.remove("open");
+});
 
 
 (function() {
