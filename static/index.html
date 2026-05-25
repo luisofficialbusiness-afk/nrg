@@ -619,7 +619,6 @@
   function updateTime() {
     const now = new Date();
     const t = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    document.getElementById('stat-time').textContent = t;
     document.getElementById('time-status').textContent = 'Time: ' + t;
   }
   updateTime(); setInterval(updateTime, 10000);
@@ -627,7 +626,6 @@
   if (navigator.getBattery) {
     navigator.getBattery().then(b => {
       const pct = Math.round(b.level * 100) + '%';
-      document.getElementById('stat-battery').textContent = pct;
       document.getElementById('battery-status').textContent = 'Battery: ' + pct;
     });
   }
@@ -638,7 +636,6 @@
     fetch('/favicon.ico?_=' + Date.now(), { cache: 'no-store' })
       .then(() => {
         const ms = Math.round(performance.now() - start) + ' ms';
-        document.getElementById('stat-ping').textContent = ms;
         document.getElementById('ping-status').textContent = 'Ping: ' + ms;
       }).catch(() => {});
     setTimeout(pingCheck, 8000);

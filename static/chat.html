@@ -132,6 +132,59 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .lightbox.open{display:flex}
 .lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain}
 
+
+/* system message */
+.msg-system{padding:8px 20px;display:flex;align-items:center;gap:10px}
+.msg-system-line{flex:1;height:1px;background:var(--border)}
+.msg-system-text{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:0.1em;white-space:nowrap;padding:0 4px}
+
+/* pinned message bar */
+.pinned-bar{flex-shrink:0;padding:8px 20px;border-bottom:1px solid var(--border);background:rgba(197,12,249,0.06);display:none;align-items:center;gap:10px}
+.pinned-bar.visible{display:flex}
+.pinned-icon{font-size:11px;color:var(--accent);flex-shrink:0}
+.pinned-text{font-size:12px;color:var(--text-dim);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pinned-label{font-family:var(--mono);font-size:8px;color:var(--accent);letter-spacing:0.1em;flex-shrink:0}
+.pinned-unpin{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;padding:0 2px;transition:color 0.13s}
+.pinned-unpin:hover{color:var(--red)}
+
+/* slow mode bar */
+.slow-mode-bar{flex-shrink:0;padding:5px 20px;border-bottom:1px solid var(--border);background:rgba(79,156,249,0.06);display:none;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;color:#4f9cf9;letter-spacing:0.08em}
+.slow-mode-bar.visible{display:flex}
+
+/* mod panel toggle btn */
+.mod-btn{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.12em;padding:5px 12px;border-radius:3px;border:1px solid var(--red);background:none;color:var(--red);cursor:pointer;transition:background 0.13s;display:none}
+.mod-btn.visible{display:block}
+.mod-btn:hover{background:rgba(255,79,79,0.1)}
+
+/* mod panel drawer */
+.mod-panel{width:260px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);display:none;flex-direction:column;overflow:hidden}
+.mod-panel.open{display:flex}
+.mod-panel-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mod-panel-title{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--red);text-transform:uppercase}
+.mod-close-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;line-height:1;transition:color 0.13s}
+.mod-close-btn:hover{color:var(--text)}
+.mod-body{flex:1;overflow-y:auto;padding:12px}
+.mod-section{margin-bottom:16px}
+.mod-section-label{font-family:var(--mono);font-size:7px;letter-spacing:0.2em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
+.mod-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:12px;padding:7px 10px;border-radius:4px;outline:none;transition:border-color 0.15s;margin-bottom:6px}
+.mod-input:focus{border-color:var(--accent)}
+.mod-input::placeholder{color:var(--text-muted)}
+.mod-select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:10px;padding:7px 10px;border-radius:4px;outline:none;margin-bottom:6px}
+.mod-btn-row{display:flex;gap:6px;flex-wrap:wrap}
+.mod-action-btn{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.1em;padding:6px 12px;border-radius:3px;cursor:pointer;transition:background 0.13s,color 0.13s;border:none;flex:1}
+.mod-action-btn.red{background:rgba(255,79,79,0.15);color:var(--red)}
+.mod-action-btn.red:hover{background:rgba(255,79,79,0.3)}
+.mod-action-btn.blue{background:rgba(79,156,249,0.15);color:#4f9cf9}
+.mod-action-btn.blue:hover{background:rgba(79,156,249,0.3)}
+.mod-action-btn.purple{background:rgba(197,12,249,0.15);color:var(--accent)}
+.mod-action-btn.purple:hover{background:rgba(197,12,249,0.3)}
+.mod-action-btn.green{background:rgba(57,217,138,0.15);color:var(--green)}
+.mod-action-btn.green:hover{background:rgba(57,217,138,0.3)}
+.mod-msg{font-family:var(--mono);font-size:9px;margin-top:5px;min-height:12px}
+.mod-msg.ok{color:var(--green)}
+.mod-msg.err{color:var(--red)}
+.mod-sep{height:1px;background:var(--border);margin:12px 0}
+
 .bottom-sidebar{position:fixed;bottom:0;left:50%;transform:translate(-50%,70%);display:flex;gap:20px;padding:10px 18px;background:rgba(15,15,15,0.95);backdrop-filter:blur(10px);border-radius:40px;border:1px solid rgba(255,255,255,0.05);transition:transform 0.3s ease;z-index:999}
 .bottom-sidebar:hover{transform:translate(-50%,0)}
 .status-card{color:white;background:var(--surface2);padding:8px 12px;border-radius:10px;font-size:0.75rem;font-family:var(--mono);letter-spacing:0.04em}
@@ -145,14 +198,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
     <div class="brand-divider"></div>
     <span class="brand-page">Chat</span>
   </div>
+  <div style="display:flex;align-items:center;gap:10px"><button class="mod-btn" id="mod-toggle-btn">MOD</button>
   <div class="online-count">
     <span class="online-dot"></span>
     <span id="online-count">0 online</span>
-  </div>
+  </div></div>
 </div>
 
 <div class="chat-layout">
   <div class="chat-main">
+    <div class="pinned-bar" id="pinned-bar"><span class="pinned-icon">&#128204;</span><span class="pinned-label">PINNED</span><span class="pinned-text" id="pinned-text"></span><button class="pinned-unpin" id="pinned-unpin" title="Unpin">&#215;</button></div>
+    <div class="slow-mode-bar" id="slow-mode-bar">&#128336; SLOW MODE — <span id="slow-mode-label"></span></div>
     <div class="messages-wrap" id="messages-wrap"></div>
     <div class="input-bar" id="input-bar" style="display:none">
       <div class="input-wrap">
@@ -175,6 +231,72 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
   <div class="chat-sidebar">
     <div class="sidebar-header">Online Now</div>
     <div class="online-list" id="online-list"></div>
+  </div>
+
+  <div class="mod-panel" id="mod-panel">
+    <div class="mod-panel-header">
+      <span class="mod-panel-title">&#9888; Mod Panel</span>
+      <button class="mod-close-btn" id="mod-close-btn">&#215;</button>
+    </div>
+    <div class="mod-body">
+
+      <div class="mod-section">
+        <div class="mod-section-label">System Message</div>
+        <input class="mod-input" id="mod-sys-input" placeholder="type announcement..." maxlength="300">
+        <div class="mod-btn-row"><button class="mod-action-btn purple" id="mod-sys-send">Send</button></div>
+        <div class="mod-msg" id="mod-sys-msg"></div>
+      </div>
+
+      <div class="mod-sep"></div>
+
+      <div class="mod-section">
+        <div class="mod-section-label">Pin Message</div>
+        <input class="mod-input" id="mod-pin-input" placeholder="text to pin..." maxlength="200">
+        <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-pin-btn">Pin</button><button class="mod-action-btn red" id="mod-unpin-btn">Unpin</button></div>
+      </div>
+
+      <div class="mod-sep"></div>
+
+      <div class="mod-section">
+        <div class="mod-section-label">Slow Mode</div>
+        <select class="mod-select" id="mod-slow-select">
+          <option value="0">Off</option>
+          <option value="5">5 seconds</option>
+          <option value="10">10 seconds</option>
+          <option value="30">30 seconds</option>
+          <option value="60">1 minute</option>
+        </select>
+        <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-slow-btn">Set</button></div>
+      </div>
+
+      <div class="mod-sep"></div>
+
+      <div class="mod-section">
+        <div class="mod-section-label">User Actions</div>
+        <input class="mod-input" id="mod-user-input" placeholder="@username">
+        <div class="mod-btn-row">
+          <button class="mod-action-btn red" id="mod-ban-btn">Ban</button>
+          <button class="mod-action-btn green" id="mod-unban-btn">Unban</button>
+        </div>
+        <select class="mod-select" id="mod-timeout-select" style="margin-top:6px">
+          <option value="5">Timeout 5 min</option>
+          <option value="10">Timeout 10 min</option>
+          <option value="30">Timeout 30 min</option>
+          <option value="60">Timeout 1 hour</option>
+        </select>
+        <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-timeout-btn">Timeout</button><button class="mod-action-btn red" id="mod-kick-btn">Kick</button></div>
+        <div class="mod-msg" id="mod-user-msg"></div>
+      </div>
+
+      <div class="mod-sep"></div>
+
+      <div class="mod-section">
+        <div class="mod-section-label">Chat</div>
+        <div class="mod-btn-row"><button class="mod-action-btn red" id="mod-clear-btn">Clear All Messages</button></div>
+        <div class="mod-msg" id="mod-clear-msg"></div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -204,7 +326,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebas
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, updateDoc,
-  collection, addDoc, onSnapshot, query,
+  collection, addDoc, onSnapshot, query, getDocs, writeBatch,
   orderBy, limit, deleteDoc, serverTimestamp,
   setDoc
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -289,6 +411,25 @@ function setAvatar(el, photoURL, name) {
 }
 
 function buildMessage(msg, showDate, canDelete) {
+  if (msg.isSystem) {
+    const wrapper = document.createElement("div");
+    wrapper.dataset.msgWrapper = msg.id;
+    const item = document.createElement("div");
+    item.className = "msg-system";
+    item.dataset.id = msg.id;
+    item.innerHTML = '<div class="msg-system-line"></div><span class="msg-system-text">&#9888; ' + escapeHtml(msg.text) + '</span><div class="msg-system-line"></div>';
+    if (canDelete) {
+      const del = document.createElement("button");
+      del.className = "msg-delete"; del.textContent = "delete";
+      del.style.cssText = "position:static;opacity:1;margin-left:8px";
+      del.addEventListener("click", async () => {
+        try { await deleteDoc(doc(chatDb, "messages", msg.id)); } catch(e) {}
+      });
+      item.appendChild(del);
+    }
+    wrapper.appendChild(item);
+    return wrapper;
+  }
   const equipped = msg.equipped || {};
   const ucKey    = equipped.usernameColor;
   const ucClass  = ucKey && UC_CLASS[ucKey] ? UC_CLASS[ucKey] : "";
@@ -471,11 +612,26 @@ async function sendMessage() {
   if (text.length > MAX_CHARS) return;
 
   const now = Date.now();
-  if (now - lastSentAt < RATE_LIMIT_MS) {
-    if (window.NRGNotify) NRGNotify.warning("Slow down", "You're sending messages too fast.");
+  const effectiveLimit = Math.max(RATE_LIMIT_MS, slowModeSeconds * 1000);
+  if (now - lastSentAt < effectiveLimit) {
+    const wait = Math.ceil((effectiveLimit - (now - lastSentAt)) / 1000);
+    if (window.NRGNotify) NRGNotify.warning("Slow Mode", "Wait " + wait + "s before sending again.");
     return;
   }
   lastSentAt = now;
+
+  const bannedSnap = await getDoc(doc(chatDb, "chatBanned", currentUser.uid));
+  if (bannedSnap.exists()) {
+    const b = bannedSnap.data();
+    if (b.timeoutUntil && new Date(b.timeoutUntil).getTime() > Date.now()) {
+      const mLeft = Math.ceil((new Date(b.timeoutUntil).getTime() - Date.now()) / 60000);
+      if (window.NRGNotify) NRGNotify.warning("Timed Out", "You are timed out for " + mLeft + " more minute(s).");
+      return;
+    } else if (!b.timeoutUntil) {
+      if (window.NRGNotify) NRGNotify.warning("Banned", "You are banned from chat.");
+      return;
+    }
+  }
 
   const equipped = userProfile.equipped || {};
   $("send-btn").disabled = true;
@@ -513,6 +669,169 @@ async function registerOnline(user, profile) {
   });
 }
 
+
+let slowModeSeconds = 0;
+
+function setModMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className   = "mod-msg " + (type === "ok" ? "ok" : "err");
+  setTimeout(() => { el.textContent = ""; el.className = "mod-msg"; }, 3000);
+}
+
+async function getUidFromUsername(username) {
+  const raw  = username.replace(/^@/, "").trim().toLowerCase();
+  const snap = await getDoc(doc(mainDb, "usernames", raw));
+  return snap.exists() ? snap.data().uid : null;
+}
+
+async function sendSystemMessage(text) {
+  await addDoc(collection(chatDb, "messages"), {
+    uid:         "system",
+    username:    "",
+    displayName: "NRG System",
+    photoURL:    null,
+    equipped:    {},
+    isAdmin:     false,
+    isSystem:    true,
+    text:        text,
+    createdAt:   serverTimestamp()
+  });
+}
+
+async function setupModPanel() {
+  const toggleBtn = $("mod-toggle-btn");
+  const panel     = $("mod-panel");
+  const closeBtn  = $("mod-close-btn");
+
+  if (!isAdmin) {
+    if (toggleBtn) toggleBtn.classList.remove("visible");
+    return;
+  }
+  if (toggleBtn) toggleBtn.classList.add("visible");
+
+  toggleBtn.addEventListener("click", () => panel.classList.toggle("open"));
+  closeBtn.addEventListener("click",  () => panel.classList.remove("open"));
+
+  // listen to chat settings
+  onSnapshot(doc(chatDb, "settings", "chat"), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+
+    // slow mode
+    slowModeSeconds = d.slowMode || 0;
+    const slowBar   = $("slow-mode-bar");
+    const slowLabel = $("slow-mode-label");
+    if (slowModeSeconds > 0) {
+      slowBar.classList.add("visible");
+      slowLabel.textContent = slowModeSeconds + (slowModeSeconds >= 60 ? "m wait" : "s wait");
+    } else {
+      slowBar.classList.remove("visible");
+    }
+
+    // pinned message
+    const pinnedBar  = $("pinned-bar");
+    const pinnedText = $("pinned-text");
+    if (d.pinnedMessage) {
+      pinnedBar.classList.add("visible");
+      pinnedText.textContent = d.pinnedMessage;
+    } else {
+      pinnedBar.classList.remove("visible");
+    }
+  });
+
+  // system message
+  $("mod-sys-send").addEventListener("click", async () => {
+    const text = $("mod-sys-input").value.trim();
+    if (!text) return;
+    try {
+      await sendSystemMessage(text);
+      $("mod-sys-input").value = "";
+      setModMsg("mod-sys-msg", "sent!", "ok");
+    } catch(e) { setModMsg("mod-sys-msg", "failed.", "err"); }
+  });
+
+  // pin message
+  $("mod-pin-btn").addEventListener("click", async () => {
+    const text = $("mod-pin-input").value.trim();
+    if (!text) return;
+    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: text }, { merge: true });
+    $("mod-pin-input").value = "";
+  });
+
+  $("mod-unpin-btn").addEventListener("click", async () => {
+    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: null }, { merge: true });
+  });
+
+  $("pinned-unpin").addEventListener("click", async () => {
+    if (!isAdmin) return;
+    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: null }, { merge: true });
+  });
+
+  // slow mode
+  $("mod-slow-btn").addEventListener("click", async () => {
+    const val = parseInt($("mod-slow-select").value);
+    await setDoc(doc(chatDb, "settings", "chat"), { slowMode: val }, { merge: true });
+  });
+
+  // ban user
+  $("mod-ban-btn").addEventListener("click", async () => {
+    const uid = await getUidFromUsername($("mod-user-input").value);
+    if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
+    try {
+      await setDoc(doc(chatDb, "chatBanned", uid), { uid, bannedAt: new Date().toISOString(), bannedBy: currentUser.uid });
+      await sendSystemMessage("A user has been banned from chat.");
+      setModMsg("mod-user-msg", "banned.", "ok");
+    } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
+  });
+
+  // unban user
+  $("mod-unban-btn").addEventListener("click", async () => {
+    const uid = await getUidFromUsername($("mod-user-input").value);
+    if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
+    try {
+      await deleteDoc(doc(chatDb, "chatBanned", uid));
+      setModMsg("mod-user-msg", "unbanned.", "ok");
+    } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
+  });
+
+  // timeout user
+  $("mod-timeout-btn").addEventListener("click", async () => {
+    const uid  = await getUidFromUsername($("mod-user-input").value);
+    if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
+    const mins = parseInt($("mod-timeout-select").value);
+    const until = new Date(Date.now() + mins * 60000).toISOString();
+    try {
+      await setDoc(doc(chatDb, "chatBanned", uid), { uid, timeoutUntil: until, bannedBy: currentUser.uid });
+      await sendSystemMessage("A user has been timed out for " + mins + " minute" + (mins !== 1 ? "s" : "") + ".");
+      setModMsg("mod-user-msg", "timed out for " + mins + "m.", "ok");
+    } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
+  });
+
+  // kick user (remove from online list)
+  $("mod-kick-btn").addEventListener("click", async () => {
+    const uid = await getUidFromUsername($("mod-user-input").value);
+    if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
+    try {
+      await deleteDoc(doc(chatDb, "online", uid));
+      setModMsg("mod-user-msg", "kicked.", "ok");
+    } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
+  });
+
+  // clear all messages
+  $("mod-clear-btn").addEventListener("click", async () => {
+    if (!confirm("Delete ALL messages? This cannot be undone.")) return;
+    try {
+      const snap  = await getDocs(collection(chatDb, "messages"));
+      const batch = writeBatch(chatDb);
+      snap.docs.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+      setModMsg("mod-clear-msg", "cleared.", "ok");
+    } catch(e) { setModMsg("mod-clear-msg", "failed.", "err"); }
+  });
+}
+
 onAuthStateChanged(auth, async user => {
   currentUser = user;
 
@@ -532,6 +851,7 @@ onAuthStateChanged(auth, async user => {
 
   userProfile = userSnap.exists() ? userSnap.data() : {};
   isAdmin     = adminSnap.exists();
+  setupModPanel();
 
   if (userProfile.isBanned) {
     $("input-bar").style.display = "none";

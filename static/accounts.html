@@ -286,6 +286,70 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 .friend-empty { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; padding: 4px 0; }
 .friend-section-sub { font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; margin-top: 14px; }
 .friend-section-sub:first-child { margin-top: 0; }
+
+.bell-wrap { position: relative; }
+.bell-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.13s, color 0.13s;
+  position: relative;
+}
+.bell-btn:hover { border-color: var(--accent); color: var(--accent); }
+.bell-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.bell-count {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  background: var(--accent); color: #000;
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  display: none; align-items: center; justify-content: center;
+  padding: 0 4px;
+}
+.bell-count.visible { display: flex; }
+
+.bell-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  width: 300px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  display: none; flex-direction: column; z-index: 10001;
+  overflow: hidden;
+}
+.bell-dropdown.open { display: flex; }
+.bell-dd-header {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.bell-dd-title { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; }
+.bell-clear-btn { font-family: var(--mono); font-size: 8px; color: var(--text-muted); background: none; border: none; cursor: pointer; letter-spacing: 0.08em; transition: color 0.13s; }
+.bell-clear-btn:hover { color: var(--accent); }
+.bell-notif-list { max-height: 320px; overflow-y: auto; }
+.bell-notif-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.bell-notif-item:last-child { border-bottom: none; }
+.bell-notif-item.unread { background: rgba(197,12,249,0.05); }
+.bell-notif-item:hover { background: var(--surface2); }
+.bell-notif-icon {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.bell-notif-icon.friend  { background: rgba(57,217,138,0.15); color: var(--green); }
+.bell-notif-icon.xp      { background: rgba(197,12,249,0.15); color: var(--accent); }
+.bell-notif-icon.level   { background: rgba(245,197,24,0.15); color: var(--gold,#f5c518); }
+.bell-notif-icon.coins   { background: rgba(245,197,24,0.15); color: var(--gold,#f5c518); }
+.bell-notif-icon.system  { background: rgba(79,156,249,0.15); color: #4f9cf9; }
+.bell-notif-icon.warning { background: rgba(255,79,79,0.15);  color: var(--red); }
+.bell-notif-body { flex: 1; min-width: 0; }
+.bell-notif-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.bell-notif-text  { font-family: var(--mono); font-size: 9px; color: var(--text-dim); letter-spacing: 0.04em; line-height: 1.5; }
+.bell-notif-time  { font-family: var(--mono); font-size: 8px; color: var(--text-muted); margin-top: 3px; }
+.bell-empty { padding: 24px 14px; text-align: center; font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
+
 .req-badge { display: inline-block; background: var(--accent); color: #000; font-family: var(--mono); font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 10px; margin-left: 5px; vertical-align: middle; }
 
 .status-card { color: white; background: var(--surface2); padding: 8px 12px; border-radius: 10px; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; }
@@ -300,6 +364,21 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
     <span class="brand-page">Account</span>
   </div>
   <div class="topbar-right">
+    <div class="bell-wrap" id="bell-wrap" style="display:none">
+      <button class="bell-btn" id="bell-btn" title="Notifications">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="bell-count" id="bell-count">0</span>
+      </button>
+      <div class="bell-dropdown" id="bell-dropdown">
+        <div class="bell-dd-header">
+          <span class="bell-dd-title">Notifications</span>
+          <button class="bell-clear-btn" id="bell-clear-btn">mark all read</button>
+        </div>
+        <div class="bell-notif-list" id="bell-notif-list">
+          <div class="bell-empty" id="bell-empty">no notifications yet.</div>
+        </div>
+      </div>
+    </div>
     <button id="topbar-login-btn">LOGIN</button>
     <div id="topbar-user-btn">
       <div class="tb-avatar" id="tb-avatar">?</div>
@@ -1003,6 +1082,118 @@ $("friend-send-btn").addEventListener("click", async () => {
     setLoading("friend-send-btn", false, "Send");
   }
 });
+
+
+const NOTIF_STORAGE_KEY = "nrg_notifications_v1";
+const ICON_MAP = { friend:"&#x2665;", xp:"&#x26A1;", level:"&#x2605;", coins:"&#x2605;", system:"&#x2139;", warning:"&#x26A0;" };
+
+function loadStoredNotifs() {
+  try { return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || "[]"); }
+  catch { return []; }
+}
+
+function saveNotifs(notifs) {
+  localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(notifs.slice(-50)));
+}
+
+function renderBell() {
+  const notifs   = loadStoredNotifs();
+  const unread   = notifs.filter(n => !n.read).length;
+  const countEl  = $("bell-count");
+  const listEl   = $("bell-notif-list");
+  const emptyEl  = $("bell-empty");
+
+  if (countEl) {
+    countEl.textContent = unread > 9 ? "9+" : String(unread);
+    countEl.classList.toggle("visible", unread > 0);
+  }
+
+  if (!listEl) return;
+  listEl.innerHTML = "";
+
+  if (notifs.length === 0) {
+    listEl.innerHTML = '<div class="bell-empty">no notifications yet.</div>';
+    return;
+  }
+
+  [...notifs].reverse().forEach(n => {
+    const item = document.createElement("div");
+    item.className = "bell-notif-item" + (n.read ? "" : " unread");
+    const ago = n.ts ? formatAgo(n.ts) : "";
+    item.innerHTML =
+      '<div class="bell-notif-icon ' + (n.type || "system") + '">' + (ICON_MAP[n.type] || "&#x2139;") + '</div>' +
+      '<div class="bell-notif-body">' +
+        '<div class="bell-notif-title">' + (n.title || "") + '</div>' +
+        '<div class="bell-notif-text">'  + (n.body  || "") + '</div>' +
+        '<div class="bell-notif-time">'  + ago + '</div>' +
+      '</div>';
+    listEl.appendChild(item);
+  });
+}
+
+function formatAgo(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000)   return "just now";
+  if (diff < 3600000) return Math.floor(diff / 60000) + "m ago";
+  if (diff < 86400000)return Math.floor(diff / 3600000) + "h ago";
+  return Math.floor(diff / 86400000) + "d ago";
+}
+
+function pushBellNotif(type, title, body) {
+  const notifs = loadStoredNotifs();
+  notifs.push({ type, title, body, ts: Date.now(), read: false });
+  saveNotifs(notifs);
+  renderBell();
+}
+
+function setupBell(user) {
+  const wrap = $("bell-wrap");
+  if (wrap) wrap.style.display = user ? "" : "none";
+  if (!user) return;
+
+  renderBell();
+
+  const btn      = $("bell-btn");
+  const dropdown = $("bell-dropdown");
+  const clearBtn = $("bell-clear-btn");
+
+  if (btn) {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      dropdown.classList.toggle("open");
+      if (dropdown.classList.contains("open")) {
+        const notifs = loadStoredNotifs().map(n => ({ ...n, read: true }));
+        saveNotifs(notifs);
+        renderBell();
+      }
+    });
+  }
+
+  document.addEventListener("click", () => dropdown?.classList.remove("open"));
+  dropdown?.addEventListener("click", e => e.stopPropagation());
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      saveNotifs([]);
+      renderBell();
+    });
+  }
+
+  if (window.NRGNotify) {
+    const _origShow = window.NRGNotify.show.bind(window.NRGNotify);
+    window.NRGNotify.show = function(opts) {
+      _origShow(opts);
+      pushBellNotif(opts.type || "system", opts.title || "", opts.body || "");
+    };
+    ["friend","xp","coins","level","system","warning"].forEach(type => {
+      const _orig = window.NRGNotify[type].bind(window.NRGNotify);
+      window.NRGNotify[type] = function(title, body) {
+        _orig(title, body);
+        pushBellNotif(type, title, body);
+      };
+    });
+  }
+}
 
 function renderDashFavs(favs) {
   const grid  = document.getElementById("dash-fav-grid");
@@ -1730,6 +1921,7 @@ $("dash-logout").addEventListener("click", async () => {
 
 onAuthStateChanged(auth, async user => {
   if (window._nrgFirebase) window._nrgFirebase.uid = user ? user.uid : null;
+  setupBell(user);
   if (user) {
     const snap = await getDoc(doc(db, "users", user.uid));
     if (snap.exists() && snap.data().isBanned) {

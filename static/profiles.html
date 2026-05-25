@@ -150,6 +150,18 @@ body { display: flex; flex-direction: column; }
 .result-level { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.06em; }
 .result-arrow { color: var(--text-muted); font-size: 12px; }
 
+
+.friends-list { display: flex; flex-direction: column; gap: 6px; }
+.friend-card { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; transition: border-color 0.13s; }
+.friend-card:hover { border-color: var(--accent); }
+.friend-card-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #000; flex-shrink: 0; overflow: hidden; }
+.friend-card-av img { width: 100%; height: 100%; object-fit: cover; }
+.friend-card-info { flex: 1; min-width: 0; }
+.friend-card-name { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.friend-card-handle { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-top: 1px; }
+.friend-card-level { font-family: var(--mono); font-size: 9px; color: var(--accent); flex-shrink: 0; }
+.no-friends { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; }
+
 .no-favs { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
 </style>
 </head>
@@ -218,6 +230,11 @@ body { display: flex; flex-direction: column; }
       <div class="profile-section">
         <div class="profile-section-title">Favorite Games</div>
         <div class="fav-list" id="p-fav-list"></div>
+      </div>
+
+      <div class="profile-section" id="p-friends-section" style="display:none">
+        <div class="profile-section-title">Friends <span id="p-friends-count" style="color:var(--text-dim);font-weight:400"></span></div>
+        <div class="friends-list" id="p-friends-list"></div>
       </div>
 
     </div>
@@ -404,6 +421,53 @@ async function loadSearchView() {
   input.addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
 }
 
+
+async function loadFriendsList(friendUids) {
+  const section = $("p-friends-section");
+  const list    = $("p-friends-list");
+  const count   = $("p-friends-count");
+
+  if (!friendUids || friendUids.length === 0) {
+    section.style.display = "";
+    list.innerHTML = '<span class="no-friends">no friends yet.</span>';
+    count.textContent = "";
+    return;
+  }
+
+  section.style.display = "";
+  count.textContent = "(" + friendUids.length + ")";
+  list.innerHTML = "";
+
+  for (const fuid of friendUids) {
+    try {
+      const snap = await getDoc(doc(db, "users", fuid));
+      if (!snap.exists()) continue;
+      const f    = snap.data();
+      const fname = f.displayName || f.email?.split("@")[0] || "User";
+      const a    = document.createElement("a");
+      a.className = "friend-card";
+      a.href      = "/profiles.html?uid=" + fuid;
+
+      let avHtml;
+      if (f.photoURL && f.photoURL !== "firestore") {
+        avHtml = '<img src="' + f.photoURL + '" alt="">';
+      } else {
+        avHtml = fname[0].toUpperCase();
+      }
+
+      a.innerHTML =
+        '<div class="friend-card-av">' + avHtml + '</div>' +
+        '<div class="friend-card-info">' +
+          '<div class="friend-card-name">' + fname + '</div>' +
+          '<div class="friend-card-handle">' + (f.username ? "@" + f.username : "") + '</div>' +
+        '</div>' +
+        '<span class="friend-card-level">LVL ' + (f.level || 1) + '</span>';
+
+      list.appendChild(a);
+    } catch(e) { continue; }
+  }
+}
+
 async function loadProfile() {
   const uid = new URLSearchParams(window.location.search).get("uid");
   if (!uid) { $("state").textContent = "no profile found."; return; }
@@ -496,6 +560,7 @@ async function loadProfile() {
     document.title = "NRG | " + name + (d.username ? " (@" + d.username + ")" : "");
     profileUid = uid;
     setupFriendBtn(uid, d);
+    await loadFriendsList(d.friends || []);
 
   } catch (e) {
     console.error(e);
