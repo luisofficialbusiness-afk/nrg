@@ -714,33 +714,6 @@ async function setupModPanel() {
   toggleBtn.addEventListener("click", () => panel.classList.toggle("open"));
   closeBtn.addEventListener("click",  () => panel.classList.remove("open"));
 
-  // listen to chat settings
-  onSnapshot(doc(chatDb, "settings", "chat"), snap => {
-    if (!snap.exists()) return;
-    const d = snap.data();
-
-    // slow mode
-    slowModeSeconds = d.slowMode || 0;
-    const slowBar   = $("slow-mode-bar");
-    const slowLabel = $("slow-mode-label");
-    if (slowModeSeconds > 0) {
-      slowBar.classList.add("visible");
-      slowLabel.textContent = slowModeSeconds + (slowModeSeconds >= 60 ? "m wait" : "s wait");
-    } else {
-      slowBar.classList.remove("visible");
-    }
-
-    // pinned message
-    const pinnedBar  = $("pinned-bar");
-    const pinnedText = $("pinned-text");
-    if (d.pinnedMessage) {
-      pinnedBar.classList.add("visible");
-      pinnedText.textContent = d.pinnedMessage;
-    } else {
-      pinnedBar.classList.remove("visible");
-    }
-  });
-
   // system message
   $("mod-sys-send").addEventListener("click", async () => {
     const text = $("mod-sys-input").value.trim();
@@ -861,16 +834,39 @@ onAuthStateChanged(auth, async user => {
   }
 
   await registerOnline(user, userProfile);
-});
 
-const msgsQ = query(collection(chatDb, "messages"), orderBy("createdAt", "asc"), limit(MAX_MSGS));
-onSnapshot(msgsQ, snap => {
-  renderMessages(snap);
-});
+  // listen to chat settings (slow mode, pinned message) for ALL users
+  onSnapshot(doc(chatDb, "settings", "chat"), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+    slowModeSeconds = d.slowMode || 0;
+    const slowBar   = $("slow-mode-bar");
+    const slowLabel = $("slow-mode-label");
+    if (slowModeSeconds > 0) {
+      slowBar.classList.add("visible");
+      slowLabel.textContent = slowModeSeconds + (slowModeSeconds >= 60 ? "m wait" : "s wait");
+    } else {
+      slowBar.classList.remove("visible");
+    }
+    const pinnedBar  = $("pinned-bar");
+    const pinnedText = $("pinned-text");
+    if (d.pinnedMessage) {
+      pinnedBar.classList.add("visible");
+      pinnedText.textContent = d.pinnedMessage;
+    } else {
+      pinnedBar.classList.remove("visible");
+    }
+  });
 
-onSnapshot(collection(chatDb, "online"), snap => {
-  const users = snap.docs.map(d => d.data());
-  renderOnlineList(users);
+  const msgsQ = query(collection(chatDb, "messages"), orderBy("createdAt", "asc"), limit(MAX_MSGS));
+  onSnapshot(msgsQ, snap => {
+    renderMessages(snap);
+  });
+
+  onSnapshot(collection(chatDb, "online"), snap => {
+    const users = snap.docs.map(d => d.data());
+    renderOnlineList(users);
+  });
 });
 
 const input = $("msg-input");
