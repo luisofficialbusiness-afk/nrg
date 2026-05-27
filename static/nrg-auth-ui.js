@@ -44,7 +44,7 @@ async function createUserDoc(user) {
       displayName: user.displayName || user.email.split("@")[0],
       photoURL:    user.photoURL    || null,
       createdAt:   serverTimestamp(),
-      theme:       localStorage.getItem("nrg_theme_selected") || "midnight",
+      theme:       localStorage.getItem("nrg_theme") || "midnight",
       favorites:   [],
       recentGames: []
     });
@@ -447,7 +447,12 @@ function updateTopbar(user) {
     $("nrg-u-email").textContent = user.email;
 
     getUserDoc(user.uid).then(data => {
-      if (data?.theme && typeof applyTheme === "function") applyTheme(data.theme);
+      if (data?.theme) {
+        const local = localStorage.getItem('nrg_theme');
+        const themeToUse = local || data.theme;
+        localStorage.setItem('nrg_theme', themeToUse);
+        if (typeof applyTheme === 'function') applyTheme(themeToUse);
+      }
     }).catch(() => {});
 
   } else {

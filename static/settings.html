@@ -375,9 +375,7 @@
         <span class="section-title">Themes</span>
         <span class="section-sub">pick your vibe</span>
       </div>
-      <div class="theme-grid" id="theme-grid">
-      
-      </div>
+      <div class="theme-grid" id="theme-grid"></div>
       <div class="btn-row">
         <button class="btn btn-primary" onclick="applySelectedTheme()">apply theme</button>
         <button class="btn btn-ghost" onclick="resetThemeToDefault()">reset</button>
@@ -573,9 +571,107 @@ function startMusic() {
   bgMusic.play().then(function() { window.removeEventListener('click', startMusic); }).catch(function(){});
 }
 window.addEventListener('click', startMusic);
-</script>
 
-<script src="sidebar-logic.js"></script>
+
+var THEMES = [
+  { id: 'midnight', name: 'Midnight', bg: '#0a0a0a', surface: '#111', surface2: '#1a1a1a', border: '#2a2a2a', accent: '#c50cf9', text: '#e8e8e8', textDim: '#666', textMuted: '#3a3a3a' },
+  { id: 'neon',     name: 'Neon',     bg: '#050510', surface: '#0d0d1f', surface2: '#14142e', border: '#1e1e3f', accent: '#4f9cf9', text: '#e8f0ff', textDim: '#5a6a88', textMuted: '#2a3048' },
+  { id: 'galaxy',   name: 'Galaxy',   bg: '#06020f', surface: '#100820', surface2: '#180c2e', border: '#2a1540', accent: '#b57bee', text: '#eee8ff', textDim: '#6a5a88', textMuted: '#2e1e44' },
+  { id: 'ocean',    name: 'Ocean',    bg: '#020a14', surface: '#061622', surface2: '#0b2233', border: '#0e3040', accent: '#00c8ff', text: '#d8f4ff', textDim: '#4a7a99', textMuted: '#0d2233' },
+  { id: 'crimson',  name: 'Crimson',  bg: '#0f0005', surface: '#1a0008', surface2: '#220010', border: '#3a0018', accent: '#ff2255', text: '#ffe8ec', textDim: '#884455', textMuted: '#3a1020' },
+  { id: 'gold',     name: 'Gold',     bg: '#0a0800', surface: '#141000', surface2: '#1e1800', border: '#302400', accent: '#f5c518', text: '#fff8e0', textDim: '#886633', textMuted: '#2e2200' },
+  { id: 'forest',   name: 'Forest',   bg: '#020a04', surface: '#071208', surface2: '#0d1e10', border: '#142e18', accent: '#39d98a', text: '#d8ffe8', textDim: '#4a8860', textMuted: '#0d2214' },
+  { id: 'sakura',   name: 'Sakura',   bg: '#0f0508', surface: '#1a0810', surface2: '#220e18', border: '#381a28', accent: '#ff6b9d', text: '#ffe8f0', textDim: '#885566', textMuted: '#2e0e1a' },
+];
+
+var selectedThemeId = localStorage.getItem('nrg_theme') || 'midnight';
+
+function buildThemeGrid() {
+  var grid = document.getElementById('theme-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  THEMES.forEach(function(t) {
+    var card = document.createElement('div');
+    card.className = 'theme-card' + (t.id === selectedThemeId ? ' selected' : '');
+    card.dataset.themeId = t.id;
+    card.innerHTML =
+      '<div class="theme-swatch" style="background:linear-gradient(135deg,'+t.bg+' 40%,'+t.accent+' 100%)"></div>' +
+      '<div class="theme-name">'+t.name+'</div>';
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.theme-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      selectedThemeId = t.id;
+    });
+    grid.appendChild(card);
+  });
+}
+
+function applyThemeVars(t) {
+  var r = document.documentElement.style;
+  function hexToRgba(hex, a) {
+    hex = hex.replace('#','');
+    if (hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join('');
+    var n=parseInt(hex,16), rv=(n>>16)&255, gv=(n>>8)&255, bv=n&255;
+    return 'rgba('+rv+','+gv+','+bv+','+a+')';
+  }
+  r.setProperty('--bg',         t.bg);
+  r.setProperty('--surface',    t.surface);
+  r.setProperty('--surface2',   t.surface2);
+  r.setProperty('--surface3',   t.surface2); // surface3 fallback
+  r.setProperty('--border',     t.border);
+  r.setProperty('--accent',     t.accent);
+  r.setProperty('--accent-dim', hexToRgba(t.accent, 0.10));
+  r.setProperty('--accent-glow',hexToRgba(t.accent, 0.25));
+  r.setProperty('--text',       t.text);
+  r.setProperty('--text-dim',   t.textDim);
+  r.setProperty('--text-muted', t.textMuted);
+}
+
+function applySelectedTheme() {
+  var t = THEMES.find(function(x){ return x.id === selectedThemeId; });
+  if (!t) return;
+  localStorage.setItem('nrg_theme', t.id);
+  applyThemeVars(t);
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'nrg-theme', theme: t.id }, '*');
+  }
+  if (window.NRGAuth && window.NRGAuth.currentUser) {
+    import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js')
+      .then(function(m) {
+        m.updateDoc(m.doc(m.getFirestore(), 'users', window.NRGAuth.currentUser.uid), { theme: t.id });
+      }).catch(function(){});
+  }
+  toast('Theme applied: ' + t.name);
+}
+
+function resetThemeToDefault() {
+  selectedThemeId = 'midnight';
+  localStorage.setItem('nrg_theme', 'midnight');
+  document.querySelectorAll('.theme-card').forEach(function(c) {
+    c.classList.toggle('selected', c.dataset.themeId === 'midnight');
+  });
+  var t = THEMES[0];
+  applyThemeVars(t);
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'nrg-theme', theme: 'midnight' }, '*');
+  }
+  if (window.NRGAuth && window.NRGAuth.currentUser) {
+    import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js')
+      .then(function(m) {
+        m.updateDoc(m.doc(m.getFirestore(), 'users', window.NRGAuth.currentUser.uid), { theme: 'midnight' });
+      }).catch(function(){});
+  }
+  toast('Theme reset to Midnight');
+}
+(function() {
+  var saved = localStorage.getItem('nrg_theme');
+  if (saved) {
+    var t = THEMES.find(function(x){ return x.id === saved; });
+    if (t) applyThemeVars(t);
+  }
+  buildThemeGrid();
+})();
+</script>
 
 </body>
 </html>

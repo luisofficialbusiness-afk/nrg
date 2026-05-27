@@ -25,7 +25,7 @@
     body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; height: 100vh; }
     ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-
+    /* ── Sidebar ── */
     #nrg-sidebar {
       width: 52px;
       flex-shrink: 0;
@@ -35,38 +35,25 @@
       flex-direction: column;
       align-items: center;
       z-index: 100;
-      transition: width 0.25s cubic-bezier(0.4,0,0.2,1);
+      transition: width 0.25s cubic-bezier(0.4,0,0.2,1), border-color 0.25s;
       overflow: hidden;
       position: relative;
     }
-    #nrg-sidebar.collapsed { width: 0; border-right: none; }
+    #nrg-sidebar.collapsed { width: 0; border-right-color: transparent; }
 
     .sidebar-logo {
-      width: 52px;
-      height: 52px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 52px; height: 52px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
       border-bottom: 1px solid var(--border);
     }
-    .sidebar-logo-text {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
+    .sidebar-logo-text { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; }
 
     .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; width: 52px; padding: 6px 0; }
 
     .sidebar-item {
       position: relative;
-      width: 52px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 52px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       border-left: 2px solid transparent;
       transition: background 0.13s, border-color 0.13s;
@@ -78,20 +65,16 @@
 
     .si-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
     .si-icon svg {
-      width: 18px; height: 18px;
-      color: var(--text-dim);
+      width: 18px; height: 18px; color: var(--text-dim);
       stroke: currentColor; fill: none;
       stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
       transition: color 0.13s;
     }
     .sidebar-item:hover .si-icon svg { color: var(--text); }
 
-
-    .si-tooltip {
-      position: absolute;
-      left: calc(100% + 10px);
-      top: 50%;
-      transform: translateY(-50%);
+    /* tooltip — fixed so overflow:hidden can never clip it */
+    #si-tooltip-global {
+      position: fixed;
       background: var(--surface2);
       border: 1px solid var(--border);
       color: var(--text);
@@ -104,33 +87,25 @@
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.15s;
-      z-index: 999;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 99999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
-    .sidebar-item:hover .si-tooltip { opacity: 1; }
+    #si-tooltip-global.visible { opacity: 1; }
 
     .sidebar-divider { width: 30px; height: 1px; background: var(--border); margin: 4px 0; flex-shrink: 0; }
 
-
+    /* collapse button */
     .sidebar-collapse-btn {
-      width: 52px;
-      height: 40px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 52px; height: 40px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
       border-top: 1px solid var(--border);
-      cursor: pointer;
-      transition: background 0.13s;
-      position: relative;
+      cursor: pointer; transition: background 0.13s;
     }
     .sidebar-collapse-btn:hover { background: var(--surface2); }
     .sidebar-collapse-btn svg { width: 16px; height: 16px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; }
     .sidebar-collapse-btn:hover svg { stroke: var(--text); }
-    .si-tooltip--above { bottom: calc(100% + 8px); top: auto; left: 50%; transform: translateX(-50%); white-space: nowrap; }
-    .sidebar-collapse-btn:hover .si-tooltip--above { opacity: 1; }
 
-
+    /* expand tab */
     #sidebar-expand-tab {
       position: fixed;
       left: 0; top: 50%;
@@ -150,10 +125,10 @@
     #sidebar-expand-tab:hover { background: var(--surface2); }
     #sidebar-expand-tab svg { width: 10px; height: 10px; stroke: var(--text-dim); fill: none; stroke-width: 2.5; stroke-linecap: round; }
 
-
+    /* ── Main content ── */
     #nrg-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
-
+    /* loader */
     #nrg-loader {
       position: absolute; inset: 0;
       background: var(--bg);
@@ -168,15 +143,16 @@
     @keyframes boltPulse { 0%,100% { filter: drop-shadow(0 0 6px var(--accent)); opacity:1; } 50% { filter: drop-shadow(0 0 18px var(--accent)); opacity:0.75; } }
     .loader-text { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; }
 
+    /* home view */
     #home-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
     #home-view.hidden { display: none; }
 
-
+    /* iframe view */
     #iframe-view { flex: 1; display: none; }
     #iframe-view.active { display: block; }
     #page-iframe { width: 100%; height: 100%; border: none; display: block; }
 
-
+    /* ── Home page styles ── */
     #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .topbar, .main { position: relative; z-index: 1; }
     .topbar { display: flex; align-items: center; justify-content: space-between; padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
@@ -204,7 +180,7 @@
     .card-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; position: relative; z-index: 1; transition: color 0.15s; }
     .nav-card:hover .card-label { color: var(--text); }
 
-
+    /* popup */
     .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; animation: fadeIn 0.25s ease 0.4s forwards; }
     @keyframes fadeIn { to { opacity: 1; } }
     .popup { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 5px; width: 90%; max-width: 400px; padding: 24px; }
@@ -219,8 +195,9 @@
   </style>
 </head>
 <body>
+<div id="si-tooltip-global"></div>
 
-
+<!-- ── Sidebar ── -->
 <nav id="nrg-sidebar">
   <div class="sidebar-logo"><span class="sidebar-logo-text">NRG</span></div>
 
@@ -228,80 +205,80 @@
 
     <div class="sidebar-item active" data-page="home" data-label="Home" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></span>
-      <span class="si-tooltip">Home</span>
+
     </div>
 
     <div class="sidebar-item" data-page="games.html" data-label="Games" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M7 11v4M9 13H5M16 12h2M17 11v2"/></svg></span>
-      <span class="si-tooltip">Games</span>
+
     </div>
 
     <div class="sidebar-item" data-page="movies.html" data-label="Movies" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M7 4v5M17 4v5M7 14v5M17 14v5M12 4v5M12 14v5"/></svg></span>
-      <span class="si-tooltip">Movies</span>
+
     </div>
 
     <div class="sidebar-item" data-page="music.html" data-label="Music" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
-      <span class="si-tooltip">Music</span>
+
     </div>
 
     <div class="sidebar-item" data-page="proxy.html" data-label="Proxy" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="9.5" r="2.5"/><path d="M7 9.5a5 5 0 0110 0"/></svg></span>
-      <span class="si-tooltip">Proxy</span>
+
     </div>
 
     <div class="sidebar-item" data-page="chat.html" data-label="Chat" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
-      <span class="si-tooltip">Chat</span>
+
     </div>
 
     <div class="sidebar-divider"></div>
 
     <div class="sidebar-item" data-page="accounts.html" data-label="Account" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
-      <span class="si-tooltip">Account</span>
+
     </div>
 
     <div class="sidebar-item" data-page="profiles.html" data-label="Profiles" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="8" r="2"/><path d="M21 20c0-2.2-1.6-4-4-4"/></svg></span>
-      <span class="si-tooltip">Profiles</span>
+
     </div>
 
     <div class="sidebar-item" data-page="shop.html" data-label="Shop" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>
-      <span class="si-tooltip">Shop</span>
+
     </div>
 
     <div class="sidebar-divider"></div>
 
     <div class="sidebar-item" data-page="settings.html" data-label="Settings" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
-      <span class="si-tooltip">Settings</span>
+
     </div>
 
     <div class="sidebar-item" data-page="admin.html" data-label="Admin" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-      <span class="si-tooltip">Admin</span>
+
     </div>
 
   </div>
 
   <div class="sidebar-collapse-btn" onclick="toggleSidebar()">
     <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <span class="si-tooltip si-tooltip--above">Collapse</span>
+
   </div>
 </nav>
 
-
+<!-- expand tab (shown when collapsed) -->
 <div id="sidebar-expand-tab" onclick="toggleSidebar()">
   <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
 </div>
 
-
+<!-- ── Main content ── -->
 <div id="nrg-content">
 
-
+  <!-- Loading overlay -->
   <div id="nrg-loader">
     <div class="loader-graphic">
       <div class="loader-ring"></div>
@@ -312,7 +289,7 @@
     <div class="loader-text" id="loader-text">Loading…</div>
   </div>
 
-
+  <!-- Home page -->
   <div id="home-view">
     <canvas id="bg-canvas"></canvas>
 
@@ -408,17 +385,17 @@
 
       </div>
     </div>
-  </div>
+  </div><!-- #home-view -->
 
-
+  <!-- Iframe view -->
   <div id="iframe-view">
     <iframe id="page-iframe" allowfullscreen></iframe>
   </div>
 
-</div>
+</div><!-- #nrg-content -->
 
 <script>
-
+  // ── Typing phrase ──
   const phrases = [
     "Feel the NRG","This is a name of a Stadium and a Company",
     "You should ask NRG AI something","Secretly browse with Proxy",
@@ -441,7 +418,7 @@
   }
   typeEffect();
 
-
+  // ── Click sound ──
   function playClick() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -456,7 +433,7 @@
     } catch(e) {}
   }
 
-
+  // ── Nav cards link to sidebar nav ──
   document.querySelectorAll('.nav-card').forEach(card => {
     card.addEventListener('mouseenter', playClick);
     card.addEventListener('click', () => {
@@ -467,7 +444,7 @@
     });
   });
 
-
+  // ── Sidebar navigation ──
   function navTo(item) {
     const page  = item.dataset.page;
     const label = item.dataset.label;
@@ -496,6 +473,7 @@
     }, 80);
   }
 
+  // ── Sidebar collapse ──
   function toggleSidebar() {
     const sidebar   = document.getElementById('nrg-sidebar');
     const expandTab = document.getElementById('sidebar-expand-tab');
@@ -503,13 +481,101 @@
     expandTab.style.display = collapsed ? 'flex' : 'none';
   }
 
+  // ── Sidebar tooltips (fixed positioning to escape overflow:hidden) ──
+  var tip = document.getElementById('si-tooltip-global');
+  var tipTimer;
+  document.querySelectorAll('.sidebar-item, .sidebar-collapse-btn').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      var label = el.dataset.label || 'Collapse';
+      var rect  = el.getBoundingClientRect();
+      tip.textContent = label;
+      tip.style.left = (rect.right + 10) + 'px';
+      tip.style.top  = (rect.top + rect.height / 2) + 'px';
+      tip.style.transform = 'translateY(-50%)';
+      clearTimeout(tipTimer);
+      tip.classList.add('visible');
+    });
+    el.addEventListener('mouseleave', function() {
+      tip.classList.remove('visible');
+    });
+  });
 
+  // ── Iframe link interception ──
+  // When a page inside the iframe navigates, keep it inside the shell
+  // and update the active sidebar item
+  document.getElementById('page-iframe').addEventListener('load', function() {
+    document.getElementById('nrg-loader').classList.remove('visible');
+    try {
+      var iframeDoc = this.contentDocument || this.contentWindow.document;
+      // intercept all link clicks inside the iframe
+      iframeDoc.addEventListener('click', function(e) {
+        var a = e.target.closest('a[href]');
+        if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('javascript') || href.startsWith('http')) return;
+        // internal page link — load in iframe instead
+        var page = href.split('/').pop();
+        e.preventDefault();
+        var item = document.querySelector('.sidebar-item[data-page="'+page+'"]');
+        if (item) navTo(item);
+        else {
+          document.getElementById('page-iframe').src = page;
+          document.getElementById('nrg-loader').classList.add('visible');
+          document.getElementById('loader-text').textContent = 'Loading…';
+        }
+      });
+    } catch(e) {} // cross-origin pages will throw, that's fine
+  });
+
+  // ── Theme sync from settings iframe ──
+  function hexToRgba(hex, a) {
+    hex = hex.replace('#','');
+    if (hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join('');
+    var n=parseInt(hex,16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  function applyTheme(t) {
+    var s = document.documentElement.style;
+    s.setProperty('--bg',          t.bg);
+    s.setProperty('--surface',     t.surface);
+    s.setProperty('--surface2',    t.surface2);
+    s.setProperty('--surface3',    t.surface2);
+    s.setProperty('--border',      t.border);
+    s.setProperty('--accent',      t.accent);
+    s.setProperty('--accent-dim',  hexToRgba(t.accent, 0.10));
+    s.setProperty('--accent-glow', hexToRgba(t.accent, 0.25));
+    s.setProperty('--text',        t.text);
+    s.setProperty('--text-dim',    t.textDim);
+    s.setProperty('--text-muted',  t.textMuted);
+  }
+
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'nrg-theme') applyTheme(e.data.theme);
+  });
+
+  // apply saved theme on load
+  (function() {
+    var THEMES = [
+      { id:'midnight', bg:'#0a0a0a', surface:'#111', surface2:'#1a1a1a', border:'#2a2a2a', accent:'#c50cf9', text:'#e8e8e8', textDim:'#666', textMuted:'#3a3a3a' },
+      { id:'neon',     bg:'#050510', surface:'#0d0d1f', surface2:'#14142e', border:'#1e1e3f', accent:'#4f9cf9', text:'#e8f0ff', textDim:'#5a6a88', textMuted:'#2a3048' },
+      { id:'galaxy',   bg:'#06020f', surface:'#100820', surface2:'#180c2e', border:'#2a1540', accent:'#b57bee', text:'#eee8ff', textDim:'#6a5a88', textMuted:'#2e1e44' },
+      { id:'ocean',    bg:'#020a14', surface:'#061622', surface2:'#0b2233', border:'#0e3040', accent:'#00c8ff', text:'#d8f4ff', textDim:'#4a7a99', textMuted:'#0d2233' },
+      { id:'crimson',  bg:'#0f0005', surface:'#1a0008', surface2:'#220010', border:'#3a0018', accent:'#ff2255', text:'#ffe8ec', textDim:'#884455', textMuted:'#3a1020' },
+      { id:'gold',     bg:'#0a0800', surface:'#141000', surface2:'#1e1800', border:'#302400', accent:'#f5c518', text:'#fff8e0', textDim:'#886633', textMuted:'#2e2200' },
+      { id:'forest',   bg:'#020a04', surface:'#071208', surface2:'#0d1e10', border:'#142e18', accent:'#39d98a', text:'#d8ffe8', textDim:'#4a8860', textMuted:'#0d2214' },
+      { id:'sakura',   bg:'#0f0508', surface:'#1a0810', surface2:'#220e18', border:'#381a28', accent:'#ff6b9d', text:'#ffe8f0', textDim:'#885566', textMuted:'#2e0e1a' },
+    ];
+    var saved = localStorage.getItem('nrg_theme');
+    if (saved) { var t = THEMES.find(function(x){return x.id===saved;}); if (t) applyTheme(t); }
+  })();
   const today = new Date();
   if (today.getMonth() === 3 && today.getDate() === 1 && !sessionStorage.getItem('nrg_seized_seen')) {
     sessionStorage.setItem('nrg_seized_seen', 'true');
     window.location.href = 'seized.html';
   }
 
+  // ── Background music ──
   const bgMusic = new Audio('music/random music.mp3');
   bgMusic.loop = true; bgMusic.volume = 0.1;
   function startMusic() { bgMusic.play().then(() => window.removeEventListener('click', startMusic)).catch(()=>{}); }

@@ -2828,9 +2828,44 @@ function renderQueue() {
   });
 }
 </script>
+<script>
+(function() {
+  var THEMES = {
+    midnight: { bg:'#0a0a0a', surface:'#111', surface2:'#1a1a1a', border:'#2a2a2a', accent:'#c50cf9', text:'#e8e8e8', textDim:'#666', textMuted:'#3a3a3a' },
+    neon:     { bg:'#050510', surface:'#0d0d1f', surface2:'#14142e', border:'#1e1e3f', accent:'#4f9cf9', text:'#e8f0ff', textDim:'#5a6a88', textMuted:'#2a3048' },
+    galaxy:   { bg:'#06020f', surface:'#100820', surface2:'#180c2e', border:'#2a1540', accent:'#b57bee', text:'#eee8ff', textDim:'#6a5a88', textMuted:'#2e1e44' },
+    ocean:    { bg:'#020a14', surface:'#061622', surface2:'#0b2233', border:'#0e3040', accent:'#00c8ff', text:'#d8f4ff', textDim:'#4a7a99', textMuted:'#0d2233' },
+    crimson:  { bg:'#0f0005', surface:'#1a0008', surface2:'#220010', border:'#3a0018', accent:'#ff2255', text:'#ffe8ec', textDim:'#884455', textMuted:'#3a1020' },
+    gold:     { bg:'#0a0800', surface:'#141000', surface2:'#1e1800', border:'#302400', accent:'#f5c518', text:'#fff8e0', textDim:'#886633', textMuted:'#2e2200' },
+    forest:   { bg:'#020a04', surface:'#071208', surface2:'#0d1e10', border:'#142e18', accent:'#39d98a', text:'#d8ffe8', textDim:'#4a8860', textMuted:'#0d2214' },
+    sakura:   { bg:'#0f0508', surface:'#1a0810', surface2:'#220e18', border:'#381a28', accent:'#ff6b9d', text:'#ffe8f0', textDim:'#885566', textMuted:'#2e0e1a' },
+  };
+  function rgba(hex, a) {
+    hex = hex.replace('#','');
+    if (hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join('');
+    var n=parseInt(hex,16);
+    return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+  }
+  window.applyTheme = function(id) {
+    var t = THEMES[id] || THEMES.midnight;
+    var s = document.documentElement.style;
+    s.setProperty('--bg',          t.bg);
+    s.setProperty('--surface',     t.surface);
+    s.setProperty('--surface2',    t.surface2);
+    s.setProperty('--surface3',    t.surface2);
+    s.setProperty('--border',      t.border);
+    s.setProperty('--accent',      t.accent);
+    s.setProperty('--accent-dim',  rgba(t.accent, 0.10));
+    s.setProperty('--accent-glow', rgba(t.accent, 0.25));
+    s.setProperty('--text',        t.text);
+    s.setProperty('--text-dim',    t.textDim);
+    s.setProperty('--text-muted',  t.textMuted);
+  };
+  window.applyTheme(localStorage.getItem('nrg_theme') || 'midnight');
+})();
+</script>
 <script src="index.js"></script>
-
-
+<script src="nrg-system.js"></script>
 
 
 </body>

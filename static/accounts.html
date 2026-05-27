@@ -1238,7 +1238,7 @@ async function createUserDoc(user) {
     displayName:      user.displayName || user.email.split("@")[0],
     photoURL:         user.photoURL || null,
     createdAt:        new Date().toISOString(),
-    theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
+    theme:            localStorage.getItem("nrg_theme") || "midnight",
     favorites:        [],
     recentGames:      [],
     inventory:        [],
@@ -1396,9 +1396,12 @@ async function showDashboard(user) {
       applyCosmetics(d.equipped || {});
       loadFriends(user.uid);
 
-      if (d.theme && d.theme !== localStorage.getItem("nrg_theme_selected")) {
-        localStorage.setItem("nrg_theme_selected", d.theme);
+      const _localTheme = localStorage.getItem("nrg_theme");
+      if (d.theme && !_localTheme) {
+        localStorage.setItem("nrg_theme", d.theme);
         if (window.applyTheme) window.applyTheme(d.theme);
+      } else if (_localTheme) {
+        if (window.applyTheme) window.applyTheme(_localTheme);
       }
       const _prevLevel = parseInt(localStorage.getItem("nrg_last_level") || "1");
       const _newLevel  = renderXPBar(d.xp || 0);
@@ -1588,7 +1591,7 @@ $("v-submit").addEventListener("click", async () => {
       displayName:      name,
       photoURL:         null,
       createdAt:        new Date().toISOString(),
-      theme:            localStorage.getItem("nrg_theme_selected") || "midnight",
+      theme:            localStorage.getItem("nrg_theme") || "midnight",
       favorites:        [],
       recentGames:      [],
       inventory:        [],
