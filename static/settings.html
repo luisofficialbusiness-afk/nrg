@@ -204,66 +204,7 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     
-   .nrg-nav-btn {
-  position: fixed; bottom: 24px; left: 24px; z-index: 9998;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--surface,#111); border: 1px solid var(--border,#2a2a2a);
-  color: var(--text-dim,#666); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.15s, color 0.15s, transform 0.2s;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-.nrg-nav-btn:hover { border-color: var(--accent,#c50cf9); color: var(--accent,#c50cf9); }
-.nrg-nav-btn.open { border-color: var(--accent,#c50cf9); color: var(--accent,#c50cf9); transform: rotate(45deg); }
-.nrg-nav-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
-
-.nrg-nav-menu {
-  position: fixed; bottom: 78px; left: 24px; z-index: 9997;
-  background: var(--surface,#111); border: 1px solid var(--border,#2a2a2a);
-  border-radius: 8px; padding: 6px;
-  display: flex; flex-direction: column; gap: 2px;
-  min-width: 160px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  opacity: 0; pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.18s, transform 0.18s;
-}
-.nrg-nav-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-
-.nrg-nav-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-radius: 5px; cursor: pointer;
-  font-family: var(--mono,'Space Mono',monospace);
-  font-size: 10px; letter-spacing: 0.1em;
-  color: var(--text-dim,#666);
-  transition: background 0.12s, color 0.12s;
-  text-decoration: none; border: none; background: none; width: 100%; text-align: left;
-}
-.nrg-nav-item:hover { background: var(--surface2,#1a1a1a); color: var(--text,#e8e8e8); }
-.nrg-nav-item.active { color: var(--accent,#c50cf9); }
-.nrg-nav-item-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--border,#2a2a2a); flex-shrink: 0; transition: background 0.12s;
-}
-.nrg-nav-item:hover .nrg-nav-item-dot,
-.nrg-nav-item.active .nrg-nav-item-dot { background: var(--accent,#c50cf9); }
-.nrg-nav-divider { height: 1px; background: var(--border,#2a2a2a); margin: 4px 6px; }
-
-    
-    .bottom-sidebar {
-      position: fixed; bottom: 0; left: 50%;
-      transform: translate(-50%, 70%);
-      display: flex; gap: 20px; padding: 10px 18px;
-      background: rgba(15,15,15,0.95); backdrop-filter: blur(10px);
-      border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
-      transition: transform 0.3s ease; z-index: 999;
-    }
-    .bottom-sidebar:hover { transform: translate(-50%, 0); }
-    .status-card {
-      color: white; background: var(--surface2); padding: 8px 12px;
-      border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;
-    }
+  
   </style>
 </head>
 <body>
@@ -399,30 +340,6 @@
   </div>
 </div>
 
-
-<button class="nrg-nav-btn" id="nrg-nav-btn" title="Navigation">
-  <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-</button>
-<nav class="nrg-nav-menu" id="nrg-nav-menu">
-  <a class="nrg-nav-item" data-page="index.html"    href="/index.html"><span class="nrg-nav-item-dot"></span>Home</a>
-  <a class="nrg-nav-item" data-page="games.html"    href="/games.html"><span class="nrg-nav-item-dot"></span>Games</a>
-  <a class="nrg-nav-item" data-page="movies.html"   href="/movies.html"><span class="nrg-nav-item-dot"></span>Movies</a>
-  <a class="nrg-nav-item" data-page="music.html"    href="/music.html"><span class="nrg-nav-item-dot"></span>Music</a>
-  <a class="nrg-nav-item" data-page="proxy.html"    href="/proxy.html"><span class="nrg-nav-item-dot"></span>Proxy</a>
-  <div class="nrg-nav-divider"></div>
-  <a class="nrg-nav-item" data-page="shop.html"     href="/shop.html"><span class="nrg-nav-item-dot"></span>Shop</a>
-  <a class="nrg-nav-item" data-page="profiles.html" href="/profiles.html"><span class="nrg-nav-item-dot"></span>Profiles</a>
-  <a class="nrg-nav-item" data-page="accounts.html" href="/accounts.html"><span class="nrg-nav-item-dot"></span>Account</a>
-  <div class="nrg-nav-divider"></div>
-  <a class="nrg-nav-item" data-page="settings.html" href="/settings.html"><span class="nrg-nav-item-dot"></span>Settings</a>
-</nav>
-
-<div class="bottom-sidebar">
-  <div class="status-card" id="time-status">Time: --:--</div>
-  <div class="status-card" id="battery-status">Battery: --%</div>
-  <div class="status-card" id="temperature-status">Temp: -- °C</div>
-  <div class="status-card" id="ping-status">Ping: -- ms</div>
-</div>
 
 <div class="toast" id="toast"></div>
 
@@ -563,14 +480,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-var bgMusic = new Audio('music/random music.mp3');
-bgMusic.loop = true;
-bgMusic.volume = 0.5;
-function startMusic() {
-  bgMusic.play().then(function() { window.removeEventListener('click', startMusic); }).catch(function(){});
-}
-window.addEventListener('click', startMusic);
 
 
 var THEMES = [
