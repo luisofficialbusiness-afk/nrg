@@ -25,7 +25,6 @@
     body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; height: 100vh; }
     ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* ── Sidebar ── */
     #nrg-sidebar {
       width: 52px;
       flex-shrink: 0;
@@ -72,7 +71,6 @@
     }
     .sidebar-item:hover .si-icon svg { color: var(--text); }
 
-    /* tooltip — fixed so overflow:hidden can never clip it */
     #si-tooltip-global {
       position: fixed;
       background: var(--surface2);
@@ -94,7 +92,6 @@
 
     .sidebar-divider { width: 30px; height: 1px; background: var(--border); margin: 4px 0; flex-shrink: 0; }
 
-    /* collapse button */
     .sidebar-collapse-btn {
       width: 52px; height: 40px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
@@ -105,7 +102,6 @@
     .sidebar-collapse-btn svg { width: 16px; height: 16px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; }
     .sidebar-collapse-btn:hover svg { stroke: var(--text); }
 
-    /* expand tab */
     #sidebar-expand-tab {
       position: fixed;
       left: 0; top: 50%;
@@ -125,10 +121,8 @@
     #sidebar-expand-tab:hover { background: var(--surface2); }
     #sidebar-expand-tab svg { width: 10px; height: 10px; stroke: var(--text-dim); fill: none; stroke-width: 2.5; stroke-linecap: round; }
 
-    /* ── Main content ── */
     #nrg-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
-    /* loader */
     #nrg-loader {
       position: absolute; inset: 0;
       background: var(--bg);
@@ -143,16 +137,13 @@
     @keyframes boltPulse { 0%,100% { filter: drop-shadow(0 0 6px var(--accent)); opacity:1; } 50% { filter: drop-shadow(0 0 18px var(--accent)); opacity:0.75; } }
     .loader-text { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; }
 
-    /* home view */
     #home-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
     #home-view.hidden { display: none; }
 
-    /* iframe view */
     #iframe-view { flex: 1; display: none; }
     #iframe-view.active { display: block; }
     #page-iframe { width: 100%; height: 100%; border: none; display: block; }
 
-    /* ── Home page styles ── */
     #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .topbar, .main { position: relative; z-index: 1; }
     .topbar { display: flex; align-items: center; justify-content: space-between; padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
@@ -180,7 +171,7 @@
     .card-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; position: relative; z-index: 1; transition: color 0.15s; }
     .nav-card:hover .card-label { color: var(--text); }
 
-    /* popup */
+
     .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; animation: fadeIn 0.25s ease 0.4s forwards; }
     @keyframes fadeIn { to { opacity: 1; } }
     .popup { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--accent); border-radius: 5px; width: 90%; max-width: 400px; padding: 24px; }
@@ -197,7 +188,7 @@
 <body>
 <div id="si-tooltip-global"></div>
 
-<!-- ── Sidebar ── -->
+
 <nav id="nrg-sidebar">
   <div class="sidebar-logo"><span class="sidebar-logo-text">NRG</span></div>
 
@@ -231,6 +222,10 @@
     <div class="sidebar-item" data-page="chat.html" data-label="Chat" onclick="navTo(this)">
       <span class="si-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
 
+    </div>
+
+    <div class="sidebar-item" data-page="live-tv.html" data-label="Live TV" onclick="navTo(this)">
+      <span class="si-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg></span>
     </div>
 
     <div class="sidebar-divider"></div>
@@ -270,15 +265,12 @@
   </div>
 </nav>
 
-<!-- expand tab (shown when collapsed) -->
 <div id="sidebar-expand-tab" onclick="toggleSidebar()">
   <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
 </div>
 
-<!-- ── Main content ── -->
 <div id="nrg-content">
 
-  <!-- Loading overlay -->
   <div id="nrg-loader">
     <div class="loader-graphic">
       <div class="loader-ring"></div>
@@ -289,7 +281,6 @@
     <div class="loader-text" id="loader-text">Loading…</div>
   </div>
 
-  <!-- Home page -->
   <div id="home-view">
     <canvas id="bg-canvas"></canvas>
 
@@ -385,17 +376,15 @@
 
       </div>
     </div>
-  </div><!-- #home-view -->
+  </div>
 
-  <!-- Iframe view -->
   <div id="iframe-view">
     <iframe id="page-iframe" allowfullscreen></iframe>
   </div>
 
-</div><!-- #nrg-content -->
+</div>
 
 <script>
-  // ── Typing phrase ──
   const phrases = [
     "Feel the NRG","This is a name of a Stadium and a Company",
     "You should ask NRG AI something","Secretly browse with Proxy",
@@ -433,7 +422,6 @@
     } catch(e) {}
   }
 
-  // ── Nav cards link to sidebar nav ──
   document.querySelectorAll('.nav-card').forEach(card => {
     card.addEventListener('mouseenter', playClick);
     card.addEventListener('click', () => {
@@ -444,7 +432,6 @@
     });
   });
 
-  // ── Sidebar navigation ──
   function navTo(item) {
     const page  = item.dataset.page;
     const label = item.dataset.label;
@@ -473,7 +460,6 @@
     }, 80);
   }
 
-  // ── Sidebar collapse ──
   function toggleSidebar() {
     const sidebar   = document.getElementById('nrg-sidebar');
     const expandTab = document.getElementById('sidebar-expand-tab');
@@ -481,7 +467,6 @@
     expandTab.style.display = collapsed ? 'flex' : 'none';
   }
 
-  // ── Sidebar tooltips (fixed positioning to escape overflow:hidden) ──
   var tip = document.getElementById('si-tooltip-global');
   var tipTimer;
   document.querySelectorAll('.sidebar-item, .sidebar-collapse-btn').forEach(function(el) {
@@ -500,20 +485,17 @@
     });
   });
 
-  // ── Iframe link interception ──
-  // When a page inside the iframe navigates, keep it inside the shell
-  // and update the active sidebar item
+
   document.getElementById('page-iframe').addEventListener('load', function() {
     document.getElementById('nrg-loader').classList.remove('visible');
     try {
       var iframeDoc = this.contentDocument || this.contentWindow.document;
-      // intercept all link clicks inside the iframe
+
       iframeDoc.addEventListener('click', function(e) {
         var a = e.target.closest('a[href]');
         if (!a) return;
         var href = a.getAttribute('href');
         if (!href || href.startsWith('#') || href.startsWith('javascript') || href.startsWith('http')) return;
-        // internal page link — load in iframe instead
         var page = href.split('/').pop();
         e.preventDefault();
         var item = document.querySelector('.sidebar-item[data-page="'+page+'"]');
@@ -524,10 +506,9 @@
           document.getElementById('loader-text').textContent = 'Loading…';
         }
       });
-    } catch(e) {} // cross-origin pages will throw, that's fine
+    } catch(e) {} 
   });
 
-  // ── Theme sync from settings iframe ──
   function hexToRgba(hex, a) {
     hex = hex.replace('#','');
     if (hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join('');
@@ -554,7 +535,7 @@
     if (e.data && e.data.type === 'nrg-theme') applyTheme(e.data.theme);
   });
 
-  // apply saved theme on load
+
   (function() {
     var THEMES = [
       { id:'midnight', bg:'#0a0a0a', surface:'#111', surface2:'#1a1a1a', border:'#2a2a2a', accent:'#c50cf9', text:'#e8e8e8', textDim:'#666', textMuted:'#3a3a3a' },
@@ -575,11 +556,7 @@
     window.location.href = 'seized.html';
   }
 
-  // ── Background music ──
-  const bgMusic = new Audio('music/random music.mp3');
-  bgMusic.loop = true; bgMusic.volume = 0.1;
-  function startMusic() { bgMusic.play().then(() => window.removeEventListener('click', startMusic)).catch(()=>{}); }
-  window.addEventListener('click', startMusic);
+
 </script>
 
 <script type="module" src="nrg-system.js"></script>

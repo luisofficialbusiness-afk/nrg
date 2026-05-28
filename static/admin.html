@@ -240,6 +240,62 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
       </div>
     </div>
 
+    <div class="panel log-panel" id="log-panel">
+      <div class="panel-header">User Logs — <span id="log-target" style="color:var(--accent)"></span></div>
+      <div class="panel-body">
+
+        <div id="log-boost-wrap" style="display:none" class="log-boost-active">
+          <div class="log-boost-label">⚡ XP BOOST ACTIVE</div>
+          <div class="log-boost-sub" id="log-boost-info"></div>
+        </div>
+
+        <div class="log-grid">
+          <div class="log-stat accent">
+            <div class="log-stat-label">XP</div>
+            <div class="log-stat-value" id="log-xp">—</div>
+            <div class="log-stat-sub" id="log-level-sub"></div>
+          </div>
+          <div class="log-stat gold">
+            <div class="log-stat-label">Coins</div>
+            <div class="log-stat-value" id="log-coins">—</div>
+          </div>
+          <div class="log-stat">
+            <div class="log-stat-label">Friends</div>
+            <div class="log-stat-value" id="log-friends">—</div>
+          </div>
+          <div class="log-stat">
+            <div class="log-stat-label">Favourites</div>
+            <div class="log-stat-value" id="log-favs">—</div>
+          </div>
+          <div class="log-stat">
+            <div class="log-stat-label">Inventory</div>
+            <div class="log-stat-value" id="log-inv-count">—</div>
+          </div>
+          <div class="log-stat green">
+            <div class="log-stat-label">Login Streak</div>
+            <div class="log-stat-value" id="log-streak">—</div>
+            <div class="log-stat-sub" id="log-last-login"></div>
+          </div>
+          <div class="log-stat">
+            <div class="log-stat-label">Joined</div>
+            <div class="log-stat-value" style="font-size:13px" id="log-joined">—</div>
+          </div>
+          <div class="log-stat">
+            <div class="log-stat-label">Time Spent</div>
+            <div class="log-stat-value" id="log-time">—</div>
+            <div class="log-stat-sub" id="log-time-unit"></div>
+          </div>
+        </div>
+
+        <div class="log-section-label">Equipped</div>
+        <div class="log-equipped-grid" id="log-equipped"></div>
+
+        <div class="log-section-label" style="margin-top:12px">Inventory</div>
+        <div class="log-inv-list" id="log-inv-list"></div>
+
+      </div>
+    </div>
+
 
     <div class="panel">
       <div class="panel-header">
