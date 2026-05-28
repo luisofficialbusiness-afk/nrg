@@ -226,6 +226,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
     <button class="filter-btn" data-filter="news">NEWS</button>
     <button class="filter-btn" data-filter="kids">KIDS</button>
     <button class="filter-btn" data-filter="anime">ANIME</button>
+    <button class="filter-btn" data-filter="latino">LATINO</button>
+    <button class="filter-btn" data-filter="intl">INTL</button>
+    <button class="filter-btn" data-filter="247">24/7</button>
     <button class="filter-btn" data-filter="az_a">A–H</button>
     <button class="filter-btn" data-filter="az_i">I–Q</button>
     <button class="filter-btn" data-filter="az_r">R–Z</button>
@@ -247,7 +250,8 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
       <div class="popup-logo" id="popup-logo"></div>
       <div>
         <div class="popup-title" id="popup-title"></div>
-        <div class="popup-on-air"><span class="live-dot"></span>ON AIR</div>
+        <div class="popup-on-air" id="popup-on-air"><span class="live-dot"></span>ON AIR</div>
+        <div id="popup-event" style="display:none;font-family:var(--mono);font-size:8px;color:var(--text-dim);margin-top:4px;letter-spacing:0.05em;"></div>
       </div>
     </div>
     <div class="popup-body">
@@ -347,10 +351,12 @@ function drawBG() {
 }
 drawBG();
 
-const SPORTS = ['sports','espn','nfl','nba','nhl','mlb','fox sports','sky sports','tsn','sportsnet','nesn','msg','bein','tennis','golf','cricket','willow','astro'];
+const SPORTS = ['sports','espn','nfl','nba','nhl','mlb','fox sports','sky sports','tsn','sportsnet','nesn','msg','bein','tennis','golf','cricket','willow','astro','wwe'];
 const NEWS   = ['news','cnn','msnbc','cnbc','al jazeera','fox news','c-span','fox business','abc','nbc 4','cbs 2'];
 const KIDS   = ['nickelodeon','nick','cartoon','disney','boomerang','peppa','spongebob','bluey','kids','jr'];
 const ANIME  = ['anime'];
+const LATINO = ['latino','espanol','español','deportes','estrella','telemundo','univision'];
+const KNOWN_REGIONS = ['| usa','| us ','| uk','| ca','| ind','| in','| my','| latino'];
 
 function cat(ch) {
   const n=ch.name.toLowerCase();
@@ -358,6 +364,7 @@ function cat(ch) {
   if(KIDS.some(k=>n.includes(k))) return 'kids';
   if(NEWS.some(k=>n.includes(k))) return 'news';
   if(SPORTS.some(k=>n.includes(k))) return 'sports';
+  if(LATINO.some(k=>n.includes(k))) return 'latino';
   return null;
 }
 function region(ch) {
@@ -366,7 +373,33 @@ function region(ch) {
   if(n.includes('| uk')) return 'uk';
   if(n.includes('| ca')) return 'ca';
   if(n.includes('| ind')||n.includes('| in')) return 'in';
+  if(n.includes('| my')) return 'my';
+  if(n.includes('| latino')) return 'latino';
   return null;
+}
+function isIntl(ch) {
+  const n=ch.name.toLowerCase();
+  const hasRegion=KNOWN_REGIONS.some(r=>n.includes(r));
+  return !hasRegion;
+}
+function is247(ch) { return ch.name.startsWith('24/7'); }
+
+// Start time helpers — ready for upcoming API update
+function formatStartTime(ts) {
+  if(!ts) return null;
+  try {
+    const d = new Date(typeof ts==='number' ? ts*1000 : ts);
+    if(isNaN(d)) return null;
+    const now = new Date();
+    const diffMs = d - now;
+    if(diffMs < 0) return null; // already started
+    const diffMins = Math.floor(diffMs/60000);
+    if(diffMins < 60) return `STARTS IN ${diffMins}M`;
+    const diffHrs = Math.floor(diffMins/60);
+    const remMins = diffMins%60;
+    if(diffHrs < 24) return remMins ? `STARTS IN ${diffHrs}H ${remMins}M` : `STARTS IN ${diffHrs}H`;
+    return `STARTS ${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}`;
+  } catch { return null; }
 }
 
 function applyFilter() {
@@ -377,6 +410,9 @@ function applyFilter() {
   else if(f==='uk')  base=base.filter(c=>region(c)==='uk');
   else if(f==='ca')  base=base.filter(c=>region(c)==='ca');
   else if(f==='in')  base=base.filter(c=>region(c)==='in');
+  else if(f==='latino') base=base.filter(c=>cat(c)==='latino'||region(c)==='latino');
+  else if(f==='intl')   base=base.filter(c=>isIntl(c));
+  else if(f==='247')    base=base.filter(c=>is247(c));
   else if(['sports','news','kids','anime'].includes(f)) base=base.filter(c=>cat(c)===f);
   else if(f==='az_a'){base=base.filter(c=>/^[a-hA-H0-9]/.test(c.name));base.sort((a,b)=>a.name.localeCompare(b.name));}
   else if(f==='az_i'){base=base.filter(c=>/^[i-qI-Q]/.test(c.name));base.sort((a,b)=>a.name.localeCompare(b.name));}
@@ -411,12 +447,15 @@ function makeCard(ch) {
   const sn=shortName(ch.name);
   const rl=regionLabel(ch.name);
   const isFav=favSlugs.has(ch.slug);
+  const startLabel = formatStartTime(ch.start_time);
   card.innerHTML=`
     <div class="ch-thumb">
       ${ch.image
         ?`<img src="${BASE}${ch.image}" alt="${sn}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=ch-fallback>${sn}</div>'">`
         :`<div class="ch-fallback">${sn}</div>`}
-      <div class="ch-on-air"><span class="live-dot" style="width:4px;height:4px"></span>LIVE</div>
+      ${startLabel
+        ?`<div class="ch-on-air" style="background:rgba(10,10,10,0.9);border-color:rgba(245,197,24,0.4);color:#f5c518;"><span style="width:4px;height:4px;border-radius:50%;background:#f5c518;display:inline-block"></span>${startLabel}</div>`
+        :`<div class="ch-on-air"><span class="live-dot" style="width:4px;height:4px"></span>LIVE</div>`}
       <button class="ch-fav-btn ${isFav?'active':''}" data-slug="${ch.slug}" title="${isFav?'Remove favourite':'Add favourite'}">${isFav?'♥':'♡'}</button>
     </div>
     <div class="ch-info">
@@ -494,6 +533,27 @@ function openPopup(ch) {
   logoEl.innerHTML=ch.image
     ?`<img src="${BASE}${ch.image}" alt="${sn}" style="width:80%;height:80%;object-fit:contain" onerror="this.outerHTML='<div class=popup-logo-fallback><svg viewBox=\\'0 0 24 24\\'><rect x=\\'2\\' y=\\'7\\' width=\\'20\\' height=\\'15\\' rx=\\'2\\'/></svg></div>'">`
     :`<div class="popup-logo-fallback"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/></svg></div>`;
+
+  // Start time — shown when API provides it
+  const startLabel = formatStartTime(ch.start_time);
+  const onAirEl = document.getElementById('popup-on-air');
+  if(startLabel) {
+    onAirEl.style.color='#f5c518';
+    onAirEl.innerHTML=`<span style="width:5px;height:5px;border-radius:50%;background:#f5c518;display:inline-block"></span>${startLabel}`;
+  } else {
+    onAirEl.style.color='';
+    onAirEl.innerHTML=`<span class="live-dot"></span>ON AIR`;
+  }
+
+  // Event name — shown when API provides it
+  const eventEl = document.getElementById('popup-event');
+  if(ch.event) {
+    eventEl.textContent = ch.event;
+    eventEl.style.display = '';
+  } else {
+    eventEl.style.display = 'none';
+  }
+
   updatePopupFavBtn();
   document.getElementById('popup-overlay').classList.add('open');
 }
