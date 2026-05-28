@@ -522,7 +522,7 @@ document.getElementById('popup-fav').addEventListener('click', async () => {
 document.getElementById('popup-watch').addEventListener('click', ()=>{
   if(!current) return;
   document.getElementById('player-name').textContent=shortName(current.name);
-  document.getElementById('player-frame').src=`${BASE}/tou/live/${current.slug}`;
+  document.getElementById('player-frame').src=`${BASE}/tou/live/${current.slug}?color=0000FF`;
   document.getElementById('player-view').classList.add('open');
   closePopup();
 });
