@@ -14,170 +14,146 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a0a;
-      --surface: #111;
-      --surface2: #1a1a1a;
-      --surface3: #222;
-      --border: #2a2a2a;
-      --accent: #c50cf9;
-      --accent-dim: rgba(197,12,249,0.10);
-      --accent-glow: rgba(197,12,249,0.25);
-      --text: #e8e8e8;
-      --text-dim: #666;
-      --text-muted: #3a3a3a;
-      --mono: 'Space Mono', monospace;
-      --sans: 'DM Sans', sans-serif;
+      --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a; --surface3: #222;
+      --border: #2a2a2a; --accent: #c50cf9; --accent-dim: rgba(197,12,249,0.10);
+      --accent-glow: rgba(197,12,249,0.25); --text: #e8e8e8; --text-dim: #666;
+      --text-muted: #3a3a3a; --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+      --tab-h: 38px;
     }
 
-    html, body {
-      height: 100vh;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-    }
-
-    ::-webkit-scrollbar { width: 3px; }
+    html, body { height: 100vh; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    .nrg-status-line {
+    /* ── Tab bar ── */
+    #tab-bar {
       position: fixed;
-      top: 17px;
-      right: 24px;
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text-muted);
-      letter-spacing: 0.18em;
-      pointer-events: none;
+      top: 0; left: 0; right: 0;
+      height: var(--tab-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      padding: 0 8px;
+      gap: 2px;
+      overflow-x: auto;
+      overflow-y: hidden;
       z-index: 2000;
     }
-    .nrg-status-line span { color: var(--accent); }
+    #tab-bar::-webkit-scrollbar { display: none; }
 
-    .nrg-rail {
-      position: fixed;
-      left: 0; top: 0; bottom: 0;
-      width: 52px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 14px 0 14px;
-      gap: 0;
-      z-index: 1000;
-    }
-
-    #node-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: center;
-      flex: 1;
-      overflow-y: auto;
-      padding: 4px 0;
-      width: 100%;
-    }
-
-    .node-wrapper {
-      position: relative;
-      width: 36px;
-      height: 36px;
+    .tab {
       flex-shrink: 0;
-    }
-
-    .nrg-node {
-      width: 100%;
-      height: 100%;
+      height: 30px;
+      min-width: 80px;
+      max-width: 180px;
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
+      padding: 0 8px 0 10px;
       cursor: pointer;
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-muted);
-      transition: background 0.13s, border-color 0.13s, color 0.13s;
+      position: relative;
+      transition: background 0.13s;
+      user-select: none;
     }
-    .nrg-node:hover { border-color: var(--text-dim); color: var(--text-dim); }
-    .nrg-node.active {
-      background: var(--accent);
+    .tab:hover { background: var(--surface3); }
+    .tab.active {
+      background: var(--bg);
       border-color: var(--accent);
-      color: #000;
-      box-shadow: 0 0 10px var(--accent-glow);
+      border-bottom: 1px solid var(--bg);
+      margin-bottom: -1px;
+      z-index: 1;
     }
-
-    .close-node {
-      position: absolute;
-      top: -4px; right: -4px;
-      width: 14px; height: 14px;
-      background: #ff3a3a;
-      color: #fff;
-      font-size: 9px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 2px;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.13s;
-      z-index: 1001;
-    }
-    .node-wrapper:hover .close-node { opacity: 1; }
-
-    #init-node {
-      width: 36px; height: 36px;
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-family: var(--mono);
-      font-size: 16px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      transition: border-color 0.13s, color 0.13s;
+    .tab-favicon {
+      width: 12px; height: 12px;
       flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
     }
-    #init-node:hover { border-color: var(--accent); color: var(--accent); }
+    .tab-favicon img { width: 12px; height: 12px; object-fit: contain; border-radius: 2px; }
+    .tab-favicon svg { width: 12px; height: 12px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
+    .tab-name {
+      flex: 1;
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .tab.active .tab-name { color: var(--text); }
+    .tab-close {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: background 0.1s, color 0.1s;
+      line-height: 1;
+    }
+    .tab-close:hover { background: rgba(255,58,58,0.2); color: #ff3a3a; }
 
+    #new-tab-btn {
+      flex-shrink: 0;
+      width: 26px; height: 26px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 2px;
+      transition: border-color 0.13s, color 0.13s;
+      align-self: center;
+    }
+    #new-tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Main layout ── */
     #nrg-viewport {
       position: fixed;
-      left: 52px; right: 0; top: 0; bottom: 0;
-      background: #fff;
+      left: 0; right: 0;
+      top: var(--tab-h); bottom: 0;
       display: none;
     }
     #nrg-viewport.active { display: block; }
-    iframe { width: 100%; height: 100%; border: none; background: #fff; }
+    #nrg-viewport iframe { width: 100%; height: 100%; border: none; background: #fff; display: none; }
+    #nrg-viewport iframe.active { display: block; }
 
+    /* ── Dashboard ── */
     #nrg-dashboard {
       position: fixed;
-      left: 52px; right: 0; top: 0; bottom: 0;
+      left: 0; right: 0;
+      top: var(--tab-h); bottom: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 36px;
-      transition: opacity 0.25s;
+      gap: 32px;
       background: var(--bg);
+      transition: opacity 0.2s;
     }
+    #nrg-dashboard.hidden { opacity: 0; pointer-events: none; }
 
-    #nrg-dashboard::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 55% 40% at 50% 50%, var(--accent-dim) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* dot + lightning bg */
+    #bg-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 
-    .nrg-logo-container {
+    /* logo */
+    .nrg-logo-wrap {
       text-align: center;
       position: relative;
       z-index: 1;
       user-select: none;
     }
-    .nrg-logo-container h1 {
+    .nrg-logo-wrap h1 {
       font-family: var(--mono);
       font-size: clamp(4rem, 12vw, 8rem);
       font-weight: 700;
@@ -187,12 +163,10 @@
       position: relative;
       display: inline-block;
     }
-
-    .nrg-logo-container h1::before {
+    .nrg-logo-wrap h1::before {
       content: attr(data-text);
       position: absolute; top: 0; left: 0;
-      color: var(--accent);
-      opacity: 0.06;
+      color: var(--accent); opacity: 0.06;
       letter-spacing: 0.15em;
       animation: glitch 6s infinite step-start;
     }
@@ -202,29 +176,16 @@
       94% { clip-path: inset(52% 0 22% 0); transform: translateX(3px); }
       96% { clip-path: inset(78% 0 8% 0);  transform: translateX(-2px); }
     }
-    .logo-rule {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      margin-top: 8px;
-      opacity: 0.4;
-    }
-    .logo-sub {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      color: var(--text-muted);
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
+    .logo-rule { height: 1px; background: linear-gradient(90deg,transparent,var(--accent),transparent); margin-top: 8px; opacity: 0.4; }
+    .logo-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.25em; color: var(--text-muted); margin-top: 10px; text-transform: uppercase; }
 
+    /* search */
     .nrg-input-wrap {
-      width: 90%;
-      max-width: 520px;
-      position: relative;
-      z-index: 1;
+      width: 90%; max-width: 520px;
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; gap: 10px;
     }
-
-    .nrg-input-wrap form {
+    .search-form {
       display: flex;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -232,211 +193,356 @@
       overflow: hidden;
       transition: border-color 0.18s;
     }
-    .nrg-input-wrap form:focus-within { border-color: var(--accent); }
-
-    .input-icon {
-      display: flex; align-items: center;
-      padding: 0 13px;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
+    .search-form:focus-within { border-color: var(--accent); }
+    .input-icon { display: flex; align-items: center; padding: 0 13px; color: var(--text-muted); flex-shrink: 0; }
     #nrg-query {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 13px;
-      padding: 13px 6px;
-      caret-color: var(--accent);
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: var(--sans); font-size: 13px;
+      padding: 13px 6px; caret-color: var(--accent);
     }
     #nrg-query::placeholder { color: var(--text-muted); }
-
     .go-btn {
-      background: var(--accent);
-      border: none;
-      color: #000;
-      font-family: var(--mono);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      padding: 0 18px;
-      cursor: pointer;
-      transition: opacity 0.13s;
-      flex-shrink: 0;
+      background: var(--accent); border: none; color: #000;
+      font-family: var(--mono); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.15em; padding: 0 18px; cursor: pointer;
+      transition: opacity 0.13s; flex-shrink: 0;
     }
     .go-btn:hover { opacity: 0.85; }
+    .input-hint { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-muted); text-align: center; }
 
-    .input-hint {
-      font-family: var(--mono);
-      font-size: 8px;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-top: 8px;
-      text-align: center;
+    /* ── Bookmarks bar ── */
+    .bookmarks-bar {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
     }
+    .bookmark-item {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 3px; padding: 4px 10px;
+      cursor: pointer; font-family: var(--mono); font-size: 8px;
+      letter-spacing: 0.08em; color: var(--text-dim);
+      transition: border-color 0.13s, color 0.13s;
+      position: relative;
+    }
+    .bookmark-item:hover { border-color: var(--accent); color: var(--accent); }
+    .bookmark-del {
+      display: none; position: absolute; top: -5px; right: -5px;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: #ff3a3a; color: #fff; font-size: 8px;
+      align-items: center; justify-content: center; cursor: pointer;
+    }
+    .bookmark-item:hover .bookmark-del { display: flex; }
+    .add-bookmark-btn {
+      width: 24px; height: 24px; border-radius: 3px;
+      border: 1px solid var(--border); background: none;
+      color: var(--text-muted); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.13s, color 0.13s;
+    }
+    .add-bookmark-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* bookmark form */
+    .bookmark-form {
+      display: none; flex-direction: column; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 2px solid var(--accent); border-radius: 4px;
+      padding: 12px; width: 100%;
+    }
+    .bookmark-form.open { display: flex; }
+    .bookmark-form input {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--sans); font-size: 12px;
+      padding: 7px 10px; border-radius: 3px; outline: none;
+      transition: border-color 0.15s;
+    }
+    .bookmark-form input:focus { border-color: var(--accent); }
+    .bookmark-form input::placeholder { color: var(--text-muted); }
+    .bookmark-form-row { display: flex; gap: 6px; }
+    .bm-save-btn {
+      background: var(--accent); border: none; color: #000;
+      font-family: var(--mono); font-size: 8px; font-weight: 700;
+      letter-spacing: 0.12em; padding: 7px 14px; border-radius: 3px;
+      cursor: pointer; transition: opacity 0.13s; flex-shrink: 0;
+    }
+    .bm-save-btn:hover { opacity: 0.85; }
+    .bm-cancel-btn {
+      background: none; border: 1px solid var(--border); color: var(--text-muted);
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+      padding: 7px 14px; border-radius: 3px; cursor: pointer;
+      transition: border-color 0.13s, color 0.13s; flex-shrink: 0;
+    }
+    .bm-cancel-btn:hover { border-color: var(--text-dim); color: var(--text); }
+
+    /* status */
+    .nrg-status-line {
+      position: fixed; top: 10px; right: 16px;
+      font-family: var(--mono); font-size: 8px;
+      color: var(--text-muted); letter-spacing: 0.18em;
+      pointer-events: none; z-index: 3000;
+    }
+    .nrg-status-line span { color: var(--accent); }
   </style>
 </head>
 <body>
 
-  <!--- This code is REALLY old back when Fratni let us start our VPS and expect bugs, RVEPRTY-->
+<!-- Tab bar -->
+<div id="tab-bar">
+  <div id="tab-list"></div>
+  <button id="new-tab-btn" title="New tab">+</button>
+</div>
 
-  <div class="nrg-status-line">proxy — <span>active</span></div>
+<!-- Viewport -->
+<div id="nrg-viewport"></div>
 
-  <nav class="nrg-rail">
-    <div id="node-stack"></div>
-    <div class="nrg-node" id="init-node" title="New tab">+</div>
-  </nav>
+<!-- Dashboard -->
+<div id="nrg-dashboard">
+  <canvas id="bg-canvas"></canvas>
 
-  <div id="nrg-viewport"></div>
+  <div class="nrg-logo-wrap">
+    <h1 data-text="NRG">NRG</h1>
+    <div class="logo-rule"></div>
+    <div class="logo-sub">proxy — browse freely</div>
+  </div>
 
-  <main id="nrg-dashboard">
-    <div class="nrg-logo-container">
-      <h1 data-text="NRG">NRG</h1>
-      <div class="logo-rule"></div>
-      <div class="logo-sub">proxy — browse freely</div>
+  <div class="nrg-input-wrap">
+    <form class="search-form" id="nrg-core-form">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input type="text" id="nrg-query" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
+      <button class="go-btn" type="submit">GO</button>
+    </form>
+    <div class="input-hint">urls and searches routed through scramjet</div>
+
+    <!-- Bookmarks -->
+    <div class="bookmarks-bar" id="bookmarks-bar">
+      <button class="add-bookmark-btn" id="add-bm-btn" title="Add bookmark">+</button>
     </div>
-
-    <div class="nrg-input-wrap">
-      <form id="nrg-core-form">
-        <div class="input-icon">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </div>
-        <input type="text" id="nrg-query" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
-        <button class="go-btn" type="submit">GO</button>
-      </form>
-      <div class="input-hint">urls and searches routed through scramjet</div>
+    <div class="bookmark-form" id="bookmark-form">
+      <input type="text" id="bm-name" placeholder="bookmark name (e.g. Google)">
+      <input type="text" id="bm-url"  placeholder="url (e.g. google.com)">
+      <div class="bookmark-form-row">
+        <button class="bm-save-btn" id="bm-save">SAVE</button>
+        <button class="bm-cancel-btn" id="bm-cancel">CANCEL</button>
+      </div>
     </div>
-  </main>
+  </div>
+</div>
 
-  <script>
-    // registers sail/sw.js
-    window.addEventListener('load', function() {
-      if (navigator.serviceWorker) {
-  navigator.serviceWorker.register("/sail/sw.js");
-}
+<div class="nrg-status-line">proxy — <span>active</span></div>
 
-      const wispUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/wisp/';
+<script>
+  // ── Dot + lightning background ──
+  (function() {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx    = canvas.getContext('2d');
+    const SPACING=36, PUSH_R=80, PUSH_F=0.18, FRICTION=0.82, RETURN=0.06;
+    let W, H, dots=[], bolts=[];
+    let mouse={x:-999,y:-999};
 
-      const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
-      connection.setTransport("/sail/libcurl/index.mjs", [{ websocket: wispUrl }]);
+    function getAccent(){return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c50cf9';}
+    function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const n=parseInt(hex,16);return[(n>>16)&255,(n>>8)&255,n&255];}
 
-      const { ScramjetController } = $scramjetLoadController();
-      const scramjet = new ScramjetController({
-          files: {
-              all: "/sail/scram/scramjet.all.js",
-              wasm: "/sail/scram/scramjet.wasm.wasm",
-              sync: "/sail/scram/scramjet.sync.js"
-          },
-          prefix: "/sail/go/"
-      });
-      scramjet.init();
+    function buildDots(){dots=[];const cols=Math.floor(W/SPACING)+1,rows=Math.floor(H/SPACING)+1;for(let r=0;r<=rows;r++)for(let c=0;c<=cols;c++){const ox=c*SPACING,oy=r*SPACING;dots.push({ox,oy,x:ox,y:oy,vx:0,vy:0});}}
+    function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;buildDots();}
 
-      let nrg_nodes = [];
-      let active_node_id = null;
+    class Bolt{constructor(x,y,a){this.segments=[];this.life=1;this.decay=0.04+Math.random()*0.03;let px=x,py=y;const len=60+Math.random()*80,steps=8+Math.floor(Math.random()*6);for(let i=0;i<steps;i++){const j=(Math.random()-0.5)*28,nx=px+Math.cos(a)*(len/steps)+Math.cos(a+Math.PI/2)*j,ny=py+Math.sin(a)*(len/steps)+Math.sin(a+Math.PI/2)*j;this.segments.push({x1:px,y1:py,x2:nx,y2:ny});px=nx;py=ny;}}draw(accent){ctx.save();ctx.globalAlpha=this.life*this.life;ctx.strokeStyle=accent;ctx.lineWidth=1.5*this.life+0.5;ctx.shadowColor=accent;ctx.shadowBlur=8*this.life;ctx.beginPath();for(const s of this.segments){ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);}ctx.stroke();ctx.restore();this.life-=this.decay;}}
 
-      function createNode(url = null) {
-        const id = 'node_' + Date.now();
-        const nodeObj = { id, url };
-        nrg_nodes.push(nodeObj);
+    window.addEventListener('resize',resize);
+    window.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
+    window.addEventListener('mouseleave',()=>{mouse.x=-999;mouse.y=-999;});
+    window.addEventListener('click',e=>{if(document.getElementById('nrg-dashboard').classList.contains('hidden'))return;const r=canvas.getBoundingClientRect();const cx=e.clientX-r.left,cy=e.clientY-r.top;for(let i=0;i<8;i++){const a=(Math.PI*2/8)*i+(Math.random()-0.5)*0.4;bolts.push(new Bolt(cx,cy,a));}});
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'node-wrapper';
-        wrapper.id = `wrap-${id}`;
+    function draw(){ctx.clearRect(0,0,W,H);const accent=getAccent(),[r,g,b]=hexToRgb(accent);for(const d of dots){const dx=mouse.x-d.x,dy=mouse.y-d.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<PUSH_R&&dist>0){const f=(1-dist/PUSH_R)*PUSH_F;d.vx-=(dx/dist)*f*12;d.vy-=(dy/dist)*f*12;}d.vx+=(d.ox-d.x)*RETURN;d.vy+=(d.oy-d.y)*RETURN;d.vx*=FRICTION;d.vy*=FRICTION;d.x+=d.vx;d.y+=d.vy;const dist2=Math.sqrt((mouse.x-d.x)**2+(mouse.y-d.y)**2),glow=Math.max(0,1-dist2/PUSH_R),radius=1.5+glow*2;ctx.beginPath();ctx.arc(d.x,d.y,radius,0,Math.PI*2);if(glow>0.05){ctx.fillStyle=`rgba(${r},${g},${b},${0.25+glow*0.75})`;ctx.shadowColor=accent;ctx.shadowBlur=6*glow;}else{ctx.fillStyle=`rgba(${r},${g},${b},0.18)`;ctx.shadowBlur=0;}ctx.fill();ctx.shadowBlur=0;}bolts=bolts.filter(b=>b.life>0);for(const b of bolts)b.draw(accent);requestAnimationFrame(draw);}
+    resize(); draw();
+  })();
+</script>
 
-        const btn = document.createElement('div');
-        btn.className = 'nrg-node';
-        btn.id = `btn-${id}`;
-        btn.innerText = 'N';
-        btn.onclick = () => switchNode(id);
+<script>
+  window.addEventListener('load', function() {
+    if (navigator.serviceWorker) navigator.serviceWorker.register("/sail/sw.js");
 
-        const close = document.createElement('div');
-        close.className = 'close-node';
-        close.innerText = '×';
-        close.onclick = (e) => {
-          e.stopPropagation();
-          deleteNode(id);
-        };
-
-        wrapper.appendChild(btn);
-        wrapper.appendChild(close);
-        document.getElementById('node-stack').appendChild(wrapper);
-
-        const frame = document.createElement('iframe');
-        frame.id = `frame-${id}`;
-        frame.style.display = 'none';
-        if (url) frame.src = url;
-        document.getElementById('nrg-viewport').appendChild(frame);
-
-        switchNode(id);
-      }
-
-      function deleteNode(id) {
-        const index = nrg_nodes.findIndex(n => n.id === id);
-        if (index === -1) return;
-        nrg_nodes.splice(index, 1);
-        document.getElementById(`wrap-${id}`).remove();
-        document.getElementById(`frame-${id}`).remove();
-
-        if (active_node_id === id) {
-          if (nrg_nodes.length > 0) {
-            switchNode(nrg_nodes[nrg_nodes.length - 1].id);
-          } else {
-            createNode();
-          }
-        }
-      }
-
-      function switchNode(id) {
-        active_node_id = id;
-        const node = nrg_nodes.find(n => n.id === id);
-
-        document.querySelectorAll('.nrg-node').forEach(e => e.classList.remove('active'));
-        const activeBtn = document.getElementById(`btn-${id}`);
-        if(activeBtn) activeBtn.classList.add('active');
-
-        document.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
-        const activeFrame = document.getElementById(`frame-${id}`);
-        if(activeFrame) activeFrame.style.display = 'block';
-
-        if (node && node.url) {
-          document.getElementById('nrg-viewport').classList.add('active');
-          document.getElementById('nrg-dashboard').style.opacity = '0';
-          document.getElementById('nrg-dashboard').style.pointerEvents = 'none';
-        } else {
-          document.getElementById('nrg-viewport').classList.remove('active');
-          document.getElementById('nrg-dashboard').style.opacity = '1';
-          document.getElementById('nrg-dashboard').style.pointerEvents = 'all';
-        }
-      }
-
-      document.getElementById('nrg-core-form').onsubmit = (e) => {
-        e.preventDefault();
-        let raw = document.getElementById('nrg-query').value.trim();
-        if (!raw) return;
-
-        if (!raw.includes('.') || raw.includes(' ')) {
-          raw = "https://search.brave.com/search?q=" + encodeURIComponent(raw);
-        } else if (!/^https?:\/\//i.test(raw)) {
-          raw = "https://" + raw;
-        }
-
-        const encoded = scramjet.encodeUrl(raw);
-        const node = nrg_nodes.find(n => n.id === active_node_id);
-        node.url = encoded;
-
-        document.getElementById(`frame-${active_node_id}`).src = encoded;
-        switchNode(active_node_id);
-        document.getElementById('nrg-query').value = "";
-      };
-
-      document.getElementById('init-node').onclick = () => createNode();
-
-      createNode();
+    const wispUrl = (location.protocol==='https:'?'wss://':'ws://')+location.host+'/wisp/';
+    const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
+    connection.setTransport("/sail/libcurl/index.mjs",[{websocket:wispUrl}]);
+    const {ScramjetController} = $scramjetLoadController();
+    const scramjet = new ScramjetController({
+      files:{all:"/sail/scram/scramjet.all.js",wasm:"/sail/scram/scramjet.wasm.wasm",sync:"/sail/scram/scramjet.sync.js"},
+      prefix:"/sail/go/"
     });
-  </script>
+    scramjet.init();
 
+    let tabs = [];
+    let activeTabId = null;
+
+    // ── Tab functions ──
+    function createTab(url = null, label = 'NEW TAB') {
+      const id = 'tab_' + Date.now();
+      tabs.push({ id, url, label });
+
+      // tab element
+      const tab = document.createElement('div');
+      tab.className = 'tab';
+      tab.id = `t-${id}`;
+      tab.innerHTML = `
+        <div class="tab-favicon" id="fav-${id}">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" stroke-linecap="round"/><path d="M16 3l-4 4-4-4"/></svg>
+        </div>
+        <span class="tab-name" id="name-${id}">${label}</span>
+        <div class="tab-close" id="close-${id}">×</div>`;
+      tab.addEventListener('click', e => { if(!e.target.classList.contains('tab-close')) switchTab(id); });
+      document.getElementById(`close-${id}`).addEventListener('click', e => { e.stopPropagation(); closeTab(id); });
+      document.getElementById('tab-list').appendChild(tab);
+
+      // iframe
+      const frame = document.createElement('iframe');
+      frame.id = `f-${id}`;
+      document.getElementById('nrg-viewport').appendChild(frame);
+
+      if (url) {
+        frame.src = url;
+        frame.addEventListener('load', () => updateTabMeta(id, frame));
+      }
+
+      switchTab(id);
+      return id;
+    }
+
+    function updateTabMeta(id, frame) {
+      try {
+        const title = frame.contentDocument?.title || '';
+        if (title) setTabLabel(id, title.substring(0, 20));
+        const favicon = frame.contentDocument?.querySelector('link[rel~="icon"]')?.href;
+        if (favicon) {
+          const favEl = document.getElementById(`fav-${id}`);
+          if (favEl) favEl.innerHTML = `<img src="${favicon}" onerror="this.style.display='none'">`;
+        }
+      } catch(e) {}
+    }
+
+    function setTabLabel(id, label) {
+      const el = document.getElementById(`name-${id}`);
+      if (el) el.textContent = label;
+      const t = tabs.find(t=>t.id===id);
+      if (t) t.label = label;
+    }
+
+    function switchTab(id) {
+      activeTabId = id;
+      const tab = tabs.find(t=>t.id===id);
+
+      // update tab UI
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.getElementById(`t-${id}`)?.classList.add('active');
+
+      // update iframes
+      document.querySelectorAll('#nrg-viewport iframe').forEach(f=>f.classList.remove('active'));
+      const frame = document.getElementById(`f-${id}`);
+      if (frame) frame.classList.add('active');
+
+      // show dashboard or viewport
+      if (tab && tab.url) {
+        document.getElementById('nrg-viewport').classList.add('active');
+        document.getElementById('nrg-dashboard').classList.add('hidden');
+      } else {
+        document.getElementById('nrg-viewport').classList.remove('active');
+        document.getElementById('nrg-dashboard').classList.remove('hidden');
+        document.getElementById('nrg-query').focus();
+      }
+    }
+
+    function closeTab(id) {
+      const idx = tabs.findIndex(t=>t.id===id);
+      if (idx===-1) return;
+      tabs.splice(idx,1);
+      document.getElementById(`t-${id}`)?.remove();
+      document.getElementById(`f-${id}`)?.remove();
+      if (tabs.length===0) { createTab(); }
+      else if (activeTabId===id) {
+        switchTab(tabs[Math.min(idx, tabs.length-1)].id);
+      }
+    }
+
+    // ── Navigate ──
+    function navigate(raw) {
+      if (!raw) return;
+      if (!raw.includes('.')||raw.includes(' ')) raw='https://search.brave.com/search?q='+encodeURIComponent(raw);
+      else if (!/^https?:\/\//i.test(raw)) raw='https://'+raw;
+      const encoded = scramjet.encodeUrl(raw);
+      const tab = tabs.find(t=>t.id===activeTabId);
+      if (tab) { tab.url=encoded; setTabLabel(activeTabId, raw.replace(/^https?:\/\//,'').split('/')[0]); }
+      const frame = document.getElementById(`f-${activeTabId}`);
+      if (frame) {
+        frame.src = encoded;
+        frame.onload = () => updateTabMeta(activeTabId, frame);
+      }
+      const t = tabs.find(t=>t.id===activeTabId);
+      if (t && t.url) {
+        document.getElementById('nrg-viewport').classList.add('active');
+        document.getElementById('nrg-dashboard').classList.add('hidden');
+      }
+    }
+
+    document.getElementById('nrg-core-form').onsubmit = e => {
+      e.preventDefault();
+      const raw = document.getElementById('nrg-query').value.trim();
+      navigate(raw);
+      document.getElementById('nrg-query').value = '';
+    };
+    document.getElementById('new-tab-btn').onclick = () => createTab();
+
+    // ── Bookmarks ──
+    let bookmarks = JSON.parse(localStorage.getItem('nrg_proxy_bookmarks') || '[]');
+
+    function saveBookmarks() { localStorage.setItem('nrg_proxy_bookmarks', JSON.stringify(bookmarks)); }
+
+    function renderBookmarks() {
+      const bar = document.getElementById('bookmarks-bar');
+      // remove existing bookmark items
+      bar.querySelectorAll('.bookmark-item').forEach(el=>el.remove());
+      const addBtn = document.getElementById('add-bm-btn');
+      bookmarks.forEach((bm, i) => {
+        const el = document.createElement('div');
+        el.className = 'bookmark-item';
+        el.innerHTML = `${bm.name}<div class="bookmark-del" data-i="${i}">×</div>`;
+        el.addEventListener('click', e => {
+          if (e.target.classList.contains('bookmark-del')) return;
+          navigate(bm.url);
+        });
+        el.querySelector('.bookmark-del').addEventListener('click', e => {
+          e.stopPropagation();
+          bookmarks.splice(i,1);
+          saveBookmarks();
+          renderBookmarks();
+        });
+        bar.insertBefore(el, addBtn);
+      });
+    }
+
+    document.getElementById('add-bm-btn').onclick = () => {
+      const form = document.getElementById('bookmark-form');
+      form.classList.toggle('open');
+      if (form.classList.contains('open')) document.getElementById('bm-name').focus();
+    };
+    document.getElementById('bm-cancel').onclick = () => {
+      document.getElementById('bookmark-form').classList.remove('open');
+      document.getElementById('bm-name').value='';
+      document.getElementById('bm-url').value='';
+    };
+    document.getElementById('bm-save').onclick = () => {
+      const name = document.getElementById('bm-name').value.trim();
+      const url  = document.getElementById('bm-url').value.trim();
+      if (!name||!url) return;
+      bookmarks.push({name, url});
+      saveBookmarks();
+      renderBookmarks();
+      document.getElementById('bookmark-form').classList.remove('open');
+      document.getElementById('bm-name').value='';
+      document.getElementById('bm-url').value='';
+    };
+
+    renderBookmarks();
+    createTab();
+  });
+</script>
 </body>
 </html>
