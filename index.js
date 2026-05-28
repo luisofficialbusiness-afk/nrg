@@ -13,6 +13,7 @@ const __dirname = process.cwd();
 const server = http.createServer();
 const app = express();
 const PORT = 8080;
+const aiRoute = require('./ai-route');
 
 // Authentication Logic
 if (config.challenge !== false) {
@@ -29,6 +30,8 @@ app.use(
     index: "index.html",
   }),
 );
+
+app.use('/', aiRoute);
 
 // 404 Handler
 app.use((req, res) => {
