@@ -4,15 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NRG | Proxy</title>
-
   <script src="/sail/baremux/index.js"></script>
   <script src="/sail/scram/scramjet.all.js"></script>
-
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a; --surface3: #222;
       --border: #2a2a2a; --accent: #c50cf9; --accent-dim: rgba(197,12,249,0.10);
@@ -20,154 +16,80 @@
       --text-muted: #3a3a3a; --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
       --tab-h: 38px;
     }
-
     html, body { height: 100vh; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
     ::-webkit-scrollbar { width: 3px; height: 3px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* ── Tab bar ── */
     #tab-bar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--tab-h);
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-end;
-      padding: 0 8px;
-      gap: 2px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      z-index: 2000;
+      position: fixed; top: 0; left: 0; right: 0; height: var(--tab-h);
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-end; padding: 0 8px 0 8px; gap: 2px;
+      overflow-x: auto; overflow-y: hidden; z-index: 2000;
     }
     #tab-bar::-webkit-scrollbar { display: none; }
+    #tab-list { display: flex; align-items: flex-end; gap: 2px; flex: 1; min-width: 0; }
 
     .tab {
-      flex-shrink: 0;
-      height: 30px;
-      min-width: 80px;
-      max-width: 180px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-bottom: none;
-      border-radius: 6px 6px 0 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 8px 0 10px;
-      cursor: pointer;
-      position: relative;
-      transition: background 0.13s;
-      user-select: none;
+      flex-shrink: 0; height: 30px; min-width: 90px; max-width: 180px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-bottom: none; border-radius: 6px 6px 0 0;
+      display: flex; align-items: center; gap: 6px; padding: 0 6px 0 10px;
+      cursor: pointer; user-select: none; transition: background 0.13s;
     }
     .tab:hover { background: var(--surface3); }
     .tab.active {
-      background: var(--bg);
-      border-color: var(--accent);
-      border-bottom: 1px solid var(--bg);
-      margin-bottom: -1px;
-      z-index: 1;
+      background: var(--bg); border-color: var(--border);
+      border-bottom: 1px solid var(--bg); margin-bottom: -1px; z-index: 1;
+      border-top-color: var(--accent);
     }
-    .tab-favicon {
-      width: 12px; height: 12px;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .tab-favicon img { width: 12px; height: 12px; object-fit: contain; border-radius: 2px; }
-    .tab-favicon svg { width: 12px; height: 12px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
-    .tab-name {
-      flex: 1;
-      font-family: var(--mono);
-      font-size: 8px;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
-    }
+    .tab-favicon { width: 13px; height: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .tab-favicon img { width: 13px; height: 13px; object-fit: contain; border-radius: 2px; }
+    .tab-favicon .tab-icon-svg { width: 11px; height: 11px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .tab-name { flex: 1; font-family: var(--mono); font-size: 8px; letter-spacing: 0.04em; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
     .tab.active .tab-name { color: var(--text); }
-    .tab-close {
-      width: 14px; height: 14px;
-      border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px;
-      color: var(--text-muted);
-      flex-shrink: 0;
-      transition: background 0.1s, color 0.1s;
-      line-height: 1;
-    }
+    .tab-close { width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-muted); flex-shrink: 0; transition: background 0.1s, color 0.1s; line-height: 1; }
     .tab-close:hover { background: rgba(255,58,58,0.2); color: #ff3a3a; }
 
     #new-tab-btn {
-      flex-shrink: 0;
-      width: 26px; height: 26px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      background: none;
-      color: var(--text-muted);
-      font-size: 16px;
-      line-height: 1;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 2px;
+      flex-shrink: 0; width: 26px; height: 26px; border-radius: 4px;
+      border: 1px solid var(--border); background: none; color: var(--text-muted);
+      font-size: 18px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; align-self: center; margin-bottom: 2px;
       transition: border-color 0.13s, color 0.13s;
-      align-self: center;
     }
     #new-tab-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Main layout ── */
     #nrg-viewport {
-      position: fixed;
-      left: 0; right: 0;
-      top: var(--tab-h); bottom: 0;
-      display: none;
+      position: fixed; left: 0; right: 0; top: var(--tab-h); bottom: 0;
+      display: none; background: #fff;
     }
-    #nrg-viewport.active { display: block; }
-    #nrg-viewport iframe { width: 100%; height: 100%; border: none; background: #fff; display: none; }
-    #nrg-viewport iframe.active { display: block; }
+    #nrg-viewport.visible { display: block; }
+    #nrg-viewport iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: none; background: #fff; display: none;
+    }
+    #nrg-viewport iframe.visible { display: block; }
 
-    /* ── Dashboard ── */
     #nrg-dashboard {
-      position: fixed;
-      left: 0; right: 0;
-      top: var(--tab-h); bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      background: var(--bg);
-      transition: opacity 0.2s;
+      position: fixed; left: 0; right: 0; top: var(--tab-h); bottom: 0;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 32px; background: var(--bg);
+      transition: opacity 0.2s; z-index: 1;
     }
     #nrg-dashboard.hidden { opacity: 0; pointer-events: none; }
+    #bg-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; width: 100%; height: 100%; }
 
-    /* dot + lightning bg */
-    #bg-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-
-    /* logo */
-    .nrg-logo-wrap {
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      user-select: none;
-    }
+    .nrg-logo-wrap { text-align: center; position: relative; z-index: 1; user-select: none; }
     .nrg-logo-wrap h1 {
-      font-family: var(--mono);
-      font-size: clamp(4rem, 12vw, 8rem);
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: 0.15em;
+      font-family: var(--mono); font-size: clamp(4rem,12vw,8rem); font-weight: 700;
+      color: var(--text); letter-spacing: 0.15em;
       text-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-dim);
-      position: relative;
-      display: inline-block;
+      position: relative; display: inline-block;
     }
     .nrg-logo-wrap h1::before {
-      content: attr(data-text);
-      position: absolute; top: 0; left: 0;
-      color: var(--accent); opacity: 0.06;
-      letter-spacing: 0.15em;
+      content: attr(data-text); position: absolute; top: 0; left: 0;
+      color: var(--accent); opacity: 0.06; letter-spacing: 0.15em;
       animation: glitch 6s infinite step-start;
     }
     @keyframes glitch {
@@ -179,22 +101,14 @@
     .logo-rule { height: 1px; background: linear-gradient(90deg,transparent,var(--accent),transparent); margin-top: 8px; opacity: 0.4; }
     .logo-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.25em; color: var(--text-muted); margin-top: 10px; text-transform: uppercase; }
 
-    /* search */
-    .nrg-input-wrap {
-      width: 90%; max-width: 520px;
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; gap: 10px;
-    }
+    .nrg-input-wrap { width: 90%; max-width: 520px; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
     .search-form {
-      display: flex;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: border-color 0.18s;
+      display: flex; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden; transition: border-color 0.18s;
     }
     .search-form:focus-within { border-color: var(--accent); }
     .input-icon { display: flex; align-items: center; padding: 0 13px; color: var(--text-muted); flex-shrink: 0; }
+    .input-icon svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
     #nrg-query {
       flex: 1; background: transparent; border: none; outline: none;
       color: var(--text); font-family: var(--sans); font-size: 13px;
@@ -210,90 +124,64 @@
     .go-btn:hover { opacity: 0.85; }
     .input-hint { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-muted); text-align: center; }
 
-    /* ── Bookmarks bar ── */
-    .bookmarks-bar {
-      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-    }
+    .bookmarks-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 24px; }
     .bookmark-item {
       display: flex; align-items: center; gap: 5px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 3px; padding: 4px 10px;
-      cursor: pointer; font-family: var(--mono); font-size: 8px;
-      letter-spacing: 0.08em; color: var(--text-dim);
-      transition: border-color 0.13s, color 0.13s;
+      border-radius: 3px; padding: 4px 10px; cursor: pointer;
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em;
+      color: var(--text-dim); transition: border-color 0.13s, color 0.13s;
       position: relative;
     }
     .bookmark-item:hover { border-color: var(--accent); color: var(--accent); }
+    .bookmark-item img { width: 12px; height: 12px; object-fit: contain; border-radius: 2px; }
     .bookmark-del {
       display: none; position: absolute; top: -5px; right: -5px;
       width: 13px; height: 13px; border-radius: 50%;
-      background: #ff3a3a; color: #fff; font-size: 8px;
-      align-items: center; justify-content: center; cursor: pointer;
+      background: #ff3a3a; color: #fff; font-size: 9px; font-weight: 700;
+      align-items: center; justify-content: center; cursor: pointer; z-index: 2;
     }
     .bookmark-item:hover .bookmark-del { display: flex; }
-    .add-bookmark-btn {
-      width: 24px; height: 24px; border-radius: 3px;
-      border: 1px solid var(--border); background: none;
-      color: var(--text-muted); font-size: 14px; cursor: pointer;
+    .add-bm-btn {
+      width: 24px; height: 24px; border-radius: 3px; border: 1px solid var(--border);
+      background: none; color: var(--text-muted); font-size: 16px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.13s, color 0.13s;
+      transition: border-color 0.13s, color 0.13s; flex-shrink: 0;
     }
-    .add-bookmark-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .add-bm-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* bookmark form */
     .bookmark-form {
-      display: none; flex-direction: column; gap: 6px;
+      display: none; flex-direction: column; gap: 8px;
       background: var(--surface); border: 1px solid var(--border);
-      border-top: 2px solid var(--accent); border-radius: 4px;
-      padding: 12px; width: 100%;
+      border-top: 2px solid var(--accent); border-radius: 4px; padding: 14px;
     }
     .bookmark-form.open { display: flex; }
     .bookmark-form input {
       background: var(--surface2); border: 1px solid var(--border);
       color: var(--text); font-family: var(--sans); font-size: 12px;
-      padding: 7px 10px; border-radius: 3px; outline: none;
-      transition: border-color 0.15s;
+      padding: 8px 10px; border-radius: 3px; outline: none; transition: border-color 0.15s;
     }
     .bookmark-form input:focus { border-color: var(--accent); }
     .bookmark-form input::placeholder { color: var(--text-muted); }
-    .bookmark-form-row { display: flex; gap: 6px; }
-    .bm-save-btn {
-      background: var(--accent); border: none; color: #000;
-      font-family: var(--mono); font-size: 8px; font-weight: 700;
-      letter-spacing: 0.12em; padding: 7px 14px; border-radius: 3px;
-      cursor: pointer; transition: opacity 0.13s; flex-shrink: 0;
-    }
-    .bm-save-btn:hover { opacity: 0.85; }
-    .bm-cancel-btn {
-      background: none; border: 1px solid var(--border); color: var(--text-muted);
-      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
-      padding: 7px 14px; border-radius: 3px; cursor: pointer;
-      transition: border-color 0.13s, color 0.13s; flex-shrink: 0;
-    }
-    .bm-cancel-btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .bm-form-row { display: flex; gap: 6px; }
+    .bm-save { background: var(--accent); border: none; color: #000; font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.12em; padding: 8px 14px; border-radius: 3px; cursor: pointer; }
+    .bm-save:hover { opacity: 0.85; }
+    .bm-cancel { background: none; border: 1px solid var(--border); color: var(--text-muted); font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em; padding: 8px 14px; border-radius: 3px; cursor: pointer; }
+    .bm-cancel:hover { border-color: var(--text-dim); color: var(--text); }
 
-    /* status */
-    .nrg-status-line {
-      position: fixed; top: 10px; right: 16px;
-      font-family: var(--mono); font-size: 8px;
-      color: var(--text-muted); letter-spacing: 0.18em;
-      pointer-events: none; z-index: 3000;
-    }
-    .nrg-status-line span { color: var(--accent); }
+    .nrg-status { position: fixed; bottom: 8px; right: 16px; font-family: var(--mono); font-size: 8px; color: var(--text-muted); letter-spacing: 0.15em; z-index: 3000; pointer-events: none; }
+    .nrg-status span { color: var(--accent); }
   </style>
 </head>
 <body>
 
-<!-- Tab bar -->
 <div id="tab-bar">
   <div id="tab-list"></div>
   <button id="new-tab-btn" title="New tab">+</button>
 </div>
 
-<!-- Viewport -->
 <div id="nrg-viewport"></div>
 
-<!-- Dashboard -->
 <div id="nrg-dashboard">
   <canvas id="bg-canvas"></canvas>
 
@@ -306,243 +194,348 @@
   <div class="nrg-input-wrap">
     <form class="search-form" id="nrg-core-form">
       <div class="input-icon">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       </div>
       <input type="text" id="nrg-query" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
       <button class="go-btn" type="submit">GO</button>
     </form>
     <div class="input-hint">urls and searches routed through scramjet</div>
-
-    <!-- Bookmarks -->
     <div class="bookmarks-bar" id="bookmarks-bar">
-      <button class="add-bookmark-btn" id="add-bm-btn" title="Add bookmark">+</button>
+      <button class="add-bm-btn" id="add-bm-btn" title="Add bookmark">+</button>
     </div>
     <div class="bookmark-form" id="bookmark-form">
-      <input type="text" id="bm-name" placeholder="bookmark name (e.g. Google)">
-      <input type="text" id="bm-url"  placeholder="url (e.g. google.com)">
-      <div class="bookmark-form-row">
-        <button class="bm-save-btn" id="bm-save">SAVE</button>
-        <button class="bm-cancel-btn" id="bm-cancel">CANCEL</button>
+      <input type="text" id="bm-name" placeholder="Name (e.g. Google)">
+      <input type="text" id="bm-url"  placeholder="URL (e.g. google.com)">
+      <div class="bm-form-row">
+        <button class="bm-save" id="bm-save">SAVE</button>
+        <button class="bm-cancel" id="bm-cancel">CANCEL</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="nrg-status-line">proxy — <span>active</span></div>
+<div class="nrg-status">proxy — <span>active</span></div>
 
 <script>
-  // ── Dot + lightning background ──
-  (function() {
-    const canvas = document.getElementById('bg-canvas');
-    const ctx    = canvas.getContext('2d');
-    const SPACING=36, PUSH_R=80, PUSH_F=0.18, FRICTION=0.82, RETURN=0.06;
-    let W, H, dots=[], bolts=[];
-    let mouse={x:-999,y:-999};
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  const SPACING=36, PUSH_R=80, PUSH_F=0.18, FRICTION=0.82, RETURN=0.06;
+  let W, H, dots=[], bolts=[];
+  let mouse = {x:-999, y:-999};
 
-    function getAccent(){return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c50cf9';}
-    function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const n=parseInt(hex,16);return[(n>>16)&255,(n>>8)&255,n&255];}
+  function getAccent() { return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c50cf9'; }
+  function hexToRgb(hex) { hex=hex.replace('#',''); if(hex.length===3)hex=hex.split('').map(c=>c+c).join(''); const n=parseInt(hex,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
 
-    function buildDots(){dots=[];const cols=Math.floor(W/SPACING)+1,rows=Math.floor(H/SPACING)+1;for(let r=0;r<=rows;r++)for(let c=0;c<=cols;c++){const ox=c*SPACING,oy=r*SPACING;dots.push({ox,oy,x:ox,y:oy,vx:0,vy:0});}}
-    function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;buildDots();}
+  function buildDots() {
+    dots=[];
+    const cols=Math.floor(W/SPACING)+1, rows=Math.floor(H/SPACING)+1;
+    for(let r=0;r<=rows;r++) for(let c=0;c<=cols;c++) dots.push({ox:c*SPACING,oy:r*SPACING,x:c*SPACING,y:r*SPACING,vx:0,vy:0});
+  }
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width = rect.width || window.innerWidth;
+    H = canvas.height = rect.height || window.innerHeight;
+    buildDots();
+  }
 
-    class Bolt{constructor(x,y,a){this.segments=[];this.life=1;this.decay=0.04+Math.random()*0.03;let px=x,py=y;const len=60+Math.random()*80,steps=8+Math.floor(Math.random()*6);for(let i=0;i<steps;i++){const j=(Math.random()-0.5)*28,nx=px+Math.cos(a)*(len/steps)+Math.cos(a+Math.PI/2)*j,ny=py+Math.sin(a)*(len/steps)+Math.sin(a+Math.PI/2)*j;this.segments.push({x1:px,y1:py,x2:nx,y2:ny});px=nx;py=ny;}}draw(accent){ctx.save();ctx.globalAlpha=this.life*this.life;ctx.strokeStyle=accent;ctx.lineWidth=1.5*this.life+0.5;ctx.shadowColor=accent;ctx.shadowBlur=8*this.life;ctx.beginPath();for(const s of this.segments){ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);}ctx.stroke();ctx.restore();this.life-=this.decay;}}
+  class Bolt {
+    constructor(x,y,a) {
+      this.segments=[]; this.life=1; this.decay=0.04+Math.random()*0.03;
+      let px=x,py=y; const len=60+Math.random()*80,steps=8+Math.floor(Math.random()*6);
+      for(let i=0;i<steps;i++){const j=(Math.random()-0.5)*28,nx=px+Math.cos(a)*(len/steps)+Math.cos(a+Math.PI/2)*j,ny=py+Math.sin(a)*(len/steps)+Math.sin(a+Math.PI/2)*j;this.segments.push({x1:px,y1:py,x2:nx,y2:ny});px=nx;py=ny;}
+    }
+    draw(accent) {
+      ctx.save(); ctx.globalAlpha=this.life*this.life; ctx.strokeStyle=accent;
+      ctx.lineWidth=1.5*this.life+0.5; ctx.shadowColor=accent; ctx.shadowBlur=8*this.life;
+      ctx.beginPath(); for(const s of this.segments){ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);} ctx.stroke();
+      ctx.restore(); this.life-=this.decay;
+    }
+  }
 
-    window.addEventListener('resize',resize);
-    window.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
-    window.addEventListener('mouseleave',()=>{mouse.x=-999;mouse.y=-999;});
-    window.addEventListener('click',e=>{if(document.getElementById('nrg-dashboard').classList.contains('hidden'))return;const r=canvas.getBoundingClientRect();const cx=e.clientX-r.left,cy=e.clientY-r.top;for(let i=0;i<8;i++){const a=(Math.PI*2/8)*i+(Math.random()-0.5)*0.4;bolts.push(new Bolt(cx,cy,a));}});
+  window.addEventListener('resize', resize);
+  document.getElementById('nrg-dashboard').addEventListener('mousemove', e => {
+    const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;
+  });
+  document.getElementById('nrg-dashboard').addEventListener('mouseleave', ()=>{mouse.x=-999;mouse.y=-999;});
+  document.getElementById('nrg-dashboard').addEventListener('click', e => {
+    if(e.target.closest('form')||e.target.closest('.bookmarks-bar')||e.target.closest('.bookmark-form')) return;
+    const r=canvas.getBoundingClientRect();
+    const cx=e.clientX-r.left, cy=e.clientY-r.top;
+    for(let i=0;i<8;i++){const a=(Math.PI*2/8)*i+(Math.random()-0.5)*0.4; bolts.push(new Bolt(cx,cy,a));}
+  });
 
-    function draw(){ctx.clearRect(0,0,W,H);const accent=getAccent(),[r,g,b]=hexToRgb(accent);for(const d of dots){const dx=mouse.x-d.x,dy=mouse.y-d.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<PUSH_R&&dist>0){const f=(1-dist/PUSH_R)*PUSH_F;d.vx-=(dx/dist)*f*12;d.vy-=(dy/dist)*f*12;}d.vx+=(d.ox-d.x)*RETURN;d.vy+=(d.oy-d.y)*RETURN;d.vx*=FRICTION;d.vy*=FRICTION;d.x+=d.vx;d.y+=d.vy;const dist2=Math.sqrt((mouse.x-d.x)**2+(mouse.y-d.y)**2),glow=Math.max(0,1-dist2/PUSH_R),radius=1.5+glow*2;ctx.beginPath();ctx.arc(d.x,d.y,radius,0,Math.PI*2);if(glow>0.05){ctx.fillStyle=`rgba(${r},${g},${b},${0.25+glow*0.75})`;ctx.shadowColor=accent;ctx.shadowBlur=6*glow;}else{ctx.fillStyle=`rgba(${r},${g},${b},0.18)`;ctx.shadowBlur=0;}ctx.fill();ctx.shadowBlur=0;}bolts=bolts.filter(b=>b.life>0);for(const b of bolts)b.draw(accent);requestAnimationFrame(draw);}
-    resize(); draw();
-  })();
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const accent=getAccent(), [r,g,b]=hexToRgb(accent);
+    for(const d of dots) {
+      const dx=mouse.x-d.x, dy=mouse.y-d.y, dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<PUSH_R&&dist>0){const f=(1-dist/PUSH_R)*PUSH_F; d.vx-=(dx/dist)*f*12; d.vy-=(dy/dist)*f*12;}
+      d.vx+=(d.ox-d.x)*RETURN; d.vy+=(d.oy-d.y)*RETURN;
+      d.vx*=FRICTION; d.vy*=FRICTION; d.x+=d.vx; d.y+=d.vy;
+      const dist2=Math.sqrt((mouse.x-d.x)**2+(mouse.y-d.y)**2), glow=Math.max(0,1-dist2/PUSH_R), radius=1.5+glow*2;
+      ctx.beginPath(); ctx.arc(d.x,d.y,radius,0,Math.PI*2);
+      if(glow>0.05){ctx.fillStyle=`rgba(${r},${g},${b},${0.25+glow*0.75})`;ctx.shadowColor=accent;ctx.shadowBlur=6*glow;}
+      else{ctx.fillStyle=`rgba(${r},${g},${b},0.18)`;ctx.shadowBlur=0;}
+      ctx.fill(); ctx.shadowBlur=0;
+    }
+    bolts=bolts.filter(b=>b.life>0);
+    for(const b of bolts) b.draw(accent);
+    requestAnimationFrame(draw);
+  }
+  resize(); draw();
+})();
 </script>
 
 <script>
-  window.addEventListener('load', function() {
-    if (navigator.serviceWorker) navigator.serviceWorker.register("/sail/sw.js");
+window.addEventListener('load', function() {
+  if (navigator.serviceWorker) navigator.serviceWorker.register('/sail/sw.js');
 
-    const wispUrl = (location.protocol==='https:'?'wss://':'ws://')+location.host+'/wisp/';
-    const connection = new BareMux.BareMuxConnection("/sail/baremux/worker.js");
-    connection.setTransport("/sail/libcurl/index.mjs",[{websocket:wispUrl}]);
-    const {ScramjetController} = $scramjetLoadController();
-    const scramjet = new ScramjetController({
-      files:{all:"/sail/scram/scramjet.all.js",wasm:"/sail/scram/scramjet.wasm.wasm",sync:"/sail/scram/scramjet.sync.js"},
-      prefix:"/sail/go/"
-    });
-    scramjet.init();
-
-    let tabs = [];
-    let activeTabId = null;
-
-    // ── Tab functions ──
-    function createTab(url = null, label = 'NEW TAB') {
-      const id = 'tab_' + Date.now();
-      tabs.push({ id, url, label });
-
-      // tab element
-      const tab = document.createElement('div');
-      tab.className = 'tab';
-      tab.id = `t-${id}`;
-      tab.innerHTML = `
-        <div class="tab-favicon" id="fav-${id}">
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" stroke-linecap="round"/><path d="M16 3l-4 4-4-4"/></svg>
-        </div>
-        <span class="tab-name" id="name-${id}">${label}</span>
-        <div class="tab-close" id="close-${id}">×</div>`;
-      tab.addEventListener('click', e => { if(!e.target.classList.contains('tab-close')) switchTab(id); });
-      document.getElementById(`close-${id}`).addEventListener('click', e => { e.stopPropagation(); closeTab(id); });
-      document.getElementById('tab-list').appendChild(tab);
-
-      // iframe
-      const frame = document.createElement('iframe');
-      frame.id = `f-${id}`;
-      document.getElementById('nrg-viewport').appendChild(frame);
-
-      if (url) {
-        frame.src = url;
-        frame.addEventListener('load', () => updateTabMeta(id, frame));
-      }
-
-      switchTab(id);
-      return id;
-    }
-
-    function updateTabMeta(id, frame) {
-      try {
-        const title = frame.contentDocument?.title || '';
-        if (title) setTabLabel(id, title.substring(0, 20));
-        const favicon = frame.contentDocument?.querySelector('link[rel~="icon"]')?.href;
-        if (favicon) {
-          const favEl = document.getElementById(`fav-${id}`);
-          if (favEl) favEl.innerHTML = `<img src="${favicon}" onerror="this.style.display='none'">`;
-        }
-      } catch(e) {}
-    }
-
-    function setTabLabel(id, label) {
-      const el = document.getElementById(`name-${id}`);
-      if (el) el.textContent = label;
-      const t = tabs.find(t=>t.id===id);
-      if (t) t.label = label;
-    }
-
-    function switchTab(id) {
-      activeTabId = id;
-      const tab = tabs.find(t=>t.id===id);
-
-      // update tab UI
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      document.getElementById(`t-${id}`)?.classList.add('active');
-
-      // update iframes
-      document.querySelectorAll('#nrg-viewport iframe').forEach(f=>f.classList.remove('active'));
-      const frame = document.getElementById(`f-${id}`);
-      if (frame) frame.classList.add('active');
-
-      // show dashboard or viewport
-      if (tab && tab.url) {
-        document.getElementById('nrg-viewport').classList.add('active');
-        document.getElementById('nrg-dashboard').classList.add('hidden');
-      } else {
-        document.getElementById('nrg-viewport').classList.remove('active');
-        document.getElementById('nrg-dashboard').classList.remove('hidden');
-        document.getElementById('nrg-query').focus();
-      }
-    }
-
-    function closeTab(id) {
-      const idx = tabs.findIndex(t=>t.id===id);
-      if (idx===-1) return;
-      tabs.splice(idx,1);
-      document.getElementById(`t-${id}`)?.remove();
-      document.getElementById(`f-${id}`)?.remove();
-      if (tabs.length===0) { createTab(); }
-      else if (activeTabId===id) {
-        switchTab(tabs[Math.min(idx, tabs.length-1)].id);
-      }
-    }
-
-    // ── Navigate ──
-    function navigate(raw) {
-      if (!raw) return;
-      if (!raw.includes('.')||raw.includes(' ')) raw='https://search.brave.com/search?q='+encodeURIComponent(raw);
-      else if (!/^https?:\/\//i.test(raw)) raw='https://'+raw;
-      const encoded = scramjet.encodeUrl(raw);
-      const tab = tabs.find(t=>t.id===activeTabId);
-      if (tab) { tab.url=encoded; setTabLabel(activeTabId, raw.replace(/^https?:\/\//,'').split('/')[0]); }
-      const frame = document.getElementById(`f-${activeTabId}`);
-      if (frame) {
-        frame.src = encoded;
-        frame.onload = () => updateTabMeta(activeTabId, frame);
-      }
-      const t = tabs.find(t=>t.id===activeTabId);
-      if (t && t.url) {
-        document.getElementById('nrg-viewport').classList.add('active');
-        document.getElementById('nrg-dashboard').classList.add('hidden');
-      }
-    }
-
-    document.getElementById('nrg-core-form').onsubmit = e => {
-      e.preventDefault();
-      const raw = document.getElementById('nrg-query').value.trim();
-      navigate(raw);
-      document.getElementById('nrg-query').value = '';
-    };
-    document.getElementById('new-tab-btn').onclick = () => createTab();
-
-    // ── Bookmarks ──
-    let bookmarks = JSON.parse(localStorage.getItem('nrg_proxy_bookmarks') || '[]');
-
-    function saveBookmarks() { localStorage.setItem('nrg_proxy_bookmarks', JSON.stringify(bookmarks)); }
-
-    function renderBookmarks() {
-      const bar = document.getElementById('bookmarks-bar');
-      // remove existing bookmark items
-      bar.querySelectorAll('.bookmark-item').forEach(el=>el.remove());
-      const addBtn = document.getElementById('add-bm-btn');
-      bookmarks.forEach((bm, i) => {
-        const el = document.createElement('div');
-        el.className = 'bookmark-item';
-        el.innerHTML = `${bm.name}<div class="bookmark-del" data-i="${i}">×</div>`;
-        el.addEventListener('click', e => {
-          if (e.target.classList.contains('bookmark-del')) return;
-          navigate(bm.url);
-        });
-        el.querySelector('.bookmark-del').addEventListener('click', e => {
-          e.stopPropagation();
-          bookmarks.splice(i,1);
-          saveBookmarks();
-          renderBookmarks();
-        });
-        bar.insertBefore(el, addBtn);
-      });
-    }
-
-    document.getElementById('add-bm-btn').onclick = () => {
-      const form = document.getElementById('bookmark-form');
-      form.classList.toggle('open');
-      if (form.classList.contains('open')) document.getElementById('bm-name').focus();
-    };
-    document.getElementById('bm-cancel').onclick = () => {
-      document.getElementById('bookmark-form').classList.remove('open');
-      document.getElementById('bm-name').value='';
-      document.getElementById('bm-url').value='';
-    };
-    document.getElementById('bm-save').onclick = () => {
-      const name = document.getElementById('bm-name').value.trim();
-      const url  = document.getElementById('bm-url').value.trim();
-      if (!name||!url) return;
-      bookmarks.push({name, url});
-      saveBookmarks();
-      renderBookmarks();
-      document.getElementById('bookmark-form').classList.remove('open');
-      document.getElementById('bm-name').value='';
-      document.getElementById('bm-url').value='';
-    };
-
-    renderBookmarks();
-    createTab();
+  const wispUrl = (location.protocol==='https:'?'wss://':'ws://')+location.host+'/wisp/';
+  const connection = new BareMux.BareMuxConnection('/sail/baremux/worker.js');
+  connection.setTransport('/sail/libcurl/index.mjs', [{websocket: wispUrl}]);
+  const {ScramjetController} = $scramjetLoadController();
+  const scramjet = new ScramjetController({
+    files: { all:'/sail/scram/scramjet.all.js', wasm:'/sail/scram/scramjet.wasm.wasm', sync:'/sail/scram/scramjet.sync.js' },
+    prefix: '/sail/go/'
   });
+  scramjet.init();
+
+  let tabs = [];
+  let activeId = null;
+
+  function getFaviconUrl(rawUrl) {
+    try {
+      let url = rawUrl;
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      const domain = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+    } catch(e) { return null; }
+  }
+
+  function processUrl(raw) {
+    raw = raw.trim();
+    if (!raw) return null;
+    if (!raw.includes('.') || raw.includes(' ')) {
+      return 'https://search.brave.com/search?q=' + encodeURIComponent(raw);
+    }
+    if (!/^https?:\/\//i.test(raw)) return 'https://' + raw;
+    return raw;
+  }
+
+  function getDisplayName(url) {
+    try {
+      if (!url) return 'NEW TAB';
+      let u = url;
+      if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+      return new URL(u).hostname.replace('www.','');
+    } catch(e) { return url.substring(0,16); }
+  }
+
+  function createTab(rawUrl) {
+    const id = 'tab_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const tab = { id, rawUrl: rawUrl || null, encodedUrl: null };
+    tabs.push(tab);
+
+    const el = document.createElement('div');
+    el.className = 'tab';
+    el.id = 'tel-' + id;
+
+    const favEl = document.createElement('div');
+    favEl.className = 'tab-favicon';
+    favEl.id = 'fav-' + id;
+    favEl.innerHTML = `<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a14.5 14.5 0 000 20A14.5 14.5 0 0012 2z"/></svg>`;
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'tab-name';
+    nameEl.id = 'tname-' + id;
+    nameEl.textContent = rawUrl ? getDisplayName(rawUrl) : 'NEW TAB';
+
+    const closeEl = document.createElement('div');
+    closeEl.className = 'tab-close';
+    closeEl.textContent = '×';
+    closeEl.addEventListener('click', e => { e.stopPropagation(); closeTab(id); });
+
+    el.appendChild(favEl);
+    el.appendChild(nameEl);
+    el.appendChild(closeEl);
+    el.addEventListener('click', () => switchTab(id));
+    document.getElementById('tab-list').appendChild(el);
+
+    const frame = document.createElement('iframe');
+    frame.id = 'frame-' + id;
+    frame.setAttribute('allowfullscreen', '');
+    document.getElementById('nrg-viewport').appendChild(frame);
+
+    if (rawUrl) {
+      const processed = processUrl(rawUrl);
+      if (processed) {
+        const encoded = scramjet.encodeUrl(processed);
+        tab.encodedUrl = encoded;
+        frame.src = encoded;
+        frame.addEventListener('load', () => {
+          try {
+            const title = frame.contentDocument?.title;
+            if (title) { nameEl.textContent = title.substring(0,20); tab.label = title; }
+            const fav = frame.contentDocument?.querySelector('link[rel*="icon"]')?.href;
+            if (fav) { favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`; }
+          } catch(e) {
+            const fav = getFaviconUrl(rawUrl);
+            if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
+          }
+        });
+        const fav = getFaviconUrl(rawUrl);
+        if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
+      }
+    }
+
+    switchTab(id);
+    return id;
+  }
+
+  function switchTab(id) {
+    activeId = id;
+    const tab = tabs.find(t => t.id === id);
+
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    const el = document.getElementById('tel-' + id);
+    if (el) el.classList.add('active');
+
+    document.querySelectorAll('#nrg-viewport iframe').forEach(f => f.classList.remove('visible'));
+    const frame = document.getElementById('frame-' + id);
+    if (frame) frame.classList.add('visible');
+
+    if (tab && tab.encodedUrl) {
+      document.getElementById('nrg-viewport').classList.add('visible');
+      document.getElementById('nrg-dashboard').classList.add('hidden');
+    } else {
+      document.getElementById('nrg-viewport').classList.remove('visible');
+      document.getElementById('nrg-dashboard').classList.remove('hidden');
+      setTimeout(() => document.getElementById('nrg-query').focus(), 50);
+    }
+  }
+
+  function closeTab(id) {
+    const idx = tabs.findIndex(t => t.id === id);
+    if (idx === -1) return;
+    tabs.splice(idx, 1);
+    document.getElementById('tel-' + id)?.remove();
+    document.getElementById('frame-' + id)?.remove();
+    if (tabs.length === 0) {
+      createTab();
+    } else if (activeId === id) {
+      switchTab(tabs[Math.max(0, idx - 1)].id);
+    }
+  }
+
+  function navigateActive(raw) {
+    if (!raw) return;
+    const processed = processUrl(raw);
+    if (!processed) return;
+    const encoded = scramjet.encodeUrl(processed);
+    const tab = tabs.find(t => t.id === activeId);
+    if (!tab) return;
+    tab.rawUrl = raw;
+    tab.encodedUrl = encoded;
+
+    const nameEl = document.getElementById('tname-' + activeId);
+    if (nameEl) nameEl.textContent = getDisplayName(raw);
+
+    const favEl = document.getElementById('fav-' + activeId);
+    if (favEl) {
+      const fav = getFaviconUrl(raw);
+      if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
+    }
+
+    const frame = document.getElementById('frame-' + activeId);
+    if (frame) {
+      frame.src = encoded;
+      frame.addEventListener('load', () => {
+        try {
+          const title = frame.contentDocument?.title;
+          if (title && nameEl) nameEl.textContent = title.substring(0, 20);
+        } catch(e) {}
+      }, {once: true});
+    }
+
+    document.getElementById('nrg-viewport').classList.add('visible');
+    document.getElementById('nrg-dashboard').classList.add('hidden');
+    document.getElementById('nrg-viewport').querySelector('iframe.visible')?.classList.add('visible');
+  }
+
+  document.getElementById('nrg-core-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const raw = document.getElementById('nrg-query').value.trim();
+    if (!raw) return;
+    navigateActive(raw);
+    document.getElementById('nrg-query').value = '';
+  });
+
+  document.getElementById('new-tab-btn').addEventListener('click', () => createTab());
+
+  let bookmarks = [];
+  try { bookmarks = JSON.parse(localStorage.getItem('nrg_bm') || '[]'); } catch(e) { bookmarks = []; }
+
+  function saveBookmarks() { localStorage.setItem('nrg_bm', JSON.stringify(bookmarks)); }
+
+  function renderBookmarks() {
+    const bar = document.getElementById('bookmarks-bar');
+    bar.querySelectorAll('.bookmark-item').forEach(el => el.remove());
+    const addBtn = document.getElementById('add-bm-btn');
+    bookmarks.forEach((bm, i) => {
+      const el = document.createElement('div');
+      el.className = 'bookmark-item';
+      const fav = getFaviconUrl(bm.url);
+      el.innerHTML = `
+        ${fav ? `<img src="${fav}" onerror="this.style.display='none'">` : ''}
+        <span>${bm.name}</span>
+        <div class="bookmark-del" title="Remove">×</div>`;
+      el.addEventListener('click', e => {
+        if (e.target.classList.contains('bookmark-del')) return;
+        createTab(bm.url);
+      });
+      el.querySelector('.bookmark-del').addEventListener('click', e => {
+        e.stopPropagation();
+        bookmarks.splice(i, 1);
+        saveBookmarks();
+        renderBookmarks();
+      });
+      bar.insertBefore(el, addBtn);
+    });
+  }
+
+  document.getElementById('add-bm-btn').addEventListener('click', () => {
+    const form = document.getElementById('bookmark-form');
+    form.classList.toggle('open');
+    if (form.classList.contains('open')) document.getElementById('bm-name').focus();
+  });
+
+  document.getElementById('bm-cancel').addEventListener('click', () => {
+    document.getElementById('bookmark-form').classList.remove('open');
+    document.getElementById('bm-name').value = '';
+    document.getElementById('bm-url').value = '';
+  });
+
+  document.getElementById('bm-save').addEventListener('click', () => {
+    const name = document.getElementById('bm-name').value.trim();
+    const url  = document.getElementById('bm-url').value.trim();
+    if (!name || !url) return;
+    bookmarks.push({ name, url });
+    saveBookmarks();
+    renderBookmarks();
+    document.getElementById('bookmark-form').classList.remove('open');
+    document.getElementById('bm-name').value = '';
+    document.getElementById('bm-url').value = '';
+  });
+
+  document.getElementById('bm-url').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('bm-save').click();
+  });
+
+  renderBookmarks();
+
+  createTab();
+});
 </script>
 </body>
 </html>
