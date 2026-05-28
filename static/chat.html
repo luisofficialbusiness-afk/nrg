@@ -240,7 +240,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <option value="5">5 seconds</option>
           <option value="10">10 seconds</option>
           <option value="30">30 seconds</option>
+          <option value="45">45 seconds</option>
           <option value="60">1 minute</option>
+          
         </select>
         <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-slow-btn">Set</button></div>
       </div>
@@ -255,10 +257,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
           <button class="mod-action-btn green" id="mod-unban-btn">Unban</button>
         </div>
         <select class="mod-select" id="mod-timeout-select" style="margin-top:6px">
-          <option value="5">Timeout 5 min</option>
-          <option value="10">Timeout 10 min</option>
-          <option value="30">Timeout 30 min</option>
-          <option value="60">Timeout 1 hour</option>
+          <option value="5">Timeout for 5 min</option>
+          <option value="10">Timeout for 10 min</option>
+          <option value="30">Timeout for 30 min</option>
+          <option value="60">Timeout for 1 hour</option>
+          <option value="24">Timeout for 24 hours</option>
         </select>
         <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-timeout-btn">Timeout</button><button class="mod-action-btn red" id="mod-kick-btn">Kick</button></div>
         <div class="mod-msg" id="mod-user-msg"></div>
@@ -713,7 +716,7 @@ async function setupModPanel() {
     if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
     try {
       await setDoc(doc(chatDb, "chatBanned", uid), { uid, bannedAt: new Date().toISOString(), bannedBy: currentUser.uid });
-      await sendSystemMessage("A user has been banned from chat.");
+      await sendSystemMessage("A user has been banned from the chat.");
       setModMsg("mod-user-msg", "banned.", "ok");
     } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
   });
