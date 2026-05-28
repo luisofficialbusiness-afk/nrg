@@ -281,6 +281,8 @@
 </head>
 <body>
 
+  <!--- This code is REALLY old back when Fratni let us start our VPS and expect bugs, RVEPRTY-->
+
   <div class="nrg-status-line">proxy — <span>active</span></div>
 
   <nav class="nrg-rail">
@@ -310,6 +312,7 @@
   </main>
 
   <script>
+    // registers sail/sw.js
     window.addEventListener('load', function() {
       if (navigator.serviceWorker) {
   navigator.serviceWorker.register("/sail/sw.js");
@@ -432,14 +435,6 @@
       document.getElementById('init-node').onclick = () => createNode();
 
       createNode();
-    });
-  </script>
-
-  <script>
-    document.querySelectorAll('.nrg-sidebar .nav-icon').forEach(icon => {
-      const cur = window.location.pathname.split('/').pop();
-      if (icon.dataset.page === cur) icon.classList.add('active');
-      icon.addEventListener('click', () => { if (icon.dataset.page) window.location.href = '/' + icon.dataset.page; });
     });
   </script>
 

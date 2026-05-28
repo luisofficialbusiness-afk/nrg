@@ -297,31 +297,6 @@
       background: #000;
     }
 
-    .bottom-sidebar {
-      position: fixed;
-      bottom: 0; left: 50%;
-      transform: translate(-50%, 70%);
-      display: flex; gap: 20px;
-      padding: 10px 18px;
-      background: rgba(15, 15, 15, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
-    .bottom-sidebar:hover { transform: translate(-50%, 0); }
-    .status-card {
-      color: white;
-      background-color: var(--surface2);
-      padding: 8px 12px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      font-size: 0.75rem;
-      font-family: var(--mono);
-      letter-spacing: 0.05em;
-    }
-
     .fav-btn {
       position: absolute; top: 7px; right: 7px;
       width: 28px; height: 28px; border-radius: 50%;
@@ -965,6 +940,8 @@
       <div class="card-info"><div class="card-title">Just Shapes & Beats</div></div>
     </div>
 
+
+    <!--- Game Cards Never Pass this Line-->
     <div class="no-results" id="no-results" style="display:none">NO GAMES FOUND.<br>TRY A DIFFERENT SEARCH.</div>
   </div>
 </div>
@@ -987,15 +964,6 @@
   <iframe class="game-frame" id="game-frame" src="" allowfullscreen></iframe>
 </div>
 
-
-
-
-<div class="bottom-sidebar">
-  <div class="status-card" id="time-status">Time: --:--</div>
-  <div class="status-card" id="battery-status">Battery: --%</div>
-  <div class="status-card" id="temperature-status">Temp: -- °C</div>
-  <div class="status-card" id="ping-status">Ping: -- ms</div>
-</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
