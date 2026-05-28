@@ -305,7 +305,6 @@ onAuthStateChanged(auth, async user => {
   } else {
     favSlugs = new Set();
   }
-  // re-render cards to show fav state
   applyFilter();
   updatePopupFavBtn();
 });
@@ -348,7 +347,6 @@ function drawBG() {
 }
 drawBG();
 
-// ── Filters ──
 const SPORTS = ['sports','espn','nfl','nba','nhl','mlb','fox sports','sky sports','tsn','sportsnet','nesn','msg','bein','tennis','golf','cricket','willow','astro'];
 const NEWS   = ['news','cnn','msnbc','cnbc','al jazeera','fox news','c-span','fox business','abc','nbc 4','cbs 2'];
 const KIDS   = ['nickelodeon','nick','cartoon','disney','boomerang','peppa','spongebob','bluey','kids','jr'];
@@ -512,7 +510,6 @@ document.getElementById('popup-fav').addEventListener('click', async () => {
   if(!current) return;
   await toggleFav(current.slug);
   updatePopupFavBtn();
-  // update card fav btn too
   const cardBtn=document.querySelector(`.ch-fav-btn[data-slug="${current.slug}"]`);
   if(cardBtn) {
     const isNowFav=favSlugs.has(current.slug);
