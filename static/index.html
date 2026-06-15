@@ -21,6 +21,7 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
+    /* ── TAB BAR ── */
     #tab-bar {
       position: fixed; top: 0; left: 0; right: 0; height: var(--tab-h);
       background: var(--surface); border-bottom: 1px solid var(--border);
@@ -61,12 +62,12 @@
     }
     #new-tab-btn:hover { border-color: var(--accent); color: var(--accent); }
 
+    /* ── NAV BAR ── */
     #nav-bar {
       position: fixed; top: var(--tab-h); left: 0; right: 0; height: var(--bar-h);
       background: var(--bg); border-bottom: 1px solid var(--border);
-      display: none; align-items: center; gap: 8px; padding: 0 12px; z-index: 1900;
+      display: flex; align-items: center; gap: 8px; padding: 0 12px; z-index: 1900;
     }
-    #nav-bar.visible { display: flex; }
     .nav-btn {
       width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border);
       background: none; color: var(--text-muted); cursor: pointer; display: flex;
@@ -94,21 +95,22 @@
     }
     #url-go:hover { color: var(--accent); background: var(--accent-dim); }
 
+    /* ── VIEWPORT ── */
     #nrg-viewport {
       position: fixed; left: 0; right: 0;
       top: calc(var(--tab-h) + var(--bar-h)); bottom: 0;
       display: none; background: #fff;
     }
     #nrg-viewport.visible { display: block; }
-    #nrg-viewport.no-bar { top: var(--tab-h); }
     #nrg-viewport iframe {
       position: absolute; inset: 0; width: 100%; height: 100%;
       border: none; background: #fff; display: none;
     }
     #nrg-viewport iframe.visible { display: block; }
 
+    /* ── NEW TAB / DASHBOARD ── */
     #nrg-dashboard {
-      position: fixed; left: 0; right: 0; top: var(--tab-h); bottom: 0;
+      position: fixed; left: 0; right: 0; top: calc(var(--tab-h) + var(--bar-h)); bottom: 0;
       display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 32px; background: var(--bg);
       transition: opacity 0.2s; z-index: 1;
@@ -116,6 +118,11 @@
     #nrg-dashboard.hidden { opacity: 0; pointer-events: none; }
     #bg-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; width: 100%; height: 100%; }
 
+    .nrg-clock {
+      position: absolute; top: 18px; right: 24px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+      color: var(--text-muted); z-index: 1; pointer-events: none;
+    }
     .nrg-logo-wrap { text-align: center; position: relative; z-index: 1; user-select: none; }
     .nrg-logo-wrap h1 {
       font-family: var(--mono); font-size: clamp(4rem,12vw,8rem); font-weight: 700;
@@ -147,6 +154,7 @@
     .go-btn:hover { opacity: 0.85; }
     .input-hint { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-muted); text-align: center; }
 
+    /* ── BOOKMARKS ── */
     .bookmarks-section { position: relative; z-index: 1; width: 90%; max-width: 520px; display: flex; flex-direction: column; gap: 8px; }
     .bookmarks-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; }
 
@@ -209,6 +217,85 @@
 
     .nrg-status { position: fixed; bottom: 8px; right: 16px; font-family: var(--mono); font-size: 8px; color: var(--text-muted); letter-spacing: 0.15em; z-index: 3000; pointer-events: none; }
     .nrg-status span { color: var(--accent); }
+
+    /* ── MINI PLAYER ── */
+    #mini-player {
+      position: fixed; bottom: 16px; right: 16px;
+      width: 260px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
+      border-radius: 6px;
+      display: none; flex-direction: column; gap: 10px; padding: 12px;
+      z-index: 4000;
+    }
+    #mini-player.visible { display: flex; }
+    .mp-top { display: flex; align-items: center; gap: 10px; }
+    .mp-cover {
+      width: 40px; height: 40px; border-radius: 3px; flex-shrink: 0;
+      background: var(--surface2); overflow: hidden; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mp-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .mp-cover svg { width: 14px; height: 14px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
+    .mp-info { flex: 1; min-width: 0; }
+    .mp-title { font-family: var(--mono); font-size: 9px; color: var(--text); letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mp-artist { font-family: var(--sans); font-size: 10px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mp-controls { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .mp-btn {
+      width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border);
+      background: none; color: var(--text-dim); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: border-color 0.13s, color 0.13s;
+      flex-shrink: 0;
+    }
+    .mp-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mp-btn.play { border-color: var(--accent); color: var(--accent); width: 34px; height: 34px; }
+    .mp-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .mp-btn.play svg { width: 13px; height: 13px; }
+    .mp-progress { display: flex; flex-direction: column; gap: 4px; }
+    .mp-prog-track { width: 100%; height: 2px; background: var(--surface2); border-radius: 2px; cursor: pointer; position: relative; }
+    .mp-prog-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width 0.5s linear; pointer-events: none; }
+    .mp-times { display: flex; justify-content: space-between; }
+    .mp-times span { font-family: var(--mono); font-size: 8px; color: var(--text-muted); }
+    .mp-footer { display: flex; justify-content: space-between; align-items: center; }
+    .mp-open-btn {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em;
+      color: var(--text-muted); background: none; border: 1px solid var(--border);
+      border-radius: 3px; padding: 3px 8px; cursor: pointer;
+      transition: border-color 0.13s, color 0.13s;
+    }
+    .mp-open-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mp-close-btn {
+      font-family: var(--mono); font-size: 10px; color: var(--text-muted);
+      background: none; border: none; cursor: pointer; line-height: 1;
+      transition: color 0.13s;
+    }
+    .mp-close-btn:hover { color: #ff3a3a; }
+
+    /* ── ERROR OVERLAY ── */
+    .nrg-error {
+      position: absolute; inset: 0; background: var(--bg);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      gap: 20px; z-index: 10; font-family: var(--mono);
+    }
+    .nrg-error.visible { display: flex; }
+    .nrg-error-code { font-size: 10px; letter-spacing: 0.2em; color: var(--accent); }
+    .nrg-error-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: 0.05em; }
+    .nrg-error-url { font-size: 10px; color: var(--text-muted); letter-spacing: 0.05em; max-width: 480px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nrg-error-msg {
+      background: var(--surface); border: 1px solid var(--border); border-left: 2px solid var(--accent);
+      border-radius: 4px; padding: 14px 18px; font-size: 10px; color: var(--text-dim);
+      max-width: 480px; width: 90%; line-height: 1.8; letter-spacing: 0.03em;
+    }
+    .nrg-error-msg .err-label { color: var(--accent); margin-right: 8px; }
+    .nrg-error-actions { display: flex; gap: 8px; }
+    .nrg-error-btn {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+      padding: 8px 18px; border-radius: 3px; border: 1px solid var(--border);
+      background: none; color: var(--text-dim); cursor: pointer; transition: all 0.13s;
+    }
+    .nrg-error-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nrg-error-btn.primary { background: var(--accent); border-color: var(--accent); color: #000; }
+    .nrg-error-btn.primary:hover { opacity: 0.85; }
   </style>
 </head>
 <body>
@@ -218,7 +305,7 @@
   <button id="new-tab-btn" title="New tab">+</button>
 </div>
 
-<div id="nav-bar">
+<div id="nav-bar" style="display:flex">
   <button class="nav-btn" id="nav-back" title="Back">
     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
   </button>
@@ -237,10 +324,27 @@
   </div>
 </div>
 
-<div id="nrg-viewport"></div>
+<div id="nrg-viewport">
+  <div class="nrg-error" id="nrg-error">
+    <div class="nrg-error-code" id="err-code">ERR_CONNECTION_FAILED</div>
+    <div class="nrg-error-title">failed to load page</div>
+    <div class="nrg-error-url" id="err-url"></div>
+    <div class="nrg-error-msg" id="err-msg">
+      <div><span class="err-label">message</span><span id="err-message">unknown error</span></div>
+      <div><span class="err-label">code</span><span id="err-code-num">—</span></div>
+      <div><span class="err-label">destination</span><span id="err-dest">—</span></div>
+    </div>
+    <div class="nrg-error-actions">
+      <button class="nrg-error-btn primary" id="err-retry">RETRY</button>
+      <button class="nrg-error-btn" id="err-newtab">NEW TAB</button>
+    </div>
+  </div>
+</div>
 
 <div id="nrg-dashboard">
   <canvas id="bg-canvas"></canvas>
+
+  <div class="nrg-clock" id="nrg-clock">00:00:00</div>
 
   <div class="nrg-logo-wrap">
     <h1>NRG</h1>
@@ -279,6 +383,47 @@
 
 <div class="nrg-status">proxy — <span>active</span></div>
 
+<!-- Persistent music iframe — never destroyed -->
+<iframe id="music-iframe" src="/static/music.html" style="position:fixed;width:0;height:0;border:none;opacity:0;pointer-events:none;z-index:-1;" allow="autoplay"></iframe>
+
+<!-- Mini Player -->
+<div id="mini-player">
+  <div class="mp-top">
+    <div class="mp-cover" id="mp-cover">
+      <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </div>
+    <div class="mp-info">
+      <div class="mp-title" id="mp-title">nothing playing</div>
+      <div class="mp-artist" id="mp-artist">—</div>
+    </div>
+  </div>
+  <div class="mp-progress">
+    <div class="mp-prog-track" id="mp-prog-track">
+      <div class="mp-prog-fill" id="mp-prog-fill"></div>
+    </div>
+    <div class="mp-times">
+      <span id="mp-cur">0:00</span>
+      <span id="mp-dur">0:00</span>
+    </div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn" id="mp-prev" title="Previous">
+      <svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+    </button>
+    <button class="mp-btn play" id="mp-play" title="Play/Pause">
+      <svg viewBox="0 0 24 24" id="mp-play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <button class="mp-btn" id="mp-next" title="Next">
+      <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+  </div>
+  <div class="mp-footer">
+    <button class="mp-open-btn" id="mp-open">OPEN MUSIC</button>
+    <button class="mp-close-btn" id="mp-close" title="Hide player">×</button>
+  </div>
+</div>
+
+<!-- Background canvas animation -->
 <script>
 (function() {
   const canvas = document.getElementById('bg-canvas');
@@ -350,8 +495,10 @@
 })();
 </script>
 
+<!-- Main app logic -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // ── PINNED NRG PAGES (global so available immediately) ──
   const PINNED_PAGES = [
     { name: 'games',    url: 'nrgmain://games',    path: '/static/games.html',    icon: '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V2M8 6V2M16 6V2M6 10h4M8 8v4M14 11h4"/></svg>' },
     { name: 'movies',   url: 'nrgmain://movies',   path: '/static/movies.html',   icon: '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>' },
@@ -360,6 +507,7 @@ document.addEventListener('DOMContentLoaded', function() {
     { name: 'settings', url: 'nrgmain://settings', path: '/static/settings.html', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
   ];
 
+  // Render pinned bookmarks immediately (before scramjet)
   const pinnedBar = document.getElementById('pinned-bar');
   PINNED_PAGES.forEach(p => {
     const el = document.createElement('div');
@@ -373,6 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let activeId = null;
   let scramjet = null;
 
+  // ── nrgmain:// RESOLVER ──
   function isNrgMain(url) { return url && url.startsWith('nrgmain://'); }
   function resolveNrgMain(url) {
     const route = url.replace('nrgmain://', '').split('/')[0];
@@ -415,12 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch(e) { return url.substring(0,16); }
   }
 
-  function showNavBar(show) {
-    const nav = document.getElementById('nav-bar');
-    const vp = document.getElementById('nrg-viewport');
-    if (show) { nav.classList.add('visible'); vp.classList.remove('no-bar'); }
-    else { nav.classList.remove('visible'); vp.classList.add('no-bar'); }
-  }
+  function showNavBar(show) { /* nav bar always visible */ }
 
   function updateUrlBar(url) {
     document.getElementById('url-bar').value = url || '';
@@ -470,6 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (rawUrl) {
       if (isNrgMain(rawUrl)) {
+        // Internal NRG page — load directly, no proxy
         const path = resolveNrgMain(rawUrl);
         if (path) {
           tab.encodedUrl = path;
@@ -483,17 +628,26 @@ document.addEventListener('DOMContentLoaded', function() {
           tab.encodedUrl = encoded;
           tab.isNrg = false;
           frame.src = encoded;
+          // Poll for title/favicon updates after load
           frame.addEventListener('load', () => {
-            try {
-              const title = frame.contentDocument?.title;
-              if (title) { nameEl.textContent = title.substring(0,20); tab.label = title; }
-              const fav = frame.contentDocument?.querySelector('link[rel*="icon"]')?.href;
-              if (fav) { favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`; }
-            } catch(e) {
-              const fav = getFaviconUrl(rawUrl);
-              if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-            }
-          });
+            const tryUpdate = () => {
+              try {
+                const doc = frame.contentDocument;
+                if (!doc) return;
+                const title = doc.title;
+                if (title && title !== 'about:blank') { nameEl.textContent = title.substring(0,20); tab.label = title; }
+                const fav = doc.querySelector('link[rel*="icon"]')?.href;
+                if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
+              } catch(e) {
+                // Cross-origin — fall back to google favicon
+                const fav = getFaviconUrl(rawUrl);
+                if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
+              }
+            };
+            tryUpdate();
+            // Try again after a short delay in case page is still loading
+            setTimeout(tryUpdate, 1500);
+          }, {once: true});
           const fav = getFaviconUrl(rawUrl);
           if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
         }
@@ -519,12 +673,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (tab && tab.encodedUrl) {
       document.getElementById('nrg-viewport').classList.add('visible');
       document.getElementById('nrg-dashboard').classList.add('hidden');
-      showNavBar(!tab.isNrg);
-      updateUrlBar(tab.isNrg ? tab.rawUrl : (tab.rawUrl || ''));
+      hideError();
+      updateUrlBar(tab.rawUrl || '');
     } else {
       document.getElementById('nrg-viewport').classList.remove('visible');
       document.getElementById('nrg-dashboard').classList.remove('hidden');
-      showNavBar(false);
       updateUrlBar('');
       setTimeout(() => document.getElementById('nrg-query').focus(), 50);
     }
@@ -537,6 +690,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tel-' + id)?.remove();
     document.getElementById('frame-' + id)?.remove();
     if (tabs.length === 0) {
+      // All tabs closed — go to new tab (dashboard)
       createTab();
     } else if (activeId === id) {
       switchTab(tabs[Math.max(0, idx - 1)].id);
@@ -581,14 +735,21 @@ document.addEventListener('DOMContentLoaded', function() {
       if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
     }
 
-    const frame = document.getElementById('frame-' + activeId);
     if (frame) {
       frame.src = encoded;
       frame.addEventListener('load', () => {
         try {
           const title = frame.contentDocument?.title;
-          if (title && nameEl) nameEl.textContent = title.substring(0, 20);
+          if (title && title !== 'about:blank' && nameEl) nameEl.textContent = title.substring(0, 20);
+          const fav = frame.contentDocument?.querySelector('link[rel*="icon"]')?.href;
+          if (fav && favEl) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
         } catch(e) {}
+        setTimeout(() => {
+          try {
+            const title = frame.contentDocument?.title;
+            if (title && title !== 'about:blank' && nameEl) nameEl.textContent = title.substring(0, 20);
+          } catch(e) {}
+        }, 1500);
       }, {once: true});
     }
 
@@ -598,6 +759,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUrlBar(raw);
   }
 
+  // ── FORM HANDLERS ──
   document.getElementById('nrg-core-form').addEventListener('submit', e => {
     e.preventDefault();
     const raw = document.getElementById('nrg-query').value.trim();
@@ -642,6 +804,78 @@ document.addEventListener('DOMContentLoaded', function() {
     if (frame) frame.contentWindow?.location.reload();
   });
 
+  // ── KEYBOARD SHORTCUTS ──
+  document.addEventListener('keydown', e => {
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (ctrl && e.key === 't') { e.preventDefault(); createTab(); }
+    if (ctrl && e.key === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); }
+    if (ctrl && e.key === 'l') { e.preventDefault(); const bar = document.getElementById('url-bar'); bar.focus(); bar.select(); }
+    if (ctrl && e.key === 'r') { e.preventDefault(); const frame = document.getElementById('frame-' + activeId); if (frame) frame.contentWindow?.location.reload(); }
+    // Tab switching Ctrl+1-9
+    if (ctrl && e.key >= '1' && e.key <= '9') {
+      e.preventDefault();
+      const idx = parseInt(e.key) - 1;
+      if (tabs[idx]) switchTab(tabs[idx].id);
+    }
+  });
+
+  // ── MINI PLAYER ──
+  const musicFrame = document.getElementById('music-iframe');
+  let musicReady = false;
+
+  function mpSend(cmd, data={}) {
+    musicFrame.contentWindow?.postMessage({ nrgMusic: true, cmd, ...data }, '*');
+  }
+
+  musicFrame.addEventListener('load', () => { musicReady = true; });
+
+  // Receive state from music iframe
+  window.addEventListener('message', e => {
+    if (e.data?.nrgMusicState) {
+      const { playing, title, artist, cover, current, duration, progress } = e.data;
+      const player = document.getElementById('mini-player');
+      if (title) {
+        player.classList.add('visible');
+        document.getElementById('mp-title').textContent = title || 'unknown';
+        document.getElementById('mp-artist').textContent = artist || '—';
+        // Update cover
+        const coverEl = document.getElementById('mp-cover');
+        if (cover) coverEl.innerHTML = `<img src="${cover}" onerror="this.innerHTML='<svg viewBox=\'0 0 24 24\'><path d=\'M9 18V5l12-2v13\'/><circle cx=\'6\' cy=\'18\' r=\'3\'/><circle cx=\'18\' cy=\'16\' r=\'3\'/></svg>'">`;
+        // Update play icon
+        const icon = document.getElementById('mp-play-icon');
+        icon.innerHTML = playing
+          ? '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>'
+          : '<polygon points="5 3 19 12 5 21 5 3"/>';
+        // Update progress
+        document.getElementById('mp-prog-fill').style.width = progress + '%';
+        const fmt = s => { s=Math.floor(s||0); return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; };
+        document.getElementById('mp-cur').textContent = fmt(current);
+        document.getElementById('mp-dur').textContent = fmt(duration);
+      }
+    }
+  });
+
+  document.getElementById('mp-play').addEventListener('click', () => mpSend('play'));
+  document.getElementById('mp-next').addEventListener('click', () => mpSend('next'));
+  document.getElementById('mp-prev').addEventListener('click', () => mpSend('prev'));
+  document.getElementById('mp-prog-track').addEventListener('click', e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mpSend('seek', { pct: (e.clientX - r.left) / r.width });
+  });
+  document.getElementById('mp-open').addEventListener('click', () => createTab('nrgmain://music'));
+  document.getElementById('mp-close').addEventListener('click', () => document.getElementById('mini-player').classList.remove('visible'));
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const el = document.getElementById('nrg-clock');
+    if (el) el.textContent = `${h}:${m}:${s}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── BOOKMARKS ──
   let bookmarks = [];
   try { bookmarks = JSON.parse(localStorage.getItem('nrg_bm') || '[]'); } catch(e) { bookmarks = []; }
   function saveBookmarks() { localStorage.setItem('nrg_bm', JSON.stringify(bookmarks)); }
@@ -686,7 +920,243 @@ document.addEventListener('DOMContentLoaded', function() {
 
   renderBookmarks();
   createTab();
-});
+
+  // ── THEME / SETTINGS SYNC ──
+  function hexToRgba(hex, a) {
+    hex = hex.replace('#','');
+    if (hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+    const n=parseInt(hex,16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  function applyTheme(t) {
+    const r = document.documentElement.style;
+    r.setProperty('--bg',          t.bg);
+    r.setProperty('--surface',     t.surface);
+    r.setProperty('--surface2',    t.surface2);
+    r.setProperty('--surface3',    t.surface2);
+    r.setProperty('--border',      t.border);
+    r.setProperty('--accent',      t.accent);
+    r.setProperty('--accent-dim',  hexToRgba(t.accent, 0.10));
+    r.setProperty('--accent-glow', hexToRgba(t.accent, 0.25));
+    r.setProperty('--text',        t.text);
+    r.setProperty('--text-dim',    t.textDim);
+    r.setProperty('--text-muted',  t.textMuted);
+  }
+
+  // Apply saved theme on load
+  const THEMES = [
+    { id:'midnight', name:'Midnight', bg:'#0a0a0a', surface:'#111', surface2:'#1a1a1a', border:'#2a2a2a', accent:'#c50cf9', text:'#e8e8e8', textDim:'#666', textMuted:'#3a3a3a' },
+    { id:'neon',     name:'Neon',     bg:'#050510', surface:'#0d0d1f', surface2:'#14142e', border:'#1e1e3f', accent:'#4f9cf9', text:'#e8f0ff', textDim:'#5a6a88', textMuted:'#2a3048' },
+    { id:'galaxy',   name:'Galaxy',   bg:'#06020f', surface:'#100820', surface2:'#180c2e', border:'#2a1540', accent:'#b57bee', text:'#eee8ff', textDim:'#6a5a88', textMuted:'#2e1e44' },
+    { id:'ocean',    name:'Ocean',    bg:'#020a14', surface:'#061622', surface2:'#0b2233', border:'#0e3040', accent:'#00c8ff', text:'#d8f4ff', textDim:'#4a7a99', textMuted:'#0d2233' },
+    { id:'crimson',  name:'Crimson',  bg:'#0f0005', surface:'#1a0008', surface2:'#220010', border:'#3a0018', accent:'#ff2255', text:'#ffe8ec', textDim:'#884455', textMuted:'#3a1020' },
+    { id:'gold',     name:'Gold',     bg:'#0a0800', surface:'#141000', surface2:'#1e1800', border:'#302400', accent:'#f5c518', text:'#fff8e0', textDim:'#886633', textMuted:'#2e2200' },
+    { id:'forest',   name:'Forest',   bg:'#020a04', surface:'#071208', surface2:'#0d1e10', border:'#142e18', accent:'#39d98a', text:'#d8ffe8', textDim:'#4a8860', textMuted:'#0d2214' },
+    { id:'sakura',   name:'Sakura',   bg:'#0f0508', surface:'#1a0810', surface2:'#220e18', border:'#381a28', accent:'#ff6b9d', text:'#ffe8f0', textDim:'#885566', textMuted:'#2e0e1a' },
+  ];
+  const savedTheme = localStorage.getItem('nrg_theme');
+  if (savedTheme) { const t = THEMES.find(x => x.id === savedTheme); if (t) applyTheme(t); }
+
+  // Apply saved cloak on load
+  const cloakTitle = localStorage.getItem('nrg_cloak_title');
+  const cloakIcon  = localStorage.getItem('nrg_cloak_icon');
+  if (cloakTitle) document.title = cloakTitle;
+  if (cloakIcon)  { const link = document.querySelector("link[rel*='icon']") || Object.assign(document.createElement('link'), {rel:'shortcut icon'}); link.href = cloakIcon; document.head.appendChild(link); }
+
+  // Apply saved panic key on load
+  const panicKey = localStorage.getItem('nrg_panic_key') || '\\';
+  const panicUrl = localStorage.getItem('nrg_panic_url') || 'https://google.com';
+  document.addEventListener('keydown', e => { if (e.key === panicKey) window.location.href = panicUrl; });
+
+  // ── ERROR OVERLAY ──
+  function showError(tabId, url, message, code, dest) {
+    const overlay = document.getElementById('nrg-error');
+    document.getElementById('err-url').textContent = url || '';
+    document.getElementById('err-message').textContent = message || 'unknown error';
+    document.getElementById('err-code-num').textContent = code || '—';
+    document.getElementById('err-dest').textContent = dest || '—';
+
+    // Map error codes to NRG error labels
+    let errLabel = 'ERR_CONNECTION_FAILED';
+    if (message && message.includes('SSL')) errLabel = 'ERR_SSL_CONNECT';
+    else if (message && message.includes('timeout')) errLabel = 'ERR_TIMED_OUT';
+    else if (message && message.includes('refused')) errLabel = 'ERR_CONNECTION_REFUSED';
+    else if (code === 404) errLabel = 'ERR_NOT_FOUND';
+    document.getElementById('err-code').textContent = errLabel;
+
+    // Hide iframe, show overlay
+    const frame = document.getElementById('frame-' + tabId);
+    if (frame) frame.classList.remove('visible');
+    overlay.classList.add('visible');
+
+    document.getElementById('err-retry').onclick = () => {
+      overlay.classList.remove('visible');
+      if (frame) { frame.classList.add('visible'); frame.src = frame.src; }
+    };
+    document.getElementById('err-newtab').onclick = () => {
+      overlay.classList.remove('visible');
+      createTab();
+    };
+  }
+
+  function hideError() {
+    document.getElementById('nrg-error').classList.remove('visible');
+  }
+
+  // Listen for scramjet error messages from iframes
+  window.addEventListener('message', e => {
+    if (!e.data || !e.data.type) return;
+    if (e.data.type === 'nrg-theme' && e.data.theme) {
+      applyTheme(e.data.theme);
+    }
+    if (e.data.type === 'scramjet-error' || (e.data.message && e.data.url)) {
+      const activeTab = tabs.find(t => t.id === activeId);
+      showError(activeId, activeTab?.rawUrl, e.data.message, e.data.code, e.data.destination);
+    }
+  });
+
+  // ── TAB HISTORY ──
+  let tabHistory = [];
+  try { tabHistory = JSON.parse(localStorage.getItem('nrg_tab_history') || '[]'); } catch(e) { tabHistory = []; }
+  let closedTabs = [];
+
+  function addToHistory(rawUrl, label) {
+    if (!rawUrl || rawUrl.startsWith('nrgmain://')) return;
+    tabHistory.unshift({ url: rawUrl, label: label || rawUrl, time: Date.now() });
+    if (tabHistory.length > 50) tabHistory = tabHistory.slice(0, 50);
+    localStorage.setItem('nrg_tab_history', JSON.stringify(tabHistory));
+  }
+
+  function clearHistory() {
+    tabHistory = [];
+    localStorage.removeItem('nrg_tab_history');
+  }
+
+  // Save to history when navigating
+  const _origNavigate = navigateActive;
+  navigateActive = function(raw) {
+    _origNavigate(raw);
+    setTimeout(() => {
+      const tab = tabs.find(t => t.id === activeId);
+      if (tab?.rawUrl) addToHistory(tab.rawUrl, document.getElementById('tname-' + activeId)?.textContent);
+    }, 200);
+  };
+
+  // Save closed tab for Ctrl+Shift+T restore
+  const _origClose = closeTab;
+  closeTab = function(id) {
+    const tab = tabs.find(t => t.id === id);
+    if (tab?.rawUrl) closedTabs.push({ url: tab.rawUrl, label: document.getElementById('tname-' + id)?.textContent });
+    _origClose(id);
+  };
+
+  // Ctrl+Shift+T — reopen last closed tab
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
+      e.preventDefault();
+      const last = closedTabs.pop();
+      if (last) createTab(last.url);
+    }
+  });
+
+  // ── TAB GROUPS ──
+  const TAB_GROUP_COLORS = ['#c50cf9','#00c8ff','#39d98a','#ff2255','#f5c518','#ff6b9d','#b57bee','#4f9cf9'];
+  let tabGroups = {};
+
+  function setTabGroup(id, colorIdx) {
+    tabGroups[id] = colorIdx;
+    const el = document.getElementById('tel-' + id);
+    if (!el) return;
+    el.style.borderTopColor = colorIdx !== null ? TAB_GROUP_COLORS[colorIdx] : 'var(--border)';
+    if (colorIdx !== null) el.style.borderTopWidth = '2px';
+  }
+
+  // Right-click tab to assign group color
+  document.getElementById('tab-list').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    const tabEl = e.target.closest('.tab');
+    if (!tabEl) return;
+    const id = tabEl.id.replace('tel-','');
+
+    // Remove existing picker
+    document.getElementById('tab-group-picker')?.remove();
+
+    const picker = document.createElement('div');
+    picker.id = 'tab-group-picker';
+    picker.style.cssText = `position:fixed;top:${e.clientY}px;left:${e.clientX}px;background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:4px;padding:8px;display:flex;flex-direction:column;gap:6px;z-index:9999;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;`;
+
+    const label = document.createElement('div');
+    label.textContent = '// TAB GROUP';
+    label.style.cssText = 'color:var(--text-muted);margin-bottom:2px;';
+    picker.appendChild(label);
+
+    const colors = document.createElement('div');
+    colors.style.cssText = 'display:flex;gap:5px;';
+    TAB_GROUP_COLORS.forEach((c, i) => {
+      const dot = document.createElement('div');
+      dot.style.cssText = `width:16px;height:16px;border-radius:50%;background:${c};cursor:pointer;border:2px solid transparent;transition:border-color 0.1s;`;
+      dot.title = `Group ${i+1}`;
+      dot.addEventListener('click', () => { setTabGroup(id, i); picker.remove(); });
+      dot.addEventListener('mouseenter', () => dot.style.borderColor = '#fff');
+      dot.addEventListener('mouseleave', () => dot.style.borderColor = 'transparent');
+      colors.appendChild(dot);
+    });
+    picker.appendChild(colors);
+
+    const clearBtn = document.createElement('div');
+    clearBtn.textContent = 'CLEAR GROUP';
+    clearBtn.style.cssText = 'color:var(--text-muted);cursor:pointer;margin-top:2px;padding:3px 0;border-top:1px solid var(--border);';
+    clearBtn.addEventListener('click', () => { setTabGroup(id, null); tabEl.style.borderTopColor=''; tabEl.style.borderTopWidth=''; picker.remove(); });
+    picker.appendChild(clearBtn);
+
+    document.body.appendChild(picker);
+    const hide = (ev) => { if (!picker.contains(ev.target)) { picker.remove(); document.removeEventListener('click', hide); } };
+    setTimeout(() => document.addEventListener('click', hide), 0);
+  });
+
+  // ── DRAG TO REORDER TABS ──
+  let dragSrc = null;
+  function initTabDrag(el) {
+    el.setAttribute('draggable', true);
+    el.addEventListener('dragstart', e => {
+      dragSrc = el;
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => el.style.opacity = '0.4', 0);
+    });
+    el.addEventListener('dragend', () => { el.style.opacity = ''; dragSrc = null; });
+    el.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    el.addEventListener('dragenter', e => { e.preventDefault(); if (el !== dragSrc) el.style.outline = '1px solid var(--accent)'; });
+    el.addEventListener('dragleave', () => el.style.outline = '');
+    el.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      el.style.outline = '';
+      if (dragSrc && dragSrc !== el) {
+        const list = document.getElementById('tab-list');
+        const els = [...list.querySelectorAll('.tab')];
+        const srcIdx = els.indexOf(dragSrc);
+        const dstIdx = els.indexOf(el);
+        if (srcIdx < dstIdx) list.insertBefore(dragSrc, el.nextSibling);
+        else list.insertBefore(dragSrc, el);
+        // Sync tabs array order
+        const srcTabIdx = tabs.findIndex(t => t.id === dragSrc.id.replace('tel-',''));
+        const dstTabIdx = tabs.findIndex(t => t.id === el.id.replace('tel-',''));
+        const [moved] = tabs.splice(srcTabIdx, 1);
+        tabs.splice(dstTabIdx, 0, moved);
+      }
+    });
+  }
+
+  // Patch createTab to init drag on new tabs
+  const _origCreateTab = createTab;
+  createTab = function(rawUrl) {
+    const id = _origCreateTab(rawUrl);
+    const el = document.getElementById('tel-' + id);
+    if (el) initTabDrag(el);
+    return id;
+  };
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>

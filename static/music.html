@@ -2867,6 +2867,40 @@ function renderQueue() {
 <script src="index.js"></script>
 <script src="nrg-system.js"></script>
 
+<script>
+// ── NRG MINI PLAYER BRIDGE ──
+(function() {
+  var audio = document.getElementById('audio');
+  if (!audio) return;
+
+  function sendState() {
+    var cur = document.querySelector('.track-row.active') || document.querySelector('.track-row.playing');
+    window.parent.postMessage({
+      nrgMusicState: true,
+      playing: !audio.paused,
+      title:    cur ? cur.dataset.title  : '',
+      artist:   cur ? cur.dataset.artist : '',
+      cover:    cur ? cur.dataset.cover  : '',
+      current:  audio.currentTime || 0,
+      duration: audio.duration    || 0,
+      progress: audio.duration ? (audio.currentTime / audio.duration) * 100 : 0
+    }, '*');
+  }
+
+  audio.addEventListener('timeupdate', sendState);
+  audio.addEventListener('play',       sendState);
+  audio.addEventListener('pause',      sendState);
+  audio.addEventListener('ended',      sendState);
+
+  window.addEventListener('message', function(e) {
+    if (!e.data || !e.data.nrgMusic) return;
+    if (e.data.cmd === 'play') { audio.paused ? audio.play() : audio.pause(); }
+    if (e.data.cmd === 'next') { if (typeof nextTrack === 'function') nextTrack(); }
+    if (e.data.cmd === 'prev') { if (typeof prevTrack === 'function') prevTrack(); }
+    if (e.data.cmd === 'seek') { if (audio.duration) audio.currentTime = e.data.pct * audio.duration; }
+  });
+})();
+</script>
 
 </body>
 </html>
