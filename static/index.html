@@ -53,6 +53,79 @@
     .tab-close { width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-muted); flex-shrink: 0; transition: background 0.1s, color 0.1s; line-height: 1; }
     .tab-close:hover { background: rgba(255,58,58,0.2); color: #ff3a3a; }
 
+    /* Pinned tabs */
+    .tab.pinned { width: 36px; min-width: 36px; max-width: 36px; padding: 0 10px; }
+    .tab.pinned .tab-name { display: none; }
+    .tab.pinned .tab-close { display: none; }
+    .tab.pinned .tab-favicon { margin: 0 auto; }
+
+    /* Tab loading spinner */
+    @keyframes nrg-spin { to { transform: rotate(360deg); } }
+    .tab-spinner {
+      width: 10px; height: 10px; border: 1.5px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: nrg-spin 0.6s linear infinite; flex-shrink: 0;
+    }
+
+    /* Lock icon in url bar */
+    #url-lock {
+      display: none; align-items: center; padding: 0 6px 0 10px;
+      flex-shrink: 0;
+    }
+    #url-lock.visible { display: flex; }
+    #url-lock svg { width: 10px; height: 10px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    #url-lock.https svg { stroke: #39d98a; }
+    #url-lock.http svg { stroke: #f5c518; }
+
+    /* Zoom indicator in url bar */
+    #url-zoom {
+      display: none; align-items: center; padding: 0 8px;
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em;
+      color: var(--text-muted); border-left: 1px solid var(--border);
+      cursor: pointer; flex-shrink: 0; gap: 4px; transition: color 0.13s;
+      white-space: nowrap;
+    }
+    #url-zoom.visible { display: flex; }
+    #url-zoom:hover { color: var(--accent); }
+
+    /* Zoom controls in dropdown */
+    .zoom-row {
+      display: flex; align-items: center; padding: 6px 14px; gap: 8px;
+    }
+    .zoom-row span {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em;
+      color: var(--text-muted); flex-shrink: 0;
+    }
+    .zoom-controls { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .zoom-btn {
+      width: 22px; height: 22px; border: 1px solid var(--border); border-radius: 3px;
+      background: none; color: var(--text-dim); cursor: pointer; font-family: var(--mono);
+      font-size: 13px; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.13s, color 0.13s; line-height: 1;
+    }
+    .zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #zoom-level {
+      font-family: var(--mono); font-size: 9px; color: var(--text); min-width: 38px;
+      text-align: center; letter-spacing: 0.05em;
+    }
+
+    /* Pin option in tab right-click */
+    .tab-ctx-menu {
+      position: fixed; background: var(--surface); border: 1px solid var(--border);
+      border-top: 2px solid var(--accent); border-radius: 4px; z-index: 9000;
+      min-width: 150px; padding: 4px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: none;
+    }
+    .tab-ctx-menu.open { display: block; }
+    .ctx-item {
+      display: flex; align-items: center; gap: 8px; padding: 7px 14px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+      color: var(--text-dim); cursor: pointer; transition: background 0.1s, color 0.1s;
+    }
+    .ctx-item:hover { background: var(--surface2); color: var(--text); }
+    .ctx-item.danger:hover { color: #ff5555; }
+    .ctx-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
     #new-tab-btn {
       flex-shrink: 0; width: 26px; height: 26px; border-radius: 4px;
       border: 1px solid var(--border); background: none; color: var(--text-muted);
@@ -296,6 +369,178 @@
     .nrg-error-btn:hover { border-color: var(--accent); color: var(--accent); }
     .nrg-error-btn.primary { background: var(--accent); border-color: var(--accent); color: #000; }
     .nrg-error-btn.primary:hover { opacity: 0.85; }
+
+    /* ── 3-DOT MENU ── */
+    #nav-menu-btn {
+      width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border);
+      background: none; color: var(--text-muted); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      transition: border-color 0.13s, color 0.13s; position: relative;
+    }
+    #nav-menu-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #nav-menu-btn svg { width: 13px; height: 13px; fill: currentColor; }
+
+    #nav-dropdown {
+      position: fixed; top: calc(var(--tab-h) + var(--bar-h) - 4px); right: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 2px solid var(--accent); border-radius: 4px;
+      min-width: 190px; z-index: 5000; display: none; flex-direction: column;
+      padding: 4px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    #nav-dropdown.open { display: flex; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px; cursor: pointer; font-family: var(--mono);
+      font-size: 9px; letter-spacing: 0.08em; color: var(--text-dim);
+      transition: background 0.1s, color 0.1s; user-select: none;
+    }
+    .dropdown-item:hover { background: var(--surface2); color: var(--text); }
+    .dropdown-item svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .dropdown-sep { height: 1px; background: var(--border); margin: 4px 0; }
+    .dropdown-item .kbd-hint { margin-left: auto; font-size: 8px; color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 2px; padding: 1px 4px; }
+
+    /* ── DEVTOOLS CONSOLE PANEL ── */
+    #devtools-panel {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      height: 280px; background: var(--surface); border-top: 2px solid var(--accent);
+      z-index: 3500; display: none; flex-direction: column;
+      font-family: var(--mono); font-size: 10px;
+      transition: height 0.18s;
+    }
+    #devtools-panel.open { display: flex; }
+    #devtools-panel.resizing { transition: none; }
+
+    #dt-toolbar {
+      display: flex; align-items: center; gap: 0;
+      background: var(--surface2); border-bottom: 1px solid var(--border);
+      flex-shrink: 0; height: 30px;
+    }
+    .dt-tab {
+      padding: 0 14px; height: 100%; display: flex; align-items: center;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+      color: var(--text-muted); cursor: pointer; border-right: 1px solid var(--border);
+      transition: color 0.13s, background 0.13s; user-select: none;
+    }
+    .dt-tab:hover { color: var(--text); background: var(--surface3); }
+    .dt-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); margin-bottom: -1px; }
+    #dt-close {
+      margin-left: auto; width: 30px; height: 30px; border: none; background: none;
+      color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex;
+      align-items: center; justify-content: center; transition: color 0.13s;
+      border-left: 1px solid var(--border);
+    }
+    #dt-close:hover { color: #ff3a3a; }
+    #dt-resize-handle {
+      position: absolute; top: -4px; left: 0; right: 0; height: 8px;
+      cursor: ns-resize; z-index: 1;
+    }
+
+    /* Console tab */
+    #dt-console { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+    #dt-console-toolbar {
+      display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    #dt-clear-btn {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em;
+      color: var(--text-muted); background: none; border: 1px solid var(--border);
+      border-radius: 3px; padding: 2px 8px; cursor: pointer; transition: all 0.13s;
+    }
+    #dt-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #dt-filter {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      font-family: var(--mono); font-size: 9px; padding: 2px 8px; border-radius: 3px;
+      outline: none; transition: border-color 0.13s; flex: 1; max-width: 200px;
+    }
+    #dt-filter:focus { border-color: var(--accent); }
+    #dt-filter::placeholder { color: var(--text-muted); }
+    .dt-level-btn {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; padding: 2px 8px;
+      border-radius: 3px; border: 1px solid var(--border); background: none;
+      cursor: pointer; transition: all 0.13s;
+    }
+    .dt-level-btn[data-level="all"] { color: var(--text-dim); }
+    .dt-level-btn[data-level="error"] { color: #ff5555; }
+    .dt-level-btn[data-level="warn"] { color: #f5c518; }
+    .dt-level-btn[data-level="log"] { color: #39d98a; }
+    .dt-level-btn.active, .dt-level-btn:hover { border-color: currentColor; }
+    #dt-log-area { flex: 1; overflow-y: auto; padding: 4px 0; }
+    .dt-entry {
+      display: flex; align-items: flex-start; gap: 8px; padding: 2px 10px;
+      border-bottom: 1px solid transparent; transition: background 0.1s;
+      line-height: 1.6; min-height: 22px;
+    }
+    .dt-entry:hover { background: var(--surface2); }
+    .dt-entry.dt-error { background: rgba(255,50,50,0.07); border-left: 2px solid #ff5555; }
+    .dt-entry.dt-warn  { background: rgba(245,197,24,0.07); border-left: 2px solid #f5c518; }
+    .dt-entry.dt-log   { border-left: 2px solid transparent; }
+    .dt-entry.dt-info  { border-left: 2px solid #4f9cf9; }
+    .dt-icon { font-size: 9px; flex-shrink: 0; margin-top: 2px; width: 12px; text-align: center; }
+    .dt-entry.dt-error .dt-icon { color: #ff5555; }
+    .dt-entry.dt-warn  .dt-icon { color: #f5c518; }
+    .dt-entry.dt-log   .dt-icon { color: #39d98a; }
+    .dt-entry.dt-info  .dt-icon { color: #4f9cf9; }
+    .dt-text { flex: 1; color: var(--text-dim); word-break: break-all; white-space: pre-wrap; }
+    .dt-entry.dt-error .dt-text { color: #ff8888; }
+    .dt-entry.dt-warn  .dt-text { color: #f5c518; }
+    .dt-time { font-size: 8px; color: var(--text-muted); flex-shrink: 0; margin-top: 3px; }
+    .dt-empty { padding: 20px; text-align: center; color: var(--text-muted); font-size: 9px; letter-spacing: 0.15em; }
+    .dt-count-badge {
+      font-size: 8px; background: var(--surface3); border-radius: 10px;
+      padding: 1px 5px; color: var(--text-muted); margin-left: auto;
+    }
+
+    #dt-input-row {
+      display: flex; align-items: center; border-top: 1px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
+    }
+    #dt-prompt { padding: 0 10px; color: var(--accent); font-size: 11px; flex-shrink: 0; }
+    #dt-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: var(--mono); font-size: 10px;
+      padding: 7px 4px; caret-color: var(--accent);
+    }
+    #dt-run-btn {
+      background: none; border: none; border-left: 1px solid var(--border);
+      color: var(--text-muted); padding: 0 12px; height: 100%; cursor: pointer;
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+      transition: color 0.13s, background 0.13s;
+    }
+    #dt-run-btn:hover { color: var(--accent); background: var(--accent-dim); }
+
+    /* Tab History page (inline rendered) */
+    #nrg-history-page {
+      position: absolute; inset: 0; background: var(--bg); overflow-y: auto;
+      display: none; padding: 32px 40px; z-index: 5;
+    }
+    #nrg-history-page.visible { display: block; }
+    .hist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .hist-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--text); text-transform: uppercase; }
+    .hist-clear-all {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+      background: none; border: 1px solid var(--border); color: var(--text-muted);
+      border-radius: 3px; padding: 5px 12px; cursor: pointer; transition: all 0.13s;
+    }
+    .hist-clear-all:hover { border-color: #ff5555; color: #ff5555; }
+    .hist-empty { font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.15em; text-align: center; margin-top: 60px; }
+    .hist-day-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; margin-top: 20px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+    .hist-entry {
+      display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+      border-radius: 3px; cursor: pointer; transition: background 0.1s; margin-bottom: 2px;
+    }
+    .hist-entry:hover { background: var(--surface); }
+    .hist-entry:hover .hist-del { opacity: 1; }
+    .hist-favicon { width: 14px; height: 14px; flex-shrink: 0; }
+    .hist-favicon img { width: 14px; height: 14px; object-fit: contain; border-radius: 2px; }
+    .hist-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.05em; color: var(--text-dim); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-url { font-family: var(--mono); font-size: 8px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
+    .hist-time { font-family: var(--mono); font-size: 8px; color: var(--text-muted); flex-shrink: 0; }
+    .hist-del {
+      opacity: 0; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,50,50,0.15);
+      color: #ff5555; font-size: 10px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: opacity 0.1s, background 0.1s;
+    }
+    .hist-del:hover { background: rgba(255,50,50,0.3); }
   </style>
 </head>
 <body>
@@ -319,12 +564,82 @@
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
   </button>
   <div id="url-bar-wrap">
+    <div id="url-lock" title="Connection security">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
     <input type="text" id="url-bar" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
+    <div id="url-zoom" title="Zoom — click to reset">
+      <span id="url-zoom-label">100%</span>
+    </div>
     <button id="url-go">GO</button>
+  </div>
+  <button id="nav-menu-btn" title="NRG menu">
+    <svg viewBox="0 0 4 16" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
+    </svg>
+  </button>
+</div>
+
+<!-- 3-dot dropdown -->
+<div id="nav-dropdown">
+  <div class="dropdown-item" id="dd-new-tab">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    NEW TAB
+    <span class="kbd-hint">Ctrl+T</span>
+  </div>
+  <div class="dropdown-sep"></div>
+  <div class="zoom-row">
+    <span>ZOOM</span>
+    <div class="zoom-controls">
+      <button class="zoom-btn" id="dd-zoom-out">−</button>
+      <span id="zoom-level">100%</span>
+      <button class="zoom-btn" id="dd-zoom-in">+</button>
+      <button class="zoom-btn" id="dd-zoom-reset" style="font-size:9px;width:auto;padding:0 6px;letter-spacing:0.05em">RST</button>
+    </div>
+  </div>
+  <div class="dropdown-item" id="dd-pin-tab">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
+    PIN TAB
+  </div>
+  <div class="dropdown-sep"></div>
+  <div class="dropdown-item" id="dd-history">
+    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.87"/></svg>
+    TAB HISTORY
+  </div>
+  <div class="dropdown-item" id="dd-devtools">
+    <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    DEVELOPER TOOLS
+    <span class="kbd-hint">F12</span>
+  </div>
+  <div class="dropdown-sep"></div>
+  <div class="dropdown-item" id="dd-settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    SETTINGS
   </div>
 </div>
 
+<!-- Tab right-click context menu -->
+<div id="tab-ctx-menu" class="tab-ctx-menu">
+  <div class="ctx-item" id="ctx-pin">📌 PIN TAB</div>
+  <div class="ctx-item" id="ctx-duplicate">⧉ DUPLICATE</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctx-group-row" style="flex-direction:column;align-items:flex-start;gap:5px;cursor:default;">
+    <span style="font-size:8px;color:var(--text-muted);letter-spacing:0.15em;">// TAB GROUP</span>
+    <div id="ctx-group-colors" style="display:flex;gap:5px;"></div>
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" id="ctx-close">✕ CLOSE TAB</div>
+</div>
+  <!-- Tab History internal page -->
 <div id="nrg-viewport">
+  <div id="nrg-history-page">
+    <div class="hist-header">
+      <div class="hist-title">// tab history</div>
+      <button class="hist-clear-all" id="hist-clear-all">CLEAR ALL</button>
+    </div>
+    <div id="hist-list"></div>
+  </div>
+
   <div class="nrg-error" id="nrg-error">
     <div class="nrg-error-code" id="err-code">ERR_CONNECTION_FAILED</div>
     <div class="nrg-error-title">failed to load page</div>
@@ -382,6 +697,34 @@
 </div>
 
 <div class="nrg-status">proxy — <span>active</span></div>
+
+<!-- DevTools Console Panel -->
+<div id="devtools-panel">
+  <div id="dt-resize-handle"></div>
+  <div id="dt-toolbar">
+    <div class="dt-tab active" data-panel="console">CONSOLE</div>
+    <button id="dt-close" title="Close DevTools">×</button>
+  </div>
+  <div id="dt-console">
+    <div id="dt-console-toolbar">
+      <button id="dt-clear-btn">CLEAR</button>
+      <input id="dt-filter" placeholder="filter…" autocomplete="off">
+      <button class="dt-level-btn active" data-level="all">ALL</button>
+      <button class="dt-level-btn" data-level="log">LOG</button>
+      <button class="dt-level-btn" data-level="warn">WARN</button>
+      <button class="dt-level-btn" data-level="error">ERR</button>
+      <span class="dt-count-badge" id="dt-err-count">0 errors</span>
+    </div>
+    <div id="dt-log-area">
+      <div class="dt-empty" id="dt-empty">no console output</div>
+    </div>
+    <div id="dt-input-row">
+      <span id="dt-prompt">&gt;</span>
+      <input id="dt-input" placeholder="run javascript in active tab…" autocomplete="off" spellcheck="false">
+      <button id="dt-run-btn">RUN</button>
+    </div>
+  </div>
+</div>
 
 <!-- Persistent music iframe — never destroyed -->
 <iframe id="music-iframe" src="/static/music.html" style="position:fixed;width:0;height:0;border:none;opacity:0;pointer-events:none;z-index:-1;" allow="autoplay"></iframe>
@@ -500,11 +843,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   // ── PINNED NRG PAGES (global so available immediately) ──
   const PINNED_PAGES = [
-    { name: 'games',    url: 'nrgmain://games',    path: '/static/games.html',    icon: '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V2M8 6V2M16 6V2M6 10h4M8 8v4M14 11h4"/></svg>' },
-    { name: 'movies',   url: 'nrgmain://movies',   path: '/static/movies.html',   icon: '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>' },
-    { name: 'music',    url: 'nrgmain://music',    path: '/static/music.html',    icon: '<svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
-    { name: 'chat',     url: 'nrgmain://chat',     path: '/static/chat.html',     icon: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
-    { name: 'settings', url: 'nrgmain://settings', path: '/static/settings.html', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
+    { name: 'games',       url: 'nrgmain://games',       path: '/static/games.html',    icon: '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V2M8 6V2M16 6V2M6 10h4M8 8v4M14 11h4"/></svg>' },
+    { name: 'movies',      url: 'nrgmain://movies',      path: '/static/movies.html',   icon: '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>' },
+    { name: 'music',       url: 'nrgmain://music',       path: '/static/music.html',    icon: '<svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
+    { name: 'chat',        url: 'nrgmain://chat',        path: '/static/chat.html',     icon: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
+    { name: 'settings',    url: 'nrgmain://settings',    path: '/static/settings.html', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
+    { name: 'tab-history', url: 'nrgmain://tab-history', path: '__internal__',           icon: '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.87"/></svg>' },
   ];
 
   // Render pinned bookmarks immediately (before scramjet)
@@ -525,6 +869,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function isNrgMain(url) { return url && url.startsWith('nrgmain://'); }
   function resolveNrgMain(url) {
     const route = url.replace('nrgmain://', '').split('/')[0];
+    if (route === 'tab-history') return '__internal__';
     const page = PINNED_PAGES.find(p => p.name === route);
     return page ? page.path : null;
   }
@@ -570,6 +915,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('url-bar').value = url || '';
   }
 
+  let dragSrc = null;
+  let closedTabs = [];
+
   function createTab(rawUrl) {
     const id = 'tab_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     const tab = { id, rawUrl: rawUrl || null, encodedUrl: null, isNrg: false };
@@ -605,18 +953,50 @@ document.addEventListener('DOMContentLoaded', function() {
     el.appendChild(nameEl);
     el.appendChild(closeEl);
     el.addEventListener('click', () => switchTab(id));
+
+    // Drag to reorder
+    el.setAttribute('draggable', true);
+    el.addEventListener('dragstart', ev => { dragSrc = el; ev.dataTransfer.effectAllowed = 'move'; setTimeout(() => el.style.opacity = '0.4', 0); });
+    el.addEventListener('dragend', () => { el.style.opacity = ''; dragSrc = null; });
+    el.addEventListener('dragover', ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = 'move'; });
+    el.addEventListener('dragenter', ev => { ev.preventDefault(); if (el !== dragSrc) el.style.outline = '1px solid var(--accent)'; });
+    el.addEventListener('dragleave', () => el.style.outline = '');
+    el.addEventListener('drop', ev => {
+      ev.preventDefault(); ev.stopPropagation(); el.style.outline = '';
+      if (dragSrc && dragSrc !== el) {
+        const list = document.getElementById('tab-list');
+        const els = [...list.querySelectorAll('.tab')];
+        const srcIdx = els.indexOf(dragSrc), dstIdx = els.indexOf(el);
+        if (srcIdx < dstIdx) list.insertBefore(dragSrc, el.nextSibling);
+        else list.insertBefore(dragSrc, el);
+        const srcTabIdx = tabs.findIndex(t => t.id === dragSrc.id.replace('tel-',''));
+        const dstTabIdx = tabs.findIndex(t => t.id === el.id.replace('tel-',''));
+        const [moved] = tabs.splice(srcTabIdx, 1);
+        tabs.splice(dstTabIdx, 0, moved);
+      }
+    });
+
     document.getElementById('tab-list').appendChild(el);
 
     const frame = document.createElement('iframe');
     frame.id = 'frame-' + id;
     frame.setAttribute('allowfullscreen', '');
+
+    frame.addEventListener('load', () => {
+      setTabLoading(id, false);
+      updateLockIcon();
+    });
+
     document.getElementById('nrg-viewport').appendChild(frame);
 
     if (rawUrl) {
       if (isNrgMain(rawUrl)) {
-        // Internal NRG page — load directly, no proxy
         const path = resolveNrgMain(rawUrl);
-        if (path) {
+        if (path === '__internal__') {
+          tab.encodedUrl = '__internal__';
+          tab.isNrg = true;
+          tab.isInternal = true;
+        } else if (path) {
           tab.encodedUrl = path;
           tab.isNrg = true;
           frame.src = path;
@@ -627,8 +1007,8 @@ document.addEventListener('DOMContentLoaded', function() {
           const encoded = scramjet.encodeUrl(processed);
           tab.encodedUrl = encoded;
           tab.isNrg = false;
+          setTabLoading(id, true);
           frame.src = encoded;
-          // Poll for title/favicon updates after load
           frame.addEventListener('load', () => {
             const tryUpdate = () => {
               try {
@@ -639,13 +1019,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fav = doc.querySelector('link[rel*="icon"]')?.href;
                 if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
               } catch(e) {
-                // Cross-origin — fall back to google favicon
                 const fav = getFaviconUrl(rawUrl);
                 if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
               }
             };
             tryUpdate();
-            // Try again after a short delay in case page is still loading
             setTimeout(tryUpdate, 1500);
           }, {once: true});
           const fav = getFaviconUrl(rawUrl);
@@ -670,27 +1048,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const frame = document.getElementById('frame-' + id);
     if (frame) frame.classList.add('visible');
 
-    if (tab && tab.encodedUrl) {
+    const histPage = document.getElementById('nrg-history-page');
+
+    if (tab && tab.isInternal) {
       document.getElementById('nrg-viewport').classList.add('visible');
       document.getElementById('nrg-dashboard').classList.add('hidden');
       hideError();
+      histPage.classList.add('visible');
       updateUrlBar(tab.rawUrl || '');
+      renderTabHistory();
     } else {
-      document.getElementById('nrg-viewport').classList.remove('visible');
-      document.getElementById('nrg-dashboard').classList.remove('hidden');
-      updateUrlBar('');
-      setTimeout(() => document.getElementById('nrg-query').focus(), 50);
+      histPage.classList.remove('visible');
+      if (tab && tab.encodedUrl) {
+        document.getElementById('nrg-viewport').classList.add('visible');
+        document.getElementById('nrg-dashboard').classList.add('hidden');
+        hideError();
+        updateUrlBar(tab.rawUrl || '');
+      } else {
+        document.getElementById('nrg-viewport').classList.remove('visible');
+        document.getElementById('nrg-dashboard').classList.remove('hidden');
+        updateUrlBar('');
+        setTimeout(() => document.getElementById('nrg-query').focus(), 50);
+      }
+    }
+
+    // Update zoom, lock, reload button for this tab
+    if (typeof setZoom === 'function') setZoom(tab?.zoom || 100);
+    if (typeof updateLockIcon === 'function') updateLockIcon();
+    const reloadBtn = document.getElementById('nav-reload');
+    if (reloadBtn && typeof STOP_SVG !== 'undefined') {
+      reloadBtn.innerHTML = tab?.loading ? STOP_SVG : RELOAD_SVG;
+      reloadBtn.title = tab?.loading ? 'Stop' : 'Reload';
     }
   }
 
   function closeTab(id) {
+    const tab = tabs.find(t => t.id === id);
+    // Save for Ctrl+Shift+T restore
+    if (tab?.rawUrl && !isNrgMain(tab.rawUrl)) {
+      closedTabs.push({ url: tab.rawUrl, label: document.getElementById('tname-' + id)?.textContent });
+    }
     const idx = tabs.findIndex(t => t.id === id);
     if (idx === -1) return;
     tabs.splice(idx, 1);
     document.getElementById('tel-' + id)?.remove();
     document.getElementById('frame-' + id)?.remove();
     if (tabs.length === 0) {
-      // All tabs closed — go to new tab (dashboard)
       createTab();
     } else if (activeId === id) {
       switchTab(tabs[Math.max(0, idx - 1)].id);
@@ -711,13 +1114,25 @@ document.addEventListener('DOMContentLoaded', function() {
       const nameEl = document.getElementById('tname-' + activeId);
       if (nameEl) nameEl.textContent = getNrgMainLabel(raw);
       const frame = document.getElementById('frame-' + activeId);
-      if (frame) frame.src = path;
+
+      if (path === '__internal__') {
+        tab.isInternal = true;
+        // Don't set frame.src — internal page rendered by switchTab
+      } else {
+        tab.isInternal = false;
+        if (frame) frame.src = path;
+      }
+
       document.getElementById('nrg-viewport').classList.add('visible');
       document.getElementById('nrg-dashboard').classList.add('hidden');
       showNavBar(false);
       updateUrlBar(raw);
+      switchTab(activeId); // re-run switchTab to show/hide internal page
       return;
     }
+
+    // Record history for real navigations
+    addTabHistory(raw);
 
     const processed = processUrl(raw);
     if (!processed) return;
@@ -725,6 +1140,10 @@ document.addEventListener('DOMContentLoaded', function() {
     tab.rawUrl = raw;
     tab.encodedUrl = encoded;
     tab.isNrg = false;
+    tab.isInternal = false;
+
+    // Hide history page if switching away
+    document.getElementById('nrg-history-page').classList.remove('visible');
 
     const nameEl = document.getElementById('tname-' + activeId);
     if (nameEl) nameEl.textContent = getDisplayName(raw);
@@ -735,7 +1154,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
     }
 
+    const frame = document.getElementById('frame-' + activeId);
     if (frame) {
+      setTabLoading(activeId, true);
       frame.src = encoded;
       frame.addEventListener('load', () => {
         try {
@@ -801,23 +1222,234 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   document.getElementById('nav-reload').addEventListener('click', () => {
     const frame = document.getElementById('frame-' + activeId);
-    if (frame) frame.contentWindow?.location.reload();
+    if (!frame) return;
+    const tab = tabs.find(t => t.id === activeId);
+    if (tab && tab.loading) {
+      // Stop loading
+      frame.contentWindow?.stop?.();
+      setTabLoading(activeId, false);
+    } else {
+      frame.contentWindow?.location.reload();
+    }
   });
 
-  // ── KEYBOARD SHORTCUTS ──
+  const RELOAD_SVG = `<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  const STOP_SVG  = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+  function setTabLoading(id, isLoading) {
+    const tab = tabs.find(t => t.id === id);
+    if (!tab) return;
+    tab.loading = isLoading;
+    const favEl = document.getElementById('fav-' + id);
+    if (favEl) {
+      if (isLoading) {
+        favEl.dataset.prevHtml = favEl.innerHTML;
+        favEl.innerHTML = '<div class="tab-spinner"></div>';
+      } else {
+        if (favEl.dataset.prevHtml) favEl.innerHTML = favEl.dataset.prevHtml;
+      }
+    }
+    if (id === activeId) {
+      const btn = document.getElementById('nav-reload');
+      btn.innerHTML = isLoading ? STOP_SVG : RELOAD_SVG;
+      btn.title = isLoading ? 'Stop' : 'Reload';
+    }
+  }
+
+  // ── KEYBOARD SHORTCUTS (non-conflicting) ──
+  // We use keydown with e.preventDefault only for keys NRG owns.
+  // We avoid: Ctrl+T (browser new tab — we still capture it but it's expected),
+  // Ctrl+W (browser close tab), Ctrl+N, Ctrl+Shift+N, F5.
   document.addEventListener('keydown', e => {
     const ctrl = e.ctrlKey || e.metaKey;
-    if (ctrl && e.key === 't') { e.preventDefault(); createTab(); }
-    if (ctrl && e.key === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); }
-    if (ctrl && e.key === 'l') { e.preventDefault(); const bar = document.getElementById('url-bar'); bar.focus(); bar.select(); }
-    if (ctrl && e.key === 'r') { e.preventDefault(); const frame = document.getElementById('frame-' + activeId); if (frame) frame.contentWindow?.location.reload(); }
-    // Tab switching Ctrl+1-9
+
+    // Ctrl+T — new tab (browser also opens one; we intercept at app level)
+    if (ctrl && e.key === 't') { e.preventDefault(); createTab(); return; }
+
+    // Ctrl+W — close active tab
+    if (ctrl && e.key === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); return; }
+
+    // Ctrl+L / Ctrl+E — focus url bar (safe, browser Ctrl+L also focuses address bar but our input captures it)
+    if (ctrl && (e.key === 'l' || e.key === 'e')) {
+      e.preventDefault();
+      const bar = document.getElementById('url-bar'); bar.focus(); bar.select(); return;
+    }
+
+    // Ctrl+R — reload (avoid conflict: only if url bar not focused)
+    if (ctrl && e.key === 'r' && document.activeElement?.id !== 'url-bar') {
+      e.preventDefault();
+      const frame = document.getElementById('frame-' + activeId);
+      if (frame) { setTabLoading(activeId, true); frame.contentWindow?.location.reload(); }
+      return;
+    }
+
+    // Ctrl+Shift+T — reopen last closed tab
+    if (ctrl && e.shiftKey && e.key === 'T') {
+      e.preventDefault();
+      const last = closedTabs.pop();
+      if (last) createTab(last.url);
+      return;
+    }
+
+    // Ctrl+Tab / Ctrl+Shift+Tab — cycle tabs
+    if (ctrl && e.key === 'Tab') {
+      e.preventDefault();
+      const idx = tabs.findIndex(t => t.id === activeId);
+      if (e.shiftKey) switchTab(tabs[(idx - 1 + tabs.length) % tabs.length].id);
+      else            switchTab(tabs[(idx + 1) % tabs.length].id);
+      return;
+    }
+
+    // Ctrl+1-9 — switch to tab by index
     if (ctrl && e.key >= '1' && e.key <= '9') {
       e.preventDefault();
       const idx = parseInt(e.key) - 1;
       if (tabs[idx]) switchTab(tabs[idx].id);
+      return;
     }
+
+    // Ctrl+= or Ctrl++ — zoom in
+    if (ctrl && (e.key === '=' || e.key === '+')) { e.preventDefault(); adjustZoom(10); return; }
+
+    // Ctrl+- — zoom out
+    if (ctrl && e.key === '-') { e.preventDefault(); adjustZoom(-10); return; }
+
+    // Ctrl+0 — reset zoom
+    if (ctrl && e.key === '0') { e.preventDefault(); setZoom(100); return; }
+
+    // F12 — toggle DevTools
+    if (e.key === 'F12') { e.preventDefault(); toggleDevTools(); return; }
   });
+
+  // ── LOCK ICON ──
+  function updateLockIcon() {
+    const lock = document.getElementById('url-lock');
+    const url = document.getElementById('url-bar').value.trim();
+    if (!url || url.startsWith('nrgmain://')) { lock.className = 'url-lock'; return; }
+    const isHttps = /^https:\/\//i.test(url) || (!/^http:\/\//i.test(url) && url.includes('.'));
+    lock.classList.remove('http','https');
+    lock.classList.add('visible', isHttps ? 'https' : 'http');
+    lock.title = isHttps ? 'Secure (HTTPS)' : 'Not secure (HTTP)';
+  }
+
+  const _origUpdateUrlBar = updateUrlBar;
+  updateUrlBar = function(raw) {
+    _origUpdateUrlBar(raw);
+    updateLockIcon();
+  };
+
+  // ── ZOOM ──
+  let currentZoom = 100;
+  const ZOOM_STEPS = [25,33,50,67,75,80,90,100,110,125,150,175,200,250,300];
+
+  function setZoom(pct) {
+    currentZoom = Math.max(25, Math.min(300, pct));
+    const frame = document.getElementById('frame-' + activeId);
+    if (frame) {
+      frame.style.transform = `scale(${currentZoom/100})`;
+      frame.style.transformOrigin = 'top left';
+      frame.style.width = `${10000/currentZoom}%`;
+      frame.style.height = `${10000/currentZoom}%`;
+    }
+    document.getElementById('zoom-level').textContent = currentZoom + '%';
+    const zoomEl = document.getElementById('url-zoom');
+    const zoomLabel = document.getElementById('url-zoom-label');
+    if (currentZoom !== 100) {
+      zoomEl.classList.add('visible');
+      zoomLabel.textContent = currentZoom + '%';
+    } else {
+      zoomEl.classList.remove('visible');
+    }
+  }
+
+  function adjustZoom(delta) {
+    const idx = ZOOM_STEPS.findIndex(s => s >= currentZoom);
+    if (delta > 0) setZoom(ZOOM_STEPS[Math.min(idx + 1, ZOOM_STEPS.length - 1)]);
+    else           setZoom(ZOOM_STEPS[Math.max(idx - 1, 0)]);
+  }
+
+  document.getElementById('dd-zoom-in').addEventListener('click', () => adjustZoom(10));
+  document.getElementById('dd-zoom-out').addEventListener('click', () => adjustZoom(-10));
+  document.getElementById('dd-zoom-reset').addEventListener('click', () => setZoom(100));
+  document.getElementById('url-zoom').addEventListener('click', () => { setZoom(100); dropdown.classList.remove('open'); });
+
+  // ── PINNED TABS ──
+  function setPinned(id, pinned) {
+    const tab = tabs.find(t => t.id === id);
+    if (!tab) return;
+    tab.pinned = pinned;
+    const el = document.getElementById('tel-' + id);
+    if (!el) return;
+    el.classList.toggle('pinned', pinned);
+    // Move pinned tabs to front
+    const list = document.getElementById('tab-list');
+    if (pinned) {
+      const firstUnpinned = [...list.querySelectorAll('.tab:not(.pinned)')][0];
+      list.insertBefore(el, firstUnpinned || document.getElementById('new-tab-btn'));
+    }
+    // Update pin label in dropdown
+    document.getElementById('dd-pin-tab').childNodes[1].textContent = pinned ? ' UNPIN TAB' : ' PIN TAB';
+  }
+
+  document.getElementById('dd-pin-tab').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    const tab = tabs.find(t => t.id === activeId);
+    if (tab) setPinned(activeId, !tab.pinned);
+  });
+
+  // ── TAB RIGHT-CLICK CONTEXT MENU ──
+  const ctxMenu = document.getElementById('tab-ctx-menu');
+  let ctxTabId = null;
+
+  document.getElementById('tab-list').addEventListener('contextmenu', e => {
+    const tabEl = e.target.closest('.tab');
+    if (!tabEl) return;
+    e.preventDefault();
+    ctxTabId = tabEl.id.replace('tel-', '');
+    const tab = tabs.find(t => t.id === ctxTabId);
+    document.getElementById('ctx-pin').textContent = (tab?.pinned ? '📌 UNPIN TAB' : '📌 PIN TAB');
+
+    // Build group color dots
+    const colorsEl = document.getElementById('ctx-group-colors');
+    colorsEl.innerHTML = '';
+    TAB_GROUP_COLORS.forEach((c, i) => {
+      const dot = document.createElement('div');
+      const active = tabGroups[ctxTabId] === i;
+      dot.style.cssText = `width:14px;height:14px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${active ? '#fff' : 'transparent'};transition:border-color 0.1s;flex-shrink:0;`;
+      dot.addEventListener('click', e => { e.stopPropagation(); setTabGroup(ctxTabId, i); ctxMenu.classList.remove('open'); });
+      dot.addEventListener('mouseenter', () => dot.style.borderColor = '#fff');
+      dot.addEventListener('mouseleave', () => dot.style.borderColor = active ? '#fff' : 'transparent');
+      colorsEl.appendChild(dot);
+    });
+    // Clear group dot
+    const clear = document.createElement('div');
+    clear.title = 'Clear group';
+    clear.style.cssText = `width:14px;height:14px;border-radius:50%;background:var(--surface3);cursor:pointer;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text-muted);flex-shrink:0;`;
+    clear.textContent = '✕';
+    clear.addEventListener('click', e => { e.stopPropagation(); setTabGroup(ctxTabId, null); const el = document.getElementById('tel-'+ctxTabId); if(el){el.style.borderTopColor='';el.style.borderTopWidth='';} ctxMenu.classList.remove('open'); });
+    colorsEl.appendChild(clear);
+
+    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 170) + 'px';
+    ctxMenu.style.top = e.clientY + 'px';
+    ctxMenu.classList.add('open');
+  });
+
+  document.getElementById('ctx-pin').addEventListener('click', () => {
+    const tab = tabs.find(t => t.id === ctxTabId);
+    if (tab) setPinned(ctxTabId, !tab.pinned);
+    ctxMenu.classList.remove('open');
+  });
+  document.getElementById('ctx-duplicate').addEventListener('click', () => {
+    const tab = tabs.find(t => t.id === ctxTabId);
+    if (tab?.rawUrl) createTab(tab.rawUrl);
+    ctxMenu.classList.remove('open');
+  });
+  document.getElementById('ctx-close').addEventListener('click', () => {
+    if (ctxTabId) closeTab(ctxTabId);
+    ctxMenu.classList.remove('open');
+  });
+  document.addEventListener('click', () => ctxMenu.classList.remove('open'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') ctxMenu.classList.remove('open'); });
 
   // ── MINI PLAYER ──
   const musicFrame = document.getElementById('music-iframe');
@@ -1016,49 +1648,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ── TAB HISTORY ──
-  let tabHistory = [];
-  try { tabHistory = JSON.parse(localStorage.getItem('nrg_tab_history') || '[]'); } catch(e) { tabHistory = []; }
-  let closedTabs = [];
 
-  function addToHistory(rawUrl, label) {
-    if (!rawUrl || rawUrl.startsWith('nrgmain://')) return;
-    tabHistory.unshift({ url: rawUrl, label: label || rawUrl, time: Date.now() });
-    if (tabHistory.length > 50) tabHistory = tabHistory.slice(0, 50);
-    localStorage.setItem('nrg_tab_history', JSON.stringify(tabHistory));
-  }
-
-  function clearHistory() {
-    tabHistory = [];
-    localStorage.removeItem('nrg_tab_history');
-  }
-
-  // Save to history when navigating
-  const _origNavigate = navigateActive;
-  navigateActive = function(raw) {
-    _origNavigate(raw);
-    setTimeout(() => {
-      const tab = tabs.find(t => t.id === activeId);
-      if (tab?.rawUrl) addToHistory(tab.rawUrl, document.getElementById('tname-' + activeId)?.textContent);
-    }, 200);
-  };
-
-  // Save closed tab for Ctrl+Shift+T restore
-  const _origClose = closeTab;
-  closeTab = function(id) {
-    const tab = tabs.find(t => t.id === id);
-    if (tab?.rawUrl) closedTabs.push({ url: tab.rawUrl, label: document.getElementById('tname-' + id)?.textContent });
-    _origClose(id);
-  };
-
-  // Ctrl+Shift+T — reopen last closed tab
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
-      e.preventDefault();
-      const last = closedTabs.pop();
-      if (last) createTab(last.url);
-    }
-  });
 
   // ── TAB GROUPS ──
   const TAB_GROUP_COLORS = ['#c50cf9','#00c8ff','#39d98a','#ff2255','#f5c518','#ff6b9d','#b57bee','#4f9cf9'];
@@ -1072,89 +1662,252 @@ document.addEventListener('DOMContentLoaded', function() {
     if (colorIdx !== null) el.style.borderTopWidth = '2px';
   }
 
-  // Right-click tab to assign group color
-  document.getElementById('tab-list').addEventListener('contextmenu', e => {
-    e.preventDefault();
-    const tabEl = e.target.closest('.tab');
-    if (!tabEl) return;
-    const id = tabEl.id.replace('tel-','');
+  // ── TAB HISTORY ──
+  let tabHistory = [];
+  try { tabHistory = JSON.parse(localStorage.getItem('nrg_tab_history') || '[]'); } catch(e) { tabHistory = []; }
+  function saveTabHistory() { localStorage.setItem('nrg_tab_history', JSON.stringify(tabHistory.slice(0, 500))); }
 
-    // Remove existing picker
-    document.getElementById('tab-group-picker')?.remove();
+  function addTabHistory(rawUrl, title) {
+    if (!rawUrl || isNrgMain(rawUrl)) return;
+    tabHistory.unshift({ url: rawUrl, title: title || rawUrl, ts: Date.now() });
+    saveTabHistory();
+  }
 
-    const picker = document.createElement('div');
-    picker.id = 'tab-group-picker';
-    picker.style.cssText = `position:fixed;top:${e.clientY}px;left:${e.clientX}px;background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:4px;padding:8px;display:flex;flex-direction:column;gap:6px;z-index:9999;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;`;
-
-    const label = document.createElement('div');
-    label.textContent = '// TAB GROUP';
-    label.style.cssText = 'color:var(--text-muted);margin-bottom:2px;';
-    picker.appendChild(label);
-
-    const colors = document.createElement('div');
-    colors.style.cssText = 'display:flex;gap:5px;';
-    TAB_GROUP_COLORS.forEach((c, i) => {
-      const dot = document.createElement('div');
-      dot.style.cssText = `width:16px;height:16px;border-radius:50%;background:${c};cursor:pointer;border:2px solid transparent;transition:border-color 0.1s;`;
-      dot.title = `Group ${i+1}`;
-      dot.addEventListener('click', () => { setTabGroup(id, i); picker.remove(); });
-      dot.addEventListener('mouseenter', () => dot.style.borderColor = '#fff');
-      dot.addEventListener('mouseleave', () => dot.style.borderColor = 'transparent');
-      colors.appendChild(dot);
+  function renderTabHistory() {
+    const list = document.getElementById('hist-list');
+    list.innerHTML = '';
+    if (tabHistory.length === 0) {
+      list.innerHTML = '<div class="hist-empty">NO HISTORY YET</div>';
+      return;
+    }
+    // Group by day
+    const groups = {};
+    tabHistory.forEach((entry, i) => {
+      const d = new Date(entry.ts);
+      const key = d.toDateString();
+      if (!groups[key]) groups[key] = [];
+      groups[key].push({ ...entry, idx: i });
     });
-    picker.appendChild(colors);
-
-    const clearBtn = document.createElement('div');
-    clearBtn.textContent = 'CLEAR GROUP';
-    clearBtn.style.cssText = 'color:var(--text-muted);cursor:pointer;margin-top:2px;padding:3px 0;border-top:1px solid var(--border);';
-    clearBtn.addEventListener('click', () => { setTabGroup(id, null); tabEl.style.borderTopColor=''; tabEl.style.borderTopWidth=''; picker.remove(); });
-    picker.appendChild(clearBtn);
-
-    document.body.appendChild(picker);
-    const hide = (ev) => { if (!picker.contains(ev.target)) { picker.remove(); document.removeEventListener('click', hide); } };
-    setTimeout(() => document.addEventListener('click', hide), 0);
-  });
-
-  // ── DRAG TO REORDER TABS ──
-  let dragSrc = null;
-  function initTabDrag(el) {
-    el.setAttribute('draggable', true);
-    el.addEventListener('dragstart', e => {
-      dragSrc = el;
-      e.dataTransfer.effectAllowed = 'move';
-      setTimeout(() => el.style.opacity = '0.4', 0);
-    });
-    el.addEventListener('dragend', () => { el.style.opacity = ''; dragSrc = null; });
-    el.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-    el.addEventListener('dragenter', e => { e.preventDefault(); if (el !== dragSrc) el.style.outline = '1px solid var(--accent)'; });
-    el.addEventListener('dragleave', () => el.style.outline = '');
-    el.addEventListener('drop', e => {
-      e.preventDefault(); e.stopPropagation();
-      el.style.outline = '';
-      if (dragSrc && dragSrc !== el) {
-        const list = document.getElementById('tab-list');
-        const els = [...list.querySelectorAll('.tab')];
-        const srcIdx = els.indexOf(dragSrc);
-        const dstIdx = els.indexOf(el);
-        if (srcIdx < dstIdx) list.insertBefore(dragSrc, el.nextSibling);
-        else list.insertBefore(dragSrc, el);
-        // Sync tabs array order
-        const srcTabIdx = tabs.findIndex(t => t.id === dragSrc.id.replace('tel-',''));
-        const dstTabIdx = tabs.findIndex(t => t.id === el.id.replace('tel-',''));
-        const [moved] = tabs.splice(srcTabIdx, 1);
-        tabs.splice(dstTabIdx, 0, moved);
-      }
+    Object.entries(groups).forEach(([day, entries]) => {
+      const label = document.createElement('div');
+      label.className = 'hist-day-label';
+      const now = new Date();
+      if (day === now.toDateString()) label.textContent = 'TODAY';
+      else if (day === new Date(now - 86400000).toDateString()) label.textContent = 'YESTERDAY';
+      else label.textContent = day.toUpperCase();
+      list.appendChild(label);
+      entries.forEach(entry => {
+        const el = document.createElement('div');
+        el.className = 'hist-entry';
+        const fav = getFaviconUrl(entry.url);
+        const t = new Date(entry.ts);
+        const timeStr = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+        el.innerHTML = `
+          <div class="hist-favicon">${fav ? `<img src="${fav}" onerror="this.style.display='none'">` : ''}</div>
+          <div class="hist-label">${entry.title || entry.url}</div>
+          <div class="hist-url">${entry.url}</div>
+          <div class="hist-time">${timeStr}</div>
+          <div class="hist-del" title="Remove">×</div>`;
+        el.addEventListener('click', e => {
+          if (e.target.classList.contains('hist-del')) return;
+          createTab(entry.url);
+        });
+        el.querySelector('.hist-del').addEventListener('click', e => {
+          e.stopPropagation();
+          tabHistory.splice(entry.idx, 1);
+          saveTabHistory();
+          renderTabHistory();
+        });
+        list.appendChild(el);
+      });
     });
   }
 
-  // Patch createTab to init drag on new tabs
-  const _origCreateTab = createTab;
-  createTab = function(rawUrl) {
-    const id = _origCreateTab(rawUrl);
-    const el = document.getElementById('tel-' + id);
-    if (el) initTabDrag(el);
-    return id;
-  };
+  document.getElementById('hist-clear-all').addEventListener('click', () => {
+    tabHistory = [];
+    saveTabHistory();
+    renderTabHistory();
+  });
+
+  // ── 3-DOT MENU ──
+  const menuBtn = document.getElementById('nav-menu-btn');
+  const dropdown = document.getElementById('nav-dropdown');
+
+  menuBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target) && e.target !== menuBtn) dropdown.classList.remove('open');
+  });
+
+  document.getElementById('dd-new-tab').addEventListener('click', () => { dropdown.classList.remove('open'); createTab(); });
+  document.getElementById('dd-settings').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://settings'); });
+  document.getElementById('dd-history').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://tab-history'); });
+  document.getElementById('dd-devtools').addEventListener('click', () => { dropdown.classList.remove('open'); toggleDevTools(); });
+
+  // ── DEVTOOLS CONSOLE ──
+  let devtoolsOpen = false;
+  let dtFilter = 'all';
+  let dtTextFilter = '';
+  let dtLogs = [];
+  let dtErrCount = 0;
+
+  function toggleDevTools() {
+    devtoolsOpen = !devtoolsOpen;
+    const panel = document.getElementById('devtools-panel');
+    panel.classList.toggle('open', devtoolsOpen);
+    if (devtoolsOpen) document.getElementById('dt-input').focus();
+  }
+
+  document.getElementById('dt-close').addEventListener('click', () => { devtoolsOpen = false; document.getElementById('devtools-panel').classList.remove('open'); });
+
+  // Console log capture via postMessage from proxied iframe
+  // Inject a script into each iframe that relays console output back
+  function injectConsoleRelay(frame) {
+    try {
+      const script = frame.contentDocument?.createElement('script');
+      if (!script) return;
+      script.textContent = `(function(){
+        const orig = {log: console.log, warn: console.warn, error: console.error, info: console.info};
+        ['log','warn','error','info'].forEach(level => {
+          console[level] = function(...args) {
+            orig[level].apply(console, args);
+            try { window.parent.postMessage({ nrgConsole: true, level, text: args.map(a => { try { return typeof a === 'object' ? JSON.stringify(a) : String(a); } catch(e) { return String(a); } }).join(' ') }, '*'); } catch(e) {}
+          };
+        });
+        window.addEventListener('error', e => {
+          try { window.parent.postMessage({ nrgConsole: true, level: 'error', text: (e.message || 'Script error') + (e.filename ? ' — ' + e.filename.split('/').pop() + ':' + e.lineno : '') }, '*'); } catch(ex) {}
+        });
+        window.addEventListener('unhandledrejection', e => {
+          try { window.parent.postMessage({ nrgConsole: true, level: 'error', text: 'Unhandled Promise: ' + (e.reason?.message || String(e.reason)) }, '*'); } catch(ex) {}
+        });
+      })();`;
+      frame.contentDocument.head?.appendChild(script);
+    } catch(e) { /* cross-origin — can't inject, will catch window.onerror from parent */ }
+  }
+
+  // Listen for console messages from iframes
+  window.addEventListener('message', e => {
+    if (e.data?.nrgConsole) {
+      addDtEntry(e.data.level, e.data.text);
+    }
+  });
+
+  // Also listen for global errors that bubble up
+  window.addEventListener('error', e => {
+    if (!e.filename || e.filename === window.location.href) return; // skip our own errors
+    addDtEntry('error', e.message + (e.filename ? ' — ' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+  }, true);
+
+  function addDtEntry(level, text) {
+    const now = new Date();
+    const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    dtLogs.push({ level, text, ts });
+    if (level === 'error') { dtErrCount++; document.getElementById('dt-err-count').textContent = dtErrCount + ' error' + (dtErrCount !== 1 ? 's' : ''); }
+    renderDtLogs();
+  }
+
+  function renderDtLogs() {
+    const area = document.getElementById('dt-log-area');
+    const empty = document.getElementById('dt-empty');
+    const filtered = dtLogs.filter(e => {
+      if (dtFilter !== 'all' && e.level !== dtFilter) return false;
+      if (dtTextFilter && !e.text.toLowerCase().includes(dtTextFilter)) return false;
+      return true;
+    });
+    // Remove all except empty placeholder
+    area.querySelectorAll('.dt-entry').forEach(el => el.remove());
+    empty.style.display = filtered.length ? 'none' : '';
+    filtered.forEach(entry => {
+      const el = document.createElement('div');
+      el.className = `dt-entry dt-${entry.level}`;
+      const icons = { log: '●', warn: '▲', error: '✕', info: 'ℹ' };
+      el.innerHTML = `<span class="dt-icon">${icons[entry.level] || '●'}</span><span class="dt-text">${entry.text.replace(/</g,'&lt;')}</span><span class="dt-time">${entry.ts}</span>`;
+      area.appendChild(el);
+    });
+    // Auto-scroll
+    area.scrollTop = area.scrollHeight;
+  }
+
+  document.getElementById('dt-clear-btn').addEventListener('click', () => {
+    dtLogs = []; dtErrCount = 0;
+    document.getElementById('dt-err-count').textContent = '0 errors';
+    renderDtLogs();
+  });
+
+  // Override parent console — placed here so addDtEntry is already defined
+  (function() {
+    const _orig = { log: console.log, warn: console.warn, error: console.error, info: console.info };
+    ['log','warn','error','info'].forEach(level => {
+      console[level] = function(...args) {
+        _orig[level].apply(console, args);
+        const text = args.map(a => { try { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); } catch(e) { return String(a); } }).join(' ');
+        addDtEntry(level, text);
+      };
+    });
+  })();
+
+  document.getElementById('dt-filter').addEventListener('input', e => {
+    dtTextFilter = e.target.value.toLowerCase();
+    renderDtLogs();
+  });
+
+  document.querySelectorAll('.dt-level-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dt-level-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      dtFilter = btn.dataset.level;
+      renderDtLogs();
+    });
+  });
+
+  // JS eval in active iframe
+  function runInActiveTab(code) {
+    const frame = document.getElementById('frame-' + activeId);
+    let result;
+    try {
+      result = frame?.contentWindow?.eval(code);
+      addDtEntry('log', '← ' + (result === undefined ? 'undefined' : JSON.stringify(result)));
+    } catch(e) {
+      addDtEntry('error', '← ' + e.message);
+    }
+  }
+
+  const dtInput = document.getElementById('dt-input');
+  document.getElementById('dt-run-btn').addEventListener('click', () => {
+    const code = dtInput.value.trim();
+    if (!code) return;
+    addDtEntry('log', '> ' + code);
+    runInActiveTab(code);
+    dtInput.value = '';
+  });
+  dtInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { document.getElementById('dt-run-btn').click(); }
+  });
+
+  // Inject relay when frames load
+  document.getElementById('nrg-viewport').addEventListener('load', e => {
+    if (e.target.tagName === 'IFRAME') injectConsoleRelay(e.target);
+  }, true);
+
+  // ── DEVTOOLS RESIZE HANDLE ──
+  const dtPanel = document.getElementById('devtools-panel');
+  const dtHandle = document.getElementById('dt-resize-handle');
+  let dtResizing = false, dtStartY = 0, dtStartH = 0;
+  dtHandle.addEventListener('mousedown', e => {
+    dtResizing = true; dtStartY = e.clientY; dtStartH = dtPanel.offsetHeight;
+    dtPanel.classList.add('resizing');
+    document.body.style.userSelect = 'none';
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dtResizing) return;
+    const delta = dtStartY - e.clientY;
+    dtPanel.style.height = Math.max(120, Math.min(window.innerHeight * 0.8, dtStartH + delta)) + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (dtResizing) { dtResizing = false; dtPanel.classList.remove('resizing'); document.body.style.userSelect = ''; }
+  });
 
 }); // end DOMContentLoaded
 </script>
