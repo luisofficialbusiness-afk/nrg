@@ -808,7 +808,6 @@
     let activeId = null;
     let scramjet = null;
 
-
     function isNrgMain(url) { return url && url.startsWith('nrgmain://'); }
     function resolveNrgMain(url) {
       const route = url.replace('nrgmain://', '').split('/')[0];
@@ -852,7 +851,7 @@
       } catch(e) { return url.substring(0,16); }
     }
 
-    function showNavBar(show) {  }
+    function showNavBar(show) {}
     function updateUrlBar(url) { document.getElementById('url-bar').value = url || ''; }
 
     let dragSrc = null;
@@ -1437,7 +1436,6 @@
         } catch(err) {}
       }
     }, true);
-
 
     const dtPanel = document.getElementById('devtools-panel');
     const dtHandle = document.getElementById('dt-resize-handle');
