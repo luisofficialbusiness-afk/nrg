@@ -292,7 +292,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, updateDoc,
@@ -301,8 +301,12 @@ import {
   setDoc
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Account DB
-const mainConfig = {
+// Single Firebase project — accounts + chat now live in the same
+// Firestore database so request.auth is actually populated on every
+// chat read/write (previously the chat side used a separate Firebase
+// project with no Auth instance attached, so requests carried no
+// login info at all).
+const firebaseConfig = {
   apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
   authDomain:        "nrg-accounts.firebaseapp.com",
   projectId:         "nrg-accounts",
@@ -311,21 +315,9 @@ const mainConfig = {
   appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
 };
 
-// chat DB
-const chatConfig = {
-  apiKey:            "AIzaSyA_vWL5TRolNFmeqlSCrlgt-pul5kCZyog",
-  authDomain:        "nrg-chat.firebaseapp.com",
-  projectId:         "nrg-chat",
-  storageBucket:     "nrg-chat.firebasestorage.app",
-  messagingSenderId: "844103114783",
-  appId:             "1:844103114783:web:8f4096d0ef1a9ffa12b52a"
-};
-
-const mainApp  = initializeApp(mainConfig);
-const chatApp  = initializeApp(chatConfig, "chat");
-const auth     = getAuth(mainApp);
-const mainDb   = getFirestore(mainApp);
-const chatDb   = getFirestore(chatApp);
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
 const $        = id => document.getElementById(id);
 const MAX_MSGS = 100;
@@ -393,7 +385,7 @@ function buildMessage(msg, showDate, canDelete) {
       del.className = "msg-delete"; del.textContent = "delete";
       del.style.cssText = "position:static;opacity:1;margin-left:8px";
       del.addEventListener("click", async () => {
-        try { await deleteDoc(doc(chatDb, "messages", msg.id)); } catch(e) {}
+        try { await deleteDoc(doc(db, "messages", msg.id)); } catch(e) {}
       });
       item.appendChild(del);
     }
@@ -482,7 +474,7 @@ function buildMessage(msg, showDate, canDelete) {
       const newText = item.querySelector(".msg-edit-input").value.trim();
       if (!newText) return;
       try {
-        await updateDoc(doc(chatDb, "messages", msg.id), { text: newText, edited: true });
+        await updateDoc(doc(db, "messages", msg.id), { text: newText, edited: true });
         item.querySelector(".msg-text").textContent = newText;
         item.querySelector(".msg-edit-wrap").classList.remove("active");
       } catch(e) { console.error(e); }
@@ -493,7 +485,7 @@ function buildMessage(msg, showDate, canDelete) {
   if (delBtn) {
     delBtn.addEventListener("click", async () => {
       if (!confirm("Delete this message?")) return;
-      try { await deleteDoc(doc(chatDb, "messages", msg.id)); } catch(e) { console.error(e); }
+      try { await deleteDoc(doc(db, "messages", msg.id)); } catch(e) { console.error(e); }
     });
   }
 
@@ -590,7 +582,7 @@ async function sendMessage() {
   }
   lastSentAt = now;
 
-  const bannedSnap = await getDoc(doc(chatDb, "chatBanned", currentUser.uid));
+  const bannedSnap = await getDoc(doc(db, "chatBanned", currentUser.uid));
   if (bannedSnap.exists()) {
     const b = bannedSnap.data();
     if (b.timeoutUntil && new Date(b.timeoutUntil).getTime() > Date.now()) {
@@ -606,7 +598,7 @@ async function sendMessage() {
   const equipped = userProfile.equipped || {};
   $("send-btn").disabled = true;
   try {
-    await addDoc(collection(chatDb, "messages"), {
+    await addDoc(collection(db, "messages"), {
       uid:         currentUser.uid,
       username:    userProfile.username    || "",
       displayName: userProfile.displayName || currentUser.email.split("@")[0],
@@ -626,7 +618,7 @@ async function sendMessage() {
 }
 
 async function registerOnline(user, profile) {
-  onlineRef = doc(chatDb, "online", user.uid);
+  onlineRef = doc(db, "online", user.uid);
   await setDoc(onlineRef, {
     uid:         user.uid,
     displayName: profile.displayName || user.email.split("@")[0],
@@ -652,12 +644,12 @@ function setModMsg(id, text, type) {
 
 async function getUidFromUsername(username) {
   const raw  = username.replace(/^@/, "").trim().toLowerCase();
-  const snap = await getDoc(doc(mainDb, "usernames", raw));
+  const snap = await getDoc(doc(db, "usernames", raw));
   return snap.exists() ? snap.data().uid : null;
 }
 
 async function sendSystemMessage(text) {
-  await addDoc(collection(chatDb, "messages"), {
+  await addDoc(collection(db, "messages"), {
     uid:         "system",
     username:    "",
     displayName: "NRG System",
@@ -699,23 +691,23 @@ async function setupModPanel() {
   $("mod-pin-btn").addEventListener("click", async () => {
     const text = $("mod-pin-input").value.trim();
     if (!text) return;
-    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: text }, { merge: true });
+    await setDoc(doc(db, "settings", "chat"), { pinnedMessage: text }, { merge: true });
     $("mod-pin-input").value = "";
   });
 
   $("mod-unpin-btn").addEventListener("click", async () => {
-    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: null }, { merge: true });
+    await setDoc(doc(db, "settings", "chat"), { pinnedMessage: null }, { merge: true });
   });
 
   $("pinned-unpin").addEventListener("click", async () => {
     if (!isAdmin) return;
-    await setDoc(doc(chatDb, "settings", "chat"), { pinnedMessage: null }, { merge: true });
+    await setDoc(doc(db, "settings", "chat"), { pinnedMessage: null }, { merge: true });
   });
 
   // slow-mode-inator
   $("mod-slow-btn").addEventListener("click", async () => {
     const val = parseInt($("mod-slow-select").value);
-    await setDoc(doc(chatDb, "settings", "chat"), { slowMode: val }, { merge: true });
+    await setDoc(doc(db, "settings", "chat"), { slowMode: val }, { merge: true });
   });
 
   // timeout user (forgot what did does )
@@ -725,7 +717,7 @@ async function setupModPanel() {
     const mins = parseInt($("mod-timeout-select").value);
     const until = new Date(Date.now() + mins * 60000).toISOString();
     try {
-      await setDoc(doc(chatDb, "chatBanned", uid), { uid, timeoutUntil: until, bannedBy: currentUser.uid });
+      await setDoc(doc(db, "chatBanned", uid), { uid, timeoutUntil: until, bannedBy: currentUser.uid });
       await sendSystemMessage("A user has been timed out for " + mins + " minute" + (mins !== 1 ? "s" : "") + ".");
       setModMsg("mod-user-msg", "timed out for " + mins + "m.", "ok");
     } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
@@ -736,7 +728,7 @@ async function setupModPanel() {
     const uid = await getUidFromUsername($("mod-user-input").value);
     if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
     try {
-      await deleteDoc(doc(chatDb, "online", uid));
+      await deleteDoc(doc(db, "online", uid));
       setModMsg("mod-user-msg", "kicked.", "ok");
     } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
   });
@@ -745,8 +737,8 @@ async function setupModPanel() {
   $("mod-clear-btn").addEventListener("click", async () => {
     if (!confirm("Delete ALL messages? This cannot be undone.")) return;
     try {
-      const snap  = await getDocs(collection(chatDb, "messages"));
-      const batch = writeBatch(chatDb);
+      const snap  = await getDocs(collection(db, "messages"));
+      const batch = writeBatch(db);
       snap.docs.forEach(d => batch.delete(d.ref));
       await batch.commit();
       setModMsg("mod-clear-msg", "cleared.", "ok");
@@ -767,8 +759,8 @@ onAuthStateChanged(auth, async user => {
   $("login-bar").style.display = "none";
 
   const [userSnap, adminSnap] = await Promise.all([
-    getDoc(doc(mainDb, "users", user.uid)),
-    getDoc(doc(mainDb, "admins", user.uid))
+    getDoc(doc(db, "users", user.uid)),
+    getDoc(doc(db, "admins", user.uid))
   ]);
 
   userProfile = userSnap.exists() ? userSnap.data() : {};
@@ -785,7 +777,7 @@ onAuthStateChanged(auth, async user => {
   await registerOnline(user, userProfile);
 
   // listen to chat settings (slow mode, pinned message) for every users
-  onSnapshot(doc(chatDb, "settings", "chat"), snap => {
+  onSnapshot(doc(db, "settings", "chat"), snap => {
     if (!snap.exists()) return;
     const d = snap.data();
     slowModeSeconds = d.slowMode || 0;
@@ -807,12 +799,12 @@ onAuthStateChanged(auth, async user => {
     }
   });
 
-  const msgsQ = query(collection(chatDb, "messages"), orderBy("createdAt", "asc"), limit(MAX_MSGS));
+  const msgsQ = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(MAX_MSGS));
   onSnapshot(msgsQ, snap => {
     renderMessages(snap);
   });
 
-  onSnapshot(collection(chatDb, "online"), snap => {
+  onSnapshot(collection(db, "online"), snap => {
     const users = snap.docs.map(d => d.data());
     renderOnlineList(users);
   });
@@ -852,7 +844,7 @@ $("img-upload-input").addEventListener("change", async e => {
     const dataUrl = ev.target.result;
     const equipped = userProfile.equipped || {};
     try {
-      await addDoc(collection(chatDb, "messages"), {
+      await addDoc(collection(db, "messages"), {
         uid:         currentUser.uid,
         username:    userProfile.username    || "",
         displayName: userProfile.displayName || currentUser.email.split("@")[0],
