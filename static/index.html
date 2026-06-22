@@ -4,15 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NRG</title>
-  <!--
-    Proxy: Ultraviolet (SuperUV backend)
-    UV prefix: /service/  |  Bare: /edu/  |  SW: /uv-sw.js
-    We inline XOR encode + SW registration so we have zero dependency
-    on uv.bundle.js / uv.config.js loading on the page — the SW loads
-    its own scripts via importScripts independently.
-  -->
   <script>
-    // XOR encode — must match UV SW codec (odd indices XOR'd with 2)
     function uvEncode(str) {
       if (!str) return str;
       return encodeURIComponent(
