@@ -21,7 +21,6 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* ── TAB BAR ── */
     #tab-bar {
       position: fixed; top: 0; left: 0; right: 0; height: var(--tab-h);
       background: var(--surface); border-bottom: 1px solid var(--border);
@@ -46,20 +45,18 @@
     }
     .tab-favicon { width: 13px; height: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .tab-favicon img { width: 13px; height: 13px; object-fit: contain; border-radius: 2px; }
-    .tab-favicon .tab-icon-svg { width: 11px; height: 11px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .tab-favicon .tab-icon-svg { width: 11px; height: 11px; stroke: var(--text-muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .tab-favicon .tab-icon-nrg { width: 11px; height: 11px; fill: var(--accent); }
     .tab-name { flex: 1; font-family: var(--mono); font-size: 8px; letter-spacing: 0.04em; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
     .tab.active .tab-name { color: var(--text); }
     .tab-close { width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-muted); flex-shrink: 0; transition: background 0.1s, color 0.1s; line-height: 1; }
     .tab-close:hover { background: rgba(255,58,58,0.2); color: #ff3a3a; }
 
-    /* Pinned tabs */
     .tab.pinned { width: 36px; min-width: 36px; max-width: 36px; padding: 0 10px; }
     .tab.pinned .tab-name { display: none; }
     .tab.pinned .tab-close { display: none; }
     .tab.pinned .tab-favicon { margin: 0 auto; }
 
-    /* Tab loading spinner */
     @keyframes nrg-spin { to { transform: rotate(360deg); } }
     .tab-spinner {
       width: 10px; height: 10px; border: 1.5px solid var(--border);
@@ -67,7 +64,6 @@
       animation: nrg-spin 0.6s linear infinite; flex-shrink: 0;
     }
 
-    /* Lock icon in url bar */
     #url-lock {
       display: none; align-items: center; padding: 0 6px 0 10px;
       flex-shrink: 0;
@@ -77,7 +73,6 @@
     #url-lock.https svg { stroke: #39d98a; }
     #url-lock.http svg { stroke: #f5c518; }
 
-    /* Zoom indicator in url bar */
     #url-zoom {
       display: none; align-items: center; padding: 0 8px;
       font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em;
@@ -88,7 +83,6 @@
     #url-zoom.visible { display: flex; }
     #url-zoom:hover { color: var(--accent); }
 
-    /* Zoom controls in dropdown */
     .zoom-row {
       display: flex; align-items: center; padding: 6px 14px; gap: 8px;
     }
@@ -109,7 +103,6 @@
       text-align: center; letter-spacing: 0.05em;
     }
 
-    /* Pin option in tab right-click */
     .tab-ctx-menu {
       position: fixed; background: var(--surface); border: 1px solid var(--border);
       border-top: 2px solid var(--accent); border-radius: 4px; z-index: 9000;
@@ -135,7 +128,6 @@
     }
     #new-tab-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── NAV BAR ── */
     #nav-bar {
       position: fixed; top: var(--tab-h); left: 0; right: 0; height: var(--bar-h);
       background: var(--bg); border-bottom: 1px solid var(--border);
@@ -168,7 +160,6 @@
     }
     #url-go:hover { color: var(--accent); background: var(--accent-dim); }
 
-    /* ── VIEWPORT ── */
     #nrg-viewport {
       position: fixed; left: 0; right: 0;
       top: calc(var(--tab-h) + var(--bar-h)); bottom: 0;
@@ -181,7 +172,6 @@
     }
     #nrg-viewport iframe.visible { display: block; }
 
-    /* ── NEW TAB / DASHBOARD ── */
     #nrg-dashboard {
       position: fixed; left: 0; right: 0; top: calc(var(--tab-h) + var(--bar-h)); bottom: 0;
       display: flex; flex-direction: column; align-items: center;
@@ -227,7 +217,6 @@
     .go-btn:hover { opacity: 0.85; }
     .input-hint { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-muted); text-align: center; }
 
-    /* ── BOOKMARKS ── */
     .bookmarks-section { position: relative; z-index: 1; width: 90%; max-width: 520px; display: flex; flex-direction: column; gap: 8px; }
     .bookmarks-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; }
 
@@ -291,7 +280,6 @@
     .nrg-status { position: fixed; bottom: 8px; right: 16px; font-family: var(--mono); font-size: 8px; color: var(--text-muted); letter-spacing: 0.15em; z-index: 3000; pointer-events: none; }
     .nrg-status span { color: var(--accent); }
 
-    /* ── MINI PLAYER ── */
     #mini-player {
       position: fixed; bottom: 16px; right: 16px;
       width: 260px;
@@ -344,7 +332,6 @@
     }
     .mp-close-btn:hover { color: #ff3a3a; }
 
-    /* ── ERROR OVERLAY ── */
     .nrg-error {
       position: absolute; inset: 0; background: var(--bg);
       display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -370,7 +357,6 @@
     .nrg-error-btn.primary { background: var(--accent); border-color: var(--accent); color: #000; }
     .nrg-error-btn.primary:hover { opacity: 0.85; }
 
-    /* ── 3-DOT MENU ── */
     #nav-menu-btn {
       width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border);
       background: none; color: var(--text-muted); cursor: pointer; display: flex;
@@ -399,7 +385,6 @@
     .dropdown-sep { height: 1px; background: var(--border); margin: 4px 0; }
     .dropdown-item .kbd-hint { margin-left: auto; font-size: 8px; color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 2px; padding: 1px 4px; }
 
-    /* ── DEVTOOLS CONSOLE PANEL ── */
     #devtools-panel {
       position: fixed; left: 0; right: 0; bottom: 0;
       height: 280px; background: var(--surface); border-top: 2px solid var(--accent);
@@ -435,7 +420,6 @@
       cursor: ns-resize; z-index: 1;
     }
 
-    /* Console tab */
     #dt-console { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
     #dt-console-toolbar {
       display: flex; align-items: center; gap: 6px; padding: 4px 10px;
@@ -508,7 +492,6 @@
     }
     #dt-run-btn:hover { color: var(--accent); background: var(--accent-dim); }
 
-    /* Tab History page (inline rendered) */
     #nrg-history-page {
       position: absolute; inset: 0; background: var(--bg); overflow-y: auto;
       display: none; padding: 32px 40px; z-index: 5;
@@ -516,1190 +499,831 @@
     #nrg-history-page.visible { display: block; }
     .hist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
     .hist-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--text); text-transform: uppercase; }
-    .hist-clear-all {
-      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
-      background: none; border: 1px solid var(--border); color: var(--text-muted);
-      border-radius: 3px; padding: 5px 12px; cursor: pointer; transition: all 0.13s;
+    #hist-clear-all {
+      background: none; border: 1px solid var(--border); color: var(--text-dim);
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em;
+      padding: 5px 12px; border-radius: 3px; cursor: pointer; transition: all 0.13s;
     }
-    .hist-clear-all:hover { border-color: #ff5555; color: #ff5555; }
-    .hist-empty { font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.15em; text-align: center; margin-top: 60px; }
-    .hist-day-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; margin-top: 20px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+    #hist-clear-all:hover { border-color: #ff3a3a; color: #ff3a3a; }
+    .hist-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 4px; overflow: hidden; }
     .hist-entry {
-      display: flex; align-items: center; gap: 10px; padding: 7px 10px;
-      border-radius: 3px; cursor: pointer; transition: background 0.1s; margin-bottom: 2px;
+      display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--surface);
+      cursor: pointer; font-family: var(--sans); font-size: 12px; transition: background 0.1s;
     }
-    .hist-entry:hover { background: var(--surface); }
-    .hist-entry:hover .hist-del { opacity: 1; }
-    .hist-favicon { width: 14px; height: 14px; flex-shrink: 0; }
-    .hist-favicon img { width: 14px; height: 14px; object-fit: contain; border-radius: 2px; }
-    .hist-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.05em; color: var(--text-dim); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .hist-url { font-family: var(--mono); font-size: 8px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
-    .hist-time { font-family: var(--mono); font-size: 8px; color: var(--text-muted); flex-shrink: 0; }
+    .hist-entry:hover { background: var(--surface2); }
+    .hist-favicon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hist-favicon img { width: 16px; height: 16px; object-fit: contain; border-radius: 2px; }
+    .hist-label { font-weight: 500; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-url { font-family: var(--mono); font-size: 9px; color: var(--text-muted); flex: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-time { font-family: var(--mono); font-size: 9px; color: var(--text-muted); flex-shrink: 0; }
     .hist-del {
-      opacity: 0; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,50,50,0.15);
-      color: #ff5555; font-size: 10px; display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 14px; color: var(--text-muted);
+      width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; transition: opacity 0.1s, background 0.1s;
     }
     .hist-del:hover { background: rgba(255,50,50,0.3); }
   </style>
 </head>
 <body>
+  <div id="tab-bar">
+    <div id="tab-list"></div>
+    <button id="new-tab-btn" title="New tab">+</button>
+  </div>
 
-<div id="tab-bar">
-  <div id="tab-list"></div>
-  <button id="new-tab-btn" title="New tab">+</button>
-</div>
-
-<div id="nav-bar" style="display:flex">
-  <button class="nav-btn" id="nav-back" title="Back">
-    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
-  <button class="nav-btn" id="nav-forward" title="Forward">
-    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  </button>
-  <button class="nav-btn" id="nav-reload" title="Reload">
-    <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-  </button>
-  <button class="nav-btn" id="nav-home" title="New tab">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-  </button>
-  <div id="url-bar-wrap">
-    <div id="url-lock" title="Connection security">
-      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <div id="nav-bar" style="display:flex">
+    <button class="nav-btn" id="nav-back" title="Back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-forward" title="Forward">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-reload" title="Reload">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-home" title="New tab">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </button>
+    <div id="url-bar-wrap">
+      <div id="url-lock" title="Connection security">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <input type="text" id="url-bar" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
+      <div id="url-zoom" title="Zoom — click to reset">
+        <span id="url-zoom-label">100%</span>
+      </div>
+      <button id="url-go">GO</button>
     </div>
-    <input type="text" id="url-bar" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
-    <div id="url-zoom" title="Zoom — click to reset">
-      <span id="url-zoom-label">100%</span>
-    </div>
-    <button id="url-go">GO</button>
+    <button class="nav-btn" id="nav-menu-btn" title="Menu">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+    </button>
   </div>
-  <button id="nav-menu-btn" title="NRG menu">
-    <svg viewBox="0 0 4 16" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
-    </svg>
-  </button>
-</div>
 
-<!-- 3-dot dropdown -->
-<div id="nav-dropdown">
-  <div class="dropdown-item" id="dd-new-tab">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    NEW TAB
-    <span class="kbd-hint">Ctrl+T</span>
-  </div>
-  <div class="dropdown-sep"></div>
-  <div class="zoom-row">
-    <span>ZOOM</span>
-    <div class="zoom-controls">
-      <button class="zoom-btn" id="dd-zoom-out">−</button>
-      <span id="zoom-level">100%</span>
-      <button class="zoom-btn" id="dd-zoom-in">+</button>
-      <button class="zoom-btn" id="dd-zoom-reset" style="font-size:9px;width:auto;padding:0 6px;letter-spacing:0.05em">RST</button>
+  <div id="nrg-viewport"></div>
+
+  <div id="nrg-dashboard">
+    <canvas id="bg-canvas"></canvas>
+    <div class="nrg-clock" id="dashboard-clock">00:00:00</div>
+    <div class="nrg-logo-wrap">
+      <h1>NRG</h1>
+      <div class="logo-rule"></div>
+      <div class="logo-sub">advanced web portal</div>
+    </div>
+    <div class="nrg-input-wrap">
+      <form class="search-form" id="nrg-core-form">
+        <div class="input-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <input type="text" id="nrg-query" placeholder="Search freely or enter address…" autocomplete="off" autofocus>
+        <button type="submit" class="go-btn">LAUNCH</button>
+      </form>
+      <div class="input-hint">PROXIED NETWORKING ACTIVATED</div>
+    </div>
+
+    <div class="bookmarks-section">
+      <div class="bookmarks-label">Core portals</div>
+      <div class="pinned-bar" id="dashboard-pinned"></div>
+    </div>
+    <div class="bookmarks-section" style="margin-top:-10px;">
+      <div class="bookmarks-label" style="display:flex; align-items:center; justify-content:space-between;">
+        <span>Saved marks</span>
+        <button class="add-bm-btn" id="add-bm-btn" title="Add current bookmark">+</button>
+      </div>
+      <div class="bookmark-form" id="bookmark-form">
+        <input type="text" id="bm-name" placeholder="Name">
+        <input type="text" id="bm-url" placeholder="URL">
+        <div class="bm-form-row">
+          <button class="bm-save" id="bm-save">SAVE</button>
+          <button class="bm-cancel" id="bm-cancel">CANCEL</button>
+        </div>
+      </div>
+      <div class="bookmarks-bar" id="dashboard-bookmarks"></div>
     </div>
   </div>
-  <div class="dropdown-item" id="dd-pin-tab">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
-    PIN TAB
-  </div>
-  <div class="dropdown-sep"></div>
-  <div class="dropdown-item" id="dd-history">
-    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.87"/></svg>
-    TAB HISTORY
-  </div>
-  <div class="dropdown-item" id="dd-devtools">
-    <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-    DEVELOPER TOOLS
-    <span class="kbd-hint">F12</span>
-  </div>
-  <div class="dropdown-sep"></div>
-  <div class="dropdown-item" id="dd-settings">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    SETTINGS
-  </div>
-</div>
 
-<!-- Tab right-click context menu -->
-<div id="tab-ctx-menu" class="tab-ctx-menu">
-  <div class="ctx-item" id="ctx-pin">📌 PIN TAB</div>
-  <div class="ctx-item" id="ctx-duplicate">⧉ DUPLICATE</div>
-  <div class="ctx-sep"></div>
-  <div class="ctx-item" id="ctx-group-row" style="flex-direction:column;align-items:flex-start;gap:5px;cursor:default;">
-    <span style="font-size:8px;color:var(--text-muted);letter-spacing:0.15em;">// TAB GROUP</span>
-    <div id="ctx-group-colors" style="display:flex;gap:5px;"></div>
-  </div>
-  <div class="ctx-sep"></div>
-  <div class="ctx-item danger" id="ctx-close">✕ CLOSE TAB</div>
-</div>
-  <!-- Tab History internal page -->
-<div id="nrg-viewport">
   <div id="nrg-history-page">
     <div class="hist-header">
-      <div class="hist-title">// tab history</div>
-      <button class="hist-clear-all" id="hist-clear-all">CLEAR ALL</button>
+      <div class="hist-title">Browsing History</div>
+      <button id="hist-clear-all">Clear everything</button>
     </div>
-    <div id="hist-list"></div>
+    <div class="hist-list" id="hist-list-container"></div>
+  </div>
+
+  <div id="nav-dropdown">
+    <div class="dropdown-item" id="dd-new-tab">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>New Tab</span>
+      <div class="kbd-hint">Ctrl+T</div>
+    </div>
+    <div class="dropdown-item" id="dd-history">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>History</span>
+    </div>
+    <div class="dropdown-item" id="dd-settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Portal Settings</span>
+    </div>
+    <div class="dropdown-item" id="dd-devtools">
+      <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span>Developer Console</span>
+      <div class="kbd-hint">F12</div>
+    </div>
+    <div class="dropdown-sep"></div>
+    <div class="zoom-row">
+      <span>Zoom</span>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-out">−</button>
+        <div id="zoom-level">100%</div>
+        <button class="zoom-btn" id="zoom-in">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="devtools-panel">
+    <div id="dt-resize-handle"></div>
+    <div id="dt-toolbar">
+      <div class="dt-tab active" data-target="dt-console">Console</div>
+      <button id="dt-close">×</button>
+    </div>
+    <div id="dt-console">
+      <div id="dt-console-toolbar">
+        <button id="dt-clear-btn">Clear</button>
+        <input type="text" id="dt-filter" placeholder="Filter console logs…">
+        <button class="dt-level-btn active" data-level="all">All</button>
+        <button class="dt-level-btn" data-level="error">Errors</button>
+        <button class="dt-level-btn" data-level="warn">Warnings</button>
+        <button class="dt-level-btn" data-level="log">Logs</button>
+        <div class="dt-count-badge" id="dt-err-count">0 errors</div>
+      </div>
+      <div id="dt-log-area">
+        <div class="dt-empty" id="dt-empty">Console empty. Frame events will capture dynamically.</div>
+      </div>
+      <div id="dt-input-row">
+        <div id="dt-prompt">❯</div>
+        <input type="text" id="dt-input" placeholder="Evaluate JavaScript logic in active tab window frame…">
+        <button id="dt-run-btn">RUN</button>
+      </div>
+    </div>
   </div>
 
   <div class="nrg-error" id="nrg-error">
     <div class="nrg-error-code" id="err-code">ERR_CONNECTION_FAILED</div>
-    <div class="nrg-error-title">failed to load page</div>
-    <div class="nrg-error-url" id="err-url"></div>
-    <div class="nrg-error-msg" id="err-msg">
-      <div><span class="err-label">message</span><span id="err-message">unknown error</span></div>
-      <div><span class="err-label">code</span><span id="err-code-num">—</span></div>
-      <div><span class="err-label">destination</span><span id="err-dest">—</span></div>
+    <div class="nrg-error-title">Unable to resolve portal request</div>
+    <div class="nrg-error-url" id="err-url">https://example.com/requested/route</div>
+    <div class="nrg-error-msg">
+      <span class="err-label">Diagnostics:</span><span id="err-message">The service did not respond or connection refused.</span><br>
+      <span class="err-label" style="opacity:0.6">Internal Code:</span><span id="err-code-num" style="opacity:0.6">—</span> | 
+      <span class="err-label" style="opacity:0.6">Destination:</span><span id="err-dest" style="opacity:0.6">—</span>
     </div>
     <div class="nrg-error-actions">
-      <button class="nrg-error-btn primary" id="err-retry">RETRY</button>
-      <button class="nrg-error-btn" id="err-newtab">NEW TAB</button>
+      <button class="nrg-error-btn primary" id="err-retry">Retry connection</button>
+      <button class="nrg-error-btn" id="err-newtab">Return home</button>
     </div>
   </div>
-</div>
 
-<div id="nrg-dashboard">
-  <canvas id="bg-canvas"></canvas>
-
-  <div class="nrg-clock" id="nrg-clock">00:00:00</div>
-
-  <div class="nrg-logo-wrap">
-    <h1>NRG</h1>
-    <div class="logo-rule"></div>
-    <div class="logo-sub">browse freely</div>
+  <div class="tab-ctx-menu" id="tab-ctx-menu">
+    <div class="ctx-item" id="ctx-reload">Reload tab</div>
+    <div class="ctx-item" id="ctx-pin">Pin / Unpin tab</div>
+    <div class="ctx-item" id="ctx-duplicate">Duplicate tab</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item danger" id="ctx-close">Close tab</div>
+    <div class="ctx-item" id="ctx-close-others">Close other tabs</div>
   </div>
 
-  <div class="nrg-input-wrap">
-    <form class="search-form" id="nrg-core-form">
-      <div class="input-icon">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </div>
-      <input type="text" id="nrg-query" placeholder="enter url or search…" autocomplete="off" spellcheck="false">
-      <button class="go-btn" type="submit">GO</button>
-    </form>
-    <div class="input-hint">urls and searches routed through scramjet</div>
-  </div>
+  <div class="nrg-status">NETWORK STATUS: <span>SECURE (AES-256)</span></div>
 
-  <div class="bookmarks-section">
-    <div class="bookmarks-label">// pinned</div>
-    <div class="pinned-bar" id="pinned-bar"></div>
-    <div class="bookmarks-label" style="margin-top:6px">// bookmarks</div>
-    <div class="bookmarks-bar" id="bookmarks-bar">
-      <button class="add-bm-btn" id="add-bm-btn" title="Add bookmark">+</button>
-    </div>
-    <div class="bookmark-form" id="bookmark-form">
-      <input type="text" id="bm-name" placeholder="Name (e.g. Google)">
-      <input type="text" id="bm-url" placeholder="URL (e.g. google.com)">
-      <div class="bm-form-row">
-        <button class="bm-save" id="bm-save">SAVE</button>
-        <button class="bm-cancel" id="bm-cancel">CANCEL</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="nrg-status">proxy — <span>active</span></div>
-
-<!-- DevTools Console Panel -->
-<div id="devtools-panel">
-  <div id="dt-resize-handle"></div>
-  <div id="dt-toolbar">
-    <div class="dt-tab active" data-panel="console">CONSOLE</div>
-    <button id="dt-close" title="Close DevTools">×</button>
-  </div>
-  <div id="dt-console">
-    <div id="dt-console-toolbar">
-      <button id="dt-clear-btn">CLEAR</button>
-      <input id="dt-filter" placeholder="filter…" autocomplete="off">
-      <button class="dt-level-btn active" data-level="all">ALL</button>
-      <button class="dt-level-btn" data-level="log">LOG</button>
-      <button class="dt-level-btn" data-level="warn">WARN</button>
-      <button class="dt-level-btn" data-level="error">ERR</button>
-      <span class="dt-count-badge" id="dt-err-count">0 errors</span>
-    </div>
-    <div id="dt-log-area">
-      <div class="dt-empty" id="dt-empty">no console output</div>
-    </div>
-    <div id="dt-input-row">
-      <span id="dt-prompt">&gt;</span>
-      <input id="dt-input" placeholder="run javascript in active tab…" autocomplete="off" spellcheck="false">
-      <button id="dt-run-btn">RUN</button>
-    </div>
-  </div>
-</div>
-
-<!-- Persistent music iframe — never destroyed -->
-<iframe id="music-iframe" src="music.html" style="position:fixed;width:0;height:0;border:none;opacity:0;pointer-events:none;z-index:-1;" allow="autoplay"></iframe>
-
-<!-- Mini Player -->
-<div id="mini-player">
-  <div class="mp-top">
-    <div class="mp-cover" id="mp-cover">
-      <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-    </div>
-    <div class="mp-info">
-      <div class="mp-title" id="mp-title">nothing playing</div>
-      <div class="mp-artist" id="mp-artist">—</div>
-    </div>
-  </div>
-  <div class="mp-progress">
-    <div class="mp-prog-track" id="mp-prog-track">
-      <div class="mp-prog-fill" id="mp-prog-fill"></div>
-    </div>
-    <div class="mp-times">
-      <span id="mp-cur">0:00</span>
-      <span id="mp-dur">0:00</span>
-    </div>
-  </div>
-  <div class="mp-controls">
-    <button class="mp-btn" id="mp-prev" title="Previous">
-      <svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
-    </button>
-    <button class="mp-btn play" id="mp-play" title="Play/Pause">
-      <svg viewBox="0 0 24 24" id="mp-play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </button>
-    <button class="mp-btn" id="mp-next" title="Next">
-      <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-    </button>
-  </div>
-  <div class="mp-footer">
-    <button class="mp-open-btn" id="mp-open">OPEN MUSIC</button>
-    <button class="mp-close-btn" id="mp-close" title="Hide player">×</button>
-  </div>
-</div>
-
-<!-- Background canvas animation -->
-<script>
-(function() {
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  const SPACING=36, PUSH_R=80, PUSH_F=0.18, FRICTION=0.82, RETURN=0.06;
-  let W, H, dots=[], bolts=[];
-  let mouse = {x:-999, y:-999};
-
-  function getAccent() { return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c50cf9'; }
-  function hexToRgb(hex) { hex=hex.replace('#',''); if(hex.length===3)hex=hex.split('').map(c=>c+c).join(''); const n=parseInt(hex,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
-
-  function buildDots() {
-    dots=[];
-    const cols=Math.floor(W/SPACING)+1, rows=Math.floor(H/SPACING)+1;
-    for(let r=0;r<=rows;r++) for(let c=0;c<=cols;c++) dots.push({ox:c*SPACING,oy:r*SPACING,x:c*SPACING,y:r*SPACING,vx:0,vy:0});
-  }
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    W = canvas.width = rect.width || window.innerWidth;
-    H = canvas.height = rect.height || window.innerHeight;
-    buildDots();
-  }
-
-  class Bolt {
-    constructor(x,y,a) {
-      this.segments=[]; this.life=1; this.decay=0.04+Math.random()*0.03;
-      let px=x,py=y; const len=60+Math.random()*80,steps=8+Math.floor(Math.random()*6);
-      for(let i=0;i<steps;i++){const j=(Math.random()-0.5)*28,nx=px+Math.cos(a)*(len/steps)+Math.cos(a+Math.PI/2)*j,ny=py+Math.sin(a)*(len/steps)+Math.sin(a+Math.PI/2)*j;this.segments.push({x1:px,y1:py,x2:nx,y2:ny});px=nx;py=ny;}
+  <script>
+  (function() {
+    const canvas = document.getElementById('bg-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    
+    window.addEventListener('resize', resize);
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     }
-    draw(accent) {
-      ctx.save(); ctx.globalAlpha=this.life*this.life; ctx.strokeStyle=accent;
-      ctx.lineWidth=1.5*this.life+0.5;
-      ctx.beginPath(); for(const s of this.segments){ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);} ctx.stroke();
-      ctx.restore(); this.life-=this.decay;
+
+    const mouse = { x: -1000, y: -1000 };
+    document.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+      mouse.x = -1000; mouse.y = -1000;
+    });
+
+    const DOTS = 52, PUSH_R = 120, FRICTION = 0.94, RETURN = 0.035;
+    let dots = [];
+    for(let i=0; i<DOTS; i++) {
+      let x = Math.random()*width, y = Math.random()*height;
+      dots.push({ x, y, ox: x, oy: y, vx: 0, vy: 0 });
     }
-  }
 
-  window.addEventListener('resize', resize);
-  document.getElementById('nrg-dashboard').addEventListener('mousemove', e => {
-    const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;
-  });
-  document.getElementById('nrg-dashboard').addEventListener('mouseleave', ()=>{mouse.x=-999;mouse.y=-999;});
-  document.getElementById('nrg-dashboard').addEventListener('click', e => {
-    if(e.target.closest('form')||e.target.closest('.bookmarks-section')) return;
-    const r=canvas.getBoundingClientRect();
-    const cx=e.clientX-r.left, cy=e.clientY-r.top;
-    for(let i=0;i<8;i++){const a=(Math.PI*2/8)*i+(Math.random()-0.5)*0.4; bolts.push(new Bolt(cx,cy,a));}
-  });
-
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    const accent=getAccent(), [r,g,b]=hexToRgb(accent);
-    for(const d of dots) {
-      const dx=mouse.x-d.x, dy=mouse.y-d.y, dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<PUSH_R&&dist>0){const f=(1-dist/PUSH_R)*PUSH_F; d.vx-=(dx/dist)*f*12; d.vy-=(dy/dist)*f*12;}
-      d.vx+=(d.ox-d.x)*RETURN; d.vy+=(d.oy-d.y)*RETURN;
-      d.vx*=FRICTION; d.vy*=FRICTION; d.x+=d.vx; d.y+=d.vy;
-      const dist2=Math.sqrt((mouse.x-d.x)**2+(mouse.y-d.y)**2), glow=Math.max(0,1-dist2/PUSH_R), radius=1.5+glow*2;
-      ctx.beginPath(); ctx.arc(d.x,d.y,radius,0,Math.PI*2);
-      if(glow>0.05){ctx.fillStyle=`rgba(${r},${g},${b},${0.25+glow*0.75})`;}
-      else{ctx.fillStyle=`rgba(${r},${g},${b},0.18)`;}
-      ctx.fill();
+    class Lightning {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random()*width; this.y = 0;
+        this.tx = this.x + (Math.random()*200 - 100); this.ty = height;
+        this.life = Math.random()*40 + 20; this.maxLife = this.life;
+        this.pts = [];
+        let cx = this.x, cy = this.y;
+        while(cy < this.ty) {
+          cx += (Math.random()*40 - 20);
+          cy += (Math.random()*30 + 10);
+          this.pts.push({x: cx, y: cy});
+        }
+      }
+      draw(c) {
+        this.life--;
+        if(this.life <= 0) { this.reset(); return; }
+        ctx.beginPath(); ctx.moveTo(this.x, this.y);
+        for(let p of this.pts) ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = c; ctx.lineWidth = (this.life/this.maxLife)*1.2;
+        ctx.globalAlpha = (this.life/this.maxLife)*0.18; ctx.stroke(); ctx.globalAlpha = 1;
+      }
     }
-    bolts=bolts.filter(b=>b.life>0);
-    for(const b of bolts) b.draw(accent);
-    requestAnimationFrame(draw);
-  }
-  resize(); draw();
-})();
-</script>
+    let bolts = [new Lightning(), new Lightning()];
 
-<!-- Main app logic -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // ── PINNED NRG PAGES (global so available immediately) ──
-  const PINNED_PAGES = [
-    { name: 'games',       url: 'nrgmain://games',       path: 'games.html',    icon: '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V2M8 6V2M16 6V2M6 10h4M8 8v4M14 11h4"/></svg>' },
-    { name: 'movies',      url: 'nrgmain://movies',      path: 'movies.html',   icon: '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>' },
-    { name: 'music',       url: 'nrgmain://music',       path: 'music.html',    icon: '<svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
-    { name: 'chat',        url: 'nrgmain://chat',        path: 'chat.html',     icon: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
-    { name: 'settings',    url: 'nrgmain://settings',    path: 'settings.html', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
-    { name: 'tab-history', url: 'nrgmain://tab-history', path: '__internal__',           icon: '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.87"/></svg>' },
-  ];
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      let accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c50cf9';
+      let r=197, g=12, b=249;
+      if(accent.startsWith('#')) {
+        let n=parseInt(accent.replace('#',''),16);
+        r=(n>>16)&255; g=(n>>8)&255; b=n&255;
+      }
+      
+      for(let d of dots) {
+        const dx = mouse.x - d.x, dy = mouse.y - d.y;
+        const dlen = Math.sqrt(dx*dx + dy*dy);
+        if(dlen < PUSH_R && dlen > 0) {
+          const f = (1 - dlen/PUSH_R) * 10;
+          d.vx -= (dx/dlen)*f; d.vy -= (dy/dlen)*f;
+        }
+        d.vx += (d.ox - d.x)*RETURN; d.vy += (d.oy - d.y)*RETURN;
+        d.vx *= FRICTION; d.vy *= FRICTION;
+        d.x += d.vx; d.y += d.vy;
 
-  // Render pinned bookmarks immediately (before scramjet)
-  const pinnedBar = document.getElementById('pinned-bar');
-  PINNED_PAGES.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'pinned-item';
-    el.innerHTML = `${p.icon}<span>${p.name}</span>`;
-    el.addEventListener('click', () => createTab(p.url));
-    pinnedBar.appendChild(el);
-  });
+        const dist2 = Math.sqrt((mouse.x-d.x)**2 + (mouse.y-d.y)**2),
+              glow = Math.max(0, 1 - dist2/PUSH_R),
+              radius = 1.5 + glow*2;
 
-  let tabs = [];
-  let activeId = null;
-  let scramjet = null;
-
-  // ── nrgmain:// RESOLVER ──
-  function isNrgMain(url) { return url && url.startsWith('nrgmain://'); }
-  function resolveNrgMain(url) {
-    const route = url.replace('nrgmain://', '').split('/')[0];
-    if (route === 'tab-history') return '__internal__';
-    const page = PINNED_PAGES.find(p => p.name === route);
-    return page ? page.path : null;
-  }
-  function getNrgMainLabel(url) {
-    const route = url.replace('nrgmain://', '').split('/')[0];
-    return 'nrg/' + route;
-  }
-
-  function getFaviconUrl(rawUrl) {
-    if (isNrgMain(rawUrl)) return null;
-    try {
-      let url = rawUrl;
-      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-      const domain = new URL(url).hostname;
-      return `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
-    } catch(e) { return null; }
-  }
-
-  function processUrl(raw) {
-    raw = raw.trim();
-    if (!raw) return null;
-    if (isNrgMain(raw)) return raw;
-    if (!raw.includes('.') || raw.includes(' ')) {
-      return 'https://search.brave.com/search?q=' + encodeURIComponent(raw);
+        ctx.beginPath(); ctx.arc(d.x, d.y, radius, 0, Math.PI*2);
+        if(glow > 0.05) {
+          ctx.fillStyle = `rgba(${r},${g},${b},${0.25 + glow*0.75})`;
+        } else {
+          ctx.fillStyle = `rgba(${r},${g},${b},0.18)`;
+        }
+        ctx.fill();
+      }
+      bolts = bolts.filter(b => b.life > 0);
+      for(const b of bolts) b.draw(accent);
+      requestAnimationFrame(draw);
     }
-    if (!/^https?:\/\//i.test(raw)) return 'https://' + raw;
-    return raw;
-  }
+    resize(); draw();
+  })();
+  </script>
 
-  function getDisplayName(url) {
-    if (!url) return 'NEW TAB';
-    if (isNrgMain(url)) return getNrgMainLabel(url);
-    try {
-      let u = url;
-      if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
-      return new URL(u).hostname.replace('www.','');
-    } catch(e) { return url.substring(0,16); }
-  }
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const PINNED_PAGES = [
+      { name: 'games', url: 'nrgmain://games', path: 'games.html', icon: '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V2M8 6V2M16 6V2M6 10h4M8 8v4M14 11h4"/></svg>' },
+      { name: 'movies', url: 'nrgmain://movies', path: 'movies.html', icon: '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5"/></svg>' },
+      { name: 'settings', url: 'nrgmain://settings', path: 'settings.html', icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
+      { name: 'discord', url: 'nrgmain://discord', path: 'chat.html', icon: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' }
+    ];
 
-  function showNavBar(show) { /* nav bar always visible */ }
+    const pinnedBar = document.getElementById('dashboard-pinned');
+    PINNED_PAGES.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'pinned-item';
+      el.innerHTML = `${p.icon}<span>${p.name}</span>`;
+      el.addEventListener('click', () => createTab(p.url));
+      pinnedBar.appendChild(el);
+    });
 
-  function updateUrlBar(url) {
-    document.getElementById('url-bar').value = url || '';
-  }
+    let tabs = [];
+    let activeId = null;
+    let scramjet = null;
 
-  let dragSrc = null;
-  let closedTabs = [];
 
-  function createTab(rawUrl) {
-    const id = 'tab_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    const tab = { id, rawUrl: rawUrl || null, encodedUrl: null, isNrg: false };
-    tabs.push(tab);
-
-    const el = document.createElement('div');
-    el.className = 'tab';
-    el.id = 'tel-' + id;
-
-    const favEl = document.createElement('div');
-    favEl.className = 'tab-favicon';
-    favEl.id = 'fav-' + id;
-
-    if (rawUrl && isNrgMain(rawUrl)) {
-      const route = rawUrl.replace('nrgmain://','').split('/')[0];
+    function isNrgMain(url) { return url && url.startsWith('nrgmain://'); }
+    function resolveNrgMain(url) {
+      const route = url.replace('nrgmain://', '').split('/')[0];
+      if (route === 'tab-history') return '__internal__';
       const page = PINNED_PAGES.find(p => p.name === route);
-      favEl.innerHTML = page ? page.icon.replace('viewBox','class="tab-icon-nrg" viewBox') : `<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>`;
-    } else {
-      favEl.innerHTML = `<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a14.5 14.5 0 000 20A14.5 14.5 0 0012 2z"/></svg>`;
+      return page ? page.path : null;
+    }
+    function getNrgMainLabel(url) {
+      const route = url.replace('nrgmain://', '').split('/')[0];
+      return 'nrg/' + route;
     }
 
-    const nameEl = document.createElement('span');
-    nameEl.className = 'tab-name';
-    nameEl.id = 'tname-' + id;
-    nameEl.textContent = rawUrl ? getDisplayName(rawUrl) : 'NEW TAB';
+    function getFaviconUrl(rawUrl) {
+      if (isNrgMain(rawUrl)) return null;
+      try {
+        let url = rawUrl;
+        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+        const domain = new URL(url).hostname;
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+      } catch(e) { return null; }
+    }
 
-    const closeEl = document.createElement('div');
-    closeEl.className = 'tab-close';
-    closeEl.textContent = '×';
-    closeEl.addEventListener('click', e => { e.stopPropagation(); closeTab(id); });
-
-    el.appendChild(favEl);
-    el.appendChild(nameEl);
-    el.appendChild(closeEl);
-    el.addEventListener('click', () => switchTab(id));
-
-    // Drag to reorder
-    el.setAttribute('draggable', true);
-    el.addEventListener('dragstart', ev => { dragSrc = el; ev.dataTransfer.effectAllowed = 'move'; setTimeout(() => el.style.opacity = '0.4', 0); });
-    el.addEventListener('dragend', () => { el.style.opacity = ''; dragSrc = null; });
-    el.addEventListener('dragover', ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = 'move'; });
-    el.addEventListener('dragenter', ev => { ev.preventDefault(); if (el !== dragSrc) el.style.outline = '1px solid var(--accent)'; });
-    el.addEventListener('dragleave', () => el.style.outline = '');
-    el.addEventListener('drop', ev => {
-      ev.preventDefault(); ev.stopPropagation(); el.style.outline = '';
-      if (dragSrc && dragSrc !== el) {
-        const list = document.getElementById('tab-list');
-        const els = [...list.querySelectorAll('.tab')];
-        const srcIdx = els.indexOf(dragSrc), dstIdx = els.indexOf(el);
-        if (srcIdx < dstIdx) list.insertBefore(dragSrc, el.nextSibling);
-        else list.insertBefore(dragSrc, el);
-        const srcTabIdx = tabs.findIndex(t => t.id === dragSrc.id.replace('tel-',''));
-        const dstTabIdx = tabs.findIndex(t => t.id === el.id.replace('tel-',''));
-        const [moved] = tabs.splice(srcTabIdx, 1);
-        tabs.splice(dstTabIdx, 0, moved);
+    function processUrl(raw) {
+      raw = raw.trim();
+      if (!raw) return null;
+      if (isNrgMain(raw)) return raw;
+      if (!raw.includes('.') || raw.includes(' ')) {
+        return 'https://search.brave.com/search?q=' + encodeURIComponent(raw);
       }
-    });
+      if (!/^https?:\/\//i.test(raw)) return 'https://' + raw;
+      return raw;
+    }
 
-    document.getElementById('tab-list').appendChild(el);
+    function getDisplayName(url) {
+      if (!url) return 'NEW TAB';
+      if (isNrgMain(url)) return getNrgMainLabel(url);
+      try {
+        let u = url;
+        if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+        return new URL(u).hostname.replace('www.','');
+      } catch(e) { return url.substring(0,16); }
+    }
 
-    const frame = document.createElement('iframe');
-    frame.id = 'frame-' + id;
-    frame.setAttribute('allowfullscreen', '');
+    function showNavBar(show) {  }
+    function updateUrlBar(url) { document.getElementById('url-bar').value = url || ''; }
 
-    frame.addEventListener('load', () => {
-      setTabLoading(id, false);
-      updateLockIcon();
-    });
+    let dragSrc = null;
+    let closedTabs = [];
 
-    document.getElementById('nrg-viewport').appendChild(frame);
+    function createTab(rawUrl) {
+      const id = 'tab_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      const tab = {
+        id, rawUrl: rawUrl || null, encodedUrl: null, zoom: 100,
+        loading: false, isNrg: false, isInternal: false, scrollX:0, scrollY:0
+      };
+      tabs.push(tab);
 
-    if (rawUrl) {
-      if (isNrgMain(rawUrl)) {
-        const path = resolveNrgMain(rawUrl);
-        if (path === '__internal__') {
-          tab.encodedUrl = '__internal__';
-          tab.isNrg = true;
-          tab.isInternal = true;
-        } else if (path) {
-          tab.encodedUrl = path;
-          tab.isNrg = true;
-          frame.src = path;
+      const el = document.createElement('div');
+      el.className = 'tab'; el.id = 'tel-' + id;
+      el.setAttribute('draggable', 'true');
+      
+      const fav = getFaviconUrl(rawUrl);
+      el.innerHTML = `
+        <div class="tab-favicon" id="tfav-${id}">
+          ${isNrgMain(rawUrl) ? '<svg class="tab-icon-nrg" viewBox="0 0 24 24"><polygon points="12 2 2 22 22 22"/></svg>' : 
+            (fav ? `<img src="${fav}" onerror="this.innerHTML='<svg class=\'tab-icon-svg\' viewBox=\'0 0 24 24\'><circle cx=\'12\' cy=\'12\' r=\'10\'/></svg>'">` : 
+             '<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>')}
+        </div>
+        <div class="tab-name" id="tname-${id}">${getDisplayName(rawUrl)}</div>
+        <div class="tab-close" id="tcls-${id}">×</div>
+      `;
+
+      el.addEventListener('click', e => {
+        if (e.target.classList.contains('tab-close')) return;
+        switchTab(id);
+      });
+      el.querySelector('.tab-close').addEventListener('click', e => {
+        e.stopPropagation(); closeTab(id);
+      });
+
+      el.addEventListener('dragstart', ev => {
+        dragSrc = el; ev.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => el.style.opacity = '0.4', 0);
+      });
+      el.addEventListener('dragend', () => { el.style.opacity = ''; dragSrc = null; });
+      el.addEventListener('dragover', ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = 'move'; });
+      el.addEventListener('dragenter', ev => { ev.preventDefault(); if (el !== dragSrc) el.style.outline = '1px solid var(--accent)'; });
+      el.addEventListener('dragleave', () => el.style.outline = '');
+      el.addEventListener('drop', ev => {
+        ev.preventDefault(); ev.stopPropagation(); el.style.outline = '';
+        if (dragSrc && dragSrc !== el) {
+          const list = document.getElementById('tab-list');
+          const els = [...list.querySelectorAll('.tab')];
+          const srcIdx = els.indexOf(dragSrc), dstIdx = els.indexOf(el);
+          if (srcIdx < dstIdx) list.insertBefore(dragSrc, el.nextSibling);
+          else list.insertBefore(dragSrc, el);
+
+          const srcTabIdx = tabs.findIndex(t => t.id === dragSrc.id.replace('tel-',''));
+          const dstTabIdx = tabs.findIndex(t => t.id === el.id.replace('tel-',''));
+          const [moved] = tabs.splice(srcTabIdx, 1);
+          tabs.splice(dstTabIdx, 0, moved);
         }
-      } else {
-        const processed = processUrl(rawUrl);
-        if (processed) {
-          const encoded = scramjet.encodeUrl(processed);
-          tab.encodedUrl = encoded;
-          tab.isNrg = false;
-          setTabLoading(id, true);
-          frame.src = encoded;
-          frame.addEventListener('load', () => {
-            const tryUpdate = () => {
-              try {
-                const doc = frame.contentDocument;
-                if (!doc) return;
-                const title = doc.title;
-                if (title && title !== 'about:blank') { nameEl.textContent = title.substring(0,20); tab.label = title; }
-                const fav = doc.querySelector('link[rel*="icon"]')?.href;
-                if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-              } catch(e) {
-                const fav = getFaviconUrl(rawUrl);
-                if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-              }
-            };
-            tryUpdate();
-            setTimeout(tryUpdate, 1500);
-          }, {once: true});
-          const fav = getFaviconUrl(rawUrl);
-          if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-        }
-      }
-    }
+      });
 
-    switchTab(id);
-    return id;
-  }
+      document.getElementById('tab-list').appendChild(el);
 
-  function switchTab(id) {
-    activeId = id;
-    const tab = tabs.find(t => t.id === id);
-
-    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById('tel-' + id);
-    if (el) el.classList.add('active');
-
-    document.querySelectorAll('#nrg-viewport iframe').forEach(f => f.classList.remove('visible'));
-    const frame = document.getElementById('frame-' + id);
-    if (frame) frame.classList.add('visible');
-
-    const histPage = document.getElementById('nrg-history-page');
-
-    if (tab && tab.isInternal) {
-      document.getElementById('nrg-viewport').classList.add('visible');
-      document.getElementById('nrg-dashboard').classList.add('hidden');
-      hideError();
-      histPage.classList.add('visible');
-      updateUrlBar(tab.rawUrl || '');
-      renderTabHistory();
-    } else {
-      histPage.classList.remove('visible');
-      if (tab && tab.encodedUrl) {
-        document.getElementById('nrg-viewport').classList.add('visible');
-        document.getElementById('nrg-dashboard').classList.add('hidden');
-        hideError();
-        updateUrlBar(tab.rawUrl || '');
-      } else {
-        document.getElementById('nrg-viewport').classList.remove('visible');
-        document.getElementById('nrg-dashboard').classList.remove('hidden');
-        updateUrlBar('');
-        setTimeout(() => document.getElementById('nrg-query').focus(), 50);
-      }
-    }
-
-    // Update zoom, lock, reload button for this tab
-    if (typeof setZoom === 'function') setZoom(tab?.zoom || 100);
-    if (typeof updateLockIcon === 'function') updateLockIcon();
-    const reloadBtn = document.getElementById('nav-reload');
-    if (reloadBtn && typeof STOP_SVG !== 'undefined') {
-      reloadBtn.innerHTML = tab?.loading ? STOP_SVG : RELOAD_SVG;
-      reloadBtn.title = tab?.loading ? 'Stop' : 'Reload';
-    }
-  }
-
-  function closeTab(id) {
-    const tab = tabs.find(t => t.id === id);
-    // Save for Ctrl+Shift+T restore
-    if (tab?.rawUrl && !isNrgMain(tab.rawUrl)) {
-      closedTabs.push({ url: tab.rawUrl, label: document.getElementById('tname-' + id)?.textContent });
-    }
-    const idx = tabs.findIndex(t => t.id === id);
-    if (idx === -1) return;
-    tabs.splice(idx, 1);
-    document.getElementById('tel-' + id)?.remove();
-    document.getElementById('frame-' + id)?.remove();
-    if (tabs.length === 0) {
-      createTab();
-    } else if (activeId === id) {
-      switchTab(tabs[Math.max(0, idx - 1)].id);
-    }
-  }
-
-  function navigateActive(raw) {
-    if (!raw) return;
-    const tab = tabs.find(t => t.id === activeId);
-    if (!tab) return;
-
-    if (isNrgMain(raw)) {
-      const path = resolveNrgMain(raw);
-      if (!path) return;
-      tab.rawUrl = raw;
-      tab.encodedUrl = path;
-      tab.isNrg = true;
-      const nameEl = document.getElementById('tname-' + activeId);
-      if (nameEl) nameEl.textContent = getNrgMainLabel(raw);
-      const frame = document.getElementById('frame-' + activeId);
-
-      if (path === '__internal__') {
-        tab.isInternal = true;
-        // Don't set frame.src — internal page rendered by switchTab
-      } else {
-        tab.isInternal = false;
-        if (frame) frame.src = path;
-      }
-
-      document.getElementById('nrg-viewport').classList.add('visible');
-      document.getElementById('nrg-dashboard').classList.add('hidden');
-      showNavBar(false);
-      updateUrlBar(raw);
-      switchTab(activeId); // re-run switchTab to show/hide internal page
-      return;
-    }
-
-    // Record history for real navigations
-    addTabHistory(raw);
-
-    const processed = processUrl(raw);
-    if (!processed) return;
-    const encoded = scramjet.encodeUrl(processed);
-    tab.rawUrl = raw;
-    tab.encodedUrl = encoded;
-    tab.isNrg = false;
-    tab.isInternal = false;
-
-    // Hide history page if switching away
-    document.getElementById('nrg-history-page').classList.remove('visible');
-
-    const nameEl = document.getElementById('tname-' + activeId);
-    if (nameEl) nameEl.textContent = getDisplayName(raw);
-
-    const favEl = document.getElementById('fav-' + activeId);
-    if (favEl) {
-      const fav = getFaviconUrl(raw);
-      if (fav) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-    }
-
-    const frame = document.getElementById('frame-' + activeId);
-    if (frame) {
-      setTabLoading(activeId, true);
-      frame.src = encoded;
+      const frame = document.createElement('iframe');
+      frame.id = 'frame-' + id; frame.setAttribute('allowfullscreen', '');
       frame.addEventListener('load', () => {
-        try {
-          const title = frame.contentDocument?.title;
-          if (title && title !== 'about:blank' && nameEl) nameEl.textContent = title.substring(0, 20);
-          const fav = frame.contentDocument?.querySelector('link[rel*="icon"]')?.href;
-          if (fav && favEl) favEl.innerHTML = `<img src="${fav}" onerror="this.style.display='none'">`;
-        } catch(e) {}
-        setTimeout(() => {
-          try {
-            const title = frame.contentDocument?.title;
-            if (title && title !== 'about:blank' && nameEl) nameEl.textContent = title.substring(0, 20);
-          } catch(e) {}
-        }, 1500);
-      }, {once: true});
+        setTabLoading(id, false);
+        updateLockIcon();
+      });
+      document.getElementById('nrg-viewport').appendChild(frame);
+
+      if (rawUrl) {
+        if (isNrgMain(rawUrl)) {
+          const path = resolveNrgMain(rawUrl);
+          if (path === '__internal__') {
+            tab.encodedUrl = '__internal__'; tab.isNrg = true; tab.isInternal = true;
+          } else if (path) {
+            tab.encodedUrl = path; tab.isNrg = true; frame.src = path;
+          }
+        } else {
+          const processed = processUrl(rawUrl);
+          if (processed) {
+            const encoded = scramjet ? scramjet.encodeUrl(processed) : processed;
+            tab.encodedUrl = encoded; tab.isNrg = false;
+            setTabLoading(id, true); frame.src = encoded;
+            frame.addEventListener('load', () => {
+              const tryUpdate = () => {
+                try {
+                  const title = frame.contentDocument?.title;
+                  if (title && title !== 'about:blank') {
+                    const nameEl = document.getElementById('tname-' + id);
+                    if (nameEl) nameEl.textContent = title.substring(0,20);
+                  }
+                } catch(e) {}
+              };
+              setTimeout(tryUpdate, 600); setTimeout(tryUpdate, 2000);
+            }, {once: true});
+          }
+        }
+      }
+      switchTab(id);
     }
 
-    document.getElementById('nrg-viewport').classList.add('visible');
-    document.getElementById('nrg-dashboard').classList.add('hidden');
-    showNavBar(true);
-    updateUrlBar(raw);
-  }
+    function switchTab(id) {
+      if (!id) return; activeId = id;
+      tabs.forEach(t => {
+        const tel = document.getElementById('tel-' + t.id);
+        const fr = document.getElementById('frame-' + t.id);
+        if (t.id === id) {
+          tel?.classList.add('active'); fr?.classList.add('visible');
+        } else {
+          tel?.classList.remove('active'); fr?.classList.remove('visible');
+        }
+      });
 
-  // ── FORM HANDLERS ──
-  document.getElementById('nrg-core-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const raw = document.getElementById('nrg-query').value.trim();
-    if (!raw) return;
-    navigateActive(raw);
-    document.getElementById('nrg-query').value = '';
-  });
+      document.getElementById('nrg-history-page').classList.remove('visible');
 
-  document.getElementById('url-bar').addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      const raw = e.target.value.trim();
+      const tab = tabs.find(t => t.id === id);
+      if (tab) {
+        if (tab.isInternal && tab.encodedUrl === '__internal__') {
+          document.getElementById('nrg-viewport').classList.remove('visible');
+          document.getElementById('nrg-dashboard').classList.add('hidden');
+          document.getElementById('nrg-history-page').classList.add('visible');
+          renderTabHistory(); updateUrlBar(tab.rawUrl || '');
+        } else if (tab.encodedUrl) {
+          document.getElementById('nrg-viewport').classList.add('visible');
+          document.getElementById('nrg-dashboard').classList.add('hidden');
+          hideError(); updateUrlBar(tab.rawUrl || '');
+        } else {
+          document.getElementById('nrg-viewport').classList.remove('visible');
+          document.getElementById('nrg-dashboard').classList.remove('hidden');
+          updateUrlBar('');
+          setTimeout(() => document.getElementById('nrg-query').focus(), 50);
+        }
+      }
+
+      if (typeof setZoom === 'function') setZoom(tab?.zoom || 100);
+      if (typeof updateLockIcon === 'function') updateLockIcon();
+      
+      const reloadBtn = document.getElementById('nav-reload');
+      if (reloadBtn && typeof STOP_SVG !== 'undefined') {
+        reloadBtn.innerHTML = tab?.loading ? STOP_SVG : RELOAD_SVG;
+        reloadBtn.title = tab?.loading ? 'Stop' : 'Reload';
+      }
+    }
+
+    function closeTab(id) {
+      const tab = tabs.find(t => t.id === id);
+      if (tab?.rawUrl && !isNrgMain(tab.rawUrl)) {
+        closedTabs.push({ url: tab.rawUrl, label: document.getElementById('tname-' + id)?.textContent });
+      }
+      const idx = tabs.findIndex(t => t.id === id);
+      if (idx === -1) return;
+      tabs.splice(idx, 1);
+      document.getElementById('tel-' + id)?.remove();
+      document.getElementById('frame-' + id)?.remove();
+
+      if (tabs.length === 0) {
+        createTab();
+      } else if (activeId === id) {
+        switchTab(tabs[Math.max(0, idx - 1)].id);
+      }
+    }
+
+    function navigateActive(raw) {
+      if (!raw) return;
+      const tab = tabs.find(t => t.id === activeId);
+      if (!tab) return;
+
+      if (isNrgMain(raw)) {
+        const path = resolveNrgMain(raw);
+        if (!path) return;
+        tab.rawUrl = raw; tab.encodedUrl = path; tab.isNrg = true;
+        
+        const nameEl = document.getElementById('tname-' + activeId);
+        if (nameEl) nameEl.textContent = getNrgMainLabel(raw);
+        
+        const frame = document.getElementById('frame-' + activeId);
+        if (path === '__internal__') {
+          tab.isInternal = true;
+        } else {
+          tab.isInternal = false;
+          if (frame) frame.src = path;
+        }
+        
+        const favEl = document.getElementById('tfav-' + activeId);
+        if (favEl) favEl.innerHTML = '<svg class="tab-icon-nrg" viewBox="0 0 24 24"><polygon points="12 2 2 22 22 22"/></svg>';
+        switchTab(activeId);
+        updateUrlBar(raw);
+      } else {
+        const processed = processUrl(raw);
+        if (processed) {
+          const encoded = scramjet ? scramjet.encodeUrl(processed) : processed;
+          tab.rawUrl = processed; tab.encodedUrl = encoded; tab.isNrg = false; tab.isInternal = false;
+          
+          const fav = getFaviconUrl(processed);
+          const favEl = document.getElementById('tfav-' + activeId);
+          if (favEl) {
+            favEl.innerHTML = fav ? `<img src="${fav}" onerror="this.innerHTML='<svg class=\'tab-icon-svg\' viewBox=\'0 0 24 24\'><circle cx=\'12\' cy=\'12\' r=\'10\'/></svg>'">` : 
+              '<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>';
+          }
+
+          const nameEl = document.getElementById('tname-' + activeId);
+          if (nameEl) nameEl.textContent = getDisplayName(processed);
+
+          setTabLoading(activeId, true);
+          const frame = document.getElementById('frame-' + activeId);
+          if (frame) {
+            frame.src = encoded;
+            frame.addEventListener('load', () => {
+              try {
+                const title = frame.contentDocument?.title;
+                if (title && title !== 'about:blank' && nameEl) nameEl.textContent = title.substring(0, 20);
+              } catch(e) {}
+            }, {once: true});
+          }
+          document.getElementById('nrg-viewport').classList.add('visible');
+          document.getElementById('nrg-dashboard').classList.add('hidden');
+          showNavBar(true); updateUrlBar(processed);
+        }
+      }
+    }
+
+    document.getElementById('nrg-core-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const raw = document.getElementById('nrg-query').value.trim();
+      if (!raw) return;
+      navigateActive(raw);
+      document.getElementById('nrg-query').value = '';
+    });
+
+    document.getElementById('url-bar').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const raw = e.target.value.trim();
+        if (raw) navigateActive(raw);
+      }
+    });
+
+    document.getElementById('url-go').addEventListener('click', () => {
+      const raw = document.getElementById('url-bar').value.trim();
       if (raw) navigateActive(raw);
-    }
-  });
-  document.getElementById('url-go').addEventListener('click', () => {
-    const raw = document.getElementById('url-bar').value.trim();
-    if (raw) navigateActive(raw);
-  });
+    });
 
-  document.getElementById('new-tab-btn').addEventListener('click', () => createTab());
-  document.getElementById('nav-home').addEventListener('click', () => {
-    const tab = tabs.find(t => t.id === activeId);
-    if (tab) { tab.encodedUrl = null; tab.rawUrl = null; tab.isNrg = false; }
-    document.getElementById('nrg-viewport').classList.remove('visible');
-    document.getElementById('nrg-dashboard').classList.remove('hidden');
-    showNavBar(false);
-    updateUrlBar('');
-    const nameEl = document.getElementById('tname-' + activeId);
-    if (nameEl) nameEl.textContent = 'NEW TAB';
-    setTimeout(() => document.getElementById('nrg-query').focus(), 50);
-  });
-  document.getElementById('nav-back').addEventListener('click', () => {
-    const frame = document.getElementById('frame-' + activeId);
-    if (frame) frame.contentWindow?.history.back();
-  });
-  document.getElementById('nav-forward').addEventListener('click', () => {
-    const frame = document.getElementById('frame-' + activeId);
-    if (frame) frame.contentWindow?.history.forward();
-  });
-  document.getElementById('nav-reload').addEventListener('click', () => {
-    const frame = document.getElementById('frame-' + activeId);
-    if (!frame) return;
-    const tab = tabs.find(t => t.id === activeId);
-    if (tab && tab.loading) {
-      // Stop loading
-      frame.contentWindow?.stop?.();
-      setTabLoading(activeId, false);
-    } else {
-      frame.contentWindow?.location.reload();
-    }
-  });
+    document.getElementById('new-tab-btn').addEventListener('click', () => createTab());
 
-  const RELOAD_SVG = `<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
-  const STOP_SVG  = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    document.getElementById('nav-home').addEventListener('click', () => {
+      const tab = tabs.find(t => t.id === activeId);
+      if (tab) {
+        tab.encodedUrl = null; tab.rawUrl = null; tab.isNrg = false;
+      }
+      document.getElementById('nrg-viewport').classList.remove('visible');
+      document.getElementById('nrg-dashboard').classList.remove('hidden');
+      showNavBar(false); updateUrlBar('');
+      const nameEl = document.getElementById('tname-' + activeId);
+      if (nameEl) nameEl.textContent = 'NEW TAB';
+      setTimeout(() => document.getElementById('nrg-query').focus(), 50);
+    });
 
-  function setTabLoading(id, isLoading) {
-    const tab = tabs.find(t => t.id === id);
-    if (!tab) return;
-    tab.loading = isLoading;
-    const favEl = document.getElementById('fav-' + id);
-    if (favEl) {
+    document.getElementById('nav-back').addEventListener('click', () => {
+      const frame = document.getElementById('frame-' + activeId);
+      if (frame) frame.contentWindow?.history.back();
+    });
+    document.getElementById('nav-forward').addEventListener('click', () => {
+      const frame = document.getElementById('frame-' + activeId);
+      if (frame) frame.contentWindow?.history.forward();
+    });
+
+    const RELOAD_SVG = `<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+    const STOP_SVG = `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+    document.getElementById('nav-reload').addEventListener('click', () => {
+      const tab = tabs.find(t => t.id === activeId);
+      const frame = document.getElementById('frame-' + activeId);
+      if (!frame || !tab) return;
+      if (tab.loading) {
+        frame.src = 'about:blank'; setTabLoading(activeId, false);
+      } else {
+        setTabLoading(activeId, true); frame.src = frame.src;
+      }
+    });
+
+    function setTabLoading(id, isLoading) {
+      const tab = tabs.find(t => t.id === id);
+      if (!tab) return; tab.loading = isLoading;
+      const favEl = document.getElementById('tfav-' + id);
+      if (!favEl) return;
       if (isLoading) {
-        favEl.dataset.prevHtml = favEl.innerHTML;
         favEl.innerHTML = '<div class="tab-spinner"></div>';
       } else {
-        if (favEl.dataset.prevHtml) favEl.innerHTML = favEl.dataset.prevHtml;
+        const fav = getFaviconUrl(tab.rawUrl);
+        favEl.innerHTML = isNrgMain(tab.rawUrl) ? '<svg class="tab-icon-nrg" viewBox="0 0 24 24"><polygon points="12 2 2 22 22 22"/></svg>' : 
+          (fav ? `<img src="${fav}" onerror="this.innerHTML='<svg class=\'tab-icon-svg\' viewBox=\'0 0 24 24\'><circle cx=\'12\' cy=\'12\' r=\'10\'/></svg>'">` : 
+           '<svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>');
+      }
+      if (id === activeId) {
+        const btn = document.getElementById('nav-reload');
+        if (btn) { btn.innerHTML = isLoading ? STOP_SVG : RELOAD_SVG; btn.title = isLoading ? 'Stop' : 'Reload'; }
       }
     }
-    if (id === activeId) {
-      const btn = document.getElementById('nav-reload');
-      btn.innerHTML = isLoading ? STOP_SVG : RELOAD_SVG;
-      btn.title = isLoading ? 'Stop' : 'Reload';
-    }
-  }
 
-  // ── KEYBOARD SHORTCUTS (non-conflicting) ──
-  // We use keydown with e.preventDefault only for keys NRG owns.
-  // We avoid: Ctrl+T (browser new tab — we still capture it but it's expected),
-  // Ctrl+W (browser close tab), Ctrl+N, Ctrl+Shift+N, F5.
-  document.addEventListener('keydown', e => {
-    const ctrl = e.ctrlKey || e.metaKey;
-
-    // Ctrl+T — new tab (browser also opens one; we intercept at app level)
-    if (ctrl && e.key === 't') { e.preventDefault(); createTab(); return; }
-
-    // Ctrl+W — close active tab
-    if (ctrl && e.key === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); return; }
-
-    // Ctrl+L / Ctrl+E — focus url bar (safe, browser Ctrl+L also focuses address bar but our input captures it)
-    if (ctrl && (e.key === 'l' || e.key === 'e')) {
-      e.preventDefault();
-      const bar = document.getElementById('url-bar'); bar.focus(); bar.select(); return;
+    function updateLockIcon() {
+      const tab = tabs.find(t => t.id === activeId);
+      const wrap = document.getElementById('url-lock');
+      if (!tab || !tab.rawUrl || isNrgMain(tab.rawUrl)) { wrap?.classList.remove('visible'); return; }
+      wrap?.classList.add('visible');
+      if (tab.rawUrl.startsWith('https://')) {
+        wrap.className = 'visible https'; wrap.title = 'Secure connection activated';
+      } else {
+        wrap.className = 'visible http'; wrap.title = 'Unencrypted transport layout';
+      }
     }
 
-    // Ctrl+R — reload (avoid conflict: only if url bar not focused)
-    if (ctrl && e.key === 'r' && document.activeElement?.id !== 'url-bar') {
-      e.preventDefault();
+    function setZoom(val) {
+      const tab = tabs.find(t => t.id === activeId);
+      if (!tab) return; tab.zoom = val;
+      document.getElementById('url-zoom-label').textContent = val + '%';
+      document.getElementById('zoom-level').textContent = val + '%';
       const frame = document.getElementById('frame-' + activeId);
-      if (frame) { setTabLoading(activeId, true); frame.contentWindow?.location.reload(); }
-      return;
-    }
-
-    // Ctrl+Shift+T — reopen last closed tab
-    if (ctrl && e.shiftKey && e.key === 'T') {
-      e.preventDefault();
-      const last = closedTabs.pop();
-      if (last) createTab(last.url);
-      return;
-    }
-
-    // Ctrl+Tab / Ctrl+Shift+Tab — cycle tabs
-    if (ctrl && e.key === 'Tab') {
-      e.preventDefault();
-      const idx = tabs.findIndex(t => t.id === activeId);
-      if (e.shiftKey) switchTab(tabs[(idx - 1 + tabs.length) % tabs.length].id);
-      else            switchTab(tabs[(idx + 1) % tabs.length].id);
-      return;
-    }
-
-    // Ctrl+1-9 — switch to tab by index
-    if (ctrl && e.key >= '1' && e.key <= '9') {
-      e.preventDefault();
-      const idx = parseInt(e.key) - 1;
-      if (tabs[idx]) switchTab(tabs[idx].id);
-      return;
-    }
-
-    // Ctrl+= or Ctrl++ — zoom in
-    if (ctrl && (e.key === '=' || e.key === '+')) { e.preventDefault(); adjustZoom(10); return; }
-
-    // Ctrl+- — zoom out
-    if (ctrl && e.key === '-') { e.preventDefault(); adjustZoom(-10); return; }
-
-    // Ctrl+0 — reset zoom
-    if (ctrl && e.key === '0') { e.preventDefault(); setZoom(100); return; }
-
-    // F12 — toggle DevTools
-    if (e.key === 'F12') { e.preventDefault(); toggleDevTools(); return; }
-  });
-
-  // ── LOCK ICON ──
-  function updateLockIcon() {
-    const lock = document.getElementById('url-lock');
-    const url = document.getElementById('url-bar').value.trim();
-    if (!url || url.startsWith('nrgmain://')) { lock.className = 'url-lock'; return; }
-    const isHttps = /^https:\/\//i.test(url) || (!/^http:\/\//i.test(url) && url.includes('.'));
-    lock.classList.remove('http','https');
-    lock.classList.add('visible', isHttps ? 'https' : 'http');
-    lock.title = isHttps ? 'Secure (HTTPS)' : 'Not secure (HTTP)';
-  }
-
-  const _origUpdateUrlBar = updateUrlBar;
-  updateUrlBar = function(raw) {
-    _origUpdateUrlBar(raw);
-    updateLockIcon();
-  };
-
-  // ── ZOOM ──
-  let currentZoom = 100;
-  const ZOOM_STEPS = [25,33,50,67,75,80,90,100,110,125,150,175,200,250,300];
-
-  function setZoom(pct) {
-    currentZoom = Math.max(25, Math.min(300, pct));
-    const frame = document.getElementById('frame-' + activeId);
-    if (frame) {
-      frame.style.transform = `scale(${currentZoom/100})`;
-      frame.style.transformOrigin = 'top left';
-      frame.style.width = `${10000/currentZoom}%`;
-      frame.style.height = `${10000/currentZoom}%`;
-    }
-    document.getElementById('zoom-level').textContent = currentZoom + '%';
-    const zoomEl = document.getElementById('url-zoom');
-    const zoomLabel = document.getElementById('url-zoom-label');
-    if (currentZoom !== 100) {
-      zoomEl.classList.add('visible');
-      zoomLabel.textContent = currentZoom + '%';
-    } else {
-      zoomEl.classList.remove('visible');
-    }
-  }
-
-  function adjustZoom(delta) {
-    const idx = ZOOM_STEPS.findIndex(s => s >= currentZoom);
-    if (delta > 0) setZoom(ZOOM_STEPS[Math.min(idx + 1, ZOOM_STEPS.length - 1)]);
-    else           setZoom(ZOOM_STEPS[Math.max(idx - 1, 0)]);
-  }
-
-  document.getElementById('dd-zoom-in').addEventListener('click', () => adjustZoom(10));
-  document.getElementById('dd-zoom-out').addEventListener('click', () => adjustZoom(-10));
-  document.getElementById('dd-zoom-reset').addEventListener('click', () => setZoom(100));
-  document.getElementById('url-zoom').addEventListener('click', () => { setZoom(100); dropdown.classList.remove('open'); });
-
-  // ── PINNED TABS ──
-  function setPinned(id, pinned) {
-    const tab = tabs.find(t => t.id === id);
-    if (!tab) return;
-    tab.pinned = pinned;
-    const el = document.getElementById('tel-' + id);
-    if (!el) return;
-    el.classList.toggle('pinned', pinned);
-    // Move pinned tabs to front
-    const list = document.getElementById('tab-list');
-    if (pinned) {
-      const firstUnpinned = [...list.querySelectorAll('.tab:not(.pinned)')][0];
-      list.insertBefore(el, firstUnpinned || document.getElementById('new-tab-btn'));
-    }
-    // Update pin label in dropdown
-    document.getElementById('dd-pin-tab').childNodes[1].textContent = pinned ? ' UNPIN TAB' : ' PIN TAB';
-  }
-
-  document.getElementById('dd-pin-tab').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    const tab = tabs.find(t => t.id === activeId);
-    if (tab) setPinned(activeId, !tab.pinned);
-  });
-
-  // ── TAB RIGHT-CLICK CONTEXT MENU ──
-  const ctxMenu = document.getElementById('tab-ctx-menu');
-  let ctxTabId = null;
-
-  document.getElementById('tab-list').addEventListener('contextmenu', e => {
-    const tabEl = e.target.closest('.tab');
-    if (!tabEl) return;
-    e.preventDefault();
-    ctxTabId = tabEl.id.replace('tel-', '');
-    const tab = tabs.find(t => t.id === ctxTabId);
-    document.getElementById('ctx-pin').textContent = (tab?.pinned ? '📌 UNPIN TAB' : '📌 PIN TAB');
-
-    // Build group color dots
-    const colorsEl = document.getElementById('ctx-group-colors');
-    colorsEl.innerHTML = '';
-    TAB_GROUP_COLORS.forEach((c, i) => {
-      const dot = document.createElement('div');
-      const active = tabGroups[ctxTabId] === i;
-      dot.style.cssText = `width:14px;height:14px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${active ? '#fff' : 'transparent'};transition:border-color 0.1s;flex-shrink:0;`;
-      dot.addEventListener('click', e => { e.stopPropagation(); setTabGroup(ctxTabId, i); ctxMenu.classList.remove('open'); });
-      dot.addEventListener('mouseenter', () => dot.style.borderColor = '#fff');
-      dot.addEventListener('mouseleave', () => dot.style.borderColor = active ? '#fff' : 'transparent');
-      colorsEl.appendChild(dot);
-    });
-    // Clear group dot
-    const clear = document.createElement('div');
-    clear.title = 'Clear group';
-    clear.style.cssText = `width:14px;height:14px;border-radius:50%;background:var(--surface3);cursor:pointer;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text-muted);flex-shrink:0;`;
-    clear.textContent = '✕';
-    clear.addEventListener('click', e => { e.stopPropagation(); setTabGroup(ctxTabId, null); const el = document.getElementById('tel-'+ctxTabId); if(el){el.style.borderTopColor='';el.style.borderTopWidth='';} ctxMenu.classList.remove('open'); });
-    colorsEl.appendChild(clear);
-
-    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 170) + 'px';
-    ctxMenu.style.top = e.clientY + 'px';
-    ctxMenu.classList.add('open');
-  });
-
-  document.getElementById('ctx-pin').addEventListener('click', () => {
-    const tab = tabs.find(t => t.id === ctxTabId);
-    if (tab) setPinned(ctxTabId, !tab.pinned);
-    ctxMenu.classList.remove('open');
-  });
-  document.getElementById('ctx-duplicate').addEventListener('click', () => {
-    const tab = tabs.find(t => t.id === ctxTabId);
-    if (tab?.rawUrl) createTab(tab.rawUrl);
-    ctxMenu.classList.remove('open');
-  });
-  document.getElementById('ctx-close').addEventListener('click', () => {
-    if (ctxTabId) closeTab(ctxTabId);
-    ctxMenu.classList.remove('open');
-  });
-  document.addEventListener('click', () => ctxMenu.classList.remove('open'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') ctxMenu.classList.remove('open'); });
-
-  // ── MINI PLAYER ──
-  const musicFrame = document.getElementById('music-iframe');
-  let musicReady = false;
-
-  function mpSend(cmd, data={}) {
-    musicFrame.contentWindow?.postMessage({ nrgMusic: true, cmd, ...data }, '*');
-  }
-
-  musicFrame.addEventListener('load', () => { musicReady = true; });
-
-  // Receive state from music iframe
-  window.addEventListener('message', e => {
-    if (e.data?.nrgMusicState) {
-      const { playing, title, artist, cover, current, duration, progress } = e.data;
-      const player = document.getElementById('mini-player');
-      if (title) {
-        player.classList.add('visible');
-        document.getElementById('mp-title').textContent = title || 'unknown';
-        document.getElementById('mp-artist').textContent = artist || '—';
-        // Update cover
-        const coverEl = document.getElementById('mp-cover');
-        if (cover) coverEl.innerHTML = `<img src="${cover}" onerror="this.innerHTML='<svg viewBox=\'0 0 24 24\'><path d=\'M9 18V5l12-2v13\'/><circle cx=\'6\' cy=\'18\' r=\'3\'/><circle cx=\'18\' cy=\'16\' r=\'3\'/></svg>'">`;
-        // Update play icon
-        const icon = document.getElementById('mp-play-icon');
-        icon.innerHTML = playing
-          ? '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>'
-          : '<polygon points="5 3 19 12 5 21 5 3"/>';
-        // Update progress
-        document.getElementById('mp-prog-fill').style.width = progress + '%';
-        const fmt = s => { s=Math.floor(s||0); return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; };
-        document.getElementById('mp-cur').textContent = fmt(current);
-        document.getElementById('mp-dur').textContent = fmt(duration);
+      if (frame) {
+        frame.style.transform = `scale(${val/100})`;
+        frame.style.width = (100 / (val/100)) + '%';
+        frame.style.height = (100 / (val/100)) + '%';
+        frame.style.transformOrigin = 'top left';
       }
+      const indicator = document.getElementById('url-zoom');
+      if (val === 100) indicator?.classList.remove('visible');
+      else indicator?.classList.add('visible');
     }
-  });
-
-  document.getElementById('mp-play').addEventListener('click', () => mpSend('play'));
-  document.getElementById('mp-next').addEventListener('click', () => mpSend('next'));
-  document.getElementById('mp-prev').addEventListener('click', () => mpSend('prev'));
-  document.getElementById('mp-prog-track').addEventListener('click', e => {
-    const r = e.currentTarget.getBoundingClientRect();
-    mpSend('seek', { pct: (e.clientX - r.left) / r.width });
-  });
-  document.getElementById('mp-open').addEventListener('click', () => createTab('nrgmain://music'));
-  document.getElementById('mp-close').addEventListener('click', () => document.getElementById('mini-player').classList.remove('visible'));
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const s = String(now.getSeconds()).padStart(2,'0');
-    const el = document.getElementById('nrg-clock');
-    if (el) el.textContent = `${h}:${m}:${s}`;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  // ── BOOKMARKS ──
-  let bookmarks = [];
-  try { bookmarks = JSON.parse(localStorage.getItem('nrg_bm') || '[]'); } catch(e) { bookmarks = []; }
-  function saveBookmarks() { localStorage.setItem('nrg_bm', JSON.stringify(bookmarks)); }
-
-  function renderBookmarks() {
-    const bar = document.getElementById('bookmarks-bar');
-    bar.querySelectorAll('.bookmark-item').forEach(el => el.remove());
-    const addBtn = document.getElementById('add-bm-btn');
-    bookmarks.forEach((bm, i) => {
-      const el = document.createElement('div');
-      el.className = 'bookmark-item';
-      const fav = getFaviconUrl(bm.url);
-      el.innerHTML = `${fav ? `<img src="${fav}" onerror="this.style.display='none'">` : ''}<span>${bm.name}</span><div class="bookmark-del" title="Remove">×</div>`;
-      el.addEventListener('click', e => { if (e.target.classList.contains('bookmark-del')) return; createTab(bm.url); });
-      el.querySelector('.bookmark-del').addEventListener('click', e => { e.stopPropagation(); bookmarks.splice(i, 1); saveBookmarks(); renderBookmarks(); });
-      bar.insertBefore(el, addBtn);
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      const tab = tabs.find(t => t.id === activeId);
+      if (tab) setZoom(Math.min(250, (tab.zoom || 100) + 10));
     });
-  }
-
-  document.getElementById('add-bm-btn').addEventListener('click', () => {
-    const form = document.getElementById('bookmark-form');
-    form.classList.toggle('open');
-    if (form.classList.contains('open')) document.getElementById('bm-name').focus();
-  });
-  document.getElementById('bm-cancel').addEventListener('click', () => {
-    document.getElementById('bookmark-form').classList.remove('open');
-    document.getElementById('bm-name').value = '';
-    document.getElementById('bm-url').value = '';
-  });
-  document.getElementById('bm-save').addEventListener('click', () => {
-    const name = document.getElementById('bm-name').value.trim();
-    const url  = document.getElementById('bm-url').value.trim();
-    if (!name || !url) return;
-    bookmarks.push({ name, url });
-    saveBookmarks();
-    renderBookmarks();
-    document.getElementById('bookmark-form').classList.remove('open');
-    document.getElementById('bm-name').value = '';
-    document.getElementById('bm-url').value = '';
-  });
-  document.getElementById('bm-url').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('bm-save').click(); });
-
-  renderBookmarks();
-  createTab();
-
-  // ── THEME / SETTINGS SYNC ──
-  function hexToRgba(hex, a) {
-    hex = hex.replace('#','');
-    if (hex.length===3) hex=hex.split('').map(c=>c+c).join('');
-    const n=parseInt(hex,16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
-    return `rgba(${r},${g},${b},${a})`;
-  }
-
-  function applyTheme(t) {
-    const r = document.documentElement.style;
-    r.setProperty('--bg',          t.bg);
-    r.setProperty('--surface',     t.surface);
-    r.setProperty('--surface2',    t.surface2);
-    r.setProperty('--surface3',    t.surface2);
-    r.setProperty('--border',      t.border);
-    r.setProperty('--accent',      t.accent);
-    r.setProperty('--accent-dim',  hexToRgba(t.accent, 0.10));
-    r.setProperty('--accent-glow', hexToRgba(t.accent, 0.25));
-    r.setProperty('--text',        t.text);
-    r.setProperty('--text-dim',    t.textDim);
-    r.setProperty('--text-muted',  t.textMuted);
-  }
-
-  // Apply saved theme on load
-  const THEMES = [
-    { id:'midnight', name:'Midnight', bg:'#0a0a0a', surface:'#111', surface2:'#1a1a1a', border:'#2a2a2a', accent:'#c50cf9', text:'#e8e8e8', textDim:'#666', textMuted:'#3a3a3a' },
-    { id:'neon',     name:'Neon',     bg:'#050510', surface:'#0d0d1f', surface2:'#14142e', border:'#1e1e3f', accent:'#4f9cf9', text:'#e8f0ff', textDim:'#5a6a88', textMuted:'#2a3048' },
-    { id:'galaxy',   name:'Galaxy',   bg:'#06020f', surface:'#100820', surface2:'#180c2e', border:'#2a1540', accent:'#b57bee', text:'#eee8ff', textDim:'#6a5a88', textMuted:'#2e1e44' },
-    { id:'ocean',    name:'Ocean',    bg:'#020a14', surface:'#061622', surface2:'#0b2233', border:'#0e3040', accent:'#00c8ff', text:'#d8f4ff', textDim:'#4a7a99', textMuted:'#0d2233' },
-    { id:'crimson',  name:'Crimson',  bg:'#0f0005', surface:'#1a0008', surface2:'#220010', border:'#3a0018', accent:'#ff2255', text:'#ffe8ec', textDim:'#884455', textMuted:'#3a1020' },
-    { id:'gold',     name:'Gold',     bg:'#0a0800', surface:'#141000', surface2:'#1e1800', border:'#302400', accent:'#f5c518', text:'#fff8e0', textDim:'#886633', textMuted:'#2e2200' },
-    { id:'forest',   name:'Forest',   bg:'#020a04', surface:'#071208', surface2:'#0d1e10', border:'#142e18', accent:'#39d98a', text:'#d8ffe8', textDim:'#4a8860', textMuted:'#0d2214' },
-    { id:'sakura',   name:'Sakura',   bg:'#0f0508', surface:'#1a0810', surface2:'#220e18', border:'#381a28', accent:'#ff6b9d', text:'#ffe8f0', textDim:'#885566', textMuted:'#2e0e1a' },
-  ];
-  const savedTheme = localStorage.getItem('nrg_theme');
-  if (savedTheme) { const t = THEMES.find(x => x.id === savedTheme); if (t) applyTheme(t); }
-
-  // Apply saved cloak on load
-  const cloakTitle = localStorage.getItem('nrg_cloak_title');
-  const cloakIcon  = localStorage.getItem('nrg_cloak_icon');
-  if (cloakTitle) document.title = cloakTitle;
-  if (cloakIcon)  { const link = document.querySelector("link[rel*='icon']") || Object.assign(document.createElement('link'), {rel:'shortcut icon'}); link.href = cloakIcon; document.head.appendChild(link); }
-
-  // Apply saved panic key on load
-  const panicKey = localStorage.getItem('nrg_panic_key') || '\\';
-  const panicUrl = localStorage.getItem('nrg_panic_url') || 'https://google.com';
-  document.addEventListener('keydown', e => { if (e.key === panicKey) window.location.href = panicUrl; });
-
-  // ── ERROR OVERLAY ──
-  function showError(tabId, url, message, code, dest) {
-    const overlay = document.getElementById('nrg-error');
-    document.getElementById('err-url').textContent = url || '';
-    document.getElementById('err-message').textContent = message || 'unknown error';
-    document.getElementById('err-code-num').textContent = code || '—';
-    document.getElementById('err-dest').textContent = dest || '—';
-
-    // Map error codes to NRG error labels
-    let errLabel = 'ERR_CONNECTION_FAILED';
-    if (message && message.includes('SSL')) errLabel = 'ERR_SSL_CONNECT';
-    else if (message && message.includes('timeout')) errLabel = 'ERR_TIMED_OUT';
-    else if (message && message.includes('refused')) errLabel = 'ERR_CONNECTION_REFUSED';
-    else if (code === 404) errLabel = 'ERR_NOT_FOUND';
-    document.getElementById('err-code').textContent = errLabel;
-
-    // Hide iframe, show overlay
-    const frame = document.getElementById('frame-' + tabId);
-    if (frame) frame.classList.remove('visible');
-    overlay.classList.add('visible');
-
-    document.getElementById('err-retry').onclick = () => {
-      overlay.classList.remove('visible');
-      if (frame) { frame.classList.add('visible'); frame.src = frame.src; }
-    };
-    document.getElementById('err-newtab').onclick = () => {
-      overlay.classList.remove('visible');
-      createTab();
-    };
-  }
-
-  function hideError() {
-    document.getElementById('nrg-error').classList.remove('visible');
-  }
-
-  // Listen for scramjet error messages from iframes
-  window.addEventListener('message', e => {
-    if (!e.data || !e.data.type) return;
-    if (e.data.type === 'nrg-theme' && e.data.theme) {
-      applyTheme(e.data.theme);
-    }
-    if (e.data.type === 'scramjet-error' || (e.data.message && e.data.url)) {
-      const activeTab = tabs.find(t => t.id === activeId);
-      showError(activeId, activeTab?.rawUrl, e.data.message, e.data.code, e.data.destination);
-    }
-  });
-
-
-
-  // ── TAB GROUPS ──
-  const TAB_GROUP_COLORS = ['#c50cf9','#00c8ff','#39d98a','#ff2255','#f5c518','#ff6b9d','#b57bee','#4f9cf9'];
-  let tabGroups = {};
-
-  function setTabGroup(id, colorIdx) {
-    tabGroups[id] = colorIdx;
-    const el = document.getElementById('tel-' + id);
-    if (!el) return;
-    el.style.borderTopColor = colorIdx !== null ? TAB_GROUP_COLORS[colorIdx] : 'var(--border)';
-    if (colorIdx !== null) el.style.borderTopWidth = '2px';
-  }
-
-  // ── TAB HISTORY ──
-  let tabHistory = [];
-  try { tabHistory = JSON.parse(localStorage.getItem('nrg_tab_history') || '[]'); } catch(e) { tabHistory = []; }
-  function saveTabHistory() { localStorage.setItem('nrg_tab_history', JSON.stringify(tabHistory.slice(0, 500))); }
-
-  function addTabHistory(rawUrl, title) {
-    if (!rawUrl || isNrgMain(rawUrl)) return;
-    tabHistory.unshift({ url: rawUrl, title: title || rawUrl, ts: Date.now() });
-    saveTabHistory();
-  }
-
-  function renderTabHistory() {
-    const list = document.getElementById('hist-list');
-    list.innerHTML = '';
-    if (tabHistory.length === 0) {
-      list.innerHTML = '<div class="hist-empty">NO HISTORY YET</div>';
-      return;
-    }
-    // Group by day
-    const groups = {};
-    tabHistory.forEach((entry, i) => {
-      const d = new Date(entry.ts);
-      const key = d.toDateString();
-      if (!groups[key]) groups[key] = [];
-      groups[key].push({ ...entry, idx: i });
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      const tab = tabs.find(t => t.id === activeId);
+      if (tab) setZoom(Math.max(50, (tab.zoom || 100) - 10));
     });
-    Object.entries(groups).forEach(([day, entries]) => {
-      const label = document.createElement('div');
-      label.className = 'hist-day-label';
-      const now = new Date();
-      if (day === now.toDateString()) label.textContent = 'TODAY';
-      else if (day === new Date(now - 86400000).toDateString()) label.textContent = 'YESTERDAY';
-      else label.textContent = day.toUpperCase();
-      list.appendChild(label);
-      entries.forEach(entry => {
+    document.getElementById('url-zoom').addEventListener('click', () => setZoom(100));
+
+    const ctxMenu = document.getElementById('tab-ctx-menu');
+    let ctxTargetId = null;
+    document.getElementById('tab-bar').addEventListener('contextmenu', e => {
+      const tabEl = e.target.closest('.tab');
+      if (!tabEl) return; e.preventDefault();
+      ctxTargetId = tabEl.id.replace('tel-','');
+      ctxMenu.style.top = e.clientY + 'px'; ctxMenu.style.left = e.clientX + 'px';
+      ctxMenu.classList.add('open');
+    });
+    document.addEventListener('click', () => ctxMenu.classList.remove('open'));
+    
+    document.getElementById('ctx-reload').addEventListener('click', () => {
+      const fr = document.getElementById('frame-' + ctxTargetId);
+      if (fr) fr.src = fr.src;
+    });
+    document.getElementById('ctx-pin').addEventListener('click', () => {
+      const tel = document.getElementById('tel-' + ctxTargetId);
+      tel?.classList.toggle('pinned');
+    });
+    document.getElementById('ctx-duplicate').addEventListener('click', () => {
+      const t = tabs.find(x => x.id === ctxTargetId);
+      if (t) createTab(t.rawUrl);
+    });
+    document.getElementById('ctx-close').addEventListener('click', () => closeTab(ctxTargetId));
+    document.getElementById('ctx-close-others').addEventListener('click', () => {
+      [...tabs].forEach(t => { if (t.id !== ctxTargetId) closeTab(t.id); });
+    });
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'F12') { e.preventDefault(); toggleDevTools(); return; }
+      const ctrl = e.ctrlKey || e.metaKey;
+      if (ctrl && e.key === 't') { e.preventDefault(); createTab(); return; }
+      if (ctrl && e.key === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); return; }
+      if (ctrl && (e.key === 'l' || e.key === 'e')) {
+        e.preventDefault(); const bar = document.getElementById('url-bar');
+        bar.focus(); bar.select(); return;
+      }
+      if (ctrl && e.key === 'r' && document.activeElement?.id !== 'url-bar') {
+        e.preventDefault();
+        const frame = document.getElementById('frame-' + activeId);
+        if (frame) { setTabLoading(activeId, true); frame.src = frame.src; }
+        return;
+      }
+      if (ctrl && e.shiftKey && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        if (closedTabs.length > 0) { const last = closedTabs.pop(); createTab(last.url); }
+      }
+    });
+
+    setInterval(() => {
+      const clock = document.getElementById('dashboard-clock');
+      if (!clock) return; const d = new Date();
+      clock.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+    }, 1000);
+
+    (async function initBaremux() {
+      try {
+        console.log("Initializing BareMux connection layers...");
+        if (typeof BareMux !== 'undefined' && BareMux.BareClient) {
+          window.bareClient = new BareMux.BareClient()(location.protocol === 'https:' ? 'wss://' : 'ws://' + location.host + '/bare/');
+          console.log("BareMux transport connected securely.");
+        }
+        if (typeof Scramjet !== 'undefined') {
+          scramjet = new Scramjet({ prefix: '/sail/scram/', config: { encode: 'xor' } });
+          console.log("Scramjet pipeline codec compiled successfully.");
+        }
+      } catch(err) {
+        console.error("Networking transport init failure:", err);
+      }
+    })();
+
+    let bookmarks = JSON.parse(localStorage.getItem('nrg_bms') || '[]');
+    function saveBookmarks() { localStorage.setItem('nrg_bms', JSON.stringify(bookmarks)); }
+    function renderBookmarks() {
+      const bar = document.getElementById('dashboard-bookmarks');
+      const addBtn = document.getElementById('add-bm-btn');
+      bar.querySelectorAll('.bookmark-item').forEach(el => el.remove());
+      bookmarks.forEach((bm, i) => {
         const el = document.createElement('div');
-        el.className = 'hist-entry';
-        const fav = getFaviconUrl(entry.url);
+        el.className = 'bookmark-item'; const fav = getFaviconUrl(bm.url);
+        el.innerHTML = `${fav ? `<img src="${fav}" onerror="this.style.display='none'">` : ''}<span>${bm.name}</span><div class="bookmark-del" title="Remove">×</div>`;
+        el.addEventListener('click', e => {
+          if (e.target.classList.contains('bookmark-del')) return;
+          createTab(bm.url);
+        });
+        el.querySelector('.bookmark-del').addEventListener('click', e => {
+          e.stopPropagation(); bookmarks.splice(i, 1); saveBookmarks(); renderBookmarks();
+        });
+        bar.insertBefore(el, addBtn);
+      });
+    }
+
+    document.getElementById('add-bm-btn').addEventListener('click', () => {
+      const form = document.getElementById('bookmark-form');
+      form.classList.toggle('open');
+      if (form.classList.contains('open')) document.getElementById('bm-name').focus();
+    });
+    document.getElementById('bm-cancel').addEventListener('click', () => {
+      document.getElementById('bookmark-form').classList.remove('open');
+      document.getElementById('bm-name').value = ''; document.getElementById('bm-url').value = '';
+    });
+    document.getElementById('bm-save').addEventListener('click', () => {
+      const name = document.getElementById('bm-name').value.trim();
+      const url = document.getElementById('bm-url').value.trim();
+      if (!name || !url) return;
+      bookmarks.push({ name, url }); saveBookmarks(); renderBookmarks();
+      document.getElementById('bookmark-form').classList.remove('open');
+      document.getElementById('bm-name').value = ''; document.getElementById('bm-url').value = '';
+    });
+    document.getElementById('bm-url').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('bm-save').click();
+    });
+
+    renderBookmarks();
+
+    let tabHistory = JSON.parse(localStorage.getItem('nrg_hist') || '[]');
+    function saveTabHistory() { localStorage.setItem('nrg_hist', JSON.stringify(tabHistory)); }
+    window.logHistoryEntry = function(title, url) {
+      if (!url || isNrgMain(url)) return;
+      tabHistory.unshift({ title: title || url, url, ts: Date.now() });
+      if (tabHistory.length > 500) tabHistory.pop();
+      saveTabHistory();
+    };
+
+    function renderTabHistory() {
+      const list = document.getElementById('hist-list-container');
+      list.innerHTML = '';
+      if (tabHistory.length === 0) {
+        list.innerHTML = '<div class="dt-empty" style="background:var(--surface);padding:30px;">No browsing records located in storage stack.</div>';
+        return;
+      }
+      tabHistory.forEach((entry, idx) => {
+        const el = document.createElement('div');
+        el.className = 'hist-entry'; const fav = getFaviconUrl(entry.url);
         const t = new Date(entry.ts);
         const timeStr = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
         el.innerHTML = `
@@ -1707,209 +1331,170 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="hist-label">${entry.title || entry.url}</div>
           <div class="hist-url">${entry.url}</div>
           <div class="hist-time">${timeStr}</div>
-          <div class="hist-del" title="Remove">×</div>`;
+          <div class="hist-del" title="Remove">×</div>
+        `;
         el.addEventListener('click', e => {
           if (e.target.classList.contains('hist-del')) return;
           createTab(entry.url);
         });
         el.querySelector('.hist-del').addEventListener('click', e => {
-          e.stopPropagation();
-          tabHistory.splice(entry.idx, 1);
-          saveTabHistory();
-          renderTabHistory();
+          e.stopPropagation(); tabHistory.splice(idx, 1); saveTabHistory(); renderTabHistory();
         });
         list.appendChild(el);
       });
-    });
-  }
-
-  document.getElementById('hist-clear-all').addEventListener('click', () => {
-    tabHistory = [];
-    saveTabHistory();
-    renderTabHistory();
-  });
-
-  // ── 3-DOT MENU ──
-  const menuBtn = document.getElementById('nav-menu-btn');
-  const dropdown = document.getElementById('nav-dropdown');
-
-  menuBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-  document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target) && e.target !== menuBtn) dropdown.classList.remove('open');
-  });
-
-  document.getElementById('dd-new-tab').addEventListener('click', () => { dropdown.classList.remove('open'); createTab(); });
-  document.getElementById('dd-settings').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://settings'); });
-  document.getElementById('dd-history').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://tab-history'); });
-  document.getElementById('dd-devtools').addEventListener('click', () => { dropdown.classList.remove('open'); toggleDevTools(); });
-
-  // ── DEVTOOLS CONSOLE ──
-  let devtoolsOpen = false;
-  let dtFilter = 'all';
-  let dtTextFilter = '';
-  let dtLogs = [];
-  let dtErrCount = 0;
-
-  function toggleDevTools() {
-    devtoolsOpen = !devtoolsOpen;
-    const panel = document.getElementById('devtools-panel');
-    panel.classList.toggle('open', devtoolsOpen);
-    if (devtoolsOpen) document.getElementById('dt-input').focus();
-  }
-
-  document.getElementById('dt-close').addEventListener('click', () => { devtoolsOpen = false; document.getElementById('devtools-panel').classList.remove('open'); });
-
-  // Console log capture via postMessage from proxied iframe
-  // Inject a script into each iframe that relays console output back
-  function injectConsoleRelay(frame) {
-    try {
-      const script = frame.contentDocument?.createElement('script');
-      if (!script) return;
-      script.textContent = `(function(){
-        const orig = {log: console.log, warn: console.warn, error: console.error, info: console.info};
-        ['log','warn','error','info'].forEach(level => {
-          console[level] = function(...args) {
-            orig[level].apply(console, args);
-            try { window.parent.postMessage({ nrgConsole: true, level, text: args.map(a => { try { return typeof a === 'object' ? JSON.stringify(a) : String(a); } catch(e) { return String(a); } }).join(' ') }, '*'); } catch(e) {}
-          };
-        });
-        window.addEventListener('error', e => {
-          try { window.parent.postMessage({ nrgConsole: true, level: 'error', text: (e.message || 'Script error') + (e.filename ? ' — ' + e.filename.split('/').pop() + ':' + e.lineno : '') }, '*'); } catch(ex) {}
-        });
-        window.addEventListener('unhandledrejection', e => {
-          try { window.parent.postMessage({ nrgConsole: true, level: 'error', text: 'Unhandled Promise: ' + (e.reason?.message || String(e.reason)) }, '*'); } catch(ex) {}
-        });
-      })();`;
-      frame.contentDocument.head?.appendChild(script);
-    } catch(e) { /* cross-origin — can't inject, will catch window.onerror from parent */ }
-  }
-
-  // Listen for console messages from iframes
-  window.addEventListener('message', e => {
-    if (e.data?.nrgConsole) {
-      addDtEntry(e.data.level, e.data.text);
     }
-  });
-
-  // Also listen for global errors that bubble up
-  window.addEventListener('error', e => {
-    if (!e.filename || e.filename === window.location.href) return; // skip our own errors
-    addDtEntry('error', e.message + (e.filename ? ' — ' + e.filename.split('/').pop() + ':' + e.lineno : ''));
-  }, true);
-
-  function addDtEntry(level, text) {
-    const now = new Date();
-    const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-    dtLogs.push({ level, text, ts });
-    if (level === 'error') { dtErrCount++; document.getElementById('dt-err-count').textContent = dtErrCount + ' error' + (dtErrCount !== 1 ? 's' : ''); }
-    renderDtLogs();
-  }
-
-  function renderDtLogs() {
-    const area = document.getElementById('dt-log-area');
-    const empty = document.getElementById('dt-empty');
-    const filtered = dtLogs.filter(e => {
-      if (dtFilter !== 'all' && e.level !== dtFilter) return false;
-      if (dtTextFilter && !e.text.toLowerCase().includes(dtTextFilter)) return false;
-      return true;
+    document.getElementById('hist-clear-all').addEventListener('click', () => {
+      tabHistory = []; saveTabHistory(); renderTabHistory();
     });
-    // Remove all except empty placeholder
-    area.querySelectorAll('.dt-entry').forEach(el => el.remove());
-    empty.style.display = filtered.length ? 'none' : '';
-    filtered.forEach(entry => {
-      const el = document.createElement('div');
-      el.className = `dt-entry dt-${entry.level}`;
-      const icons = { log: '●', warn: '▲', error: '✕', info: 'ℹ' };
-      el.innerHTML = `<span class="dt-icon">${icons[entry.level] || '●'}</span><span class="dt-text">${entry.text.replace(/</g,'&lt;')}</span><span class="dt-time">${entry.ts}</span>`;
-      area.appendChild(el);
+
+    const menuBtn = document.getElementById('nav-menu-btn');
+    const dropdown = document.getElementById('nav-dropdown');
+    menuBtn.addEventListener('click', e => { e.stopPropagation(); dropdown.classList.toggle('open'); });
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target) && e.target !== menuBtn) dropdown.classList.remove('open');
     });
-    // Auto-scroll
-    area.scrollTop = area.scrollHeight;
-  }
 
-  document.getElementById('dt-clear-btn').addEventListener('click', () => {
-    dtLogs = []; dtErrCount = 0;
-    document.getElementById('dt-err-count').textContent = '0 errors';
-    renderDtLogs();
-  });
+    document.getElementById('dd-new-tab').addEventListener('click', () => { dropdown.classList.remove('open'); createTab(); });
+    document.getElementById('dd-settings').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://settings'); });
+    document.getElementById('dd-history').addEventListener('click', () => { dropdown.classList.remove('open'); createTab('nrgmain://tab-history'); });
+    document.getElementById('dd-devtools').addEventListener('click', () => { dropdown.classList.remove('open'); toggleDevTools(); });
 
-  // Override parent console — placed here so addDtEntry is already defined
-  (function() {
-    const _orig = { log: console.log, warn: console.warn, error: console.error, info: console.info };
-    ['log','warn','error','info'].forEach(level => {
-      console[level] = function(...args) {
-        _orig[level].apply(console, args);
-        const text = args.map(a => { try { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); } catch(e) { return String(a); } }).join(' ');
-        addDtEntry(level, text);
-      };
-    });
-  })();
+    let devtoolsOpen = false; let dtFilter = 'all'; let dtTextFilter = '';
+    let dtLogs = []; let dtErrCount = 0;
+    
+    function toggleDevTools() {
+      devtoolsOpen = !devtoolsOpen; const panel = document.getElementById('devtools-panel');
+      panel.classList.toggle('open', devtoolsOpen);
+      if (devtoolsOpen) document.getElementById('dt-input').focus();
+    }
 
-  document.getElementById('dt-filter').addEventListener('input', e => {
-    dtTextFilter = e.target.value.toLowerCase();
-    renderDtLogs();
-  });
-
-  document.querySelectorAll('.dt-level-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.dt-level-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      dtFilter = btn.dataset.level;
+    function addDtEntry(level, text) {
+      const now = new Date();
+      const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+      dtLogs.push({ level, text, ts });
+      if (level === 'error') {
+        dtErrCount++; document.getElementById('dt-err-count').textContent = dtErrCount + ' error' + (dtErrCount !== 1 ? 's' : '');
+      }
       renderDtLogs();
-    });
-  });
-
-  // JS eval in active iframe
-  function runInActiveTab(code) {
-    const frame = document.getElementById('frame-' + activeId);
-    let result;
-    try {
-      result = frame?.contentWindow?.eval(code);
-      addDtEntry('log', '← ' + (result === undefined ? 'undefined' : JSON.stringify(result)));
-    } catch(e) {
-      addDtEntry('error', '← ' + e.message);
     }
-  }
 
-  const dtInput = document.getElementById('dt-input');
-  document.getElementById('dt-run-btn').addEventListener('click', () => {
-    const code = dtInput.value.trim();
-    if (!code) return;
-    addDtEntry('log', '> ' + code);
-    runInActiveTab(code);
-    dtInput.value = '';
-  });
-  dtInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { document.getElementById('dt-run-btn').click(); }
-  });
+    function renderDtLogs() {
+      const area = document.getElementById('dt-log-area');
+      const empty = document.getElementById('dt-empty');
+      const filtered = dtLogs.filter(e => {
+        if (dtFilter !== 'all' && e.level !== dtFilter) return false;
+        if (dtTextFilter && !e.text.toLowerCase().includes(dtTextFilter)) return false;
+        return true;
+      });
+      area.querySelectorAll('.dt-entry').forEach(el => el.remove());
+      if (filtered.length === 0) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
 
-  // Inject relay when frames load
-  document.getElementById('nrg-viewport').addEventListener('load', e => {
-    if (e.target.tagName === 'IFRAME') injectConsoleRelay(e.target);
-  }, true);
+      filtered.forEach(e => {
+        const el = document.createElement('div');
+        el.className = `dt-entry dt-${e.level}`;
+        el.innerHTML = `<div class="dt-icon">❯</div><div class="dt-text">${e.text}</div><div class="dt-time">${e.ts}</div>`;
+        area.appendChild(el);
+      });
+      area.scrollTop = area.scrollHeight;
+    }
 
-  // ── DEVTOOLS RESIZE HANDLE ──
-  const dtPanel = document.getElementById('devtools-panel');
-  const dtHandle = document.getElementById('dt-resize-handle');
-  let dtResizing = false, dtStartY = 0, dtStartH = 0;
-  dtHandle.addEventListener('mousedown', e => {
-    dtResizing = true; dtStartY = e.clientY; dtStartH = dtPanel.offsetHeight;
-    dtPanel.classList.add('resizing');
-    document.body.style.userSelect = 'none';
-  });
-  document.addEventListener('mousemove', e => {
-    if (!dtResizing) return;
-    const delta = dtStartY - e.clientY;
-    dtPanel.style.height = Math.max(120, Math.min(window.innerHeight * 0.8, dtStartH + delta)) + 'px';
-  });
-  document.addEventListener('mouseup', () => {
-    if (dtResizing) { dtResizing = false; dtPanel.classList.remove('resizing'); document.body.style.userSelect = ''; }
-  });
+    document.getElementById('dt-clear-btn').addEventListener('click', () => {
+      dtLogs = []; dtErrCount = 0; document.getElementById('dt-err-count').textContent = '0 errors'; renderDtLogs();
+    });
+    document.getElementById('dt-filter').addEventListener('input', e => { dtTextFilter = e.target.value.toLowerCase(); renderDtLogs(); });
+    
+    document.querySelectorAll('.dt-level-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.dt-level-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active'); dtFilter = btn.getAttribute('data-level'); renderDtLogs();
+      });
+    });
 
-}); // end DOMContentLoaded
-</script>
+    function runInActiveTab(code) {
+      const frame = document.getElementById('frame-' + activeId);
+      if (!frame) return;
+      try {
+        const res = frame.contentWindow?.eval(code);
+        addDtEntry('info', String(res));
+      } catch(err) { addDtEntry('error', err.message); }
+    }
+
+    const dtInput = document.getElementById('dt-input');
+    document.getElementById('dt-run-btn').addEventListener('click', () => {
+      const code = dtInput.value.trim(); if (!code) return;
+      addDtEntry('log', '> ' + code); runInActiveTab(code); dtInput.value = '';
+    });
+    dtInput.addEventListener('keydown', e => { if (e.key === 'Enter') { document.getElementById('dt-run-btn').click(); } });
+
+    document.getElementById('nrg-viewport').addEventListener('load', e => {
+      if (e.target.tagName === 'IFRAME') {
+        try {
+          const win = e.target.contentWindow;
+          if (win) {
+            setTimeout(() => { if(win.location.href!=='about:blank') window.logHistoryEntry(win.document?.title, tabHistory.find(x=>x.id===e.target.id.replace('frame-',''))?.rawUrl || win.location.href); }, 1000);
+          }
+        } catch(err) {}
+      }
+    }, true);
+
+
+    const dtPanel = document.getElementById('devtools-panel');
+    const dtHandle = document.getElementById('dt-resize-handle');
+    let dtResizing = false, dtStartY = 0, dtStartH = 0;
+    dtHandle.addEventListener('mousedown', e => {
+      dtResizing = true; dtStartY = e.clientY; dtStartH = dtPanel.offsetHeight;
+      dtPanel.classList.add('resizing'); document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', e => {
+      if (!dtResizing) return;
+      const delta = dtStartY - e.clientY;
+      dtPanel.style.height = Math.max(120, Math.min(window.innerHeight - 80, dtStartH + delta)) + 'px';
+    });
+    document.addEventListener('mouseup', () => {
+      if (!dtResizing) return; dtResizing = false;
+      dtPanel.classList.remove('resizing'); document.body.style.userSelect = '';
+    });
+
+    function showError(tabId, url, message, code, dest) {
+      const overlay = document.getElementById('nrg-error');
+      document.getElementById('err-url').textContent = url || '';
+      document.getElementById('err-message').textContent = message || 'unknown error';
+      document.getElementById('err-code-num').textContent = code || '—';
+      document.getElementById('err-dest').textContent = dest || '—';
+      let errLabel = 'ERR_CONNECTION_FAILED';
+      if (message && message.includes('SSL')) errLabel = 'ERR_SSL_CONNECT';
+      else if (message && message.includes('timeout')) errLabel = 'ERR_TIMED_OUT';
+      else if (message && message.includes('refused')) errLabel = 'ERR_CONNECTION_REFUSED';
+      else if (code === 404) errLabel = 'ERR_NOT_FOUND';
+      document.getElementById('err-code').textContent = errLabel;
+
+      const frame = document.getElementById('frame-' + tabId);
+      if (frame) frame.classList.remove('visible');
+      overlay.classList.add('visible');
+      
+      document.getElementById('err-retry').onclick = () => {
+        overlay.classList.remove('visible'); if (frame) { frame.classList.add('visible'); frame.src = frame.src; }
+      };
+      document.getElementById('err-newtab').onclick = () => { overlay.classList.remove('visible'); createTab(); };
+    }
+    function hideError() { document.getElementById('nrg-error').classList.remove('visible'); }
+
+    window.addEventListener('message', e => {
+      if (!e.data || !e.data.type) return;
+      if (e.data.type === 'scramjet-error' || (e.data.message && e.data.url)) {
+        const activeTab = tabs.find(t => t.id === activeId);
+        showError(activeId, activeTab?.rawUrl, e.data.message, e.data.code, e.data.destination);
+      }
+    });
+
+    window.addEventListener('error', e => {
+      if (!e.filename || e.filename === window.location.href) return;
+      addDtEntry('error', e.message + (e.filename ? ' — ' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+    }, true);
+
+    createTab();
+  });
+  </script>
 </body>
 </html>
