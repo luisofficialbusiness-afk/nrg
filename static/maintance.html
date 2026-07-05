@@ -101,27 +101,7 @@
       letter-spacing: 0.04em;
     }
 
-    #mute-btn {
-      position: fixed;
-      bottom: 18px;
-      right: 18px;
-      z-index: 20;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      color: #888;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      padding: 7px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      font-family: system-ui, sans-serif;
-    }
-    #mute-btn:hover {
-      background: #222;
-      color: #ccc;
-      border-color: #555;
-    }
+  
 
     #scanlines {
       position: fixed;
@@ -142,7 +122,7 @@
 
   <div id="scanlines"></div>
 
-  <audio id="bg-music" src="music/random music.mp3" loop></audio>
+ 
 
   <img id="dvd-img" src="images/waiting.gif" alt="waiting"
     onerror="this.style.display='none'; document.getElementById('dvd-fallback').style.display='flex';" />
@@ -158,29 +138,8 @@
     <div id="timer-display">00:00:00</div>
     <div id="zinko-credit">maintenance page idea from zinko inc (RIP)</div>
   </div>
-
-  <button id="mute-btn">🔊 mute</button>
-
   <script>
  
-    const music   = document.getElementById('bg-music');
-    const muteBtn = document.getElementById('mute-btn');
-
-  
-    music.volume = 1;
-    const playPromise = music.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        
-        document.addEventListener('click', () => music.play(), { once: true });
-      });
-    }
-
-    muteBtn.addEventListener('click', () => {
-      music.muted = !music.muted;
-      muteBtn.textContent = music.muted ? '🔇 unmute' : '🔊 mute';
-    });
-
    
     const img      = document.getElementById('dvd-img');
     const fallback = document.getElementById('dvd-fallback');
