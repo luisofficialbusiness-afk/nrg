@@ -466,7 +466,7 @@ function resetThemeToDefault() {
 
 // gay son or thot daugher procedure
 
-const MAINTENANCE_MODE = true; 
+const MAINTENANCE_MODE = false; 
 
 if (MAINTENANCE_MODE) {
   window.location.replace("maintance.html");
