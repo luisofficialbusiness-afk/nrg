@@ -1,6 +1,6 @@
-# NRG
+# Sams Proxy
 
-A self-hosted browser entertainment platform built on Node.js + Express. NRG gives you a unified dark-themed UI for games, movies, live TV, music, a web proxy, an AI chat, and user accounts — all running from a single server you control.
+A self-hosted browser entertainment platform built on Node.js + Express. Sams Proxy gives you a unified dark-themed UI for games, movies, live TV, music, a web proxy, an AI chat, and user accounts — all running from a single server you control.
 
 ---
 
