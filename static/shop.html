@@ -113,7 +113,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); disp
 
 <div class="topbar">
   <div class="brand">
-    <span class="brand-nrg">NRG</span>
+    <span class="brand-nrg">Sams Proxy</span>
     <div class="brand-divider"></div>
     <span class="brand-page">SHOP</span>
   </div>
@@ -182,8 +182,9 @@ const FALLBACK_ITEMS = [
   { id: "color_purple",   name: "Purple Handle",    category: "usernamecolor", rarity: "common",    price: 60,   color: "#c50cf9", desc: "Make your @username purple." },
   { id: "color_blue",     name: "Blue Handle",      category: "usernamecolor", rarity: "common",    price: 60,   color: "#4f9cf9", desc: "Make your @username blue." },
   { id: "color_rose",     name: "Rose Pink Handle", category: "usernamecolor", rarity: "common",    price: 60,   color: "#ff6b9d", desc: "Make your @username rose pink." },
+  { id: "color_pink",     name: "Pink Handle", category: "usernamecolor", rarity: "common",    price: 60,   color: "#c300ff", desc: "Make your @username pink." },
   { id: "color_lavender", name: "Lavender Handle",  category: "usernamecolor", rarity: "common",    price: 60,   color: "#b57bee", desc: "Make your @username lavender." },
-  { id: "color_gold",     name: "Gold Handle",      category: "usernamecolor", rarity: "rare",      price: 250,  color: "#f5c518", desc: "Make your @username gold." },
+  { id: "color_gold",     name: "Gold Handle",      category: "usernamecolor", rarity: "rare",      price: 300,  color: "#f5c518", desc: "Make your @username gold." },
   { id: "color_red",      name: "Red Handle",       category: "usernamecolor", rarity: "rare",      price: 160,  color: "#ff4f4f", desc: "Make your @username red." },
   { id: "color_green",    name: "Green Handle",     category: "usernamecolor", rarity: "rare",      price: 160,  color: "#39d98a", desc: "Make your @username green." },
   { id: "color_orange",   name: "Blood Orange",     category: "usernamecolor", rarity: "rare",      price: 160,  color: "#ff4500", desc: "Make your @username blood orange." },
@@ -192,16 +193,17 @@ const FALLBACK_ITEMS = [
   { id: "color_yellow",   name: "Cyber Yellow",     category: "usernamecolor", rarity: "epic",      price: 300,  color: "#ffe600", desc: "Bright cyber yellow @username." },
   { id: "color_ice",      name: "Ice White",        category: "usernamecolor", rarity: "epic",      price: 300,  color: "#e8f4ff", desc: "Ice white @username." },
   { id: "color_rainbow",  name: "Rainbow Handle",   category: "usernamecolor", rarity: "legendary", price: 800,  color: "rainbow", desc: "Animated rainbow @username." },
-
-  { id: "boost_1x5_120",  name: "1.5x XP — 2 hrs", category: "xpboost",       rarity: "common",    price: 65,   multiplier: 1.5, duration: 120, desc: "50% more XP for 2 hours." },
+// xp boosts
   { id: "boost_2x_30",    name: "2x XP — 30 min",  category: "xpboost",       rarity: "common",    price: 80,   multiplier: 2,   duration: 30,  desc: "Double your XP for 30 minutes." },
   { id: "boost_2x_60",    name: "2x XP — 1 hour",  category: "xpboost",       rarity: "rare",      price: 140,  multiplier: 2,   duration: 60,  desc: "Double your XP for 1 hour." },
+  { id: "boost_2x_120",  name: "2x XP — 2 hrs", category: "xpboost",       rarity: "epic",    price: 250,   multiplier: 2.0, duration: 120, desc: "Double your XP for 2 hours." },
   { id: "boost_2x_180",   name: "2x XP — 3 hrs",   category: "xpboost",       rarity: "rare",      price: 220,  multiplier: 2,   duration: 180, desc: "Double your XP for 3 hours." },
   { id: "boost_3x_60",    name: "3x XP — 1 hour",  category: "xpboost",       rarity: "epic",      price: 320,  multiplier: 3,   duration: 60,  desc: "Triple your XP for 1 hour." },
   { id: "boost_4x_45",    name: "4x XP — 45 min",  category: "xpboost",       rarity: "epic",      price: 420,  multiplier: 4,   duration: 45,  desc: "4x XP for 45 minutes." },
-  { id: "boost_5x_30",    name: "5x XP — 30 min",  category: "xpboost",       rarity: "legendary", price: 600,  multiplier: 5,   duration: 30,  desc: "5x XP for 30 minutes. Decent." },
+  { id: "boost_5x_30",    name: "5x XP — 30 min",  category: "xpboost",       rarity: "legendary", price: 600,  multiplier: 5,   duration: 150,  desc: "5x XP for 30 minutes. Decent." },
   { id: "boost_10x_15",   name: "10x XP — 15 min", category: "xpboost",       rarity: "legendary", price: 1000, multiplier: 10,  duration: 15,  desc: "10x XP for 15 minutes. Insane." },
-
+  { id: "boost_10x_30",   name: "10x XP — 30 min", category: "xpboost",       rarity: "legendary", price: 3000, multiplier: 10,  duration: 30,  desc: "10x XP for 30 minutes. Insane Insane." },
+  // profile decorations
   { id: "profile_dark",    name: "Dark Theme",      category: "profiledeco",   rarity: "common",    price: 200,  desc: "Deep dark theme on your public profile." },
   { id: "profile_neon",    name: "Neon Theme",      category: "profiledeco",   rarity: "rare",      price: 300,  desc: "Neon glow effect on your public profile." },
   { id: "profile_crimson", name: "Crimson Theme",   category: "profiledeco",   rarity: "rare",      price: 350,  desc: "Deep red crimson theme on your profile." },
@@ -232,8 +234,10 @@ const FALLBACK_ITEMS = [
   { id: "title_champion",  name: "Champion",        category: "title",         rarity: "epic",      price: 500,  desc: "A true champion." },
   { id: "title_legend",    name: "Legend",          category: "title",         rarity: "epic",      price: 500,  desc: "Legendary status." },
   { id: "title_goat",      name: "G.O.A.T",         category: "title",         rarity: "legendary", price: 900,  desc: "Greatest of all time." },
-  { id: "title_og",        name: "NRG OG",          category: "title",         rarity: "legendary", price: 1200, desc: "An original NRG member." },
-  { id: "title_nrg",       name: "NRG Elite",       category: "title",         rarity: "legendary", price: 1599, desc: "The rarest title. For the dedicated." },
+  { id: "title_og",        name: "Sams Proxy OG",   category: "title",         rarity: "legendary", price: 1200, desc: "An original NRG member." },
+  { id: "title_samsproxy", name: "Sams Proxy Elite", category: "title",         rarity: "legendary", price: 1599, desc: "The 2nd rarest title. For the dedicated." },
+  { id: "title_samslegend", name: "Sams Legend", category: "title",         rarity: "legendary", price: 5000, desc: "The rarest title. For the dedicated & rich." },
+];
 ];
 
 function toast(msg, type = "success") {
