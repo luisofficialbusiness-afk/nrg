@@ -180,7 +180,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
 <div class="topbar">
   <div class="brand">
-    <span class="brand-nrg">NRG</span>
+    <span class="brand-Sams Proxy">Sams Proxy</span>
     <div class="brand-divider"></div>
     <span class="brand-page">Chat</span>
   </div>
@@ -247,11 +247,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
         <div class="mod-section-label">Slow Mode</div>
         <select class="mod-select" id="mod-slow-select">
           <option value="0">Off</option>
+          <option value="1">1 second</option>
           <option value="5">5 seconds</option>
           <option value="10">10 seconds</option>
           <option value="30">30 seconds</option>
           <option value="45">45 seconds</option>
           <option value="60">1 minute</option>
+          <option value="3600">1 hour</option>
+          <option value="7200">2 hours</option>
           
         </select>
         <div class="mod-btn-row"><button class="mod-action-btn blue" id="mod-slow-btn">Set</button></div>
@@ -683,7 +686,7 @@ async function setupModPanel() {
     try {
       await sendSystemMessage(text);
       $("mod-sys-input").value = "";
-      setModMsg("mod-sys-msg", "sent!", "ok");
+      setModMsg("mod-sys-msg", "message sent!", "ok");
     } catch(e) { setModMsg("mod-sys-msg", "failed.", "err"); }
   });
 
@@ -694,11 +697,11 @@ async function setupModPanel() {
     await setDoc(doc(db, "settings", "chat"), { pinnedMessage: text }, { merge: true });
     $("mod-pin-input").value = "";
   });
-
+//unpin button
   $("mod-unpin-btn").addEventListener("click", async () => {
     await setDoc(doc(db, "settings", "chat"), { pinnedMessage: null }, { merge: true });
   });
-
+//unpin messages
   $("pinned-unpin").addEventListener("click", async () => {
     if (!isAdmin) return;
     await setDoc(doc(db, "settings", "chat"), { pinnedMessage: null }, { merge: true });
@@ -723,7 +726,7 @@ async function setupModPanel() {
     } catch(e) { setModMsg("mod-user-msg", "failed.", "err"); }
   });
 
-  // kick user, fuck them
+  // kick user
   $("mod-kick-btn").addEventListener("click", async () => {
     const uid = await getUidFromUsername($("mod-user-input").value);
     if (!uid) { setModMsg("mod-user-msg", "user not found.", "err"); return; }
