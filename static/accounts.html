@@ -1204,7 +1204,7 @@ async function createUserDoc(user) {
     const missing = {};
     if (d.xp               === undefined) missing.xp               = 0;
     if (d.level            === undefined) missing.level            = 1;
-    if (d.coins            === undefined) missing.coins            = 0;
+    if (d.coins            === undefined) missing.coins            = 20;
     if (d.inventory        === undefined) missing.inventory        = [];
     if (d.equipped         === undefined) missing.equipped         = {};
     if (d.loginStreak      === undefined) missing.loginStreak      = 0;
