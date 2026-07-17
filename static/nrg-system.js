@@ -117,7 +117,7 @@ export async function claimDailyReward() {
 
   // streak continues if last login was yesterday, otherwise resets to 1
   const streak     = lastLogin === yesterday ? (d.loginStreak || 0) + 1 : 1;
-  const coinsEarned = Math.min(10 + (streak - 1) * 15, 200); // 10 base, +15 per streak day, cap 200
+  const coinsEarned = 30; // flat 30 coins per day
 
   await updateDoc(doc(db, "users", user.uid), {
     lastLoginDate: today,
