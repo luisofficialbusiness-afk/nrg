@@ -21,9 +21,9 @@ import {
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
-  authDomain:        "nrg-accounts.firebaseapp.com",
-  projectId:         "nrg-accounts",
-  storageBucket:     "nrg-accounts.firebasestorage.app",
+  authDomain:        "sams-proxy-accounts.firebaseapp.com",
+  projectId:         "sams-proxy-accounts",
+  storageBucket:     "sams-proxy-accounts.firebasestorage.app",
   messagingSenderId: "969467601192",
   appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
 };
@@ -42,7 +42,7 @@ async function createUserDoc(user) {
       displayName: user.displayName || user.email.split('@')[0],
       photoURL:    user.photoURL || null,
       createdAt:   serverTimestamp(),
-      theme:       localStorage.getItem('nrg_theme_selected') || 'midnight',
+      theme:       localStorage.getItem('sams_proxy_theme_selected') || 'midnight',
       favorites:   [],
       recentGames: []
     });
@@ -90,7 +90,7 @@ async function resetPassword(email) {
 async function saveTheme(themeName) {
   const user = auth.currentUser;
   if (user) await updateUserDoc(user.uid, { theme: themeName });
-  localStorage.setItem('nrg_theme_selected', themeName);
+  localStorage.setItem('sams_proxy_theme_selected', themeName);
 }
 
 async function saveFavoriteGame(gameName, add = true) {
@@ -116,7 +116,7 @@ function onUser(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
-window.NRGAuth = {
+window.SamsProxyAuth = {
   signUp,
   logIn,
   logInWithGoogle,

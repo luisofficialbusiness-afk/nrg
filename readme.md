@@ -1,6 +1,6 @@
 # Sams Proxy
 
-A self-hosted browser entertainment platform built on Node.js + Express. Sams Proxy gives you a unified dark-themed UI for games, movies, live TV, music, a web proxy, an AI chat, and user accounts — all running from a single server you control.
+A self-hosted browser entertainment platform built on Node.js + Express. Sams Proxy gives you a unified dark-themed UI for games, movies, live TV, music, a web proxy, an AI chat, and user accounts with Firebase Auth + Firestore. Deploy in one click on Vercel, Docker, or VPS.
 
 ---
 
@@ -46,7 +46,7 @@ A self-hosted browser entertainment platform built on Node.js + Express. Sams Pr
 
 ```bash
 git clone <your-fork-url>
-cd nrg
+cd sams-proxy
 pnpm install
 pnpm start
 ```
@@ -144,8 +144,8 @@ vercel deploy
 ### Docker
 
 ```bash
-docker build -t nrg .
-docker run -p 8080:8080 nrg
+docker build -t sams-proxy .
+docker run -p 8080:8080 sams-proxy
 ```
 
 ### Any VPS / bare metal
@@ -162,7 +162,7 @@ Use a reverse proxy (nginx / Caddy) in front for HTTPS.
 ## Project Structure
 
 ```
-nrg/
+sams-proxy/
 ├── index.js              # Express + Wisp + Bare server entry point
 ├── config.js             # Server config (auth, port)
 ├── nrg-auth.js           # Firebase auth module (fill in your credentials)
@@ -193,4 +193,4 @@ GPL-3.0-or-later — see [`LICENSE`](./LICENSE).
 
 ---
 
-*Now Open Source — NRG*
+*Now Open Source — sams proxy*

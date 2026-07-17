@@ -4,9 +4,9 @@ import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gst
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
-  authDomain:        "nrg-accounts.firebaseapp.com",
-  projectId:         "nrg-accounts",
-  storageBucket:     "nrg-accounts.firebasestorage.app",
+  authDomain:        "sams-proxy-accounts.firebaseapp.com",
+  projectId:         "sams-proxy-accounts",
+  storageBucket:     "sams-proxy-accounts.firebasestorage.app",
   messagingSenderId: "969467601192",
   appId:             "1:969467601192:web:bd312dd3d58e4b6b7c701d"
 };
@@ -142,7 +142,7 @@ export function onReady(callback) {
 }
 
 // expose on window so non-module scripts (games.html legacy scripts) can still call them
-window.NRGSystem = { addXP, addCoins, spendCoins, activateXPBoost, claimDailyReward, getUserData, levelFromXP, xpForLevel, xpProgressInLevel };
+window.SamsProxySystem = { addXP, addCoins, spendCoins, activateXPBoost, claimDailyReward, getUserData, levelFromXP, xpForLevel, xpProgressInLevel };
 
 (function() {
   var THEMES = {
@@ -155,7 +155,7 @@ window.NRGSystem = { addXP, addCoins, spendCoins, activateXPBoost, claimDailyRew
     forest:   { bg:'#020a04', surface:'#071208', surface2:'#0d1e10', border:'#142e18', accent:'#39d98a', text:'#d8ffe8', textDim:'#4a8860', textMuted:'#0d2214' },
     sakura:   { bg:'#0f0508', surface:'#1a0810', surface2:'#220e18', border:'#381a28', accent:'#ff6b9d', text:'#ffe8f0', textDim:'#885566', textMuted:'#2e0e1a' },
   };
-  var saved = localStorage.getItem('nrg_theme');
+  var saved = localStorage.getItem('sams_proxy_theme');
   var t = THEMES[saved] || THEMES.midnight;
   function rgba(hex, a) {
     hex = hex.replace('#','');
