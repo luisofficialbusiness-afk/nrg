@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home</title>
+<title>Sams Proxy - Home</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -151,6 +151,11 @@ canvas#snow{position:fixed;inset:0;pointer-events:none;z-index:0}
       <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4M15 11h.01M17 13h.01"/></svg>
       <span class="tooltip">Games</span>
     </button>
+    <!-- Proxy -->
+    <button class="nav-icon" onclick="location.href='proxy/index.html'">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
+      <span class="tooltip">Proxy</span>
+    </button>
     <!-- Shop -->
     <button class="nav-icon" onclick="location.href='shop.html'">
       <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -163,27 +168,31 @@ canvas#snow{position:fixed;inset:0;pointer-events:none;z-index:0}
     </button>
     <div class="account-wrap">
     <button class="account-btn" id="accountBtn">
-      <img src="data:image/webp;base64,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" alt="account">
+      <img src="data:image/webp;base64,UklGRmgIAABXRUJQVlA4IFwIAAAwNQCdASq2ALYAPm02l0gkIyIppFG6sTANiWcDsB2ibiFBSzxzHLlSLTJrXml+ruBCTcnzNaw8NrlzztpyRv5ZN3DAZ29sIue9aVtigF4cUjbdIkez6760l5z/z6d77EW2[...]">
     </button>
     <div class="account-dropdown" id="accountDropdown">
       <div class="dropdown-header">
-        <img class="dropdown-pfp" src="data:image/webp;base64,UklGRmgIAABXRUJQVlA4IFwIAAAwNQCdASq2ALYAPm02l0gkIyIppFG6sTANiWcDsB2ibiFBSzxzHLlSLTJrXml+ruBCTcnzNaw8NrlzztpyRv5ZN3DAZ29sIue9aVtigF4cWjbdIkez6760l5z/z6d77EW2O9U78Le5o8qT9T1hw/XTPNmEaD6UArY1evXoMPbtU+c1AAroFxanCoWyj96UBD9SI6FVM584G7J4WtQwh6Y7z5LNDrPlA4WYDGbrVFi0tpAydUauHCSs5G65AxlY8AS4mZbjI+nQFu4gG7NWZ4Axk2dBYdJPsiN642WJJ2nD6Pyfu7GHq3DXKaOpjX2dWeUxn9LpaUcdFHQI1EKONB0EazNNpyuLfsEYEF181vbkVOJgzeneIbPaKBHUL0c8/gx/m7BMSuF2wsKBB4LclwWZ9xfMq9bnZ9vs61KXPn6VFr4vPfk0tQ+FbaXwx4bt2c2uUwocHOPjnD+IZibcpbcukbMoLuUAzXMkVTsqaPWO3AcpaQFu6tUBAxyEVQosTp7EF0fPRPMmDyujFnmz5z2ryPJ561+0tzb9cjYCHNohHFExbzRG5rjHzJg7bnax3k/QAAD++ZNjOODXek6RNxuwWn5mf4RTPblGcXZaPJ/ASu2xd6xuAFZNCzpoQW5aKuG2YOjQQap0J+f3wxc+J++JdpIa3ETY/3pZ57YimFsBohuUmvxKHa/m7r0FgcsrclR7vr92uEhBNzJTYxQBPYToWr3/P37E+8y/82apePlK8q3Wx63+kqFaASMMOcvf64P9cE1AFpcHBCJzBA1Ipg3lGQBnO9lnVHGrPqpSqIwT6WAvcHScDYNLAlZcNH9xTmSAx/UXuKH7SWtS8cpLQaIcksFDYyOzWLe3pWlDcHFqcRNREMyLrbAI95NVYZQZYI/A+cg+EDYEahAHNtqmqAnHNRwXsK1sNflGx5Dn28+qKkv+7Q1hS0dAO7KnZfX6XduyxIUaQ7fw3SXHVHW7QhqXsVJVjyRtvR+hImpuXsp9pRt5qYZFky9ZflImHWhc5UhaqkqxIx6GtijpVK/LekV3ZIczBoiduSPtKJZtaMGxYyvr6bDsA9+gyjEMhqCRz3/Xv4yl24Kz2O4ObEBzYgqggpmJ2KaJl4OfWJYTgoZPQIGJGGWcnC4ARECnB/9JT4Dm+wV+vJ6luSehC5ASLmLDrHfukhEwpyQCwXHwSIbhCCD8fJth1mwEX9o1D2PiP79odFTrnqa8/9yW9lHCNDsD6VWEUlrNev6AHlwEVdC+hsDhRlF6xr/Fre/JX5oGDmWCjcgmfLDcGvXGYrGvaTEV+SGSOZ97p2OanhJ5BKK6GMb3aQVxCFk4yV3fVG/MnmQJNZw2jwlZIWnYgdVSX8J4m6av47gOxHTIIX2l7ODBlTSi2KRG2+bFPSzxS62GUYZsa4/oLDRfThyNfhpnZovGBA1/RLM0VbOiv6NagEW2G0eOQXMu0Y4m6IV6Ytn3/sHYHPfoF9DltiOSr/ullT4M+5NyWdRWy8o3yqYQj252nho6RYdM3rkD2YPIxBgcu8xOtdppsl3+tasrOHIlNk7gLsDkMITf0YEwmsB9eq1qsGLFO5NYPq4SqhMK7mz9iajlnOF/1S/p1HZCMDBrJVDi2q/JeMW4HHVtpkqtcp0XJbGL6zIyaCEmetTWXIJSk91FMQoGSJvAZMZoqOsCxFVf7MByuT15fhsmCw8Xd278LYHT7VRUk78JlT7ljYGZZYu+dWseHHxsX6rsa9U3C3oGtwQcpY+rdqx/V7NpsNdAsbqKiZnfezWQs/1KsGmrVWXiXwU3fSyyGr9+dRdxqCW0MTH+ankcb/7MIEKFPYew5Aj/O33NnR94vIQbaqZqZKY7Bf5LPtEde04H/FuAjp3P940au1VwgHzdpmTXQKjtVBFAuiIQTjAvLQbAPFZR6NhAsH+boNHJzpsbcUMM0c9NMTLFyiWjMcsQSHbDG6vUg6uc9nBPQQdDsbSYK7lmAu/+sg9BQso/klBgdLkvhJuUI60o5rGIePgSuMxDfcdor9c6WI3Ef9xYns6gfBXNpZPvsabsNlXGpxu7hUqtb14cz//1JLk5YgbRE+U/SbU5qVtOJqDmH8opL57pUlW0zMgbNtRgIN7EXJl7LbfZvmMGg/ePb62LOd8+AP7gVZD3FZ667UmdTE31rO0NXCz5WDIYb3c8GiAtdXsAg0ZJVFAbpF+oiJNgPVPruTCufP8sUBd4c7eyWCJrEQFeq7UHf5uu8bAghHQN7qbUVxQ5u5BFosP8j0NosmK4UtvmKp3iOrWnZbjiRQEqJEkCUWg8QI7kjhkM+UrkGEEdQsHQeyCkBCa7zapQUPbzfIiw/capY4LtLknKFXguVt5+TWv69C/xWR3UFlbfL+7lMSu+Va+PwfM6Rb8VDLV9lu2cePFW9lhaipPnDfBp6NeXCkO2yGmYDS1AuHFJeG8VPhaUalqtcYdMq5+yiNO1W0jq94mNKxeetIcBRqjXQ+ndeCwoBgovW68IaH2MqGsw/qVieppe5Q5wLBS102km24ucgpa2ypQnSlv4WZfSX8EvM0oGeoXbppbuag9UTbhUDTpvao4gjpuRKIrjErIXfX0vAjEEbHy4tRSMpxjLtGX+rdc7a0p7xU6VTNNu8u6CDubV6ujuOVIKX9DW0jkKyDlCyGu6HIyur09ccJLweJlKEK1hWSQBmwg7i9Vn8MbZiUc8DJnOWfeN7K371JovA5tcp1Lh8XM5lv2dFO2w/AweNlJ4mADYJcNBn41L/e4Xn4ajqyupXzmNHlzn03HEFp3FoJrX44aPEVLU12SazzXktpApZ0mFQCmUlHYAOEZ/FMww76yAJCTWkr8zwAAAAAAA" alt="pfp">
+        <img class="dropdown-pfp" src="data:image/webp;base64,UklGRmgIAABXRUJQVlA4IFwIAAAwNQCdASq2ALYAPm02l0gkIyIppFG6sTANiWcDsB2ibiFBSzxzHLlSLTJrXml+ruBCTcnzNaw8NrlzztpyRv5ZN3DAZ29sIue9aVtigF4cW[...]">
         <div>
           <div class="dropdown-name">sam</div>
           <div class="dropdown-role">Member</div>
         </div>
       </div>
       <div class="dropdown-items">
+        <div class="dropdown-item" onclick="location.href='accounts.html'">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Account
+        </div>
         <div class="dropdown-item" onclick="location.href='profiles.html'">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Profile
         </div>
         <div class="dropdown-item" onclick="location.href='settings.html'">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.86a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01 0-4h.09A1.65 1.65 0 004.14 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82 1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
           Settings
         </div>
         <div class="dropdown-divider"></div>
-        <div class="dropdown-item danger" onclick="if(window.NRGAuth)NRGAuth.logOut();else{localStorage.clear();location.href='accounts.html';}">
+        <div class="dropdown-item danger" onclick="if(window.SamsProxyAuth)SamsProxyAuth.logOut();else{localStorage.clear();location.href='accounts.html';}">
           <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Sign out
         </div>
@@ -196,46 +205,55 @@ canvas#snow{position:fixed;inset:0;pointer-events:none;z-index:0}
 <div class="main">
   <div class="greeting">
     <div class="greeting-time" id="timeLabel">Good evening</div>
-    <div class="greeting-name">Welcome back, <span>RVEPRTY</span></div>
+    <div class="greeting-name">Welcome back, <span id="displayName">User</span></div>
   </div>
 
   <div class="section">
     <div class="section-label">Browse</div>
     <div class="cards">
-      <div class="card">
+      <div class="card" onclick="location.href='movies.html'">
         <div class="card-icon">
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M17 9h5M2 15h5M17 15h5"/></svg>
         </div>
         <div>
-          <div class="card-title" onclick="location.href='movies.html'">Movies</div>
+          <div class="card-title">Movies</div>
           <div class="card-sub">Watch something</div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" onclick="location.href='music.html'">
         <div class="card-icon">
           <svg viewBox="0 0 24 24"><circle cx="8" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M11 18V7l10-2v11"/></svg>
         </div>
         <div>
-          <div class="card-title" onclick="location.href='music.html'">Music</div>
+          <div class="card-title">Music</div>
           <div class="card-sub">Listen to something</div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" onclick="location.href='games.html'">
         <div class="card-icon">
           <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4M8 10v4M15 11h.01M17 13h.01"/></svg>
         </div>
         <div>
-          <div class="card-title" onclick="location.href='games.html'">Games</div>
+          <div class="card-title">Games</div>
           <div class="card-sub">Play something</div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" onclick="location.href='proxy/index.html'">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
+        </div>
+        <div>
+          <div class="card-title">Proxy</div>
+          <div class="card-sub">Browse anything</div>
+        </div>
+      </div>
+      <div class="card" onclick="location.href='shop.html'">
         <div class="card-icon">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         </div>
         <div>
-          <div class="card-title" onclick="location.href='shop.html'">Shop</div>
-          <div class="card-sub">Get an avatar</div>
+          <div class="card-title">Shop</div>
+          <div class="card-sub">Get cosmetics</div>
         </div>
       </div>
     </div>
@@ -280,14 +298,18 @@ function draw() {
 window.addEventListener('resize',resize);
 init(); draw();
 
-
+// Account dropdown
 const accountBtn = document.getElementById('accountBtn');
 const accountDropdown = document.getElementById('accountDropdown');
-accountBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  accountDropdown.classList.toggle('open');
+if (accountBtn) {
+  accountBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    accountDropdown.classList.toggle('open');
+  });
+}
+document.addEventListener('click', () => {
+  if (accountDropdown) accountDropdown.classList.remove('open');
 });
-document.addEventListener('click', () => accountDropdown.classList.remove('open'));
 </script>
 
 <script type="module">
@@ -297,9 +319,9 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKPXLTU0z18tsn80JCXJhJ62EEjDl7lqY",
-  authDomain: "nrg-accounts.firebaseapp.com",
-  projectId: "nrg-accounts",
-  storageBucket: "nrg-accounts.firebasestorage.app",
+  authDomain: "sams-proxy-accounts.firebaseapp.com",
+  projectId: "sams-proxy-accounts",
+  storageBucket: "sams-proxy-accounts.firebasestorage.app",
   messagingSenderId: "969467601192",
   appId: "1:969467601192:web:bd312dd3d58e4b6b7c701d"
 };
@@ -320,17 +342,14 @@ onAuthStateChanged(auth, async (user) => {
 
   const displayName = data.username || data.displayName || user.displayName || user.email?.split('@')[0] || 'User';
   const photoURL = data.avatarURL || data.photoURL || user.photoURL || null;
-  const role = data.role || data.plan || 'Member';
 
   // Update greeting
-  const greetingName = document.querySelector('.greeting-name span');
-  if (greetingName) greetingName.textContent = displayName;
+  const displayEl = document.getElementById('displayName');
+  if (displayEl) displayEl.textContent = displayName;
 
   // Update dropdown
   const dropName = document.querySelector('.dropdown-name');
-  const dropRole = document.querySelector('.dropdown-role');
   if (dropName) dropName.textContent = displayName;
-  if (dropRole) dropRole.textContent = role;
 
   // Update pfp if user has one
   if (photoURL) {

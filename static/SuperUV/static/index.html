@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NRG // EDUCATION</title>
+  <title>Sams Proxy // EDUCATION</title>
   <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;900&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -54,7 +54,7 @@
     }
 
     .nrg-logo-container::after {
-      content: 'NRG';
+      content: 'SAMS';
       position: absolute;
       left: 15px;
       top: 10px;
@@ -201,7 +201,7 @@
 
   <main id="nrg-dashboard">
     <div class="nrg-logo-container">
-      <h1>NRG</h1>
+      <h1>SAMS</h1>
     </div>
 
     <form class="nrg-input-wrap" id="nrg-core-form">
@@ -230,14 +230,14 @@
       const btn = document.createElement('div');
       btn.className = 'nrg-node';
       btn.id = `btn-${id}`;
-      btn.innerText = 'N';
+      btn.innerText = 'S';
       btn.onclick = () => switchNode(id);
       
       const close = document.createElement('div');
       close.className = 'close-node';
       close.innerText = '×';
       close.onclick = (e) => {
-        e.stopPropagation(); // Prevents switching to the node while closing it
+        e.stopPropagation();
         deleteNode(id);
       };
 
@@ -258,19 +258,14 @@
       const index = nrg_nodes.findIndex(n => n.id === id);
       if (index === -1) return;
 
-      // Remove from Array
       nrg_nodes.splice(index, 1);
+      document.getElementById(`wrap-${id}`)?.remove();
+      document.getElementById(`frame-${id}`)?.remove();
 
-      // Remove elements from DOM
-      document.getElementById(`wrap-${id}`).remove();
-      document.getElementById(`frame-${id}`).remove();
-
-      // If we deleted the active node, switch to the last available node
       if (active_node_id === id) {
         if (nrg_nodes.length > 0) {
           switchNode(nrg_nodes[nrg_nodes.length - 1].id);
         } else {
-          // No nodes left? Create a fresh home node
           createNode();
         }
       }
@@ -312,11 +307,12 @@
 
       const encoded = "/service/" + uvEncode(final);
       const node = nrg_nodes.find(n => n.id === active_node_id);
-      node.url = encoded;
-      node.raw = final;
-      
-      document.getElementById(`frame-${active_node_id}`).src = encoded;
-      switchNode(active_node_id);
+      if (node) {
+        node.url = encoded;
+        node.raw = final;
+        document.getElementById(`frame-${active_node_id}`).src = encoded;
+        switchNode(active_node_id);
+      }
       document.getElementById('nrg-query').value = "";
     };
 

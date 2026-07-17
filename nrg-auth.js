@@ -42,9 +42,14 @@ async function createUserDoc(user) {
       displayName: user.displayName || user.email.split('@')[0],
       photoURL:    user.photoURL || null,
       createdAt:   serverTimestamp(),
-      theme:       localStorage.getItem('sams_proxy_theme_selected') || 'midnight',
+      theme:       localStorage.getItem('sams_proxy_theme') || 'midnight',
       favorites:   [],
-      recentGames: []
+      recentGames: [],
+      coins:       0,
+      xp:          0,
+      level:       1,
+      loginStreak: 0,
+      lastLoginDate: null
     });
   }
 }
@@ -61,7 +66,6 @@ async function updateUserDoc(uid, data) {
 async function signUp(email, password, displayName) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(cred.user, { displayName });
-  // FIX: pass cred.user directly after awaiting updateProfile so displayName is set
   await createUserDoc(cred.user);
   return cred.user;
 }
@@ -90,7 +94,7 @@ async function resetPassword(email) {
 async function saveTheme(themeName) {
   const user = auth.currentUser;
   if (user) await updateUserDoc(user.uid, { theme: themeName });
-  localStorage.setItem('sams_proxy_theme_selected', themeName);
+  localStorage.setItem('sams_proxy_theme', themeName);
 }
 
 async function saveFavoriteGame(gameName, add = true) {
